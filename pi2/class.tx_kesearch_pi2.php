@@ -113,19 +113,25 @@ class tx_kesearch_pi2 extends tx_kesearch_lib {
 		$content = $this->cObj->substituteMarker($content, '###NUMBER_OF_RESULTS###', sprintf($this->pi_getLL('num_results'), $this->numberOfResults));
 		$this->fluidTemplateVariables['numberofresults'] = $this->numberOfResults;
 
-		//******************************************+
-		// TODO
-		//******************************************+
-
+		// sorting, fluid template variables are filled in class tx_kesearch_lib_sorting
 		$content = $this->cObj->substituteMarker($content, '###ORDERING###', $this->renderOrdering());
-		$subpart = $this->cObj->getSubpart($content, '###SHOW_SPINNER###');
-		if($this->conf['renderMethod'] == 'static') {
-			$content = $this->cObj->substituteSubpart($content, '###SHOW_SPINNER###', '');
-		} else {
-			$subpart = $this->cObj->substituteMarker($subpart, '###SPINNER###', $this->spinnerImageResults);
-			$content = $this->cObj->substituteSubpart($content, '###SHOW_SPINNER###', $subpart);
+
+		// spinner and loading icon (does not apply to fluid template)
+		if ($this->conf['renderMethod'] != 'fluidtemplate') {
+			$subpart = $this->cObj->getSubpart($content, '###SHOW_SPINNER###');
+			if($this->conf['renderMethod'] == 'static') {
+				$content = $this->cObj->substituteSubpart($content, '###SHOW_SPINNER###', '');
+			} else {
+				$subpart = $this->cObj->substituteMarker($subpart, '###SPINNER###', $this->spinnerImageResults);
+				$content = $this->cObj->substituteSubpart($content, '###SHOW_SPINNER###', $subpart);
+			}
+			$content = $this->cObj->substituteMarker($content, '###LOADING###', $this->pi_getLL('loading'));
 		}
-		$content = $this->cObj->substituteMarker($content, '###LOADING###', $this->pi_getLL('loading'));
+
+		//******************************************+
+		// TODO: add query time and pagebrowser
+		// to fluid template
+		//******************************************+
 
 		// process query time
 		if($this->conf['showQueryTime']) {

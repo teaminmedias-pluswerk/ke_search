@@ -19,7 +19,7 @@ Settings are available via
 				<f:format.raw>{conf.textForResults}</f:format.raw>
 			</f:if>
 			<f:else>
-				<f:render partial="ResultRows" arguments="{conf: conf, numberofresults: numberofresults, resultrows: resultrows}" />
+				<f:render partial="ResultRows" arguments="{conf: conf, numberofresults: numberofresults, resultrows: resultrows, sortingLinks: sortingLinks}" />
 			</f:else>
 		</f:then>
 		<f:else>
@@ -28,7 +28,7 @@ Settings are available via
 					<f:render partial="NoResults" arguments="{conf: conf, noResultsText: noResultsText}" />
 				</f:then>
 				<f:else>
-					<f:render partial="ResultRows" arguments="{conf: conf, numberofresults: numberofresults, resultrows: resultrows}" />
+					<f:render partial="ResultRows" arguments="{conf: conf, numberofresults: numberofresults, resultrows: resultrows, sortingLinks: sortingLinks}" />
 				</f:else>
 			</f:if>
 		</f:else>
@@ -38,7 +38,6 @@ Settings are available via
 		Yet missing in this fluid template:
 		<ul>
 			<li>filter</li>
-			<li>ordering</li>
 			<li>pagebrowser_top</li>
 			<li>pagebrowser_bottom</li>
 			<li>query_time</li>

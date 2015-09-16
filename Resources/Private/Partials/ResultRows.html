@@ -5,6 +5,7 @@
 
 <div class="clearer"> </div>
 <div id="kesearch_num_results">{numberofresults} {f:translate(key: 'LLL:EXT:ke_search/pi1/locallang.xml:num_results_plain')}:</div>
+<f:render partial="Sorting" arguments="{conf: conf, numberofresults: numberofresults, sortingLinks: sortingLinks}" />
 <div id="kesearch_results">
 	<f:for each="{resultrows}" as="resultrow">
 		<f:render partial="ResultRow" arguments="{conf: conf, resultrow: resultrow}" />

@@ -1524,8 +1524,7 @@ class tx_kesearch_lib extends tx_kesearch_pluginBase {
 			$this->fluidTemplateVariables['wordsTooShort'] = 1;
 		}
 
-		// loop through results
-		// init results counter
+		// init counter and loop through the search results
 		$resultCount = 1;
 		if (TYPO3_VERSION_INTEGER >= 6002000) {
 			$this->searchResult = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_lib_searchresult', $this);
@@ -1533,8 +1532,8 @@ class tx_kesearch_lib extends tx_kesearch_pluginBase {
 			$this->searchResult = t3lib_div::makeInstance('tx_kesearch_lib_searchresult', $this);
 		}
 
-
 		$this->fluidTemplateVariables['resultrows'] = array();
+
 		foreach($rows as $row) {
 			// generate row content
 			$tempContent = $this->cObj->getSubpart($this->templateCode, '###RESULT_ROW###');
@@ -1658,7 +1657,7 @@ class tx_kesearch_lib extends tx_kesearch_pluginBase {
 			$resultrowTemplateValues['imageHtml'] = $renderedImage[0];
 			$tempContent = $this->cObj->substituteSubpart ($tempContent, '###SUB_TYPE_ICON###', $renderedImage[1], $recursive=1);
 
-			// fluid templating: add result row to
+			// fluid templating: add result row to the variables array
 			$this->fluidTemplateVariables['resultrows'][] = $resultrowTemplateValues;
 
 			// marker based templating: add temp content to result list
@@ -2040,7 +2039,7 @@ class tx_kesearch_lib extends tx_kesearch_pluginBase {
 		} else {
 			$sortObj = t3lib_div::makeInstance('tx_kesearch_lib_sorting', $this);
 		}
-		return $sortObj->renderSorting();
+		return $sortObj->renderSorting($this->fluidTemplateVariables);
 	}
 
 	/**

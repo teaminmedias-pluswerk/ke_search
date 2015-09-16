@@ -1,0 +1,20 @@
+<!--
+	=====================
+	Partials/Sorting.html
+-->
+
+<f:if condition="{conf.showSortInFrontend}">
+	<f:if condition="{conf.sortByVisitor}">
+		<div id="kesearch_ordering">
+			<div class="ordering">
+				<ul>
+					<li><strong>{f:translate(key: 'LLL:EXT:ke_search/pi1/locallang.xml:label_sort')}</strong></li>
+					<f:for each="{sortingLinks}" as="sortingLink">
+						<li class="sortlink sortlink-{sortingLink.field}"><f:format.raw>{sortingLink.url}</f:format.raw><span class="{sortingLink.class}"></span></li>
+					</f:for>
+				</ul>
+				<div class="clearer"></div>
+			</div>
+		</div>
+	</f:if>
+</f:if>

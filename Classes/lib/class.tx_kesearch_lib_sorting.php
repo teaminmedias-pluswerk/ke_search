@@ -102,7 +102,7 @@ class tx_kesearch_lib_sorting {
 	 *
 	 * @return string HTML
 	 */
-	public function renderSorting() {
+	public function renderSorting(&$fluidTemplateVariables) {
 		// show sorting:
 		// if show Sorting is activated in FlexForm
 		// if a value to sortBy is set in FlexForm (title, relevance, sortdate, what ever...)
@@ -121,7 +121,7 @@ class tx_kesearch_lib_sorting {
 
 					/* if ordering direction is the same change it
 					 *
-					 * Explaintation:
+					 * Explanation:
 					 * No ordering is active. Default Ordering by db is "sortdate desc".
 					 * Default ordering by current field is also "sortdate desc".
 					 * So...if you click the link for sortdate it will sort the results by "sortdate desc" again
@@ -132,10 +132,16 @@ class tx_kesearch_lib_sorting {
 					}
 
 					$markerArray['###FIELDNAME###'] = $field;
-					$markerArray['###URL###'] = $this->generateSortingLink($field, $sortByDir);
-					$markerArray['###CLASS###'] = $this->getClassNameForUpDownArrow($field, $dbOrdering);
+					$markerArray['###URL###'] = $url = $this->generateSortingLink($field, $sortByDir);
+					$markerArray['###CLASS###'] = $classname = $this->getClassNameForUpDownArrow($field, $dbOrdering);
 
 					$links .= $this->cObj->substituteMarkerArray($this->subpartArray['###SORT_LINK###'], $markerArray);
+
+					$fluidTemplateVariables['sortingLinks'][] = array(
+						'field' => $field,
+						'url' => $url,
+						'class' => $classname
+					);
 				}
 			}
 
