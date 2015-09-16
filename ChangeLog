@@ -1,9 +1,9 @@
 ChangeLog
 
-Version 1.10.3
+Version 2.0.0
+- feature: fluid based templating
 
 Version 1.10.2
-- feature: fluid based templating
 - bugfix: add langDisable in flexform, https://forge.typo3.org/issues/64579
 - bugfix: fix check for templvoila in templavoila indexer.
 - bugfix: remove debug output. Thanks to Felix Jacobi. https://forge.typo3.org/issues/69616
