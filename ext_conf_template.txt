@@ -1,0 +1,32 @@
+# cat=basic//10; type=options[1,2,3,4,5]; label = Multiply value to title score: If you want you can score a searchword found in a title higher than a searchword found in bodytext. Default is 1. So an entry in title is as high scored than an entry in bodytext.
+multiplyValueToTitle = 1
+
+# cat=basic//20; type=options[1,2,3,4,5,6,7,8,9,10]; label = Change searchword length: Leave this to 4 if you have no access to MySQL-Server configuration. If you have configured MySQL to search for 3 digit words, you have to set this option to 3, too.
+searchWordLength = 4
+
+# cat=basic//30; type=boolean; label=Enable partial word search: If partial word search is activated, ke_search internaly adds a * behind all searchwords, so if you search for "snow", internally "snow*" is used, that means words like "snowman" will also be found. Partial word search is a little bit slower than full word search.
+enablePartSearch = 1
+
+# cat=basic//40; type=boolean; label=Enable explicit AND: By default, one or more searchwords are connected with "OR". If this option is enabled, two or more search words are connected with AND. If it is disabled, they are connected with OR, where results containing all the search words will get a higher relevance ranking. Enabling this function means, ke_search internally adds a "+" in front of each search word.
+enableExplicitAnd = 0
+
+# cat=notification//10; type=boolean; label= Send notification when finished: If activated, a notification email will be sent when indexing process is finished in CLI / scheduler mode.
+finishNotification = 0
+
+# cat=notification//20; type=string; label= Indexer notification recipient: Indexer notifications are sent to this address.
+notificationRecipient =
+
+# cat=notification//30; type=string; label= Indexer notification sender: sender email address.
+notificationSender = no_reply@domain.com
+
+# cat=notification//40; type=string; label= Indexer notification subject: Subject of notification mails
+notificationSubject = [KE_SEARCH INDEXER NOTIFICATION]
+
+# cat=filepath//10; type=string; label=Path to pdftotext: This path must be valid, if you want to extract content from pdf files
+pathPdftotext = /usr/bin/
+
+# cat=filepath//20; type=string; label=Path to pdfinfo: This path must be valid, if you want to extract content from pdf files. We need pdfinfo to get the amount of pages within a pdf file
+pathPdfinfo = /usr/bin/
+
+# cat=filepath//30; type=string; label=Path to catdoc, catppt, xls2csv: This path must be valid, if you want to extract content from doc, xls and ppt files.
+pathCatdoc = /usr/bin/

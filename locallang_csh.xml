@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+   <meta type="array">
+     <description>CSH labels</description>
+     <type>CSH</type>
+     <csh_table></csh_table>
+     <fileId>EXT:ke_search/locallang_csh.xml</fileId>
+     <labelContext type="array"></labelContext>
+  </meta>
+  <data type="array">
+   <languageKey index="default" type="array">
+     <label index="wrap.alttitle">Wrap for frontend rendering</label>
+     <label index="wrap.description"><![CDATA[HTML code, wrap for frontend rendering of a filter. Example: <class style="myclass">|</div>.]]></label>
+     <label index="wrap.details"></label>
+     <label index="wrap.syntax"></label>
+     <label index="wrap.image_descr"></label>
+     <label index="wrap.image"></label>
+     <label index="wrap.seeAlso"></label>
+   </languageKey>
+   <languageKey index="de" type="array">
+     <label index="wrap.alttitle">Wrap für Frontend-Darstellung.</label>
+     <label index="wrap.description"><![CDATA[HTML-Code, welcher den HTML-Code umschließt, der zur Anzeige des Filters erstellt wird. Beispiel: <class style="myclass">|</div>.]]></label>
+     <label index="wrap.details"></label>
+     <label index="wrap.syntax"></label>
+     <label index="wrap.image_descr"></label>
+     <label index="wrap.image"></label>
+     <label index="wrap.seeAlso"></label>
+   </languageKey>
+  </data>
+</T3locallang>

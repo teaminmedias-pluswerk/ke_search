@@ -1,0 +1,29 @@
+<T3DataStructure>
+	<sheets>
+		<MAIN>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:ke_search/pi2/locallang.xml:ff.main</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
+
+					<loadFlexformsFromOtherCE>
+						<TCEforms>
+							<label>LLL:EXT:ke_search/pi2/locallang.xml:ff.loadFlexformsFromOtherCE</label>
+							<config>
+								<type>group</type>
+								<internal_type>db</internal_type>
+								<allowed>tt_content</allowed>
+								<size>1</size>
+								<maxitems>1</maxitems>
+								<minitems>1</minitems>
+							</config>
+						</TCEforms>
+					</loadFlexformsFromOtherCE>
+
+				</el>
+			</ROOT>
+		</MAIN>
+	</sheets>
+</T3DataStructure>

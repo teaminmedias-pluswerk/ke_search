@@ -1,0 +1,447 @@
+ChangeLog
+
+Version 1.10.3
+
+Version 1.10.2
+- feature: fluid based templating
+- bugfix: add langDisable in flexform, https://forge.typo3.org/issues/64579
+- bugfix: fix check for templvoila in templavoila indexer.
+- bugfix: remove debug output. Thanks to Felix Jacobi. https://forge.typo3.org/issues/69616
+- bugfix: do not try to index folders, only files can be indexed. Thanks to Ricky Bohse. https://forge.typo3.org/issues/68156
+- task: add hint to backend form for file indexer that _cli_scheduler must have access rights to file mounts. Thanks to Urs Braem. https://forge.typo3.org/issues/67983
+
+Version 1.10.1
+* task: Output error message if PDF file is encrypted but return empty content instead of false.
+* bugfix: InWord Search does not work with enableExplicitAnd on Sphinx. Thanks to Marc Bauer. https://forge.typo3.org/issues/67280
+* task: remove RemoveXSS.php from res/scripts since it is not needed anymore. https://forge.typo3.org/issues/67602
+* task: save page id with indexed files instead of hardcoded "1". https://forge.typo3.org/issues/68723, thanks to Stefan Franke.
+* task: remove calls to t3lib_extMgm for 7.4 compatibility.
+* bugfix: fix german label for backend module function 5.
+
+Version 1.10.0
+* Note: This version updates the database structure!
+* task: remove calls to deprecated image functions.
+* task: remove deprecated feInterface usage.
+* task: add error message if sphinx reports a warning.
+* bugfix: checkIfFileWasIndexed not working correctly, https://forge.typo3.org/issues/67169, thanks to Stefan Terborg and Benjamin Schreiber.
+* feature: add new hook for cleanup process.
+* feature: log indexing report to sys_log and add an option to show the last indexing report in the backend module.
+
+Version 1.9.3
+* task: do some cleanup in backend module.
+* task: make backend module compatible with TYPO3 7.2.
+
+Version 1.9.2
+* bugfix: fix naming for comments indexer hook.
+* bugfix: fix comments indexer, set orig_uid and orig_pid.
+* task: add information about number of records in index per type and last indexing time in backend module.
+
+Version 1.9.1
+* task: fix position of message "searchword too short"
+* bugfix: check if array exists in checkbox rendering
+* task: do not call CharsetConverter function statically but instantiate the class first.
+* bugfix: create correct links to ext:tt_news and ext:news records of type "internal page" and "external link"
+* bugfix: respect extendToSubpages not only for fe_group but also for hidden, starttime and endtime. https://forge.typo3.org/issues/45235
+* bugfix: ke_search stops because file not found, https://forge.typo3.org/issues/66256
+
+Version 1.9.0
+* task: make ke_search compatible with TYPO3 version 7. Adjust class names and use namespaces.
+* task: adjust backend module layout to TYPO3 7.
+* task: add information about indexer configurations in backend module "start indexing" and show button only if configurations exist.
+* task: set default number of filters to show to 10 instead of 0.
+* task: change check if external system tools exist (eg. pdfinfo), remove check for PHP safeMode since there's no API for that in TYPO3 version 7 and PHP safeMode is deprecated since PHP 5.3.
+* bugfix: fix problem with path to tempory file. For example path contains spaces. Thanks to Nikolay Orlenko.
+* task: change default template (slightly) and default css in order to make the appearance more subtile and more suitable to wide range of websites out of the box.
+
+Version 1.8.5, March 2015
+* feature: show preview images for results of ext:news. Thanks to designverign GmbH for sponsoring this feature.
+* feature: show alternative texts in preview images.
+* task: use FAL API for finding preview images.
+
+Version 1.8.4
+* bugfix: do not create language overlay for pages for language 0, that creates infinite loops while indexing. https://forge.typo3.org/issues/58427
+* bugfix: add hidden pages and pages with no_index flag to the cached pages array, otherwise "extend to subpages" flag has no effect on their subpages and fe_groups are not set.
+* bugfix: add pages with all doktypes to the cached pages array, otherwise "extend to subpages" flag has no effect on their subpages and fe_groups are not set.
+* bugfix: make target pid changeable via hook in tt_address indexer. Thanks to Nikolay Orlenko. https://forge.typo3.org/issues/63662
+* bugfix: allow more than one backend group in access field for index table. Thanks to Frans Saris. https://forge.typo3.org/issues/64860
+* bugfix: fix compatibility with version 4.5: dont' render page preview images.
+* bugfix: File indexing (FAL enabled) only support public local storages. Thanks to Frans Saris. https://forge.typo3.org/issues/64861
+* bugfix: fix compatibility with version 4.5: remove relation to sys_file_storage in TCA for TYPO3 versions below 6.
+* bugfix: CLI not possible with TYPO3 6.2.x. Thanks to Ricky Bohse. https://forge.typo3.org/issues/64947
+
+Version 1.8.3 
+* feature: Show images from pages (field "media" in page properties) in search result list. Activate this function in plugin configuration. Relies on FAL and therefore needs 6.X to work.
+* bugfix: Don't combine groups of subpages with groups of parent pages. https://forge.typo3.org/issues/61966
+* bugfix: escpape search strings for sphinx search (ke_search_premium).
+* bugfix: fix setLimit call for ke_search_premium
+* bugfix: fix compatibility to TYPO3 6.1 (FAL _getMetaData function is not available).
+* bugfix: fix default value from no_fal to -1 in indexerconfig TCA.
+* task: remove field "targetpid" from configuration for "remote" indexer type (needed for ke_search_premium).
+* task: add type "external" to result link rendering
+* task: add result list icons for external results
+
+Version 1.8.2
+* bugfix: Fix tag generation for news categories. fixes regression introduced in 1.8.0.
+
+Version 1.8.1
+* task: Move getResultLinkConfiguration to a static function in helper class, this makes it possible to call it from out of ke_search (needed for ke_search_premium).
+* bugfix (IMPORTANT): Fix regression introduced in 1.7.2: fronted user group set in page properties should be taken to the corresponding index entry, otherwise protected pages will show up in the search results even if the user is not logged in.
+
+Version 1.8.0, October 2014
+* Thanks to swm medienproduktion for sponsoring this version.
+* Note: This version updates the database!
+* task: Extend hook 'modifyFileIndexEntry' in file indexer. Note: Needs adjustment in your code if you use that hook!
+* feature: Index FAL metadata. Index metadata and categories, translate assigned categories to tags. This makes it possible to filter files by assigning system categories to them.
+* feature: Show Fal metadata. In result list use title from FAL if a FAL file is indexed.
+* feature: Show file thumbnails. Option to show file preview in result list (for pdf and files).
+* feature: Index images. When indexing files and there's no indexer for a certain file type, fallback to FAL meta data indexing. This makes it possible to index images with the standalone file indexer.
+* feature: allow other image types than .gif for type icons in result list. Icons can be configured like this (Template Setup): plugin.tx_kesearch_pi2.resultListTypeIcon.file_doc.file = fileadmin/img/doc.png (where file_doc stands for file formats like file_xls, file_docx etc. or indexer types like page, news etc.). Image configuration can be used like plugin.tx_kesearch_pi2.resultListTypeIcon.file_doc.file.maxW = 25
+
+Version 1.7.3
+* feature: Make it possible to override extension configuration set in extension manager with page typoscript for ke_search and ke_search_premium (Example: ke_search_premium.extconf.override.enableSphinxSearch = 0).
+
+Version 1.7.2
+* feature: extend page indexer hook. This makes it possible to modify all values written to the indexer. IMPORTANT: Needs adjustent to your page indexer hooks, add the parameter $indexEntryDefaultValues as last parameter to your modifyPagesIndexEntry function!
+
+Version 1.7.1, September 2014
+* feature: new hook modifyFilters in class tx_kesearch_filters.
+
+Version 1.7.0, September 2014
+* Note: This version updates the database!
+* feature: Show number of results per filter option. Configurable in the filter configuration: Activate "Show number of results for each filter option?" in the filter settings.
+* feature: Allow alphabetical sorting for filter options. Can be set in the filter settings by activating the checkbox "Sort filteroptions alphabetically?".
+* feature: save language to statistic table. Thanks to Frans Saris, https://forge.typo3.org/issues/59596.
+* feature: Improve statistic backend module by show 30 instead of 10 days statistical data and by showing searchphrases additionally to the searchwords. Show statistic for each language.
+* feature: add HTML5 placeholder for searchword and new marker searchbox_default_value. Thanks to Frans Saris, https://forge.typo3.org/issues/59474.
+* task: After selecting one or more filter options in a certain filter, don't display the other filter options anymore. This was a behaviour which lead to some irritations. Now, after selecting a filter option, you will have to reset this certain filter in order to see all the available filter options. This should be much clearer for the user.
+* bugfix: fix "Illegal string offset 'langChildren'" error in backend when inserting pi3 (textlinks multiselection).
+* task: show path in backend module in mode "show indexed content".
+* bugfix: files indexed by the standalone file indexer can't be tagged. Thanks to Felix Jacobi, https://forge.typo3.org/issues/59543.
+* bugfix: after the searchword is removed, sorting for "score" is not possible anymore. So remove this sorting and put it back to default.
+* bugfix: fetch search results early in lib, that's needed for calculating the filter options to display in pi1.
+* task: cache tags in result list for performance reasons.
+* bugfix: show correct number of results per filter option when using sphinx (included in ke_search_premium).
+
+Version 1.6.11
+* feature: indexer for extension a21glossary.
+* bugfix: Using tx_news with sys categories in the indexer does not always return the right category. Thanks to Sebastian Haak, https://forge.typo3.org/issues/61072.
+* bugfix: Don't index non-FAL-files, otherwise error "uid of file has to be numeric" may appear when indexing pages. Thanks to Frans Saris, https://forge.typo3.org/issues/60883.
+* bugfix: exception in backend module because of missing second parameter for "funcMenu". https://forge.typo3.org/issues/60485.
+* bugfix: error thrown when indexing FAL files (incorrect arguments to EXECUTE when there are files to be indexed). https://forge.typo3.org/issues/58774.
+* bugfix: make files from explicit (non-FAL) indexer searchable for all languages, not only the default language. https://forge.typo3.org/issues/60377.
+
+Version 1.6.10, July 2014
+* task: make file indexer work again. Implement workaround for core bug. Directories must now typed in comma-separated and cannot be selected via element browser, http://forge.typo3.org/issues/59261 and http://forge.typo3.org/issues/49082.
+* bugfix: file indexer throwed an error in the backend module because of a not correct initialized array, thanks to Claudio Kressibucher.
+
+Version 1.6.9, July 2014
+* task: improve backend module rendering (adjust to TYPO3 6.2), add more information in "show indexed content" mode.
+* task: add hook for modifiying the tags to filter for ('modifyTagsAgainst').
+* task: add hook for third party applications to manipulate last part of query building. Thanks to Bastian Bringenberg and Felix Jacobi, http://forge.typo3.org/issues/58285.
+
+Version 1.6.8, June 2014
+* bugfix: fix ext:news indexer compatibility with news 3.0 in the backend (fix in last version was not correct).
+* bugfix: tx_kesearch_stat_search.searchphrase and tx_kesearch_stat_word.word double escaped and kesearch_stat_word is filled with the complete searchphrase instead of separate words. Thanks to Frans Saris, http://forge.typo3.org/issues/59595
+
+Version 1.6.7, June 2014
+* bugfix: fix ext:news indexer compatibility with news 3.0 in the backend (was introduced in last version).
+
+Version 1.6.6, June 2014
+* bugfix: use mb_strtolower to convert strings saved to the statistic table. This words are also used for the autocomplete function with ke_search_premium. Attention: The function is called with "UTF-8" as charset parameter, so if you have the mbstring PHP extension installed but use another charset than UTF-8 this will possibly lead to problems.
+* bugfix: fix PHP warning in scheduler for file indexer in TYPO3 >= 6.2.
+* task: make ext:news indexer with ext:news version 3.0. This version features system categories instead of extension specific categories, http://forge.typo3.org/issues/58759
+
+Version 1.6.5, March 2014
+* bugfix: fix regression in backend module for TYPO3 versions 4.7 and below. http://forge.typo3.org/issues/57349
+
+Verison 1.6.4, March 2014
+* bugfix: use API function getModuleUrl for link generation. http://forge.typo3.org/issues/56719
+* task: add default value for $fe_group parameter. http://forge.typo3.org/issues/56563
+* task: added labels for next/previous navigation in search result list. Thanks to Frank Gerards, http://forge.typo3.org/issues/53044
+
+Version 1.6.3, January 2014
+* bugfix: Custom indexer throws errors. http://forge.typo3.org/issues/54398
+* feature: Enable stdWrap for highlighted word. Thanks to Dan Untenzu, http://forge.typo3.org/issues/54515
+* bugfix: don't call htmlspecialchars with NULL parameter.
+* feature: improve memory consumption drastically. Thanks to Morton Jonuschat, http://forge.typo3.org/issues/53946
+* feature: improve search speed, do not calculate percentage scores unless required, Thanks to Morton Jonuschat, http://forge.typo3.org/issues/53979
+* bugfix: check if filter is set before building the link to reset the filter.
+
+Version 1.6.2, December 2013
+* bugfix: Fix pagebrowser which is not working in static mode (first 10 results are shown on every page). Thanks to Morton Jonuschat, http://forge.typo3.org/issues/54352
+
+Version 1.6.1, December 2013
+* bugfix: missing class error when editing the plugin in backend, http://forge.typo3.org/issues/54297
+* bugfix: fixed XCLASS calls (classes were moved in version 1.6.0).
+
+Version 1.6.0, December 2013
+* feature: FAL based file indexer, indexes files linked in content element "uploads" (file links) and files linked in RTE text (needs at least TYPO3 6.0.0), access restrictions will be taken into account, combined from page and content element.
+* new icons: added icons for result list in the frontend depending on file type
+* removed "index content elements with restrictions" option from tt_content indexer, fix permission check for content element. So every content element will be indexed and the correct fe_group setting will be used for the index entry.
+* feature: select link target for files seperately from normal links.
+* changed default behaviour: set "index content elements with restrictions" in page indexer to "no" by default
+* bugfix: fixed check if an index already exists, was false always
+* feature: allow to override startingpoint in search plugin via typoscript like this: plugin.tx_kesearch_pi1.overrideStartingPoint = 123 / plugin.tx_kesearch_pi1.overrideStartingPointRecursive = 1 / plugin.tx_kesearch_pi2.overrideStartingPoint = 123 / plugin.tx_kesearch_pi2.overrideStartingPointRecursive = 1
+* bugfix: jump to page one after starting a new search and using the submit button in static mode
+* bugfix: add tags also to subpages of sysfolders (254), since we don't want them to be excluded, http://forge.typo3.org/issues/49435
+* bugfix: fix the inheritage of frontend groups, was not working correctly with "hide at login" page
+* bugfix: inherit frontend groups also on shortcut pages
+* changed default behaviour: set sorting for relevance by default after a user enters a searchword if sorting is changeable in the frontend
+* feature: new indexer configuration option for FAL based file indexer: add tags from linking pages to indexed files?
+* bugfix ke_search_premium: take pid into account when using sphinx
+* feature: add search fields: search for filters, indexer configurations and filter options in the backend is now possible
+* bugfix: remove cHash in sorting link
+* bugfix: init "config" array and basic rootLine for templavoila indexer, in order to prevent fatal errors while indexing certain kind of content elements
+* bugfix: while indexing use the fe_groups restriction of the current page OR use the inherited groups, do not combine them
+* task: remove ( and ) and _ when generating tags from news categories (ext:news indexer)
+* task: index FAL files even if they are attached to a access protected content element, the index entry for that file itself will be access protected in that case.
+* bugfix: fix indexing of files protected by naw_securedl extension by using the getForLocalProcessing property, not the publicUri property.
+* feature: add error reporting for indexer (use $this->addError() function to add errors).
+* bugfix: fixed typo in template (diY --> div), thanks to Jano (http://kesearch.kennziffer.com/dokumentation/facettierung.html)
+* bugfix: in tt_news indexer message print the number of really indexed news, not the totally available news in the system
+* task: move code for setting the sortdate and other additional fields from hook to indexer itself. delete the hook.
+* bugfix: Cronjob Error after Update of tt_news: Call to a member function exec_SELECTquery, http://forge.typo3.org/issues/52038
+* task: move class files to Classes/ directory.
+* task: Prepare ke_search for TYPO3 CMS 6.2: remove require_once calls where possible. Change calls to t3lib_div::makeInstance to \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance.
+
+Version 1.5.0, September 2013
+* feature: indexer for ext:news
+* feature: create filter options from ext:news categories automatically while indexing
+* feature: hidden filters. Set hidden filters together with preselected filter options in plugin configuration in order to have preselected filters which are not shown in the frontend.
+* feature: tt_address indexer: allow modification of starttime, endtime, fe_group and sys_languge_uid by hook
+* feature: added onblur function for search word input field
+* cleanup: tt_address indexer: remove adding of orig_uid and orig_pid from hook and put it in the indexer itself
+* bugfix: fixed use of tagChar for ke_search_premium
+* Increased max. directories to 100 for file indexer.
+* Removed "Show query" Debug option (was not functional anyway anymore), added "Log query" option in plugin configuration (needs devLog extension).
+* changed default setting: static mode is now default instead of ajax_after_reload since this mode needs no additional extension
+* cleanup: moved backend images from extension root folder to subfolder
+
+Version 1.4.1, July 2013
+* security bugfix
+
+Version 1.4, January 2013
+* Feature: Now you can add multiple TV-fields divided by comma
+* Feature: Added indexer for extension "comments".
+
+Version 1.3.1, December 2012
+* Bugfix: Search for words with umlauts failed on some installations. http://forge.typo3.org/issues/42345
+* Feature: Fixed fieldname 'main_content' für TemplaVoila indexer. Thanks to Christian Ducrot. http://forge.typo3.org/issues/43078
+* Feature: Add new indexer for mm_forum. Thanks to Jan Bartels
+* Bugfix: Changed TYPO3_CONF_VARS to globals scope
+
+Version 1.3.0, October 2012
+* feature: output of additional information (size of index, deleted entries) after indexer ran. Thanks to Jan Bartels, http://forge.typo3.org/issues/40067
+* feature: Search for phrases using "", example: "french cuisine".
+* feature: Search parameters, you can use + and - in order include or exclude search words explicitly.
+* feature: Partial word searching can be enabled/disabled in the extension manager.
+* feature: "AND"-linking of words can explicitly enabled in the extension manager, otherwise "OR" ist used to link more than one word in the search string.
+* feature: Make new HRDate-option for tt_news-indexer configurable, Thanks to Jan Bartels, http://forge.typo3.org/issues/40068
+* template change: added <fieldset> tag to search form in order to make the html code compatible to XHTML 1.1, http://forge.typo3.org/issues/40431
+* feature: File indexer now indexes doc and xls files (in addition to pdf and ppt). Thanks to Lukas Kamber. http://forge.typo3.org/issues/39636
+* bugfix: Indexer did not recognize file type correctly, so it could happen that after the first indexing, files were deleted from the index in the second run. See also http://forge.typo3.org/issues/41423.
+* configuration change: changed "pathCatppt" to "pathCatdoc". Please update your configuration in the extension manager!
+* bugfix: fixed charset setting for ppt file indexer. Thanks to Lukas Kamber. http://forge.typo3.org/issues/39635
+* bugfix: "AND" combination does not work properly
+* bugfix: changed some wordings
+* removed deprecated function: Check for version number in class.tx_kesearch_indexer.php, http://forge.typo3.org/issues/41036, Thanks to Tim Wendisch
+* made ke_search compatible with TYPO3 6.0. Tested against TYPO3 6.0 Beta2.
+* bugfix: updated all XCLASS declarations
+* bugfix: make use of extendToSubpages while searching for parent fe_group.
+* added dependency PHP 5.3 (namespace feature is now used)
+* bugfix: keep ordering of filters in plugin also in FE
+
+Version 1.2.0, August 2012
+* bugfix: Function checkIfTagMatchesRecords didn't work properly with all filter types. Please note: Due to a complete rewrite of this functionality your hooks may need adjustments if they call functions which do not exist anymore.
+* Many filter methods were collected in one new filter class now.
+* Many changes in db-Object to reduce queries to the database.
+* Fixed javascript function "enable/disable all checkboxes" for checkbox filter, was broken since last version
+* make ke_search TYPO3 6.0 compatible by removing deprecated translation functions.
+* new feature in tt_news indexer: respect the useHRDatesSingle feature of tt_news and add month, year and day params to the news link. Right now, this feature is always turned on.
+* Feature: Add phrase searching
+* Feature: exclude words from search results with -
+* Feature: explicit include words in search results with +
+* Feature: lower the weight of words with ~
+
+Version 1.1.1, July 2012
+* bugfix: ke_yac indexer: store additional fields in db
+* bugfix: In dropdown filters the preselected filter options (via backend flexform) haven been added to search even if the user selected a different filter option of the same filter in the frontend. That lead to empty search result lists.
+* bugfix: Preselected filters in checkbox filter have not been displayed correctly.
+* added better integration for ke_search_premium
+* added showTime call for tt_news indexer, indexer now shows the time needed for indexing.
+* css modification for autocomplete in premium version
+* bugfix: double errormessages regarding too small words in AJAX-Mode
+* bugfix: ke_search does not work in TYPO3 4.7
+* feature: delete index LOCK entry in sys_registry if it's older than 12 hours
+* bugfix: make template w3c compatible
+
+Version 1.1.0, June 2012
+* bugfix: Error-handling for Ajax-FE missing / Remove invalid characters. Thanks to Jan Bartels, http://forge.typo3.org/issues/34808
+* feature: tt-news-indexer: Add tags of SysFolder. Thanks to Jan Bartels, http://forge.typo3.org/issues/34080
+* feature: Assign tags to indexer. Thanks to Jan Bartels, http://forge.typo3.org/issues/34081
+* bugfix: not valid html code. http://forge.typo3.org/issues/35229
+* new hook: modifySearchWords
+* bugfix: corrected locallang values, thanks to Jan Bartes, http://forge.typo3.org/issues/37582
+* feature: added new indexer for TemplaVoila, http://forge.typo3.org/issues/31208
+* bug: mark all checkboxes doen not work in IE8/9, http://www.keworks.de/kunden/kesearch/ticket/14283.html
+* feature: Index only news of the following categories, http://www.keworks.de/kunden/kesearch/ticket/14264.html
+* feature: get abstract of pageproperties, http://www.keworks.de/kunden/kesearch/ticket/14328.html
+* bugfix: content error in templavoila indexer, thanks to Bernhard Eckl, http://forge.typo3.org/issues/38017
+
+Version 1.0.2, May 2012
+* bugfix: wrong rendering of the abstract
+* bugfix: Installation of tt_news was required for ke_search, http://forge.typo3.org/issues/37133
+* feature: Enable recursive search for tt_news and tt_address, too. Thanks to Jan Bartels, http://forge.typo3.org/issues/34077
+* feature: #20885: Add a possibility to exclude pages from tagging. Thanks to Jan Bartels, http://forge.typo3.org/issues/34495
+* new language: Dutch (nl), Thanks to Otto van Bruggen
+* new hook: modifyResultList
+
+Version 1.0.1, May 2012
+* bugfix: don't skip "shortcut" pages, thanks to Jan Bartels
+* bugfix: remove unused code in tt_address indexer, http://forge.typo3.org/issues/36493, thanks to Jan Bartels
+* New feature: tt_news indexer targetpage is provided by tt_news category, thanks for sponsoring to Otto van Bruggen, http://forge.typo3.org/issues/33701
+* new hooks: renderPagebrowserInit, pagebrowseAdditionalMarker, thanks to Krystian Szymukowicz, http://forge.typo3.org/issues/35646
+* new hook: getLimit, thanks to Krystian Szymukowicz, http://forge.typo3.org/issues/35652
+* bugfix: Tags from preselected filters result in invalid query, thanks to Morton Jonuschat, http://forge.typo3.org/issues/36556
+
+Version 1.0.0, March 2012
+* changed default values in searchbox plugin: don't allow sorting by visitor, sorting with searchword is now relevance descending (score desc), click on result link does not open an new window
+* removed plugin flexform option "showResultsPerFilter" since it had no effect
+* added "apply filter" link to checkbox filters in ajax mode
+* bugfix: checkbox filter functions "reset" and "select / deselect all" removed for static mode, this needs javascript
+* bugfix: javascript for resetting of checkbox filters fixed
+* Indexer "DAM" was edited for common usage
+* Filter type "list" implemented for static mode
+* notifications: switched to swiftmailer for notification for version 4.5 and above
+* notifications: added sender email configuration option in extension manager (needed for swiftmailer)
+* notifications: renamed extension manager configuration option for notification mail
+* notifications: removed periodic notifications since they weren't working properly.
+* notifications: Detached periodicNotification configuration from amountOfRecordsToSaveInMem, two different things have been mixed up here.
+* Set default value for amountOfRecordsToSaveInMem to 500.
+* New feature: BE function "start indexing" now checks if there is a LOCK for the indexing process. If so it will print a warning message for non-admins and the "start indexer" button is not shown. Admin users can remove the LOCK by clicking a button. This means no more manual editing of database table "sys_registry" if an index process fails. In addition, a LOCK that is older than 12 hours will be removed automatically.
+* Added patch for additionalPathForTypeIcons, http://forge.typo3.org/issues/28496, thanks to Morton Jonuschat
+* New feature: added CSS class per type to result list item, eg. class="result-list-item result-list-item-type-tt_news", thanks to Dominik Hahn
+* bugfix: calculation of percental score (thanks to Morton Jonuschat)
+* bugfix: CSS for score scale
+* page and content element indexer index now the Ctype  "header"
+* bugfix: headers set to "hidden" are not indexed anymore (page indexer and content element indexer)
+* new feature in backend module: clear search index button, only for admins
+* bugfix: filext was not taken into account in file indexer
+* bugfix and improvement regarding indexing time information in indexing process finish notification mail
+* bugfix: config value "sortWithoutSearchword" was not processed, this leaded to empty result lists in some cases because sorting by relevance was used instead
+* Changed default values for options "showPercentalScore" and "showScoreScale" to 0
+* Removed dependency on "xajax". If render method "ajax after load" is used and xajax is not installed, you will receive an error message in frontend
+* bugfix: removal of indexer "xtypocommerce" - this is a very special extension that should not be interesting for most users
+* bugfix: highlighting of searchword in result title
+* bugfix: show indexer configuration field "filetypes" only for type "files"
+* More flexible rendering of results count by using sprintf
+* New config: set template and css file by flexform; overwrites the setup and default value
+* bugfix: default flexforms value for "sortWithoutSearchword" changed
+* Indexing process time information added to notifications
+* bugfix: reset pagenumber when submitting new search params
+* bugfix: show correct error message when a searchword is too short
+* bugfix: set page=1 when clicking an option from a a filter list
+* bugfix: On low performance servers it happened that an event was fired before the content was loaded, so a js error was thrown and the processing stopped. This is resolved by using a domReady event.
+* bugfix: no htmlspecialchars() for field "params" in indexer
+* bugfix: correct XCLASS params in pi2
+* bugfix: no more multiple index entries for dam records that are assigned to several dam categories
+* tt_news keywords are now indexed in content field
+* Better output for error messages while indexing process
+* New feature: TYPO3 scheduler task for indexing process added
+* New feature in ext-conf. Now you can give title a higher relevance.
+* bugfix: check if hook entry is available before calling "modifyFlexFormData"
+* New marker "NUMBER_OF_RESULTS" added to result list subpart, independent of pagebrowser subpart
+* amount of results for each filter will be displayed now
+* each flexform value is configurable by TS
+* each TS property has stdWrap properties
+* add init() method for initialization of plugin
+* getter for flexform values completely rewritten
+* bugfix: Filters aren't shown in static mode
+* added for-attribute for checkbox labels
+* bug: wrong checkboxes are selected after search in "no validation to other filter"-mode
+* hide sorting links in FE if there are no search results
+* new option to mark all checkboxes as default
+* ajax render method has been removed. Remaining render methods are "static" and "ajax after reload". It has been removed since it hasn't been used very much and raised maintenance. In this case we also deleted following two options of FlexForm-Configuration:
+* redirectOnFilterChange
+* resetFiltersOnSubmit
+* better index choosing, increases performance
+* sorting in frontend not activated by default
+* Deleted the "plugin mode". We have two seperate plugins instead. Each plugin has its own flexform and locallang file. So you have to insert all resultlists again as pi2.
+* Both plugins extend the same parent object
+* Created a new DB Object for generating the search results
+* Many calles to getSearchResults have been deleted
+* Removed possibility to get maxScore. This is implemented in Select-Query directly in order to reduce mysql calls
+* fixed fixed_lgd_pre --> fixed_lgd_cs
+* Selectquery generates the percentage value for results automatically
+* The function for counting the results has been completely rewritten
+* Many variables are declared as global now for faster access and less calls to functions
+* reduced the function calls in general
+* better init() function
+* better code comments
+* searching is a little bit faster
+* seperated each indexer into its own class
+* child pages of sysfolders, shortcuts are indexed, too
+* added additionalPathForTypeIcons
+
+Version 0.3.0
+* new option in ext-conf to speed up INSERTqueries up to 35% with help of DELAYED
+* repaired customIndexer hook and added a new code sample to documentationdelete interval setting from ext conf
+* modified cleanup process. All records before starting timestamp of indexing will be deleted
+* speed up indexing with help of PREPARED-Statements
+* New feature: Show text instead of searchresults when no filter or searchword was given.
+* New feature: Multi-select filters. The user can now select two or more options of a filter, they will be "OR" connected. In the frontend this filter type will be rendered as checkboxes.
+* New feature: set individual text in RTE for "no results found"
+* New feature: a default text is shown in searchbox; it will be hidden on focus
+* Notification functions for a better monitoring of the indexing process (in CLI mode) added
+* Example configuration for use of danp_tagcloud with ke_search statistics data added to documentation
+* New feature: Sorting. Can be set in the backend and in the frontend. Available options are relevance, title and date. See documentation for details.
+* Cleanup for javascript inclusion
+* moved all tag indexing into indexer class
+* removed getRootlineTags
+* repaired searching for filters
+* better indexing of restricted content
+* added multilingual support for filteroptions
+* added orig_uid and orig_pid to inder-table and added them into the indexer process
+* removed utf-8 quirx-mode
+* delete all conf of pi1 completely before it was filled with data of pi2
+* added content indexer
+* added text link feature
+* changed content field in indexer table to mediumtext
+* added new plugin wizards for our new two plugins
+* fixed a problem with pagebrowser and multiselection
+* if you have configured MySQL to search for 3 digit words, you can configure ke_search to the same value now in extension configuration.
+
+Version 0.2.0
+* Huge performance optimizations!
+* New feature: Count search words and phrases with ke_stats
+* New feature: search words and phrases are counted in statistic tables (optional by flexforms), simple statistic function for last 10 days added to backend module
+* Cleanup: Some methods removed from pi1 to new library class
+* bugfix: correct highlighting of search word in result titles
+* Cleanup: removed methods that are not needed any longer
+* bugfix: correct limit for pagebrowser
+* bugfix: checking of matching tags
+* bugfix: correct whitespace cropping; old procedure generated endless loops in some cases
+* bugfix: AND relation for several search words
+* Cleanup for search word creation, use one central function
+
+Version 0.1.1
+* XSS removal improvements
+* New: render mode selectable: ajax, static, ajax after page reload
+* Several bugfixes and optimizations
+* New filter render type added: "list"
+* New indexer type included: ke_yac records
+* Icon artwork for database tables added
+* New feature: tags can be set automated for all childs of defined page
+* bugfix: Indexer took all pages if no recursive page was set for indexing
+* Added CLI-script for indexing process
+* New indexer type included: tt_news records
+* New feature: supporting multiple words as searchphrase (treated as conjunction)
+* Filter select boxes that have no options but "all" get HTML-Tag "disabled"
+* New indexer configuration option for indexing of pages: index content elements that have got restricted usergroup permissions?
+* Javascript is minified (if TYPO3 version >= 4.2 )
+* Flexform options regarding debugging are available for admins only
+* New feature: consecutive numbering (optional by flexforms)
+* New feature: reset filters when submitting search word (optional by flexforms)
+* New feature: availability check mode is configurable now
+* New feature: show search query time (optional by flexforms)
+* initial version

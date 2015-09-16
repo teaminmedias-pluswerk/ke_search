@@ -1,0 +1,47 @@
+<f:layout name="General" />
+<!--
+=====================
+Templates/ResultList.html
+
+Settings are available via
+{conf}
+{extConf}
+{extConfPremium}
+-->
+<f:section name="content">
+	<f:if condition="{wordsTooShort}">
+		<div class="messsage">{f:translate(key: 'LLL:EXT:ke_search/pi1/locallang.xml:searchword_length_error')}</div>
+	</f:if>
+
+	<f:if condition="{isEmptySearch}">
+		<f:then>
+			<f:if condition="{conf.showTextInsteadOfResults}">
+				<f:format.raw>{conf.textForResults}</f:format.raw>
+			</f:if>
+			<f:else>
+				<f:render partial="ResultRows" arguments="{conf: conf, numberofresults: numberofresults, resultrows: resultrows}" />
+			</f:else>
+		</f:then>
+		<f:else>
+			<f:if condition="{numberofresults} == 0">
+				<f:then>
+					<f:render partial="NoResults" arguments="{conf: conf, noResultsText: noResultsText}" />
+				</f:then>
+				<f:else>
+					<f:render partial="ResultRows" arguments="{conf: conf, numberofresults: numberofresults, resultrows: resultrows}" />
+				</f:else>
+			</f:if>
+		</f:else>
+	</f:if>
+
+	<div style="border:1px solid red; display:block; margin-top:20px;">
+		Yet missing in this fluid template:
+		<ul>
+			<li>filter</li>
+			<li>ordering</li>
+			<li>pagebrowser_top</li>
+			<li>pagebrowser_bottom</li>
+			<li>query_time</li>
+		</ul>
+	</div>
+</f:section>

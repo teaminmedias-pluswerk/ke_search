@@ -1,0 +1,41 @@
+<f:layout name="General" />
+<!--
+=====================
+Templates/SearchForm.html
+-->
+<f:section name="content">
+	<form method="get" id="form_kesearch_pi1" name="form_kesearch_pi1"  action="{f:uri.page(pageUid: targetpage)}">
+		<fieldset class="kesearch_searchbox">
+			<f:if condition="{targetpage}">
+				<input type="hidden" name="id" value="{targetpage}" />
+			</f:if>
+			<f:if condition="{lparam}">
+				<input type="hidden" name="L" value="{lparam}" />
+			</f:if>
+			<f:if condition="{mpparam}">
+				<input type="hidden" name="MP" value="{mpparam}" />
+			</f:if>
+			<f:if condition="{typeparam}">
+				<input type="hidden" name="type" value="{typeparam}" />
+			</f:if>
+
+			<div class="kesearchbox">
+				<input type="text" id="ke_search_sword" name="tx_kesearch_pi1[sword]" value="{searchword}" placeholder="{searchwordDefault}" onfocus="if (this.value == '{searchwordDefault}') { this.value = ''; }" onblur="if (this.value == '') { this.value = '{searchwordDefault}'; }" />
+				<input type="image" id="kesearch_submit" src="typo3conf/ext/ke_search/res/img/kesearch_submit.png" alt="{submitAltText}" class="submit" onclick="document.getElementById('keasearchpagenumber').value=1; document.getElementById('form_kesearch_pi1').submit();" />
+				<div class="clearer">&nbsp;</div>
+			</div>
+
+			<input id="kesearchpagenumber" type="hidden" name="tx_kesearch_pi1[page]" value="{page}" />
+			<input id="resetFilters" type="hidden" name="tx_kesearch_pi1[resetFilters]" value="0" />
+			<input id="sortByField" type="hidden" name="tx_kesearch_pi1[sortByField]" value="{sortByField}" />
+			<input id="sortByDir" type="hidden" name="tx_kesearch_pi1[sortByDir]" value="{sortByDir}" />
+
+			<f:if condition="{filter}">
+				<div id="kesearch_filters"><f:format.raw>{filter}</f:format.raw></div>
+			</f:if>
+
+			<span class="resetbutt"><a href="{resetUrl}" class="resetButton"><span><f:translate key="LLL:EXT:ke_search/pi1/locallang.xml:reset_button" /></span></a></span>
+			<span class="submitbutt"><input type="submit" value="{f:translate(key: 'LLL:EXT:ke_search/pi1/locallang.xml:submit')}" /></span>
+		</fieldset>
+	</form>
+</f:section>

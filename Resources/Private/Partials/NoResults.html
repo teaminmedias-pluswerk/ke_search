@@ -1,0 +1,14 @@
+<!--
+	=====================
+	Partials/NoResults.html
+-->
+<div id="kesearch_results">
+	<f:if condition="{conf.showNoResultsText}">
+		<f:then>
+			<f:format.raw>{noResultsText}</f:format.raw>
+		</f:then>
+		<f:else>
+			{f:translate(key: 'LLL:EXT:ke_search/pi1/locallang.xml:no_results_found')}.
+		</f:else>
+	</f:if>
+</div>
