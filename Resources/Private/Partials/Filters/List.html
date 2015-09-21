@@ -1,0 +1,14 @@
+<!--
+	=====================
+	Partials/Filters/List.html
+-->
+
+<div class="list" id="list_{filter.uid}">
+	<span class="head">{filter.title}</span>
+	<ul id="options_{filter.id}" class="###LISTCSSCLASS###">
+		<f:for each="{filter.options}" as="option">
+			<li {f:if(condition: '{option.selected}', then: ' class="selected"')}><a href="{option.link}">{option.title}<f:if condition="{option.selected} == ''"><f:if condition="{filter.shownumberofresults}"> ({option.results})</f:if></f:if></a></li>
+		</f:for>
+		<a href="{filter.resetLink}" class="kesGreyButt"><f:translate key="LLL:EXT:ke_search/pi1/locallang.xml:reset_filter" /></a>
+	</ul>
+</div>

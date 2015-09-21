@@ -1,0 +1,11 @@
+<!--
+	=====================
+	Partials/PageBrowser.html
+-->
+
+<f:if condition="{numberofresults} > {conf.resultsPerPage}">
+	<div class="pages_total">
+		<div class="result_txt">{f:translate(key: 'LLL:EXT:ke_search/pi1/locallang.xml:results')} {pagebrowser.start} {f:translate(key: 'LLL:EXT:ke_search/pi1/locallang.xml:until')} {pagebrowser.end} {f:translate(key: 'LLL:EXT:ke_search/pi1/locallang.xml:of')} {pagebrowser.total}</div>
+		<div class="kesearch_pagebrowser"><f:format.raw>{pagebrowser.previous} {pagebrowser.pages_list} {pagebrowser.next}</f:format.raw></div>
+	</div>
+</f:if>

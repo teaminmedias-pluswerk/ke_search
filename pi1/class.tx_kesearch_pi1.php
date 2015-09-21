@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Andreas Kiefer <andreas.kiefer@inmedias.dem>
+*  (c) 2010 Andreas Kiefer <andreas.kiefer@inmedias.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -61,9 +61,14 @@ class tx_kesearch_pi1 extends tx_kesearch_lib {
 		// add header parts when in searchbox mode
 		$this->addHeaderParts();
 
-		// init marker template for pi1 if not in fluid rendering mode
-		if ($this->conf['renderMethod'] != 'fluidtemplate') {
-			$this->initMarkerTemplate();
+		// init template for pi1 
+		if ($this->conf['renderMethod'] == 'fluidtemplate') {
+			$this->initFluidTemplate();
+		} else {
+			$content = $this->initMarkerTemplate();
+			if ($content) {
+				return $content;
+			}
 		}
 
 		// hook for initials
@@ -88,11 +93,6 @@ class tx_kesearch_pi1 extends tx_kesearch_lib {
 		}
 
 		if ($this->conf['renderMethod'] == 'fluidtemplate') {
-			// include some JS for the filters. set default for JSPath.
-			// TODO: make it possible to deactivate the inclusion of a js file
-			$this->conf['JSPath'] = $this->conf['JSPath'] ? $this->conf['JSPath'] : 'typo3conf/ext/ke_search/Resources/Public/JS/';
-			$GLOBALS['TSFE']->getPageRenderer()->addJsLibrary('ke_search_searchbox_js', $this->conf['JSPath'] . 'SearchboxHeaderJS.js');
-
 			// assign variables and do the rendering
 			$this->searchFormView->assignMultiple($this->fluidTemplateVariables);
 			$htmlOutput = $this->searchFormView->render();
@@ -141,7 +141,6 @@ class tx_kesearch_pi1 extends tx_kesearch_lib {
 	 * @return string
 	 */
 	public function initMarkerTemplate() {
-
 		// init XAJAX?
 		if ($this->conf['renderMethod'] != 'static') {
 			if (TYPO3_VERSION_INTEGER < 6002000) {
@@ -170,6 +169,22 @@ class tx_kesearch_pi1 extends tx_kesearch_lib {
 
 		// get javascript onclick actions
 		$this->initOnclickActions();
+	}
+
+	/**
+	 * inits the standalone fluid template
+	 */
+	public function initFluidTemplate() {
+		/** @var \TYPO3\CMS\Fluid\View\StandaloneView $this->searchFormView */
+		$this->searchFormView = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
+		$this->searchFormView->setPartialRootPath($this->conf['partialRootPath']);
+		$this->searchFormView->setLayoutRootPath($this->conf['layoutRootPath']);
+		$this->searchFormView->setTemplatePathAndFilename($this->conf['templateRootPath'] . 'SearchForm.html');
+
+		// make settings available in fluid template
+		$this->searchFormView->assign('conf', $this->conf);
+		$this->searchFormView->assign('extConf', $this->extConf);
+		$this->searchFormView->assign('extConfPremium', $this->extConfPremium);
 	}
 }
 

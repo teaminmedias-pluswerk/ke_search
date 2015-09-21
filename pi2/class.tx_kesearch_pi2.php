@@ -60,9 +60,13 @@ class tx_kesearch_pi2 extends tx_kesearch_lib {
 			return $this->pi_wrapInBaseClass($content);
 		}
 
-		// init marker template for pi2 if not in fluid rendering mode
-		if ($this->conf['renderMethod'] != 'fluidtemplate') {
-			$this->initMarkerTemplate();
+		// init template
+		if ($this->conf['renderMethod'] == 'fluidtemplate') {
+			$this->initFluidTemplate();
+		} else {
+			if (!$this->initMarkerTemplate()) {
+				return ;
+			}
 		}
 
 		// hook for initials
@@ -128,18 +132,15 @@ class tx_kesearch_pi2 extends tx_kesearch_lib {
 			$content = $this->cObj->substituteMarker($content, '###LOADING###', $this->pi_getLL('loading'));
 		}
 
-		//******************************************+
-		// TODO: add query time and pagebrowser
-		// to fluid template
-		//******************************************+
-
 		// process query time
+		if (TYPO3_VERSION_INTEGER >= 7000000) {
+			$queryTime = (TYPO3\CMS\Core\Utility\GeneralUtility::milliseconds() - $GLOBALS['TSFE']->register['ke_search_queryStartTime']);
+		} else {
+			$queryTime = (t3lib_div::milliseconds() - $GLOBALS['TSFE']->register['ke_search_queryStartTime']);
+		}
+		$this->fluidTemplateVariables['queryTime'] = $queryTime;
+		$this->fluidTemplateVariables['queryTimeText'] = sprintf($this->pi_getLL('query_time'), $queryTime);
 		if($this->conf['showQueryTime']) {
-			if (TYPO3_VERSION_INTEGER >= 7000000) {
-				$queryTime = (TYPO3\CMS\Core\Utility\GeneralUtility::milliseconds() - $GLOBALS['TSFE']->register['ke_search_queryStartTime']);
-			} else {
-				$queryTime = (t3lib_div::milliseconds() - $GLOBALS['TSFE']->register['ke_search_queryStartTime']);
-			}
 			$content = $this->cObj->substituteMarker($content, '###QUERY_TIME###', sprintf($this->pi_getLL('query_time'), $queryTime));
 		} else {
 			$content = $this->cObj->substituteMarker($content, '###QUERY_TIME###', '');
@@ -162,6 +163,7 @@ class tx_kesearch_pi2 extends tx_kesearch_lib {
 			}
 		}
 
+		// generate HTML output (fluid or marker based templating)
 		if ($this->conf['renderMethod'] == 'fluidtemplate') {
 			$this->resultListView->assignMultiple($this->fluidTemplateVariables);
 			$htmlOutput = $this->resultListView->render();
@@ -171,7 +173,6 @@ class tx_kesearch_pi2 extends tx_kesearch_lib {
 
 		return $htmlOutput;
 	}
-
 
 	/**
 	 * inits the marker based template for pi2
@@ -185,7 +186,7 @@ class tx_kesearch_pi2 extends tx_kesearch_lib {
 			} else {
 				$xajaxIsLoaded = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('xajax');
 			}
-			if (!$xajaxIsLoaded) return;
+			if (!$xajaxIsLoaded) return false;
 			else $this->initXajax();
 		}
 
@@ -204,6 +205,22 @@ class tx_kesearch_pi2 extends tx_kesearch_lib {
 
 		// get javascript onclick actions
 		$this->initOnclickActions();
+	}
+
+	/**
+	 * inits the standalone fluid template
+	 */
+	public function initFluidTemplate() {
+		/** @var \TYPO3\CMS\Fluid\View\StandaloneView $this->resultListView */
+		$this->resultListView = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
+		$this->resultListView->setPartialRootPath($this->conf['partialRootPath']);
+		$this->resultListView->setLayoutRootPath($this->conf['layoutRootPath']);
+		$this->resultListView->setTemplatePathAndFilename($this->conf['templateRootPath'] . 'ResultList.html');
+
+		// make settings available in fluid template
+		$this->resultListView->assign('conf', $this->conf);
+		$this->resultListView->assign('extConf', $this->extConf);
+		$this->resultListView->assign('extConfPremium', $this->extConfPremium);
 	}
 
 	/**

@@ -79,29 +79,6 @@ $TCA['tx_kesearch_filters'] = array (
 			)
 		),
 
-		'cssclass' => array (
-			'exclude' => 0,
-			'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filters.cssclass',
-			'config' => array (
-				'type' => 'select',
-				'items' => array (
-					array('LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filters.cssclass.I.0', ''),
-					array('LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filters.cssclass.I.1', 'small'),
-					array('LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filters.cssclass.I.2', 'larger'),
-				),
-				'size' => 1,
-				'maxitems' => 1,
-			)
-		),
-
-		'expandbydefault' => array (
-			'exclude' => 0,
-			'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filters.expandbydefault',
-			'config' => array (
-				'type'    => 'check',
-				'default' => '0'
-			)
-		),
 		'markAllCheckboxes' => array (
 			'exclude' => 0,
 			'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filters.markAllCheckboxes',
@@ -161,27 +138,17 @@ $TCA['tx_kesearch_filters'] = array (
 				'default' => '1',
 			)
 		),
-		'wrap' => array (
-			'exclude' => 0,
-			'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filters.wrap',
-			'config' => array (
-				'type' => 'input',
-				'size' => '30',
-			)
-		),
 	),
 	'types' => array (
-		'select' => array('showitem' => 'sys_language_uid;;;;1-1-1,l10n_parent, l10n_diffsource, hidden;;1;;1-1-1, title;;;;2-2-2,rendertype;;;;3-3-3, options, shownumberofresults, alphabeticalsorting,wrap;;;;4-4-4'),
-		'list' => array('showitem' => 'sys_language_uid;;;;1-1-1,l10n_parent, l10n_diffsource, hidden;;1;;1-1-1, title;;;;2-2-2,rendertype;;;;3-3-3, expandbydefault, cssclass, options, shownumberofresults, alphabeticalsorting, wrap;;;;4-4-4'),
-		'checkbox' => array('showitem' => 'sys_language_uid;;;;1-1-1,l10n_parent, l10n_diffsource, hidden;;1;;1-1-1, title;;;;2-2-2,rendertype;;;;3-3-3, expandbydefault, markAllCheckboxes, cssclass,options, shownumberofresults, alphabeticalsorting, wrap;;;;4-4-4'),
-		'textlinks' => array('showitem' => 'sys_language_uid;;;;1-1-1,l10n_parent, l10n_diffsource, hidden;;1;;1-1-1, title;;;;2-2-2,rendertype;;;;3-3-3, target_pid, amount, shownumberofresults, alphabeticalsorting, wrap;;;;4-4-4, options')
+		'select' => array('showitem' => 'sys_language_uid;;;;1-1-1,l10n_parent, l10n_diffsource, hidden;;1;;1-1-1, title;;;;2-2-2,rendertype;;;;3-3-3, options, shownumberofresults, alphabeticalsorting;;;;4-4-4'),
+		'list' => array('showitem' => 'sys_language_uid;;;;1-1-1,l10n_parent, l10n_diffsource, hidden;;1;;1-1-1, title;;;;2-2-2,rendertype;;;;3-3-3, options, shownumberofresults, alphabeticalsorting;;;;4-4-4'),
+		'checkbox' => array('showitem' => 'sys_language_uid;;;;1-1-1,l10n_parent, l10n_diffsource, hidden;;1;;1-1-1, title;;;;2-2-2,rendertype;;;;3-3-3, markAllCheckboxes, options, shownumberofresults, alphabeticalsorting;;;;4-4-4'),
+		'textlinks' => array('showitem' => 'sys_language_uid;;;;1-1-1,l10n_parent, l10n_diffsource, hidden;;1;;1-1-1, title;;;;2-2-2,rendertype;;;;3-3-3, target_pid, amount, shownumberofresults, alphabeticalsorting;;;;4-4-4, options')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')
 	)
 );
-
-
 
 $TCA['tx_kesearch_filteroptions'] = array (
 	'ctrl' => $TCA['tx_kesearch_filteroptions']['ctrl'],

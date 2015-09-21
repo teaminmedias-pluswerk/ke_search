@@ -1,0 +1,13 @@
+<!--
+	=====================
+	Partials/Filters/Textlinks.html
+-->
+
+<select id="{filter.id}" name="{filter.name}" {f:if(condition: '{filter.optionCount} == 0', then: 'disabled = "disabled"')}>
+	<option value="">{filter.title}</option>
+	<f:for each="{filter.options}" as="option">
+		<option value="{option.value}" {f:if(condition: '{option.selected}', then: 'selected = "selected"')}>
+			{option.title}<f:if condition="{option.selected} == ''"><f:if condition="{filter.shownumberofresults}"> ({option.results})</f:if></f:if>
+		</option>
+	</f:for>
+</select>

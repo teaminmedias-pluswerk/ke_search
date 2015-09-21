@@ -93,9 +93,10 @@ class tx_kesearch_lib_filters_textlinks {
 	 *
 	 * @param integer $filterUid uid of the current loopd filter
 	 * @param array $optionsOfSearchresult All found options in current search result
+	 * @param object $lib
 	 * @return string HTML
 	 */
-	public function renderTextlinks($filterUid, $optionsOfSearchresult) {
+	public function renderTextlinks($filterUid, $optionsOfSearchresult, $lib) {
 		$filters = $this->pObj->filters->getFilters();
 		$filter = $filters[$filterUid];
 

@@ -33,9 +33,11 @@ if (TYPO3_VERSION_INTEGER >= 7000000) {
 }
 
 /**
- * Plugin 'Faceted search - searchbox and filters' for the 'ke_search' extension.
+ * Parent class for plugins pi1 and pi2
  *
+ * @author	Andreas Kiefer
  * @author	Stefan Froemken
+ * @author	Christian Bülter
  * @package	TYPO3
  * @subpackage	tx_kesearch
  */
@@ -274,13 +276,15 @@ class tx_kesearch_lib extends tx_kesearch_pluginBase {
 	 * initializes the marker based or fluid based template
 	 */
 	public function initTemplate() {
-
 		// check for rendering method
 		if ($this->conf['renderMethod'] == 'fluidtemplate') {
 			if (TYPO3_VERSION_INTEGER < 6000000) {
 				return ('<span style="color: red;"><b>ke_search error:</b>Render method "Fluid template" needs at least TYPO3 version 6.</span>');
 			} else {
-				$this->initFluidTemplate();
+				// set default template paths
+				$this->conf['templateRootPath'] = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($this->conf['templateRootPath'] ? $this->conf['templateRootPath'] : 'EXT:ke_search/Resources/Private/Templates/');
+				$this->conf['partialRootPath'] = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($this->conf['partialRootPath'] ? $this->conf['partialRootPath'] : 'EXT:ke_search/Resources/Private/Partials/');
+				$this->conf['layoutRootPath'] = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($this->conf['layoutRootPath'] ? $this->conf['layoutRootPath'] : 'EXT:ke_search/Resources/Private/Layouts/');
 			}
 		} else {
 			// get html template
@@ -292,38 +296,6 @@ class tx_kesearch_lib extends tx_kesearch_pluginBase {
 			$this->templateCode = $this->cObj->fileResource($this->templateFile);
 		}
 	}
-
-	/**
-	 * inits the standalone fluid template
-	 */
-	public function initFluidTemplate() {
-		// set default template paths
-		$this->conf['templateRootPath'] = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($this->conf['templateRootPath'] ? $this->conf['templateRootPath'] : 'EXT:ke_search/Resources/Private/Templates/');
-		$this->conf['partialRootPath'] = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($this->conf['partialRootPath'] ? $this->conf['partialRootPath'] : 'EXT:ke_search/Resources/Private/Partials/');
-		$this->conf['layoutRootPath'] = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($this->conf['layoutRootPath'] ? $this->conf['layoutRootPath'] : 'EXT:ke_search/Resources/Private/Layouts/');
-
-		/** @var \TYPO3\CMS\Fluid\View\StandaloneView $this->searchFormView */
-		$this->searchFormView = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
-		$this->searchFormView->setPartialRootPath($this->conf['partialRootPath']);
-		$this->searchFormView->setLayoutRootPath($this->conf['layoutRootPath']);
-		$this->searchFormView->setTemplatePathAndFilename($this->conf['templateRootPath'] . 'SearchForm.html');
-
-		/** @var \TYPO3\CMS\Fluid\View\StandaloneView $this->resultListView */
-		$this->resultListView = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
-		$this->resultListView->setPartialRootPath($this->conf['partialRootPath']);
-		$this->resultListView->setLayoutRootPath($this->conf['layoutRootPath']);
-		$this->resultListView->setTemplatePathAndFilename($this->conf['templateRootPath'] . 'ResultList.html');
-
-		// make settings available in fluid template
-		$this->resultListView->assign('conf', $this->conf);
-		$this->resultListView->assign('extConf', $this->extConf);
-		$this->resultListView->assign('extConfPremium', $this->extConfPremium);
-
-		$this->searchFormView->assign('conf', $this->conf);
-		$this->searchFormView->assign('extConf', $this->extConf);
-		$this->searchFormView->assign('extConfPremium', $this->extConfPremium);
-	}
-
 
 	/**
 	 * Move all FlexForm data of current record to conf array
@@ -349,7 +321,6 @@ class tx_kesearch_lib extends tx_kesearch_pluginBase {
 		}
 	}
 
-
 	/*
 	 * function initOnclickActions
 	 */
@@ -374,7 +345,6 @@ class tx_kesearch_lib extends tx_kesearch_pluginBase {
 				break;
 		}
 	}
-
 
 	/**
 	 * creates the searchbox
@@ -515,11 +485,9 @@ class tx_kesearch_lib extends tx_kesearch_pluginBase {
 		return $content;
 	}
 
-
 	/**
-	 * loop through all available filters and render them individually
+	 * loop through all available filters and compile the values for the fluid template rendering
 	 *
-	 * @return string HTML-Content concatenated for each filter
 	 */
 	public function renderFilters() {
 		foreach ($this->filters->getFilters() as $filter) {
@@ -558,49 +526,43 @@ class tx_kesearch_lib extends tx_kesearch_pluginBase {
 				}
 			}
 
-			// render "wrap"
-			if($filter['wrap']) {
-				if (TYPO3_VERSION_INTEGER >= 7000000) {
-					$wrap = TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode('|', $filter['wrap']);
-				} else {
-					$wrap = t3lib_div::trimExplode('|', $filter['wrap']);
+			// build link to reset this filter while keeping the others
+			unset($linkconf);
+			$linkconf['parameter'] = $GLOBALS['TSFE']->id;
+			$linkconf['additionalParams'] = '&tx_kesearch_pi1[sword]='.$this->piVars['sword'];
+			$linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter][' . $filter['uid'] . ']=';
+			if (is_array($this->piVars['filter']) && count($this->piVars['filter'])) {
+				foreach ($this->piVars['filter'] as $key => $value) {
+					if ($key != $filter['uid']) {
+						$linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter][' . $key . ']=' . $value;
+					}
 				}
-			} else {
-				$wrap = array(
-					0 => '',
-					1 => ''
-				);
 			}
+			$resetLink = $this->cObj->typoLink_URL($linkconf);
 
-			// get subparts corresponding to render type
+			// set values for fluid template
+			$filterData = $filter;
+			$filterData['name'] = 'tx_kesearch_pi1[filter][' . $filter['uid'] . ']';
+			$filterData['id'] = 'filter_' . $filter['uid'];
+			$filterData['options'] = $options;
+			$filterData['checkboxOptions'] = $this->compileCheckboxOptions($filter, $options);
+			$filterData['optionCount'] = count($options);
+			$filterData['resetLink'] = $resetLink;
+
+			// special classes / custom code
 			switch($filter['rendertype']) {
-
-				case 'select':
-				default:
-					$filterContent .= $wrap[0] . $this->renderSelect($filter['uid'], $options) . $wrap[1];
-					break;
-
-				case 'list':
-					$filterContent .= $wrap[0] . $this->renderList($filter['uid'], $options) . $wrap[1];
-					break;
-
-				case 'checkbox':
-					$filterContent .= $wrap[0] . $this->renderCheckbox($filter['uid'], $options) . $wrap[1];
-					break;
-
 				case 'textlinks':
 					if (TYPO3_VERSION_INTEGER >= 6002000) {
 						$textLinkObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_lib_filters_textlinks', $this);
 					} else {
 						$textLinkObj = t3lib_div::makeInstance('tx_kesearch_lib_filters_textlinks', $this);
 					}
-					$filterContent .= $wrap[0] . $textLinkObj->renderTextlinks($filter['uid'], $options) . $wrap[1];
+					$textLinkObj->renderTextlinks($filter['uid'], $options, $this);
 					break;
 
-				// use custom render code
+				// use custom code for filter rendering
 				default:
 					// hook for custom filter renderer
-					$customFilterContent = '';
 					if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customFilterRenderer'])) {
 						foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customFilterRenderer'] as $_classRef) {
 							if (TYPO3_VERSION_INTEGER >= 7000000) {
@@ -608,17 +570,92 @@ class tx_kesearch_lib extends tx_kesearch_pluginBase {
 							} else {
 								$_procObj = & t3lib_div::getUserObj($_classRef);
 							}
-							$customFilterContent .= $_procObj->customFilterRenderer($filter['uid'], $options, $this);
+							$_procObj->customFilterRenderer($filter['uid'], $options, $this);
 						}
-					}
-					if ($customFilterContent) {
-						$filterContent .= $wrap[0] . $customFilterContent . $wrap[1];
 					}
 					break;
 			}
+
+
+			// add values to fluid template
+			$this->fluidTemplateVariables['filters'][] = $filterData;
+		}
+	}
+
+	/**
+	 * compiles a list of checkbox records
+	 *
+	 * @param $filterUid UID of the filter for which we need the checkboxes
+	 * @param $options contains all options which are found in the search result
+	 * @return $array list of checkboxes records
+	 */
+	public function compileCheckboxOptions($filter, $options) {
+		$allOptionsOfCurrentFilter = $filter['options'];
+
+		// alphabetical sorting of filter options
+		if ($filter['alphabeticalsorting'] == 1) {
+			$this->sortArrayByColumn($allOptionsOfCurrentFilter, 'title');
 		}
 
-		return $filterContent;
+		// loop through options
+		$checkboxOptions = array();
+		if(is_array($allOptionsOfCurrentFilter)) {
+			foreach($allOptionsOfCurrentFilter as $key => $data) {
+				$data['key'] = $key;
+				$isOptionInOptionArray = FALSE;
+
+				// check if current option (of searchresults) is in array of all possible options
+				$isOptionInOptionArray = 0;
+				if (is_array($options)) {
+					foreach($options as $optionInResultList) {
+						if ($optionInResultList['value'] == $data['tag']) {
+							$isOptionInOptionArray = TRUE;
+							$data['results'] = $optionInResultList['results'];
+							break;
+						}
+					}
+				}
+
+				// if option is in optionArray, we have to mark the checkboxes
+				if ($isOptionInOptionArray) {
+					// if user has selected a checkbox it must be selected on the resultpage, too.
+					// options which have been preselected in the backend are already in $this->piVars['filter'][$filter['uid]]
+					if($this->piVars['filter'][$filter['uid']][$key]) {
+						$data['selected'] = 1;
+					}
+
+					// mark all checkboxes if that config options is set and no search string was given and there
+					// are no preselected filters given for that filter
+					if($this->isEmptySearch && $filter['markAllCheckboxes'] && empty($this->preselectedFilter[$filter['uid']])) {
+						$data['selected'] = 1;
+					}
+
+				} else { // if an option was not found in the search results
+					$data['disabled'] = 1;
+				}
+
+				$data['id'] = 'filter_' . $filter['uid'] . '_' . $key;
+				$checkboxOptions[] = $data;
+			}
+		}
+
+		// modify filter options by hook
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptions'])) {
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptions'] as $_classRef) {
+				if (TYPO3_VERSION_INTEGER >= 7000000) {
+					$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+				} else {
+					$_procObj = & t3lib_div::getUserObj($_classRef);
+				}
+				$contentOptions .= $_procObj->modifyFilterOptions(
+					$filter,
+					$checkboxOptions,
+					$this
+				);
+			}
+		}
+
+		return $checkboxOptions;
 	}
 
 	/**
@@ -643,11 +680,27 @@ class tx_kesearch_lib extends tx_kesearch_pluginBase {
 				// others anymore since this leads to a strange behaviour (options are
 				// only displayed if they have BOTH tags: the selected and the other filter option.
 				if ((!count($filter['selectedOptions']) || in_array($option['uid'], $filter['selectedOptions'])) && $this->filters->checkIfTagMatchesRecords($option['tag'])) {
+
+					// build link which selects this option and keeps all the other selected filters
+					unset($linkconf);
+					$linkconf['parameter'] = $GLOBALS['TSFE']->id;
+					$linkconf['additionalParams'] = '&tx_kesearch_pi1[sword]=' . $this->piVars['sword'] . '&tx_kesearch_pi1[filter][' . $filter['uid'] . ']=' . $option['tag'];
+					$linkconf['useCacheHash'] = false;
+					if (is_array($this->piVars['filter']) && count($this->piVars['filter'])) {
+						foreach ($this->piVars['filter'] as $key => $value) {
+							if ($key != $filter['uid']) {
+								$linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter][' . $key . ']=' . $value;
+							}
+						}
+					}
+					$optionLink = $this->cObj->typoLink_URL($linkconf);
+
 					$options[$option['uid']] = array(
 						'title' => $option['title'],
 						'value' => $option['tag'],
 						'results' => $this->tagsInSearchResult[$option['tag']],
 						'selected' => is_array($filter['selectedOptions']) && in_array($option['uid'], $filter['selectedOptions']),
+						'link' => $optionLink
 					);
 				}
 			} else {
@@ -661,429 +714,6 @@ class tx_kesearch_lib extends tx_kesearch_pluginBase {
 		}
 
 		return $options;
-	}
-
-	/**
-	 * renders the select filter
-	 *  
-	 * @param integer $filterUid
-	 * @param array $options
-	 * @return string
-	 */
-	public function renderSelect($filterUid, $options) {
-		$filters = $this->filters->getFilters();
-		$filterSubpart = '###SUB_FILTER_SELECT###';
-		$optionSubpart = '###SUB_FILTER_SELECT_OPTION###';
-
-		// add standard option "all"
-		$optionsContent .= $this->cObj->getSubpart($this->templateCode, $optionSubpart);
-		$optionsContent = $this->cObj->substituteMarker($optionsContent,'###TITLE###', htmlspecialchars($filters[$filterUid]['title']));
-		$optionsContent = $this->cObj->substituteMarker($optionsContent,'###VALUE###', '');
-		$optionsContent = $this->cObj->substituteMarker($optionsContent,'###SELECTED###','');
-		$optionsContent = $this->cObj->substituteMarker($optionsContent,'###CSS_CLASS###', 'class="label" ' );
-
-		// loop through options
-		if (is_array($options)) {
-			foreach ($options as $key => $data) {
-				$optionsContent .= $this->cObj->getSubpart($this->templateCode, $optionSubpart);
-				$optionsContent = $this->cObj->substituteMarker($optionsContent,'###ONCLICK###', $this->onclickFilter);
-				$number_of_results = $this->renderNumberOfResultsString($data['results'], $filters[$filterUid]);
-				$optionsContent = $this->cObj->substituteMarker($optionsContent,'###TITLE###', htmlspecialchars($data['title']) . $number_of_results);
-				$optionsContent = $this->cObj->substituteMarker($optionsContent,'###VALUE###', htmlspecialchars($data['value']));
-				$optionsContent = $this->cObj->substituteMarker($optionsContent,'###SELECTED###', $data['selected'] ? ' selected="selected" ' : '');
-				$optionsContent = $this->cObj->substituteMarker($optionsContent,'###CSS_CLASS###', ' ' );
-				$optionsCount++;
-			}
-		}
-
-		// modify filter options by hook
-		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptions'])) {
-			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptions'] as $_classRef) {
-				if (TYPO3_VERSION_INTEGER >= 7000000) {
-					$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
-				} else {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
-				}
-				$optionsContent .= $_procObj->modifyFilterOptions(
-					$filterUid,
-					$optionsContent,
-					$optionsCount,
-					$this
-				);
-			}
-		}
-
-		// fill markers
-		$filterContent = $this->cObj->getSubpart($this->templateCode, $filterSubpart);
-		$filterContent = $this->cObj->substituteSubpart ($filterContent, $optionSubpart, $optionsContent, $recursive=1);
-		$filterContent = $this->cObj->substituteMarker($filterContent,'###FILTERTITLE###', htmlspecialchars($filters[$filterUid]['title']));
-		$filterContent = $this->cObj->substituteMarker($filterContent,'###FILTERNAME###', 'tx_kesearch_pi1[filter]['.$filterUid.']');
-		$filterContent = $this->cObj->substituteMarker($filterContent,'###FILTERID###', 'filter_' . $filterUid);
-		$filterContent = $this->cObj->substituteMarker($filterContent,'###DISABLED###', $optionsCount > 0 ? '' : ' disabled="disabled" ');
-
-		// set onclick actions for different rendering methods
-		if ($this->conf['renderMethod'] == 'static') {
-			$filterContent = $this->cObj->substituteMarker($filterContent,'###ONCHANGE###', '');
-		} else {
-			$filterContent = $this->cObj->substituteMarker($filterContent,'###ONCHANGE###', 'onchange="' . $this->onclickFilter . '"');
-		}
-
-		return $filterContent;
-	}
-
-	/**
-	 * renders the list filter 
-	 * 
-	 * @param integer $filterUid
-	 * @param array $options
-	 * @return string
-	 */
-	public function renderList($filterUid, $options) {
-		$filters = $this->filters->getFilters();
-		$filterSubpart = '###SUB_FILTER_LIST###';
-		$optionSubpart = '###SUB_FILTER_LIST_OPTION###';
-
-		$optionsCount = 0;
-
-		if($this->conf['renderMethod'] == 'static') {
-			// STATIC MODE
-			// in static mode, the list filter can not submit other filter values
-			// it submits only the current filter value that is clicked, other
-			// filters are ignored
-			if (is_array($options)) {
-				foreach ($options as $key => $data) {
-					$number_of_results = $this->renderNumberOfResultsString($data['results'], $filters[$filterUid]);
-					$onclick = '';
-
-					// build filter link
-					$optionLink = '';
-					unset($linkconf);
-					$linkconf['parameter'] = $GLOBALS['TSFE']->id;
-					$linkconf['additionalParams'] = '&tx_kesearch_pi1[sword]='.$this->piVars['sword'].'&tx_kesearch_pi1[filter]['.$filterUid.']='.$data['value'];
-					$linkconf['useCacheHash'] = false;
-					$optionLink = $this->cObj->typoLink(htmlspecialchars($data['title']) . $number_of_results,$linkconf);
-
-					$optionsContent .= $this->cObj->getSubpart($this->templateCode, $optionSubpart);
-					$optionsContent = $this->cObj->substituteMarker($optionsContent,'###ONCLICK###', '');
-					$optionsContent = $this->cObj->substituteMarker($optionsContent,'###TITLE###', $optionLink);
-					$cssClass = 'option ';
-					$cssClass .= $data['selected'] ? 'selected' : '';
-					$optionsContent = $this->cObj->substituteMarker($optionsContent,'###OPTIONCSSCLASS###', $cssClass);
-
-					$optionsCount++;
-				}
-
-				// modify filter options by hook
-				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptions'])) {
-					foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptions'] as $_classRef) {
-						if (TYPO3_VERSION_INTEGER >= 7000000) {
-							$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
-						} else {
-							$_procObj = & t3lib_div::getUserObj($_classRef);
-						}
-						$optionsContent .= $_procObj->modifyFilterOptions(
-							$filterUid,
-							$optionsContent,
-							$optionsCount,
-							$this
-						);
-					}
-				}
-
-				// build link to reset filter
-				unset($linkconf);
-				$linkconf['parameter'] = $GLOBALS['TSFE']->id;
-				$linkconf['additionalParams'] = '&tx_kesearch_pi1[sword]='.$this->piVars['sword'];
-				$linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter]['.$filterUid.']=';
-				if (is_array($this->piVars['filter']) && count($this->piVars['filter'])) {
-					foreach ($this->piVars['filter'] as $key => $value) {
-						if ($key != $filterUid) {
-							$linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter]['.$key.']='.$value.'';
-						}
-					}
-				}
-				$resetFilterLink = $this->cObj->typoLink($this->pi_getLL('reset_filter'),$linkconf);
-
-				// fill markers
-				$filterContent = $this->cObj->getSubpart($this->templateCode, $filterSubpart);
-				$filterContent = $this->cObj->substituteSubpart($filterContent, $optionSubpart, $optionsContent);
-				$filterContent = $this->cObj->substituteMarker($filterContent,'###FILTERTITLE###', htmlspecialchars($filters[$filterUid]['title']));
-				$filterContent = $this->cObj->substituteMarker($filterContent,'###SWITCH_AREA_START###', '');
-				$filterContent = $this->cObj->substituteMarker($filterContent,'###SWITCH_AREA_END###', '');
-				$filterContent = $this->cObj->substituteMarker($filterContent,'###FILTERNAME###', 'tx_kesearch_pi1[filter]['.$filterUid.']');
-				$filterContent = $this->cObj->substituteMarker($filterContent,'###FILTERID###', 'filter_' . $filterUid);
-				$filterContent = $this->cObj->substituteMarker($filterContent,'###ONCHANGE###', '');
-				$filterContent = $this->cObj->substituteMarker($filterContent,'###ONCLICK_RESET###', '');
-				$filterContent = $this->cObj->substituteMarker($filterContent,'###RESET_FILTER###', $resetFilterLink);
-				$filterContent = $this->cObj->substituteMarker($filterContent,'###DISABLED###', $optionsCount > 0 ? '' : ' disabled="disabled" ');
-				$filterContent = $this->cObj->substituteMarker($filterContent,'###VALUE###', $this->piVars['filter'][$filterUid]);
-			}
-		} else {
-			// AJAX -MODE
-			// use javascript onclick action for submitting the whole form
-			// if in ajax-mode
-			// loop through options
-
-			if (is_array($options)) {
-				foreach ($options as $key => $data) {
-					$number_of_results = $this->renderNumberOfResultsString($data['results'], $filters[$filterUid]);
-					$onclick = '';
-					$tempField = $this->piVars['orderByField'];
-					$tempDir = $this->piVars['orderByDir'];
-					if($tempField != '' && $tempDir != '') {
-						$onclick = 'setOrderBy(' . $tempField . ', ' . $tempDir . ');';
-					}
-					$onclick = $onclick . ' document.getElementById(\'filter_' . $filterUid . '\').value=';
-					if (TYPO3_VERSION_INTEGER >= 7000000) {
-						$onclick .= TYPO3\CMS\Core\Utility\GeneralUtility::quoteJSvalue($data['value']);
-					} else {
-						$onclick .= t3lib_div::quoteJSvalue($data['value']);
-					}
-					$onclick .= '; ';
-					$onclick .= ' document.getElementById(\'pagenumber\').value=\'1\'; ';
-					$onclick .= $this->onclickFilter;
-					$onclick = 'onclick="'.$onclick.'"';
-
-					$optionsContent .= $this->cObj->getSubpart($this->templateCode, $optionSubpart);
-					$optionsContent = $this->cObj->substituteMarker($optionsContent,'###ONCLICK###', $onclick);
-					$optionsContent = $this->cObj->substituteMarker($optionsContent,'###TITLE###', htmlspecialchars($data['title']) . $number_of_results);
-					$cssClass = 'option ';
-					$cssClass .= $data['selected'] ? 'selected' : '';
-					$optionsContent = $this->cObj->substituteMarker($optionsContent,'###OPTIONCSSCLASS###', $cssClass);
-
-					$optionsCount++;
-
-				}
-			}
-
-			// modify filter options by hook
-			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptions'])) {
-				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptions'] as $_classRef) {
-					if (TYPO3_VERSION_INTEGER >= 7000000) {
-						$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
-					} else {
-						$_procObj = & t3lib_div::getUserObj($_classRef);
-					}
-					$optionsContent .= $_procObj->modifyFilterOptions(
-						$filterUid,
-						$optionsContent,
-						$optionsCount,
-						$this
-					);
-				}
-			}
-
-			// build onclick reset
-			$onclickReset = 'onclick="document.getElementById(\'filter_' . $filterUid . '\').value=\'\'; '.$this->onclickFilter.' "';
-
-			// fill markers
-			$filterContent = $this->cObj->getSubpart($this->templateCode, $filterSubpart);
-			$filterContent = $this->cObj->substituteSubpart ($filterContent, $optionSubpart, $optionsContent);
-			$filterContent = $this->cObj->substituteMarker($filterContent,'###FILTERTITLE###', htmlspecialchars($filters[$filterUid]['title']));
-			$filterContent = $this->cObj->substituteMarker($filterContent,'###SWITCH_AREA_START###', '<a href="javascript:switchArea(\'filter_'.$filterUid.'\')">');
-			$filterContent = $this->cObj->substituteMarker($filterContent,'###SWITCH_AREA_END###', '</a>');
-			$filterContent = $this->cObj->substituteMarker($filterContent,'###FILTERNAME###', 'tx_kesearch_pi1[filter]['.$filterUid.']');
-			$filterContent = $this->cObj->substituteMarker($filterContent,'###FILTERID###', 'filter_' . $filterUid);
-			$filterContent = $this->cObj->substituteMarker($filterContent,'###ONCHANGE###', $this->onclickFilter);
-			$filterContent = $this->cObj->substituteMarker($filterContent,'###ONCLICK_RESET###', $onclickReset );
-			$filterContent = $this->cObj->substituteMarker($filterContent,'###RESET_FILTER###', $this->pi_getLL('reset_filter'));
-			$filterContent = $this->cObj->substituteMarker($filterContent,'###DISABLED###', $optionsCount > 0 ? '' : ' disabled="disabled" ');
-			$filterContent = $this->cObj->substituteMarker($filterContent,'###VALUE###', $this->piVars['filter'][$filterUid]);
-		}
-
-		// bullet
-		unset($imageConf);
-		$bulletSrc = $filters[$filterUid]['expandbydefault'] ? 'list-head-expanded.gif' : 'list-head-closed.gif';
-		if (TYPO3_VERSION_INTEGER < 6002000) {
-			$imageConf['file'] = t3lib_extMgm::siteRelPath($this->extKey).'res/img/'.$bulletSrc;
-		} else {
-			$imageConf['file'] = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath($this->extKey).'res/img/'.$bulletSrc;
-		}
-		$imageConf['params'] = 'class="bullet" id="bullet_filter_' . $filterUid . '" ';
-		$filterContent = $this->cObj->substituteMarker($filterContent,'###BULLET###', $this->cObj->IMAGE($imageConf));
-
-		// expand by default ?
-		$class = $filters[$filterUid]['expandbydefault'] || !empty($this->piVars['filter'][$filterUid]) || $this->conf['renderMethod'] == 'static' ? 'expanded' : 'closed';
-		$filterContent = $this->cObj->substituteMarker($filterContent,'###LISTCSSCLASS###', $class);
-
-		// special css class (outer options list for scrollbox)
-		$filterContent = $this->cObj->substituteMarker($filterContent,'###SPECIAL_CSS_CLASS###', $filters[$filterUid]['cssclass'] ? $filters[$filterUid]['cssclass'] : '');
-
-		return $filterContent;
-
-	}
-
-
-	/**
-	 * renders the filters which are in checkbox mode
-	 *
-	 * @param $filterUid UID of the filter which we have to render
-	 * @param $options contains all options which are found in the search result
-	 * @return $string HTML of rendered checkbox filter
-	 */
-	public function renderCheckbox($filterUid, $options) {
-		$filters = $this->filters->getFilters();
-		$allOptionsOfCurrentFilter = $filters[$filterUid]['options'];
-
-		// alphabetical sorting of filter options
-		if ($filters[$filterUid]['alphabeticalsorting'] == 1) {
-			$this->sortArrayByColumn($allOptionsOfCurrentFilter, 'title');
-		}
-
-		// getSubparts
-		$template['filter'] = $this->cObj->getSubpart($this->templateCode, '###SUB_FILTER_CHECKBOX###');
-		$template['options'] = $this->cObj->getSubpart($this->templateCode, '###SUB_FILTER_CHECKBOX_OPTION###');
-
-		// loop through options
-		if(is_array($allOptionsOfCurrentFilter)) {
-			foreach($allOptionsOfCurrentFilter as $key => $data) {
-				$checkBoxParams['selected'] = '';
-				$checkBoxParams['disabled'] = '';
-				$isOptionInOptionArray = 0;
-
-				// check if current option (of searchresults) is in array of all possible options
-				$isOptionInOptionArray = 0;
-				if (is_array($options)) {
-					foreach($options as $optionKey => $optionValue) {
-						if (TYPO3_VERSION_INTEGER >= 7000000) {
-							$isInArray = TYPO3\CMS\Core\Utility\GeneralUtility::inArray($options[$optionKey], $data['title']);
-						} else {
-							$isInArray = t3lib_div::inArray($options[$optionKey], $data['title']);
-						}
-						if(is_array($options[$optionKey]) && $isInArray) {
-							$isOptionInOptionArray = 1;
-							break;
-						}
-					}
-				}
-
-				// if option is in optionArray, we have to mark the checkboxes
-				if ($isOptionInOptionArray) {
-					// if user has selected a checkbox it must be selected on the resultpage, too.
-					// options which have been preselected in the backend are already in $this->piVars['filter'][$filterUid]
-					if($this->piVars['filter'][$filterUid][$key]) {
-						$checkBoxParams['selected'] = 'checked="checked"';
-					}
-
-					// mark all checkboxes if that config options is set and no search string was given and there
-					// are no preselected filters given for that filter
-					if($this->isEmptySearch && $filters[$filterUid]['markAllCheckboxes'] && empty($this->preselectedFilter[$filterUid])) {
-						$checkBoxParams['selected'] = 'checked="checked"';
-					}
-
-				} else { // if an option was not found in the search results
-					$checkBoxParams['disabled'] = 'disabled="disabled"';
-				}
-
-				$number_of_results = $this->renderNumberOfResultsString($options[$data['uid']]['results'], $filters[$filterUid]);
-				$markerArray['###TITLE###'] = htmlspecialchars($data['title']) . $number_of_results;
-				$markerArray['###VALUE###'] = htmlspecialchars($data['tag']);
-				$markerArray['###OPTIONKEY###'] = $key;
-				$markerArray['###OPTIONID###'] = 'filter_' . $filterUid . '_' . $key;
-				$markerArray['###OPTIONCSSCLASS###'] = 'optionCheckBox optionCheckBox' . $filterUid . ' optionCheckBox' . $filterUid . '_' . $key;
-				$markerArray['###OPTIONSELECT###'] = $checkBoxParams['selected'];
-				$markerArray['###OPTIONDISABLED###'] = $checkBoxParams['disabled'];
-
-				$contentOptions .= $this->cObj->substituteMarkerArray($template['options'], $markerArray);
-			}
-			$optionsCount = count($allOptionsOfCurrentFilter);
-		}
-
-		// modify filter options by hook
-		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptions'])) {
-			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptions'] as $_classRef) {
-				if (TYPO3_VERSION_INTEGER >= 7000000) {
-					$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
-				} else {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
-				}
-				$contentOptions .= $_procObj->modifyFilterOptions(
-					$filterUid,
-					$contentOptions,
-					$optionsCount,
-					$this
-				);
-			}
-		}
-
-		unset($markerArray);
-
-		// render filter
-		$contentFilters = $this->cObj->substituteSubpart($template['filter'], '###SUB_FILTER_CHECKBOX_OPTION###', $contentOptions);
-
-		// get title
-		$filterTitle = htmlspecialchars($filters[$filterUid]['title']);
-
-		// get bullet image
-		$bulletSrc = $filters[$filterUid]['expandbydefault'] ? 'list-head-expanded.gif' : 'list-head-closed.gif';
-		if (TYPO3_VERSION_INTEGER < 6002000) {
-			$bulletConf['file'] = t3lib_extMgm::siteRelPath($this->extKey) . 'res/img/' . $bulletSrc;
-		} else {
-			$bulletConf['file'] = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath($this->extKey) . 'res/img/' . $bulletSrc;
-		}
-		$bulletConf['params'] = 'class="bullet" id="bullet_filter_' . $filterUid . '" ';
-		$bulletImage = $this->cObj->IMAGE($bulletConf);
-
-		/**
-		 * if "expand by default" is set
-		 * if value in current filter is not empty
-		 * if we are in static mode
-		 */
-		if($filters[$filterUid]['expandbydefault'] || !empty($this->piVars['filter'][$filterUid]) || $this->conf['renderMethod'] == 'static') {
-			$class = 'expanded';
-		} else $class = 'closed';
-
-		// fill markers
-		$markerArray['###LABEL_ALL###'] = $this->pi_getLL('label_all');
-		$markerArray['###FILTERTITLE###'] = $filterTitle;
-		$markerArray['###FILTERNAME###'] = 'tx_kesearch_pi1[filter]['.$filterUid.']';
-		$markerArray['###FILTERID###'] = 'filter_' . $filterUid;
-		$markerArray['###FILTER_UID###'] = $filterUid;
-		$markerArray['###ONCHANGE###'] = $this->onclickFilter;
-		$markerArray['###ONCLICK_RESET###'] = $this->onclickFilter;
-		$markerArray['###DISABLED###'] = $optionsCount > 0 ? '' : ' disabled="disabled" ';
-		$markerArray['###BULLET###'] = $bulletImage;
-		$markerArray['###LISTCSSCLASS###'] = $class;
-		$markerArray['###SPECIAL_CSS_CLASS###'] = $filters[$filterUid]['cssclass'] ? $filters[$filterUid]['cssclass'] : '';
-		$markerArray['###SWITCH_AREA_START###'] = $this->conf['renderMethod'] != 'static' ? '<a href="javascript:switchArea(\'filter_'.$filterUid.'\')">' : '';
-		$markerArray['###SWITCH_AREA_END###'] = $this->conf['renderMethod'] != 'static' ? '</a>' : '';
-		$contentFilters = $this->cObj->substituteMarkerArray($contentFilters, $markerArray);
-
-		// show checkbox switch only in ajax mode (needs javascript)
-		if ($this->conf['renderMethod'] != 'static') {
-			$checkboxSwitch  = $this->cObj->getSubpart($this->templateCode,'###SUB_CHECKBOX_SWITCH###');
-			$markerArray = array(
-				'###FILTER_UID###' => $filterUid,
-				'###LABEL_ALL###' => $this->pi_getLL('label_all'),
-			);
-			$checkboxSwitch = $this->cObj->substituteMarkerArray($checkboxSwitch,$markerArray);
-		} else $checkboxSwitch = '';
-		$contentFilters = $this->cObj->substituteSubpart($contentFilters, '###SUB_CHECKBOX_SWITCH', $checkboxSwitch);
-
-		// show checkbox reset link only in ajax mode (needs javascript)
-		if ($this->conf['renderMethod'] != 'static') {
-			$checkboxReset  = $this->cObj->getSubpart($this->templateCode,'###SUB_CHECKBOX_RESET###');
-			$markerArray = array(
-				'###FILTER_UID###' => $filterUid,
-				'###ONCLICK_RESET###' => $this->onclickFilter,
-				'###RESET_FILTER###' => $this->pi_getLL('reset_filter'),
-			);
-			$checkboxReset = $this->cObj->substituteMarkerArray($checkboxReset,$markerArray);
-		} else $checkboxReset = '';
-		$contentFilters = $this->cObj->substituteSubpart($contentFilters, '###SUB_CHECKBOX_RESET', $checkboxReset);
-
-		// submit checkbox filter link only in ajax mode (needs javascript)
-		if ($this->conf['renderMethod'] != 'static') {
-			$checkboxSubmit  = $this->cObj->getSubpart($this->templateCode,'###SUB_CHECKBOX_SUBMIT###');
-			$markerArray = array(
-				'###ONCLICK_RESET###' => $this->onclickFilter,
-				'###CHECKBOX_SUBMIT###' => $this->pi_getLL('checkbox_submit'),
-			);
-			$checkboxSubmit = $this->cObj->substituteMarkerArray($checkboxSubmit,$markerArray);
-		} else $checkboxSubmit = '';
-		$contentFilters = $this->cObj->substituteSubpart($contentFilters, '###SUB_CHECKBOX_SUBMIT', $checkboxSubmit);
-
-		return $contentFilters;
 	}
 
 	/**
@@ -1855,6 +1485,7 @@ class tx_kesearch_lib extends tx_kesearch_pluginBase {
 
 		// hook for third party pagebrowsers or for modification of build in browser
 		// if the hook return content then return that content
+		// use only if you use marker based templating, not for fluid based templating!
 		$content = '';
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['renderPagebrowserInit'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['renderPagebrowserInit'] as $_classRef) {
@@ -2011,8 +1642,10 @@ class tx_kesearch_lib extends tx_kesearch_pluginBase {
 			'until' => $this->pi_getLL('until'),
 			'of' => $this->pi_getLL('of'),
 		);
+		$this->fluidTemplateVariables['pagebrowser'] = $markerArray;
 
 		// hook for additional markers in pagebrowse
+		// use only if you use marker based templating, not for fluid based templating!
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['pagebrowseAdditionalMarker'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['pagebrowseAdditionalMarker'] as $_classRef) {
 				if (TYPO3_VERSION_INTEGER >= 7000000) {

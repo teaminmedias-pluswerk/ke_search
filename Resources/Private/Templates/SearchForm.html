@@ -30,8 +30,8 @@ Templates/SearchForm.html
 			<input id="sortByField" type="hidden" name="tx_kesearch_pi1[sortByField]" value="{sortByField}" />
 			<input id="sortByDir" type="hidden" name="tx_kesearch_pi1[sortByDir]" value="{sortByDir}" />
 
-			<f:if condition="{filter}">
-				<div id="kesearch_filters"><f:format.raw>{filter}</f:format.raw></div>
+			<f:if condition="{filters}">
+				<div id="kesearch_filters"><f:render partial="Filters" arguments="{conf: conf, numberofresults: numberofresults, resultrows: resultrows, filters: filters}" /></div>
 			</f:if>
 
 			<span class="resetbutt"><a href="{resetUrl}" class="resetButton"><span><f:translate key="LLL:EXT:ke_search/pi1/locallang.xml:reset_button" /></span></a></span>

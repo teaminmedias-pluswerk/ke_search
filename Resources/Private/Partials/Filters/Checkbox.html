@@ -1,0 +1,24 @@
+<!--
+	=====================
+	Partials/Filters/Checkbox.html
+-->
+
+<div class="list" id="list_###FILTERID###">
+<span class="head">{filter.title}</span>
+<!--
+<span class="kesGreyButt" onclick="enableCheckboxes({filter.uid})"><f:translate key="LLL:EXT:ke_search/pi1/locallang.xml:label_all" /></span>
+-->
+<ul id="options_{filter.id}" class="checkboxList">
+	<f:for each="{filter.checkboxOptions}" as="option">
+		<li class="optionCheckBox optionCheckBox{filter.uid} optionCheckBox{filter_uid}_{option.value}">
+			<input type="checkbox" name="{filter.name}[{option.key}]" id="{option.id}" value="{option.tag}" {f:if(condition: '{option.selected}', then: ' checked="checked"')} {f:if(condition: '{option.disabled}', then: 'disabled = "disabled"')} />
+		    <label for="{option.id}">{option.title}<f:if condition="{option.results}"><f:if condition="{filter.shownumberofresults}"> ({option.results})</f:if></f:if></label>
+		</li>
+		<li class="clearer"></li>
+	</f:for>
+</ul>
+<!--
+<span class="kesGreyButt" onclick="resetCheckboxes(###FILTER_UID###); ###ONCLICK_RESET###">###RESET_FILTER###</span>
+<span class="kesGreyButt" onclick="###ONCLICK_RESET###">###CHECKBOX_SUBMIT###</span>
+-->
+</div>

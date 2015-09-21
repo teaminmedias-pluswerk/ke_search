@@ -46,6 +46,7 @@
 }
 
 /* Buttons */
+a.kesGreyButt,
 span.resetbutt a,
 span.submitbutt input,
 input.kesGreyButt,
@@ -169,15 +170,9 @@ div.kesearchbox{
     margin-bottom: 10px;
 }
 #kesearch_filters .list .head {
-    background: url("img/filterHeadBG.gif");
     display:block;
     border: 1px solid #CFCFCF;
     padding: 5px;
-}
-#kesearch_filters .list .head img {
-    margin: 0 5px;
-    position: relative;
-    top: -2px;
 }
 #kesearch_filters .list ul {
     padding: 10px;
@@ -218,7 +213,6 @@ div.kesearchbox{
 #kesearch_filters .list li.parent2,
 #kesearch_filters .list li.parent3 {
     font-weight: bold;
-    list-style-image: url("img/list-bullet-cat.gif");
     list-style-position: outside;
 }
 
