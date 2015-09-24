@@ -42,11 +42,7 @@ class tx_kesearch_pi1 extends tx_kesearch_lib {
 	 */
 	function main($content, $conf) {
 
-		if (TYPO3_VERSION_INTEGER >= 7000000) {
-			$this->ms = TYPO3\CMS\Core\Utility\GeneralUtility::milliseconds();
-		} else {
-			$this->ms = t3lib_div::milliseconds();
-		}
+		$this->ms = TYPO3\CMS\Core\Utility\GeneralUtility::milliseconds();
 		$this->conf = $conf;
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
@@ -74,11 +70,7 @@ class tx_kesearch_pi1 extends tx_kesearch_lib {
 		// hook for initials
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['initials'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['initials'] as $_classRef) {
-				if (TYPO3_VERSION_INTEGER >= 7000000) {
-					$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
-				} else {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
-				}
+				$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
 				$_procObj->addInitials($this);
 			}
 		}
@@ -124,11 +116,7 @@ class tx_kesearch_pi1 extends tx_kesearch_lib {
 		// hook for additional searchbox markers
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['additionalSearchboxContent'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['additionalSearchboxContent'] as $_classRef) {
-				if (TYPO3_VERSION_INTEGER >= 7000000) {
-					$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
-				} else {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
-				}
+				$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
 				$_procObj->additionalSearchboxContent($content, $this);
 			}
 		}
@@ -143,11 +131,7 @@ class tx_kesearch_pi1 extends tx_kesearch_lib {
 	public function initMarkerTemplate() {
 		// init XAJAX?
 		if ($this->conf['renderMethod'] != 'static') {
-			if (TYPO3_VERSION_INTEGER < 6002000) {
-				$xajaxIsLoaded = t3lib_extMgm::isLoaded('xajax');
-			} else {
-				$xajaxIsLoaded = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('xajax');
-			}
+			$xajaxIsLoaded = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('xajax');
 			if (!$xajaxIsLoaded) {
 				return ('<span style="color: red;"><b>ke_search error:</b>"XAJAX" must be installed for this mode.</span>');
 			}
@@ -158,11 +142,7 @@ class tx_kesearch_pi1 extends tx_kesearch_lib {
 		if ($this->conf['spinnerImageFile']) {
 			$spinnerSrc = $this->conf['spinnerImageFile'];
 		} else {
-			if (TYPO3_VERSION_INTEGER < 6002000) {
-				$spinnerSrc = t3lib_extMgm::siteRelPath($this->extKey).'res/img/spinner.gif';
-			} else {
-				$spinnerSrc = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath($this->extKey).'res/img/spinner.gif';
-			}
+			$spinnerSrc = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath($this->extKey).'res/img/spinner.gif';
 		}
 		$this->spinnerImageFilters = '<img id="kesearch_spinner_filters" src="'.$spinnerSrc.'" alt="'.$this->pi_getLL('loading').'" />';
 		$this->spinnerImageResults = '<img id="kesearch_spinner_results" src="'.$spinnerSrc.'" alt="'.$this->pi_getLL('loading').'" />';

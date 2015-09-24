@@ -102,11 +102,7 @@ class tx_kesearch_lib_searchresult {
 				if ($this->row['orig_uid']) {
 					$fileRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
 					$fileObject = $fileRepository->findByUid($this->row['orig_uid']);
-					if (TYPO3_VERSION_INTEGER >= 6002000) {
-						$metadata = $fileObject->_getMetaData();
-					} else {
-						$metadata = array();
-					}
+					$metadata = $fileObject->_getMetaData();
 					$linktext = ($metadata['title'] ? $metadata['title'] : $this->row['title']);
 				} else {
 					$linktext = $this->row['title'];

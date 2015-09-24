@@ -6,17 +6,7 @@ class tx_kesearch_classes_flexform {
 	var $lang;
 
 	public function init() {
-		if (TYPO3_VERSION_INTEGER >= 7000000) {
-			$this->lang = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Lang\\LanguageService');
-		} else if (TYPO3_VERSION_INTEGER >= 6002000) {
-			$this->lang = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('language');
-		} else {
-			$this->lang = t3lib_div::makeInstance('language');
-		}
-
-		if (TYPO3_VERSION_INTEGER < 6001000) {
-			t3lib_div::loadTCA('tx_kesearch_index');
-		}
+		$this->lang = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Lang\\LanguageService');
 	}
 
 	function listAvailableOrderingsForFrontend(&$config) {
@@ -30,12 +20,7 @@ class tx_kesearch_classes_flexform {
 		$res = $GLOBALS['TYPO3_DB']->sql_query('SHOW COLUMNS FROM tx_kesearch_index');
 		while($col = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 
-			if (TYPO3_VERSION_INTEGER >= 7000000) {
-				$isInList = TYPO3\CMS\Core\Utility\GeneralUtility::inList($notAllowedFields, $col['Field']);
-			} else {
-				$isInList = t3lib_div::inList($notAllowedFields, $col['Field']);
-			}
-
+			$isInList = TYPO3\CMS\Core\Utility\GeneralUtility::inList($notAllowedFields, $col['Field']);
 			if(!$isInList) {
 				$file = $GLOBALS['TCA']['tx_kesearch_index']['columns'][$col['Field']]['label'];
 				$fieldLabel = $this->lang->sL($file);
@@ -58,12 +43,7 @@ class tx_kesearch_classes_flexform {
 		$res = $GLOBALS['TYPO3_DB']->sql_query('SHOW COLUMNS FROM tx_kesearch_index');
 		while($col = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 
-			if (TYPO3_VERSION_INTEGER >= 7000000) {
-				$isInList = TYPO3\CMS\Core\Utility\GeneralUtility::inList($notAllowedFields, $col['Field']);
-			} else {
-				$isInList = t3lib_div::inList($notAllowedFields, $col['Field']);
-			}
-
+			$isInList = TYPO3\CMS\Core\Utility\GeneralUtility::inList($notAllowedFields, $col['Field']);
 			if(!$isInList) {
 				$file = $GLOBALS['TCA']['tx_kesearch_index']['columns'][$col['Field']]['label'];
 				$fieldLabel = $this->lang->sL($file);

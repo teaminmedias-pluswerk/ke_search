@@ -25,16 +25,10 @@
 
 
 
-// include indexer class and create a "baseclass" (only for backwards compatibility)
-if (TYPO3_VERSION_INTEGER >= 6002000) {
-	require_once(TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_search') . 'Classes/indexer/class.tx_kesearch_indexer.php');
-	abstract class tx_kesearch_indexertask_baseclass extends \TYPO3\CMS\Scheduler\Task\AbstractTask { }
-} else {
-	require_once(t3lib_extMgm::extPath('ke_search') . 'Classes/indexer/class.tx_kesearch_indexer.php');
-	abstract class tx_kesearch_indexertask_baseclass extends tx_scheduler_Task { }
-}
+// include indexer class 
+require_once(TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_search') . 'Classes/indexer/class.tx_kesearch_indexer.php');
 
-class tx_kesearch_indexertask extends tx_kesearch_indexertask_baseclass {
+class tx_kesearch_indexertask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 
 	public function execute() {
 
@@ -42,22 +36,15 @@ class tx_kesearch_indexertask extends tx_kesearch_indexertask_baseclass {
 		$this->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ke_search']);
 
 		// make indexer instance
-		if (TYPO3_VERSION_INTEGER >= 6002000) {
-			$indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_indexer');
-		} else {
-			$indexer = t3lib_div::makeInstance('tx_kesearch_indexer');
-		}
+		$indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_indexer');
 
 		// process
-		$response = $indexer->startIndexing(true, $this->extConf, 'CLI');
+		$indexer->startIndexing(true, $this->extConf, 'CLI');
 
 		return true;
-
 	}
-
 }
 
 if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/Scheduler/class.tx_kesearch_indexertask.php'])	{
 	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/Scheduler/class.tx_kesearch_indexertask.php']);
 }
-?>

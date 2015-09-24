@@ -56,11 +56,7 @@ class tx_kesearch_indexer_types_ke_yac extends tx_kesearch_indexer_types {
 		$where .= ' AND hidden=0 AND deleted=0 ';
 		// do not index passed events?
 		if ($this->indexerConfig['index_passed_events'] == 'no') {
-			if (TYPO3_VERSION_INTEGER < 6002000) {
-				$keYacProductsIsLoaded = t3lib_extMgm::isLoaded('ke_yac_products');
-			} else {
-				$keYacProductsIsLoaded = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('ke_yac_products');
-			}
+			$keYacProductsIsLoaded = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('ke_yac_products');
 			if ($keYacProductsIsLoaded) {
 				// special query if ke_yac_products loaded (VNR)
 				$where .= '
@@ -92,11 +88,7 @@ class tx_kesearch_indexer_types_ke_yac extends tx_kesearch_indexer_types {
 				$targetPID = $this->indexerConfig['targetpid'];
 
 				// get tags
-				if (TYPO3_VERSION_INTEGER >= 7000000) {
-					$yacRecordTags = TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',',$yacRecord['tx_keyacsearchtags_tags'], true);
-				} else {
-					$yacRecordTags = t3lib_div::trimExplode(',',$yacRecord['tx_keyacsearchtags_tags'], true);
-				}
+				$yacRecordTags = TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',',$yacRecord['tx_keyacsearchtags_tags'], true);
 
 				$tags = '';
 				$clearTextTags = '';
@@ -118,11 +110,7 @@ class tx_kesearch_indexer_types_ke_yac extends tx_kesearch_indexer_types {
 					// hook for custom modifications of the indexed data, e. g. the tags
 				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyYACIndexEntry'])) {
 					foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyYACIndexEntry'] as $_classRef) {
-						if (TYPO3_VERSION_INTEGER >= 7000000) {
-							$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
-						} else {
-							$_procObj = & t3lib_div::getUserObj($_classRef);
-						}
+						$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
 						$_procObj->modifyYACIndexEntry(
 							$title,
 							$abstract,

@@ -71,31 +71,18 @@ class tx_kesearch_indexer_filetypes_ppt extends tx_kesearch_indexer_types_file i
 	 */
 	public function getContent($file) {
 		// create the tempfile which will contain the content
-		if (TYPO3_VERSION_INTEGER >= 7000000) {
-			$tempFileName = TYPO3\CMS\Core\Utility\GeneralUtility::tempnam('ppt_files-Indexer');
-		} else {
-			$tempFileName = t3lib_div::tempnam('ppt_files-Indexer');
-		}
+		$tempFileName = TYPO3\CMS\Core\Utility\GeneralUtility::tempnam('ppt_files-Indexer');
 
 		// Delete if exists, just to be safe.
 		@unlink($tempFileName);
 
 		// generate and execute the pdftotext commandline tool
 		$cmd = $this->app['catppt'] . ' -s8859-1 -dutf-8 ' . escapeshellarg($file) . ' > ' . escapeshellarg($tempFileName);
-
-		if (TYPO3_VERSION_INTEGER >= 7000000) {
-			TYPO3\CMS\Core\Utility\CommandUtility::exec($cmd);
-		} else {
-			t3lib_utility_Command::exec($cmd);
-		}
+		TYPO3\CMS\Core\Utility\CommandUtility::exec($cmd);
 
 		// check if the tempFile was successfully created
 		if (@is_file($tempFileName)) {
-			if (TYPO3_VERSION_INTEGER >= 7000000) {
-				$content = TYPO3\CMS\Core\Utility\GeneralUtility::getUrl($tempFileName);
-			} else {
-				$content = t3lib_div::getUrl($tempFileName);
-			}
+			$content = TYPO3\CMS\Core\Utility\GeneralUtility::getUrl($tempFileName);
 			unlink($tempFileName);
 		}
 		else

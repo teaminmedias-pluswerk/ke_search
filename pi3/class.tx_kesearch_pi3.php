@@ -42,11 +42,7 @@ class tx_kesearch_pi3 extends tx_kesearch_lib {
 	 */
 	function main($content, $conf) {
 
-		if (TYPO3_VERSION_INTEGER >= 7000000) {
-			$this->ms = TYPO3\CMS\Core\Utility\GeneralUtility::milliseconds();
-		} else {
-			$this->ms = t3lib_div::milliseconds();
-		}
+		$this->ms = TYPO3\CMS\Core\Utility\GeneralUtility::milliseconds();
 		$this->conf = $conf;
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
@@ -57,11 +53,7 @@ class tx_kesearch_pi3 extends tx_kesearch_lib {
 
 		// init XAJAX?
 		if ($this->conf['renderMethod'] != 'static') {
-			if (TYPO3_VERSION_INTEGER < 6002000) {
-				$xajaxIsLoaded = t3lib_extMgm::isLoaded('xajax');
-			} else {
-				$xajaxIsLoaded = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('xajax');
-			}
+			$xajaxIsLoaded = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('xajax');
 			if (!$xajaxIsLoaded) {
 				return ('<span style="color: red;"><b>ke_search error:</b>"XAJAX" must be installed for this mode.</span>');
 			}
@@ -71,11 +63,7 @@ class tx_kesearch_pi3 extends tx_kesearch_lib {
 		// hook for initials
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['initials'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['initials'] as $_classRef) {
-				if (TYPO3_VERSION_INTEGER >= 7000000) {
-					$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
-				} else {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
-				}
+				$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
 				$_procObj->addInitials($this);
 			}
 		}
@@ -97,11 +85,7 @@ class tx_kesearch_pi3 extends tx_kesearch_lib {
 		// hook for modifying content
 		if(is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyMultiselectContent'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyMultiselectContent'] as $_classRef) {
-				if (TYPO3_VERSION_INTEGER >= 7000000) {
-					$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
-				} else {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
-				}
+				$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
 				$content = $_procObj->modifyMultiselectContent($template['multiselect'], $filter, $this);
 			}
 		}

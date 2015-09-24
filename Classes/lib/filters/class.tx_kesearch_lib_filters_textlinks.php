@@ -135,11 +135,7 @@ class tx_kesearch_lib_filters_textlinks {
 		// modify filter options by hook
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptions'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptions'] as $_classRef) {
-				if (TYPO3_VERSION_INTEGER >= 7000000) {
-					$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
-				} else {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
-				}
+				$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
 				$contentOptions .= $_procObj->modifyFilterOptions(
 					$filterUid,
 					$contentOptions,
@@ -217,11 +213,7 @@ class tx_kesearch_lib_filters_textlinks {
 			// build intersection of both arrays
 			$optionsOfCurrentFilter = array_intersect_key($allOptionsOfCurrentFilter, $additionalOptionValues);
 			// merge additional values into option array
-			if (TYPO3_VERSION_INTEGER >= 7000000) {
-				\TYPO3\CMS\Core\Utility\ArrayUtility::mergeRecursiveWithOverrule($optionsOfCurrentFilter, (array)$additionalOptionValues);
-			} else {
-				$optionsOfCurrentFilter = t3lib_div::array_merge_recursive_overrule((array)$optionsOfCurrentFilter, (array)$additionalOptionValues);
-			}
+			\TYPO3\CMS\Core\Utility\ArrayUtility::mergeRecursiveWithOverrule($optionsOfCurrentFilter, (array)$additionalOptionValues);
 			// return sorted option array
 			return $this->sortMultiDimArray($optionsOfCurrentFilter);
 		} else return array();
@@ -337,11 +329,7 @@ class tx_kesearch_lib_filters_textlinks {
 		// This is useful if you want to define special sortings for each textlink
 		if(is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyParamsForTextlinks'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyParamsForTextlinks'] as $_classRef) {
-				if (TYPO3_VERSION_INTEGER >= 7000000) {
-					$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
-				} else {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
-				}
+				$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
 				$_procObj->modifyParamsForTextlinks($params, $excludes, $option, $this->conf, $this->pObj);
 			}
 		}

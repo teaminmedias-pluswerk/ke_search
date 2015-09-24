@@ -32,21 +32,17 @@
 							<config>
 								<type>select</type>
 								<items>
-									<numIndex index="0">
-										<numIndex index="0">LLL:EXT:ke_search/pi1/locallang.xml:ff.renderMethod.I.0</numIndex>
-										<numIndex index="1">static</numIndex>
-									</numIndex>
-									<numIndex index="1">
-										<numIndex index="0">LLL:EXT:ke_search/pi1/locallang.xml:ff.renderMethod.I.1</numIndex>
-										<numIndex index="1">ajax_after_reload</numIndex>
-									</numIndex>
 									<numIndex index="2">
 										<numIndex index="0">LLL:EXT:ke_search/pi1/locallang.xml:ff.renderMethod.I.2</numIndex>
 										<numIndex index="1">fluidtemplate</numIndex>
 									</numIndex>
+									<numIndex index="0">
+										<numIndex index="0">[DEPRECATED] marker based templating</numIndex>
+										<numIndex index="1">static</numIndex>
+									</numIndex>
 								</items>
 								<size>1</size>
-								<default>static</default>
+								<default>fluidtemplate</default>
 							</config>
 						</TCEforms>
 					</renderMethod>

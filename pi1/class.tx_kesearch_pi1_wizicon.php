@@ -42,12 +42,7 @@ class tx_kesearch_pi1_wizicon {
 		global $LANG;
 
 		$LL = $this->includeLocalLang();
-
-		if (TYPO3_VERSION_INTEGER < 6002000) {
-			$extRelPath = t3lib_extMgm::extRelPath('ke_search');
-		} else {
-			$extRelPath = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('ke_search');
-		}
+		$extRelPath = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('ke_search');
 
 		$wizardItems['plugins_tx_kesearch_pi1'] = array(
 		    'icon' =>  $extRelPath . 'pi1/ce_wiz.gif',
@@ -65,24 +60,10 @@ class tx_kesearch_pi1_wizicon {
 	 * @return	The array with language labels
 	 */
 	function includeLocalLang() {
-		if (TYPO3_VERSION_INTEGER < 6002000) {
-			$llFile = t3lib_extMgm::extPath('ke_search') . 'pi1/locallang.xml';
-		} else {
-			$llFile = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_search') . 'pi1/locallang.xml';
-		}
+		$llFile = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_search') . 'pi1/locallang.xml';
 
-		if (TYPO3_VERSION_INTEGER >= 4006000) {
-			if (TYPO3_VERSION_INTEGER >= 7000000) {
-				$xmlParser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Localization\\Parser\\LocallangXmlParser');
-			} else if (TYPO3_VERSION_INTEGER >= 6002000) {
-				$xmlParser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('t3lib_l10n_parser_Llxml');
-			} else {
-				$xmlParser = t3lib_div::makeInstance('t3lib_l10n_parser_Llxml');
-			}
-			$LOCAL_LANG = $xmlParser->getParsedData($llFile, $GLOBALS['LANG']->lang);
-		} else {
-			$LOCAL_LANG = t3lib_div::readLLXMLfile($llFile, $GLOBALS['LANG']->lang);
-		}
+		$xmlParser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Localization\\Parser\\LocallangXmlParser');
+		$LOCAL_LANG = $xmlParser->getParsedData($llFile, $GLOBALS['LANG']->lang);
 		return $LOCAL_LANG;
 	}
 

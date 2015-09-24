@@ -49,12 +49,7 @@ class tx_kesearch_indexer_types_tt_content extends tx_kesearch_indexer_types_pag
 		// copied to the index
 		//$where .= t3lib_BEfunc::BEenableFields($table);
 		$where .= ' AND hidden=0';
-
-		if (TYPO3_VERSION_INTEGER >= 7000000) {
-			$where .= TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table);
-		} else {
-			$where .= t3lib_BEfunc::deleteClause($table);
-		}
+		$where .= TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table);
 
 		// get tags from page
 		$tags = $this->pageRecords[$uid]['tags'];
@@ -138,11 +133,7 @@ class tx_kesearch_indexer_types_tt_content extends tx_kesearch_indexer_types_pag
 				// hook for custom modifications of the indexed data, e. g. the tags
 				if(is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyContentIndexEntry'])) {
 					foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyContentIndexEntry'] as $_classRef) {
-						if (TYPO3_VERSION_INTEGER >= 7000000) {
-							$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
-						} else {
-							$_procObj = & t3lib_div::getUserObj($_classRef);
-						}
+						$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
 						$_procObj->modifyContentIndexEntry(
 							$row['header'],
 							$row,

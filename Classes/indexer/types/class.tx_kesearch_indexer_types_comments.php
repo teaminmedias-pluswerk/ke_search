@@ -59,16 +59,9 @@ class tx_kesearch_indexer_types_comments extends tx_kesearch_indexer_types {
 		}
 		$where = 'pid IN (' . implode(',', $indexPids) . ') ';
 		$where .= ' AND approved=1';
-
-		if (TYPO3_VERSION_INTEGER >= 7000000) {
-			$where .= ' AND external_prefix IN ("' . implode('","', TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $this->indexerConfig['commenttypes'])) . '")';
-			$where .= TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table);
-			$where .= TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table);
-		} else {
-			$where .= ' AND external_prefix IN ("' . implode('","',t3lib_div::trimExplode(',', $this->indexerConfig['commenttypes'])) . '")';
-			$where .= t3lib_befunc::BEenableFields($table);
-			$where .= t3lib_befunc::deleteClause($table);
-		}
+		$where .= ' AND external_prefix IN ("' . implode('","', TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $this->indexerConfig['commenttypes'])) . '")';
+		$where .= TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table);
+		$where .= TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table);
 
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields,$table,$where);
 		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
@@ -110,11 +103,7 @@ class tx_kesearch_indexer_types_comments extends tx_kesearch_indexer_types {
 				// hook for custom modifications of the indexed data, e. g. the tags
 				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyCommentsIndexEntry'])) {
 					foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyCommentsIndexEntry'] as $_classRef) {
-						if (TYPO3_VERSION_INTEGER >= 7000000) {
-							$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
-						} else {
-							$_procObj = & t3lib_div::getUserObj($_classRef);
-						}
+						$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
 						$_procObj->modifyCommentsIndexEntry(
 							$title,
 							$abstract,

@@ -64,11 +64,7 @@ class tx_kesearch_filters {
 	public function initialize(tx_kesearch_lib $pObj) {
 		$this->pObj = $pObj;
 		$this->cObj = $pObj->cObj;
-		if (TYPO3_VERSION_INTEGER >= 6002000) {
-			$this->db = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_db');
-		} else {
-			$this->db = t3lib_div::makeInstance('tx_kesearch_db');
-		}
+		$this->db = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_db');
 
 		$this->conf = $this->pObj->conf;
 		$this->piVars = $this->pObj->piVars;
@@ -81,11 +77,7 @@ class tx_kesearch_filters {
 		// hook to modify filters
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilters'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilters'] as $_classRef) {
-				if (TYPO3_VERSION_INTEGER >= 7000000) {
-					$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
-				} else {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
-				}
+				$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
 				$_procObj->modifyFilters($this->filters, $this);
 			}
 		}
@@ -124,11 +116,7 @@ class tx_kesearch_filters {
 			if ($this->pObj->piVars['filter'][$filter['uid']] == $option['tag']) {
 				$selected = true;
 			} else if (is_array($this->pObj->piVars['filter'][$filter['uid']])) {
-				if (TYPO3_VERSION_INTEGER >= 7000000) {
-					$isInArray = TYPO3\CMS\Core\Utility\GeneralUtility::inArray($this->pObj->piVars['filter'][$filter['uid']], $option['tag']);
-				} else {
-					$isInArray = t3lib_div::inArray($this->pObj->piVars['filter'][$filter['uid']], $option['tag']);
-				}
+				$isInArray = TYPO3\CMS\Core\Utility\GeneralUtility::inArray($this->pObj->piVars['filter'][$filter['uid']], $option['tag']);
 				if($isInArray) {
 					$selected = true;
 				}
@@ -163,11 +151,7 @@ class tx_kesearch_filters {
 			$list1 .= ',';
 		}
 		$list1 .= $list2;
-		if (TYPO3_VERSION_INTEGER >= 7000000) {
-			$returnValue = TYPO3\CMS\Core\Utility\GeneralUtility::uniqueList($list1);
-		} else {
-			$returnValue = t3lib_div::uniqueList($list1);
-		}
+		$returnValue = TYPO3\CMS\Core\Utility\GeneralUtility::uniqueList($list1);
 		return $returnValue;
 	}
 

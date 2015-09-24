@@ -1,9 +1,5 @@
 <?php
-if (TYPO3_VERSION_INTEGER >= 6002000) {
-	$extensionPath = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_search');
-} else {
-	$extensionPath = t3lib_extMgm::extPath('ke_search');
-}
+$extensionPath = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_search');
 return array(
 	'tx_kesearch_pi1' => $extensionPath . 'pi1/class.tx_kesearch_pi1.php',
 	'tx_kesearch_indexertask' => $extensionPath . 'Classes/Scheduler/class.tx_kesearch_indexertask.php',

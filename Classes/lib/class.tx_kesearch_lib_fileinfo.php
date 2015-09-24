@@ -67,11 +67,7 @@ class tx_kesearch_lib_fileinfo {
 		$this->file = $file instanceof \TYPO3\CMS\Core\Resource\File ? $file : NULL;
 
 		if(is_string($file) && !empty($file)) {
-			if (TYPO3_VERSION_INTEGER >= 7000000) {
-				$this->fileInfo = TYPO3\CMS\Core\Utility\GeneralUtility::split_fileref($file);
-			} else {
-				$this->fileInfo = t3lib_div::split_fileref($file);
-			}
+			$this->fileInfo = TYPO3\CMS\Core\Utility\GeneralUtility::split_fileref($file);
 			$this->fileInfo['mtime'] = filemtime($file);
 			$this->fileInfo['atime'] = fileatime($file);
 			$this->fileInfo['owner'] = fileowner($file);

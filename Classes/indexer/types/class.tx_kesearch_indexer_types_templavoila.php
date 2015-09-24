@@ -65,28 +65,15 @@ class tx_kesearch_indexer_types_templavoila extends tx_kesearch_indexer_types {
 	public function __construct($pObj) {
 		parent::__construct($pObj);
 
-		if (TYPO3_VERSION_INTEGER < 6002000) {
-			$this->templavoilaIsLoaded = t3lib_extMgm::isLoaded('templavoila');
-		} else {
-			$this->templavoilaIsLoaded = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('templavoila');
-		}
+		$this->templavoilaIsLoaded = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('templavoila');
 		if ($this->templavoilaIsLoaded) {
-			if (TYPO3_VERSION_INTEGER >= 7000000) {
-				$enableFields = TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('pages') . TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('pages');
-			} else {
-				$enableFields = t3lib_BEfunc::BEenableFields('pages') . t3lib_BEfunc::deleteClause('pages');
-			}
+			$enableFields = TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('pages') . TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('pages');
 
 			$row = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('uid,title', 'pages', 'pid = 0' .  $enableFields);
 
 			$GLOBALS['TT'] = new t3lib_timeTrackNull;
-			if (TYPO3_VERSION_INTEGER >= 6002000) {
-				$GLOBALS['TSFE'] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tslib_fe', $GLOBALS['TYPO3_CONF_VARS'], $row['uid'], 0);
-				$GLOBALS['TSFE']->sys_page = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('t3lib_pageSelect');
-			} else {
-				$GLOBALS['TSFE'] = t3lib_div::makeInstance('tslib_fe', $GLOBALS['TYPO3_CONF_VARS'], $row['uid'], 0);
-				$GLOBALS['TSFE']->sys_page = t3lib_div::makeInstance('t3lib_pageSelect');
-			}
+			$GLOBALS['TSFE'] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tslib_fe', $GLOBALS['TYPO3_CONF_VARS'], $row['uid'], 0);
+			$GLOBALS['TSFE']->sys_page = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('t3lib_pageSelect');
 			$GLOBALS['TSFE']->sys_page->init(TRUE);
 			$GLOBALS['TSFE']->initTemplate();
 
@@ -97,11 +84,7 @@ class tx_kesearch_indexer_types_templavoila extends tx_kesearch_indexer_types {
 
 			// override it with the page/type-specific "config."
 			if (is_array($GLOBALS['TSFE']->pSetup['config.'])) {
-				if (TYPO3_VERSION_INTEGER >= 7000000) {
-					$GLOBALS['TSFE']->config['config'] = TYPO3\CMS\Core\Utility\GeneralUtility::array_merge_recursive_overrule($GLOBALS['TSFE']->config['config'], $GLOBALS['TSFE']->pSetup['config.']);
-				} else {
-					$GLOBALS['TSFE']->config['config'] = t3lib_div::array_merge_recursive_overrule($GLOBALS['TSFE']->config['config'], $GLOBALS['TSFE']->pSetup['config.']);
-				}
+				$GLOBALS['TSFE']->config['config'] = TYPO3\CMS\Core\Utility\GeneralUtility::array_merge_recursive_overrule($GLOBALS['TSFE']->config['config'], $GLOBALS['TSFE']->pSetup['config.']);
 			}
 
 			// generate basic rootline
@@ -109,11 +92,7 @@ class tx_kesearch_indexer_types_templavoila extends tx_kesearch_indexer_types {
 				0 => array('uid' => $row['uid'], 'title' => $row['title'])
 			);
 
-			if (TYPO3_VERSION_INTEGER >= 6002000) {
-				$this->tv = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_templavoila_pi1');
-			} else {
-				$this->tv = t3lib_div::makeInstance('tx_templavoila_pi1');
-			}
+			$this->tv = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_templavoila_pi1');
 		}
 
 		$this->counter = 0;
@@ -123,11 +102,7 @@ class tx_kesearch_indexer_types_templavoila extends tx_kesearch_indexer_types {
 		$this->whereClauseForCType = implode(' OR ', $cTypes);
 
 		// get all available sys_language_uid records
-		if (TYPO3_VERSION_INTEGER >= 7000000) {
-			$this->sysLanguages = TYPO3\CMS\Backend\Utility\BackendUtility::getSystemLanguages();
-		} else {
-			$this->sysLanguages = t3lib_BEfunc::getSystemLanguages();
-		}
+		$this->sysLanguages = TYPO3\CMS\Backend\Utility\BackendUtility::getSystemLanguages();
 	}
 
 
@@ -216,27 +191,14 @@ class tx_kesearch_indexer_types_templavoila extends tx_kesearch_indexer_types {
 	public function addLocalizedPagesToCache($row) {
 		$this->cachedPageRecords[0][$row['uid']] = $row;
 		foreach($this->sysLanguages as $sysLang) {
-			if (TYPO3_VERSION_INTEGER >= 7000000) {
-				list($pageOverlay) = TYPO3\CMS\Backend\Utility\BackendUtility::getRecordsByField(
-					'pages_language_overlay',
-					'pid',
-					$row['uid'],
-					'AND sys_language_uid=' . intval($sysLang[1])
-				);
-			} else {
-				list($pageOverlay) = t3lib_BEfunc::getRecordsByField(
-					'pages_language_overlay',
-					'pid',
-					$row['uid'],
-					'AND sys_language_uid=' . intval($sysLang[1])
-				);
-			}
+			list($pageOverlay) = TYPO3\CMS\Backend\Utility\BackendUtility::getRecordsByField(
+				'pages_language_overlay',
+				'pid',
+				$row['uid'],
+				'AND sys_language_uid=' . intval($sysLang[1])
+			);
 			if($pageOverlay) {
-				if (TYPO3_VERSION_INTEGER >= 7000000) {
-					$this->cachedPageRecords[$sysLang[1]][$row['uid']] = TYPO3\CMS\Core\Utility\GeneralUtility::array_merge($row, $pageOverlay);
-				} else {
-					$this->cachedPageRecords[$sysLang[1]][$row['uid']] = t3lib_div::array_merge($row, $pageOverlay);
-				}
+				$this->cachedPageRecords[$sysLang[1]][$row['uid']] = TYPO3\CMS\Core\Utility\GeneralUtility::array_merge($row, $pageOverlay);
 			}
 		}
 	}
@@ -250,12 +212,7 @@ class tx_kesearch_indexer_types_templavoila extends tx_kesearch_indexer_types {
 
 		$flex = $this->pageRecords[$uid]['tx_templavoila_flex'];
 		if(empty($flex)) return '';
-
-		if (TYPO3_VERSION_INTEGER >= 7000000) {
-			$flex = TYPO3\CMS\Core\Utility\GeneralUtility::xml2array($flex);
-		} else {
-			$flex = t3lib_div::xml2array($flex);
-		}
+		$flex = TYPO3\CMS\Core\Utility\GeneralUtility::xml2array($flex);
 
 		// TODO: Maybe I need a more detailed collection of retrieving CE UIDS
 		$contentElementUids = array();
@@ -263,21 +220,13 @@ class tx_kesearch_indexer_types_templavoila extends tx_kesearch_indexer_types {
 			$tvPaths = 'field_content';
 		} else $tvPaths = $this->indexerConfig['tvpath'];
 
-		if (TYPO3_VERSION_INTEGER >= 7000000) {
-			$tvPaths = TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $tvPaths);
-		} else {
-			$tvPaths = t3lib_div::trimExplode(',', $tvPaths);
-		}
+		$tvPaths = TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $tvPaths);
 
 		foreach ($tvPaths as $tvPath) {
 			$contentElementUids[] = $flex['data']['sDEF']['lDEF'][$tvPath]['vDEF'];
 		}
 
-		if (TYPO3_VERSION_INTEGER >= 7000000) {
-			$contentElementUids = TYPO3\CMS\Core\Utility\GeneralUtility::uniqueList(implode(',', $contentElementUids));
-		} else {
-			$contentElementUids = t3lib_div::uniqueList(implode(',', $contentElementUids));
-		}
+		$contentElementUids = TYPO3\CMS\Core\Utility\GeneralUtility::uniqueList(implode(',', $contentElementUids));
 
 		if(empty($contentElementUids)) return '';
 
@@ -288,13 +237,8 @@ class tx_kesearch_indexer_types_templavoila extends tx_kesearch_indexer_types {
 		$table = 'tt_content';
 		$where = 'uid IN (' . $contentElementUids . ')';
 		$where .= ' AND (' . $this->whereClauseForCType. ')';
-		if (TYPO3_VERSION_INTEGER >= 7000000) {
-			$where .= TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table);
-			$where .= TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table);
-		} else {
-			$where .= t3lib_BEfunc::BEenableFields($table);
-			$where .= t3lib_BEfunc::deleteClause($table);
-		}
+		$where .= TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table);
+		$where .= TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table);
 
 		// if indexing of content elements with restrictions is not allowed
 		// get only content elements that have empty group restrictions
@@ -344,11 +288,7 @@ class tx_kesearch_indexer_types_templavoila extends tx_kesearch_indexer_types {
 		// hook for custom modifications of the indexed data, e. g. the tags
 		if(is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyTemplaVoilaIndexEntry'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyTemplaVoilaIndexEntry'] as $_classRef) {
-				if (TYPO3_VERSION_INTEGER >= 7000000) {
-					$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
-				} else {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
-				}
+				$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
 				$_procObj->modifyPagesIndexEntry(
 					$uid,
 					$pageContent,

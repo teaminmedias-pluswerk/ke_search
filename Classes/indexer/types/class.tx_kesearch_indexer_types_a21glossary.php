@@ -64,13 +64,8 @@ class tx_kesearch_indexer_types_a21glossary extends tx_kesearch_indexer_types {
 		// Copy those restrictions to the index.
 		$fields = '*';
 		$where = 'pid IN (' . implode(',', $indexPids) . ') ';
-		if (TYPO3_VERSION_INTEGER >= 7000000) {
-			$where .= TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table);
-			$where .= TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table);
-		} else {
-			$where .= t3lib_befunc::BEenableFields($table);
-			$where .= t3lib_befunc::deleteClause($table);
-		}
+		$where .= TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table);
+		$where .= TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table);
 
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
 		$indexedRecordsCounter = 0;
@@ -113,11 +108,7 @@ class tx_kesearch_indexer_types_a21glossary extends tx_kesearch_indexer_types {
 				// hook for custom modifications of the indexed data, e.g. the tags
 				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifya21glossaryIndexEntry'])) {
 					foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifya21glossaryIndexEntry'] as $_classRef) {
-						if (TYPO3_VERSION_INTEGER >= 7000000) {
-							$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
-						} else {
-							$_procObj = & t3lib_div::getUserObj($_classRef);
-						}
+						$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
 						$_procObj->modifya21glossaryIndexEntry(
 							$title,
 							$abstract,

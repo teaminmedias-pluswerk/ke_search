@@ -81,20 +81,12 @@ class tx_kesearch_indexer_types_t3s_content extends tx_kesearch_indexer_types {
 			);
 			if($rows) {
 				foreach($rows as $key => $row) {
-					if (TYPO3_VERSION_INTEGER >= 7000000) {
-						$xml = TYPO3\CMS\Core\Utility\GeneralUtility::xml2array($row['pi_flexform']);
-					} else {
-						$xml = t3lib_div::xml2array($row['pi_flexform']);
-					}
+					$xml = TYPO3\CMS\Core\Utility\GeneralUtility::xml2array($row['pi_flexform']);
 					$config = $xml['data']['general']['lDEF'];
 					$ttContentUids[] = $config['contentElements']['vDEF'];
 				}
 				$ttContentUids = implode(',', $ttContentUids);
-				if (TYPO3_VERSION_INTEGER >= 7000000) {
-					$ttContentUids = TYPO3\CMS\Core\Utility\GeneralUtility::uniqueList($ttContentUids);
-				} else {
-					$ttContentUids = t3lib_div::uniqueList($ttContentUids);
-				}
+				$ttContentUids = TYPO3\CMS\Core\Utility\GeneralUtility::uniqueList($ttContentUids);
 				$ttContentRecords = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
 					'*',
 					'tt_content',

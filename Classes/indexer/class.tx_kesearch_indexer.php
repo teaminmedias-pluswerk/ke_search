@@ -69,20 +69,9 @@ class tx_kesearch_indexer {
 		// get extension configuration array
 		$this->extConf = tx_kesearch_helper::getExtConf();
 		$this->extConfPremium = tx_kesearch_helper::getExtConfPremium();
-
-		if (TYPO3_VERSION_INTEGER >= 7000000) {
-			$this->registry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Registry');
-		} else if (TYPO3_VERSION_INTEGER >= 6002000) {
-			$this->registry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('t3lib_Registry');
-		} else {
-			$this->registry = t3lib_div::makeInstance('t3lib_Registry');
-		}
+		$this->registry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Registry');
 
 		// fetch the list of the default indexers which come with ke_search
-		// load TCA definition first (only necessary in TYPO3 below 6.1)
-		if (TYPO3_VERSION_INTEGER < 6001000) {
-			t3lib_div::loadTCA('tx_kesearch_indexerconfig');
-		}
 		foreach ($GLOBALS['TCA']['tx_kesearch_indexerconfig']['columns']['type']['config']['items'] as $indexerType) {
 			$this->defaultIndexerTypes[] = $indexerType[1];
 		}
@@ -127,11 +116,7 @@ class tx_kesearch_indexer {
 		// register additional fields which should be written to DB
 		if(is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['registerAdditionalFields'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['registerAdditionalFields'] as $_classRef) {
-				if (TYPO3_VERSION_INTEGER >= 7000000) {
-					$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
-				} else {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
-				}
+				$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
 				$_procObj->registerAdditionalFields($this->additionalFields);
 			}
 		}
@@ -144,18 +129,10 @@ class tx_kesearch_indexer {
 
 			// run default indexers shipped with ke_search
 			if (in_array($this->indexerConfig['type'], $this->defaultIndexerTypes)) {
-				if (TYPO3_VERSION_INTEGER < 6002000) {
-					$path = t3lib_extMgm::extPath('ke_search') . 'Classes/indexer/types/class.tx_kesearch_indexer_types_' . $this->indexerConfig['type'] . '.php';
-					} else {
-					$path = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_search') . 'Classes/indexer/types/class.tx_kesearch_indexer_types_' . $this->indexerConfig['type'] . '.php';
-				}
+				$path = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_search') . 'Classes/indexer/types/class.tx_kesearch_indexer_types_' . $this->indexerConfig['type'] . '.php';
 				if(is_file($path)) {
 					require_once($path);
-					if (TYPO3_VERSION_INTEGER >= 6002000) {
-						$searchObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_indexer_types_' . $this->indexerConfig['type'], $this);
-					} else {
-						$searchObj = t3lib_div::makeInstance('tx_kesearch_indexer_types_' . $this->indexerConfig['type'], $this);
-					}
+					$searchObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_indexer_types_' . $this->indexerConfig['type'], $this);
 					$content .= $searchObj->startIndexing();
 				} else {
 					$content = '<div class="error"> Could not find file ' . $path . '</div>' . "\n";
@@ -165,11 +142,7 @@ class tx_kesearch_indexer {
 			// hook for custom indexer
 			if(is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customIndexer'])) {
 				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customIndexer'] as $_classRef) {
-					if (TYPO3_VERSION_INTEGER >= 7000000) {
-						$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
-					} else {
-						$_procObj = & t3lib_div::getUserObj($_classRef);
-					}
+					$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
 					$content .= $_procObj->customIndexer($indexerConfig, $this);
 				}
 			}
@@ -202,31 +175,16 @@ class tx_kesearch_indexer {
 		// send notification in CLI mode
 		if ($mode == 'CLI') {
 			// send finishNotification
-			if (TYPO3_VERSION_INTEGER >= 7000000) {
-				$isValidEmail = TYPO3\CMS\Core\Utility\GeneralUtility::validEmail($extConf['notificationRecipient']);
-			} else {
-				$isValidEmail = t3lib_div::validEmail($extConf['notificationRecipient']);
-			}
+			$isValidEmail = TYPO3\CMS\Core\Utility\GeneralUtility::validEmail($extConf['notificationRecipient']);
 			if ($extConf['finishNotification'] && $isValidEmail) {
 
 				// send the notification message
-				// use swiftmailer in 4.5 and above
-				if (TYPO3_VERSION_INTEGER >= 4005000) {
-					if (TYPO3_VERSION_INTEGER >= 7000000) {
-						$mail = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Mail\\MailMessage');
-					} else if (TYPO3_VERSION_INTEGER >= 6002000) {
-						$mail = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('t3lib_mail_Message');
-					} else {
-						$mail = t3lib_div::makeInstance('t3lib_mail_Message');
-					}
-					$mail->setFrom(array($extConf['notificationSender']));
-					$mail->setTo(array($extConf['notificationRecipient']));
-					$mail->setSubject($extConf['notificationSubject']);
-					$mail->setBody($plaintextReport);
-					$mail->send();
-				} else {
-					mail($extConf['notificationRecipient'], $subject, $plaintextReport);
-				}
+				$mail = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Mail\\MailMessage');
+				$mail->setFrom(array($extConf['notificationSender']));
+				$mail->setTo(array($extConf['notificationRecipient']));
+				$mail->setSubject($extConf['notificationSubject']);
+				$mail->setBody($plaintextReport);
+				$mail->send();
 			}
 		}
 
@@ -361,11 +319,7 @@ class tx_kesearch_indexer {
 		// hook for cleanup
 		if(is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['cleanup'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['cleanup'] as $_classRef) {
-				if (TYPO3_VERSION_INTEGER >= 7000000) {
-					$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
-				} else {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
-				}
+				$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
 				$content .= $_procObj->cleanup($where, $this);
 			}
 		}
@@ -455,11 +409,7 @@ class tx_kesearch_indexer {
 			} else {
 				$tags = $tagChar . $indexerTag . $tagChar;
 			}
-			if (TYPO3_VERSION_INTEGER >= 7000000) {
-				$tags = TYPO3\CMS\Core\Utility\GeneralUtility::uniqueList($tags);
-			} else {
-				$tags = t3lib_div::uniqueList($tags);
-			}
+			$tags = TYPO3\CMS\Core\Utility\GeneralUtility::uniqueList($tags);
 		}
 
 		$table = 'tx_kesearch_index';
@@ -786,13 +736,8 @@ class tx_kesearch_indexer {
 		$fields = 'title, tag';
 		$table = 'tx_kesearch_filteroptions';
 		$where = 'uid = "' . intval($tagUid) . '" ';
-		if (TYPO3_VERSION_INTEGER >= 7000000) {
-			$where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table, 0);
-			$where .= \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table, 0);
-		} else {
-			$where .= t3lib_befunc::BEenableFields($table, 0);
-			$where .= t3lib_befunc::deleteClause($table, 0);
-		}
+		$where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table, 0);
+		$where .= \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table, 0);
 
 		$row = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
 			$fields,
@@ -829,13 +774,8 @@ class tx_kesearch_indexer {
 		$fields = '*';
 		$table = 'tx_kesearch_indexerconfig';
 		$where = '1=1 ';
-		if (TYPO3_VERSION_INTEGER >= 7000000) {
-			$where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table);
-			$where .= \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table);
-		} else {
-			$where .= t3lib_befunc::BEenableFields($table);
-			$where .= t3lib_befunc::deleteClause($table);
-		}
+		$where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table);
+		$where .= \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table);
 		return $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($fields, $table, $where);
 	}
 }

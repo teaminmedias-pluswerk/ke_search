@@ -11,11 +11,7 @@ class IndexerTest extends Tx_Extbase_BaseTestCase {
 
 
 	public function setUp() {
-		if (TYPO3_VERSION_INTEGER >= 6002000) {
-			$this->indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_indexer');
-		} else {
-			$this->indexer = t3lib_div::makeInstance('tx_kesearch_indexer');
-		}
+		$this->indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_indexer');
 		$this->indexer->additionalFields = array('orig_uid', 'orig_pid', 'enddate');
 
 	}

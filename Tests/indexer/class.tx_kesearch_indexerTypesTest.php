@@ -16,17 +16,10 @@ class IndexerTypesTest extends Tx_Extbase_BaseTestCase {
 
 
 	public function setUp() {
-		if (TYPO3_VERSION_INTEGER >= 6002000) {
-			$this->indexerTypes = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_indexer_types');
-			$this->indexerTypes->queryGen = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('t3lib_queryGenerator');
-			$this->pageIndexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_indexer_types_page');
-			$this->pageIndexer->pObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_indexer');
-		} else {
-			$this->indexerTypes = t3lib_div::makeInstance('tx_kesearch_indexer_types');
-			$this->indexerTypes->queryGen = t3lib_div::makeInstance('t3lib_queryGenerator');
-			$this->pageIndexer = t3lib_div::makeInstance('tx_kesearch_indexer_types_page');
-			$this->pageIndexer->pObj = t3lib_div::makeInstance('tx_kesearch_indexer');
-		}
+		$this->indexerTypes = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_indexer_types');
+		$this->indexerTypes->queryGen = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('t3lib_queryGenerator');
+		$this->pageIndexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_indexer_types_page');
+		$this->pageIndexer->pObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_indexer');
 		$this->pageIndexer->pObj->extConf['prePostTagChar'] = '#';
 	}
 

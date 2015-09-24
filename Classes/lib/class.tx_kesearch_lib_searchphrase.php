@@ -120,11 +120,7 @@ class tx_kesearch_lib_searchphrase {
 				$word = trim($word, '+-~<>');
 
 				// check for word length
-				if (TYPO3_VERSION_INTEGER >= 7000000) {
-					$csconv = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Charset\\CharsetConverter');
-				} else {
-					$csconv = t3lib_div::makeInstance('t3lib_cs');
-				}
+				$csconv = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Charset\\CharsetConverter');
 				$searchWordLength = $csconv->utf8_strlen($word);
 				if($searchWordLength < $this->pObj->extConf['searchWordLength']) {
 					$this->pObj->hasTooShortWords = true;
@@ -228,11 +224,7 @@ class tx_kesearch_lib_searchphrase {
 		// hook for modifiying the tags to filter for
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyTagsAgainst'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyTagsAgainst'] as $_classRef) {
-				if (TYPO3_VERSION_INTEGER >= 7000000) {
-					$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
-				} else {
-					$_procObj = & t3lib_div::getUserObj($_classRef);
-				}
+				$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
 				$_procObj->modifyTagsAgainst($tagsAgainst, $this);
 			}
 		}

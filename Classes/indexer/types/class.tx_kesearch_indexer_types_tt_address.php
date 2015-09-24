@@ -58,13 +58,8 @@ class tx_kesearch_indexer_types_tt_address extends tx_kesearch_indexer_types {
 		}
 		$where = 'pid IN (' . implode(',', $indexPids) . ') ';
 
-		if (TYPO3_VERSION_INTEGER >= 7000000) {
-			$where .= TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table);
-			$where .= TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table);
-		} else {
-			$where .= t3lib_befunc::BEenableFields($table);
-			$where .= t3lib_befunc::deleteClause($table);
-		}
+		$where .= TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table);
+		$where .= TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table);
 
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
 		$resCount = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
@@ -148,11 +143,7 @@ class tx_kesearch_indexer_types_tt_address extends tx_kesearch_indexer_types {
 				// hook for custom modifications of the indexed data, e. g. the tags
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyAddressIndexEntry'])) {
 				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyAddressIndexEntry'] as $_classRef) {
-					if (TYPO3_VERSION_INTEGER >= 7000000) {
-						$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
-					} else {
-						$_procObj = & t3lib_div::getUserObj($_classRef);
-					}
+					$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
 					$_procObj->modifyAddressIndexEntry(
 						$title,
 						$abstract,

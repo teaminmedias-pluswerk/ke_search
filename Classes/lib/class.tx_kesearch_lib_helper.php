@@ -46,11 +46,7 @@ class tx_kesearch_helper {
 		// so you we need to change the default char # against something else.
 		// MySQL has problems also with #
 		// but we wrap # with " and it works.
-		if (TYPO3_VERSION_INTEGER < 6002000) {
-			$keSearchPremiumIsLoaded = t3lib_extMgm::isLoaded('ke_search_premium');
-		} else {
-			$keSearchPremiumIsLoaded = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('ke_search_premium');
-		}
+		$keSearchPremiumIsLoaded = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('ke_search_premium');
 		if ($keSearchPremiumIsLoaded) {
 			$extConfPremium = tx_kesearch_helper::getExtConfPremium();
 			$extConf['prePostTagChar'] = $extConfPremium['prePostTagChar'];
@@ -79,11 +75,7 @@ class tx_kesearch_helper {
 	 * @since 14.10.14
 	 */
 	public static function getExtConfPremium() {
-		if (TYPO3_VERSION_INTEGER < 6002000) {
-			$keSearchPremiumIsLoaded = t3lib_extMgm::isLoaded('ke_search_premium');
-		} else {
-			$keSearchPremiumIsLoaded = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('ke_search_premium');
-		}
+		$keSearchPremiumIsLoaded = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('ke_search_premium');
 		if ($keSearchPremiumIsLoaded) {
 			$extConfPremium = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ke_search_premium']);
 			if (!$extConfPremium['prePostTagChar']) $extConfPremium['prePostTagChar'] = '_';
@@ -117,11 +109,7 @@ class tx_kesearch_helper {
 		);
 
 		if ($uid && $table) {
-			if (TYPO3_VERSION_INTEGER >= 7000000) {
-				$enableFields = \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('sys_category') . \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('sys_category');
-			} else {
-				$enableFields = t3lib_befunc::BEenableFields('sys_category') . t3lib_befunc::deleteClause('sys_category');
-			}
+			$enableFields = \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('sys_category') . \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('sys_category');
 			$resCat = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
 				'sys_category.uid, sys_category.title',
 				'sys_category',

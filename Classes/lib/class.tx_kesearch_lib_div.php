@@ -98,11 +98,7 @@ class tx_kesearch_lib_div {
 	 * @return string XSS safe value
 	*/
 	public function removeXSS($value) {
-		if (TYPO3_VERSION_INTEGER >= 6002000) {
-			$returnValue = TYPO3\CMS\Core\Utility\GeneralUtility::removeXSS($value);
-		} else {
-			$returnValue = t3lib_div::removeXSS($value);
-		}
+		$returnValue = TYPO3\CMS\Core\Utility\GeneralUtility::removeXSS($value);
 		return $returnValue;
 	}
 

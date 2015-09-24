@@ -1,13 +1,8 @@
 <?php
 if (!defined ('TYPO3_MODE')) 	die ('Access denied.');
 
-if (TYPO3_VERSION_INTEGER < 6002000) {
-	$extPath = t3lib_extMgm::extPath('ke_search');
-	$extRelPath = t3lib_extMgm::extRelPath('ke_search');
-} else {
-	$extPath = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_search');
-	$extRelPath = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('ke_search');
-}
+$extPath = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_search');
+$extRelPath = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('ke_search');
 
 $TCA['tx_kesearch_filters'] = array (
 	'ctrl' => $TCA['tx_kesearch_filters']['ctrl'],
@@ -767,19 +762,10 @@ $TCA['tx_kesearch_indexerconfig'] = array (
 
 // news version 3 features system categories instead of it's own
 // category system which was used in previous versions
-if (TYPO3_VERSION_INTEGER < 6002000) {
-	$ttnewsVersion = t3lib_extMgm::getExtensionVersion('news');
-} else {
-	$ttnewsVersion = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getExtensionVersion('news');
-}
+$ttnewsVersion = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getExtensionVersion('news');
 if (version_compare($ttnewsVersion, '3.0.0') >= 0) {
 	$TCA['tx_kesearch_indexerconfig']['columns']['index_extnews_category_selection']['config']['treeConfig']['parentField'] = 'parent';
 	$TCA['tx_kesearch_indexerconfig']['columns']['index_extnews_category_selection']['config']['foreign_table'] = 'sys_category';
 	$TCA['tx_kesearch_indexerconfig']['columns']['index_extnews_category_selection']['config']['foreign_table_where'] = '';
-}
-
-// fallback for TYPO3 versions below 6 where FAL is not present
-if (TYPO3_VERSION_INTEGER < 6000000) {
-	$TCA['tx_kesearch_indexerconfig']['columns']['fal_storage']['config'] = array('type' => 'passthrough');
 }
 ?>
