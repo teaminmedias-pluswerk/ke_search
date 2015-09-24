@@ -3,7 +3,7 @@
 /* * *************************************************************
  *  Copyright notice
  *
- *  (c) 2011 Andreas Kiefer 
+ *  (c) 2011 Andreas Kiefer
  *  All rights reserved
  *
  *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,7 +26,7 @@
 /**
  * Class that adds the wizard icon.
  *
- * @author	Andreas Kiefer 
+ * @author	Andreas Kiefer
  * @package	TYPO3
  * @subpackage	tx_kesearch
  */
@@ -68,8 +68,3 @@ class tx_kesearch_pi2_wizicon {
 	}
 
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/pi2/class.tx_kesearch_pi2_wizicon.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/pi2/class.tx_kesearch_pi2_wizicon.php']);
-}
-?>

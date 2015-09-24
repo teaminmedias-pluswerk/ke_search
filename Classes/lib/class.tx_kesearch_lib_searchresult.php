@@ -294,8 +294,3 @@ class tx_kesearch_lib_searchresult {
 		} else return $this->cObj->crop($content, $this->conf['resultChars'] . '|...|1');
 	}
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/lib/class.tx_kesearch_lib_searchresult.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/lib/class.tx_kesearch_lib_searchresult.php']);
-}
-?>

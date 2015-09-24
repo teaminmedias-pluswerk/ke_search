@@ -151,8 +151,3 @@ class user_filterlist {
 		}
 	}
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/Backend/class.user_filterlist.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/Backend/class.user_filterlist.php']);
-}
-?>

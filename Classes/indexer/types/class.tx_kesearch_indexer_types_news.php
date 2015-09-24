@@ -26,7 +26,7 @@
  * Plugin 'Faceted search' for the 'ke_search' extension.
  *
  * @author	Andreas Kiefer (kennziffer.com) <kiefer@kennziffer.com>
- * @author	Stefan Frömken 
+ * @author	Stefan Frömken
  * @author	Christian Bülter (kennziffer.com) <buelter@kennziffer.com>
  * @package	TYPO3
  * @subpackage	tx_kesearch
@@ -58,8 +58,8 @@ class tx_kesearch_indexer_types_news extends tx_kesearch_indexer_types {
 			$this->addTagsToRecords($indexPids);
 		}
 
-		// get all the news entries to index, don't index hidden or 
-		// deleted news, BUT  get the news with frontend user group 
+		// get all the news entries to index, don't index hidden or
+		// deleted news, BUT  get the news with frontend user group
 		// access restrictions or time (start / stop) restrictions.
 		// Copy those restrictions to the index.
 		$fields = '*';
@@ -72,11 +72,11 @@ class tx_kesearch_indexer_types_news extends tx_kesearch_indexer_types {
 		if ($resCount) {
 			while (($newsRecord = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))) {
 
-				// get category data for this news record (list of 
+				// get category data for this news record (list of
 				// assigned categories and single view from category, if it exists)
 				$categoryData = $this->getCategoryData($newsRecord);
 
-				// If mode equals 2 ('choose categories for indexing') 
+				// If mode equals 2 ('choose categories for indexing')
 				// check if the current news record has one of the categories
 				// assigned that should be indexed.
 				// mode 1 means 'index all news no matter what category
@@ -85,12 +85,12 @@ class tx_kesearch_indexer_types_news extends tx_kesearch_indexer_types {
 
 					$isInList = false;
 					foreach ($categoryData['uid_list'] as $catUid) {
-						// if category was found in list, set isInList 
+						// if category was found in list, set isInList
 						// to true and break further processing.
 						if (\TYPO3\CMS\Core\Utility\GeneralUtility::inList($this->indexerConfig['index_extnews_category_selection'], $catUid)) { $isInList = true; break; }
 					}
 
-					// if category was not fount stop further processing 
+					// if category was not fount stop further processing
 					// and continue with next news record
 					if(!$isInList) {
 						continue ;
@@ -240,7 +240,7 @@ class tx_kesearch_indexer_types_news extends tx_kesearch_indexer_types {
 	 * It also compiles a list of all assigned categories and returns
 	 * it as an array in $categoryData['uid_list']. The titles of the
 	 * categories are returned in $categoryData['title_list'] (array)
-	 * 
+	 *
 	 * @author Christian Bülter <buelter@kennziffer.com>
 	 * @since 26.06.13 14:34
 	 * @param type $newsRecord
@@ -300,7 +300,7 @@ class tx_kesearch_indexer_types_news extends tx_kesearch_indexer_types {
 
 	/**
 	 * adds tags from the ext:news "keywords" field to the index entry
-	 * 
+	 *
 	 * @author Christian Bülter <buelter@kennziffer.com>
 	 * @since 26.06.13 14:27
 	 * @param string $tags
@@ -320,7 +320,7 @@ class tx_kesearch_indexer_types_news extends tx_kesearch_indexer_types {
 
 	/**
 	 * Adds tags from the ext:news table "tags" as ke_search tags to the index entry
-	 * 
+	 *
 	 * @author Christian Bülter <buelter@kennziffer.com>
 	 * @since 26.06.13 14:25
 	 * @param string $tags
@@ -337,7 +337,7 @@ class tx_kesearch_indexer_types_news extends tx_kesearch_indexer_types {
 			' AND tx_news_domain_model_news.uid = ' . $newsRecord['uid'] .
 			$addWhere
 		);
-			
+
 		while (($newsTag = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resTag))) {
 			tx_kesearch_helper::makeTags($tags, array($newsTag['title']));
 		}
@@ -347,7 +347,7 @@ class tx_kesearch_indexer_types_news extends tx_kesearch_indexer_types {
 
 	/**
 	 * creates tags from category titles
-	 * 
+	 *
 	 * @author Christian Bülter <buelter@kennziffer.com>
 	 * @since 26.06.13 15:49
 	 * @param string $tags
@@ -359,8 +359,3 @@ class tx_kesearch_indexer_types_news extends tx_kesearch_indexer_types {
 		return $tags;
 	}
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/indexer/types/class.tx_kesearch_indexer_types_ttnews.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/indexer/types/class.tx_kesearch_indexer_types_ttnews.php']);
-}
-?>

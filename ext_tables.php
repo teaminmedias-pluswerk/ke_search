@@ -159,4 +159,3 @@ if (TYPO3_MODE == 'BE') {
 	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_kesearch_pi2_wizicon'] = $extPath . 'pi2/class.tx_kesearch_pi2_wizicon.php';
 	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_kesearch_pi3_wizicon'] = $extPath . 'pi3/class.tx_kesearch_pi3_wizicon.php';
 }
-?>

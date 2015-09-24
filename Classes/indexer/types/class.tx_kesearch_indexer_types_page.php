@@ -22,7 +22,7 @@
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  * *************************************************************
- * 
+ *
  * @author Andreas Kiefer <kiefer@kennziffer.com>
  * @author Christian Bülter <buelter@kennziffer.com>
  */
@@ -32,7 +32,7 @@ define('DONOTINDEX', -3);
  * Plugin 'Faceted search' for the 'ke_search' extension.
  *
  * @author	Andreas Kiefer (kennziffer.com) <kiefer@kennziffer.com>
- * @author	Stefan Froemken 
+ * @author	Stefan Froemken
  * @author	Christian Bülter <christian.buelter@inmedias.de>
  * @package	TYPO3
  * @subpackage	tx_kesearch
@@ -161,7 +161,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types {
 		// get all available sys_language_uid records
 		$this->sysLanguages = \TYPO3\CMS\Backend\Utility\BackendUtility::getSystemLanguages();
 
-		// make file repository 
+		// make file repository
 		/* @var $this->fileRepository \TYPO3\CMS\Core\Resource\FileRepository */
 		$this->fileRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
 	}
@@ -487,7 +487,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types {
 
 	/**
 	 * combine group access restrictons from page(s) and content element
-	 * 
+	 *
 	 * @param string $feGroupsPages comma list
 	 * @param string $feGroupsContentElement comma list
 	 * @return type
@@ -767,8 +767,3 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types {
 	}
 
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/indexer/types/class.tx_kesearch_indexer_types_page.php']) {
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/indexer/types/class.tx_kesearch_indexer_types_page.php']);
-}
-?>

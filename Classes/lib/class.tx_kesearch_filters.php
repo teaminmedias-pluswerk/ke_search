@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2012 Stefan Froemken 
+*  (c) 2012 Stefan Froemken
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -25,7 +25,7 @@
 /**
  * Plugin 'Faceted search - searchbox and filters' for the 'ke_search' extension.
  *
- * @author	Stefan Froemken 
+ * @author	Stefan Froemken
  * @author	Christian Bülter
  * @package	TYPO3
  * @subpackage	tx_kesearch
@@ -73,7 +73,7 @@ class tx_kesearch_filters {
 
 		// get filters and filter options
 		$this->filters = $this->getFiltersFromUidList($this->combineLists($this->conf['filters'], $this->conf['hiddenfilters']));
-		
+
 		// hook to modify filters
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilters'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilters'] as $_classRef) {
@@ -86,7 +86,7 @@ class tx_kesearch_filters {
 		foreach ($this->filters as $filter) {
 			$this->filters[$filter['uid']]['selectedOptions'] = $this->getSelectedFilterOptions($filter);
 		}
-		
+
 	}
 
 	/**
@@ -137,13 +137,13 @@ class tx_kesearch_filters {
 	}
 
 	/**
-	 * 
+	 *
 	 * combines two string comma lists
-	 * 
+	 *
 	 * @param string $list1
 	 * @param string $list2
 	 * @author Christian Bülter <buelter@kennziffer.com>
-	 * @since 23.07.13 
+	 * @since 23.07.13
 	 * @return string
 	 */
 	public function combineLists($list1 = '', $list2 = '') {
@@ -277,8 +277,3 @@ class tx_kesearch_filters {
 		return $this->tagChar;
 	}
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/lib/class.tx_kesearch_filters.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/lib/class.tx_kesearch_filters.php']);
-}
-?>

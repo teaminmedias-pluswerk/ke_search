@@ -77,4 +77,3 @@ class IndexerTest extends Tx_Extbase_BaseTestCase {
 		}
 	}
 }
-?>

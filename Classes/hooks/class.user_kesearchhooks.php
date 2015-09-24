@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2011 Stefan Froemken 
+*  (c) 2011 Stefan Froemken
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -25,7 +25,7 @@
 /**
  * Hooks for ke_search
  *
- * @author Stefan Froemken 
+ * @author Stefan Froemken
  * @package	TYPO3
  * @subpackage	ke_search
  */
@@ -157,8 +157,3 @@ class user_kesearch_sortdate {
 		}
 	}
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/hooks/class.user_kesearchhooks.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/hooks/class.user_kesearchhooks.php']);
-}
-?>

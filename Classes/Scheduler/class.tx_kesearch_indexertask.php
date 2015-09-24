@@ -25,7 +25,7 @@
 
 
 
-// include indexer class 
+// include indexer class
 require_once(TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_search') . 'Classes/indexer/class.tx_kesearch_indexer.php');
 
 class tx_kesearch_indexertask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
@@ -43,8 +43,4 @@ class tx_kesearch_indexertask extends \TYPO3\CMS\Scheduler\Task\AbstractTask {
 
 		return true;
 	}
-}
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/Scheduler/class.tx_kesearch_indexertask.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/Scheduler/class.tx_kesearch_indexertask.php']);
 }

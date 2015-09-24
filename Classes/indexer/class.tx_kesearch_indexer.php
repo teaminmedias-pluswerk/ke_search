@@ -26,7 +26,7 @@
  * Plugin 'Faceted search' for the 'ke_search' extension.
  *
  * @author	Andreas Kiefer (kennziffer.com) <kiefer@kennziffer.com>
- * @author	Stefan Froemken 
+ * @author	Stefan Froemken
  * @package	TYPO3
  * @subpackage	tx_kesearch
  */
@@ -779,8 +779,3 @@ class tx_kesearch_indexer {
 		return $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($fields, $table, $where);
 	}
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/indexer/class.tx_kesearch_indexer.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/indexer/class.tx_kesearch_indexer.php']);
-}
-?>

@@ -9,4 +9,3 @@ interface tx_kesearch_indexer_filetypes {
 	 */
 	public function getContent($file);
 }
-?>

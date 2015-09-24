@@ -778,4 +778,3 @@ if (version_compare($ttnewsVersion, '3.0.0') >= 0) {
 	$TCA['tx_kesearch_indexerconfig']['columns']['index_extnews_category_selection']['config']['foreign_table'] = 'sys_category';
 	$TCA['tx_kesearch_indexerconfig']['columns']['index_extnews_category_selection']['config']['foreign_table_where'] = '';
 }
-?>

@@ -166,4 +166,3 @@ class IndexerTypesTest extends Tx_Extbase_BaseTestCase {
 		$this->pageIndexer->addTagsToPageRecords($indexPids);
 	}
 }
-?>

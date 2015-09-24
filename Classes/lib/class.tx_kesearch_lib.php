@@ -226,7 +226,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	}
 
 	/**
-	 * 
+	 *
 	 * initializes the marker based or fluid based template
 	 */
 	public function initTemplate() {
@@ -443,7 +443,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 
 			// get filter options which should be displayed
 			$options = $this->findFilterOptionsToDisplay($filter);
-			
+
 			// alphabetical sorting of filter options
 			if ($filter['alphabeticalsorting'] == 1) {
 				$this->sortArrayByColumn($options, 'title');
@@ -580,11 +580,11 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	/**
 	 * find out which filter options should be displayed for the given filter
 	 * check filter options availability and preselection status
-	 * 
+	 *
 	 * @param array $filter
 	 * @return array
 	 * @author Christian Bülter <buelter@kennziffer.com>
-	 * @since 09.09.14 
+	 * @since 09.09.14
 	 */
 	public function findFilterOptionsToDisplay($filter) {
 		$options = array();
@@ -1582,9 +1582,9 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	}
 
 	/**
-	 * renders a review image and sets the max. width and max. height if not 
+	 * renders a review image and sets the max. width and max. height if not
 	 * defined yet.
-	 * 
+	 *
 	 * @param array $imageConf
 	 * @return string
 	 */
@@ -1901,8 +1901,3 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		$arr = $newArray;
 	}
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/lib/class.tx_kesearch_lib.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/lib/class.tx_kesearch_lib.php']);
-}
-?>

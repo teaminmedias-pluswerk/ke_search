@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2012 Stefan Froemken 
+*  (c) 2012 Stefan Froemken
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -25,7 +25,7 @@
 /**
  * Class to save ke_search configuration
  *
- * @author	Stefan Froemken 
+ * @author	Stefan Froemken
  * @package	TYPO3
  * @subpackage	tx_kesearch
  */
@@ -34,4 +34,3 @@ class tx_kesearch_config {
 
 	}
 }
-?>

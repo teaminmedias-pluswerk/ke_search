@@ -141,4 +141,3 @@ class SearchResultTest extends Tx_Extbase_BaseTestCase {
 		$this->assertEquals($resultShouldBe, $result);
 	}
 }
-?>
