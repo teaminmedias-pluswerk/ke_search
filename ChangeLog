@@ -1,7 +1,7 @@
 ChangeLog
 
 Version 2.0.0
-IMPORTANT: This version has breaking changes: Marker based templatating has been removed completely, support for TYPO 4.5 has been dropped!
+IMPORTANT: This version has breaking changes: Marker based templatating has been deprecated and will be dropped completely, support for TYPO 4.5 has been dropped, parameters of hook calls have changed!
 - feature: add fluid based templating.
 - task: raise minimum requirement to TYPO3 version 6.2
 - task: remove all checks for TYPO3 version.
@@ -11,6 +11,7 @@ IMPORTANT: This version has breaking changes: Marker based templatating has been
 - feature: make content types which should be indexed configurable. https://forge.typo3.org/issues/58631. (This can now be done as a comma separated list in the indexer configuration record in the backend.)
 - feature: add system categories as generic tags for pages, content elements and files (eg. "syscat123").
 - bugfix: fix path information for indexed files, remove the filename from the path, eg. "fileadmin/user_upload/test.pdf" should be "fileadmin/user_upload/".
+- feature: add indexer object to hook modifyPagesIndexEntry in pages indexer. Thanks To Ricky Bohse. https://forge.typo3.org/issues/69835.
 
 Version 1.10.2
 - bugfix: add langDisable in flexform, https://forge.typo3.org/issues/64579
