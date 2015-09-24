@@ -1,0 +1,16 @@
+# ==============================================
+# Typoscript configuration for ke_search
+# ==============================================
+
+# paths for fluid templating
+plugin.tx_kesearch_pi1 {
+	templateRootPath = EXT:ke_search/Resources/Private/Templates/
+	partialRootPath = EXT:ke_search/Resources/Private/Partials/
+	layoutRootPath = EXT:ke_search/Resources/Private/Layouts/
+}
+
+plugin.tx_kesearch_pi2 {
+	templateRootPath = EXT:ke_search/Resources/Private/Templates/
+	partialRootPath = EXT:ke_search/Resources/Private/Partials/
+	layoutRootPath = EXT:ke_search/Resources/Private/Layouts/
+}

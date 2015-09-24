@@ -6,6 +6,7 @@ IMPORTANT: This version has breaking changes: Marker based templatating has been
 - task: remove "wrap" option for filter rendering, this can be done in the fluid template.
 - task: raise minimun requirement to TYPO3 version 6.2
 - task: remove all checks for TYPO3 version.
+- feature: make content types which should be indexed configurable. https://forge.typo3.org/issues/58631.
 
 Version 1.10.2
 - bugfix: add langDisable in flexform, https://forge.typo3.org/issues/64579

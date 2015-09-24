@@ -82,6 +82,7 @@
 			<label index="tx_kesearch_indexerconfig.index_passed_events.I.1">No</label>
 			<label index="tx_kesearch_indexerconfig.directories">Directories (comma-separated, e.g. fileadmin/my_directory/,fileadmin/my_other_directory or my_directory/,my_other_directory/ if you use FAL)</label>
 			<label index="tx_kesearch_indexerconfig.fileext">File indexer: Comma separated list of allowed file extensions (eg. pdf,ppt,doc,xls):</label>
+			<label index="tx_kesearch_indexerconfig.contenttypes">Content element types which should be indexed (default: text,textpic,bullets,table,html,header,uploads):</label>
 			<label index="tx_kesearch_indexerconfig.commenttypes">Comma separated list of comment types (eg. pages):</label>
 			<label index="tx_kesearch_indexerconfig.filteroption">Add tag to all indexed elements:</label>
 			<label index="tx_kesearch_indexerconfig.tvpath">Tell us in which field configuration the indexer can find the tt_content uids. Normally it should be "field_content":</label>

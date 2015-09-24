@@ -133,6 +133,7 @@ CREATE TABLE tx_kesearch_indexerconfig (
 	filteroption int(11) DEFAULT '0' NOT NULL,
 	tvpath varchar(255) DEFAULT '' NOT NULL,
 	fal_storage int(11) DEFAULT '0' NOT NULL,
+	contenttypes tinytext,
 
 	PRIMARY KEY (uid),
 	KEY parent (pid)

@@ -28,6 +28,8 @@
  *
  * @author	Andreas Kiefer (kennziffer.com) <kiefer@kennziffer.com>
  * @author	Stefan Froemken 
+ * @author	Christian Bülter <christian.buelter@inmedias.de>
+ *
  * @package	TYPO3
  * @subpackage	tx_kesearch
  */

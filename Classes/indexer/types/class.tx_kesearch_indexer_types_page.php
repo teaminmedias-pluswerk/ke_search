@@ -33,7 +33,7 @@ define('DONOTINDEX', -3);
  *
  * @author	Andreas Kiefer (kennziffer.com) <kiefer@kennziffer.com>
  * @author	Stefan Froemken 
- * @author	Christian Bülter (kennziffer.com) <buelter@kennziffer.com>
+ * @author	Christian Bülter <christian.buelter@inmedias.de>
  * @package	TYPO3
  * @subpackage	tx_kesearch
  */
@@ -65,7 +65,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types {
 	 *
 	 * @var array
 	 */
-	var $indexCTypes = array(
+	var $defaultIndexCTypes = array(
 	    'text',
 	    'textpic',
 	    'bullets',
@@ -144,7 +144,16 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types {
 	public function __construct($pObj) {
 		parent::__construct($pObj);
 
-		foreach ($this->indexCTypes as $value) {
+		// set content types which should be index, fall back to default if not defined
+		if (empty($this->indexerConfig['contenttypes'])) {
+			$content_types_temp = $this->defaultIndexCTypes;
+		} else {
+			$content_types_temp = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $this->indexerConfig['contenttypes']);
+		}
+
+		// create a mysql WHERE clause for the content element types
+		$cTypes = array();
+		foreach ($content_types_temp as $value) {
 			$cTypes[] = 'CType="' . $value . '"';
 		}
 		$this->whereClauseForCType = implode(' OR ', $cTypes);

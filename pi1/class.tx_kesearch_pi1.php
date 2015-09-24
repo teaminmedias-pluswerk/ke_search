@@ -57,7 +57,7 @@ class tx_kesearch_pi1 extends tx_kesearch_lib {
 		// add header parts when in searchbox mode
 		$this->addHeaderParts();
 
-		// init template for pi1 
+		// init template for pi1
 		if ($this->conf['renderMethod'] == 'fluidtemplate') {
 			$this->initFluidTemplate();
 		} else {
