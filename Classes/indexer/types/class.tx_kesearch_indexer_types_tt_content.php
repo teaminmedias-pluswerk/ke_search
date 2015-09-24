@@ -51,9 +51,6 @@ class tx_kesearch_indexer_types_tt_content extends tx_kesearch_indexer_types_pag
 		$where .= ' AND hidden=0';
 		$where .= TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table);
 
-		// get tags from page
-		$tags = $this->pageRecords[$uid]['tags'];
-
 		// Get access restrictions for this page
 		$pageAccessRestrictions = $this->getInheritedAccessRestrictions($uid);
 
@@ -76,6 +73,16 @@ class tx_kesearch_indexer_types_tt_content extends tx_kesearch_indexer_types_pag
 
 				// get content for this content element
 				$content = '';
+
+				// get tags from page
+				$tags = $this->pageRecords[$uid]['tags'];
+
+				// assign categories as tags (as cleartext, eg. "colorblue")
+				$categories = tx_kesearch_helper::getCategories($row['uid'], $table);
+				tx_kesearch_helper::makeTags($tags, $categories['title_list']);
+
+				// assign categories as generic tags (eg. "syscat123")
+				tx_kesearch_helper::makeSystemCategoryTags($tags, $row['uid'], $table);
 
 				// index header
 				// add header only if not set to "hidden"
@@ -118,7 +125,6 @@ class tx_kesearch_indexer_types_tt_content extends tx_kesearch_indexer_types_pag
 				if ($endtime == 0 || ($this->cachedPageRecords[$row['sys_language_uid']][$row['pid']]['endtime'] && $this->cachedPageRecords[$row['sys_language_uid']][$row['pid']]['endtime'] < $endtime)) {
 					$endtime = $this->cachedPageRecords[$row['sys_language_uid']][$row['pid']]['endtime'];
 				}
-
 
 				if ($endtime == 0 || ($row['endtime'] && $row['endtime'] < $endtime)) {
 					$endtime = $row['endtime'];

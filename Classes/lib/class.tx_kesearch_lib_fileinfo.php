@@ -115,7 +115,7 @@ class tx_kesearch_lib_fileinfo {
 	 */
 	public function getRelativePath() {
 		if ($this->file !== NULL) {
-			return $this->file->getPublicUrl();
+			return dirname($this->file->getPublicUrl()) . '/';
 		} else {
 			return str_replace(PATH_site, '', $this->fileInfo['path']);
 		}

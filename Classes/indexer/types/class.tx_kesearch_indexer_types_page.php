@@ -676,9 +676,12 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types {
 			$metadata = $fileObject->_getMetaData();
 		}
 
-		// assign categories as tags
+		// assign categories as tags (as cleartext, eg. "colorblue")
 		$categories = tx_kesearch_helper::getCategories($metadata['uid'], 'sys_file_metadata');
 		tx_kesearch_helper::makeTags($tags, $categories['title_list']);
+
+		// assign categories as generic tags (eg. "syscat123")
+		tx_kesearch_helper::makeSystemCategoryTags($tags, $metadata['uid'], 'sys_file_metadata');
 
 		if ($metadata['title']) {
 			$content = $metadata['title'] . "\n" . $content;
@@ -721,7 +724,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types {
 			$storagePid,                             // storage PID
 			$title,                                  // file name
 			$type,                                   // content type
-			$ttContentRow[pid],                      // target PID: where is the single view?
+			$ttContentRow['pid'],                    // target PID: where is the single view?
 			$content,                                // indexed content
 			$tags,                                   // tags
 			'',                                      // typolink params for singleview

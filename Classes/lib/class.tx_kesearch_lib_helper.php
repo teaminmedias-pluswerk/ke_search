@@ -164,6 +164,25 @@ class tx_kesearch_helper {
 	}
 
 	/**
+	 * finds the system categories for $uid in $tablename, creates
+	 * tags like "syscat123" ("syscat" + category uid).
+	 *
+	 * @param string $tags
+	 * @param integer $uid
+	 * @param string $tablename
+	 * @author Christian Bülter <christian.buelter@inmedias.de>
+	 * @since 24.09.15
+	 */
+	public function makeSystemCategoryTags(&$tags, $uid, $tablename) {
+			$categories = tx_kesearch_helper::getCategories($uid, $tablename);
+			if (count($categories['uid_list'])) {
+				foreach ($categories['uid_list'] as $category_uid) {
+					tx_kesearch_helper::makeTags($tags, array('syscat' . $category_uid));
+				}
+			}
+	}
+
+	/**
 	 * renders a link to a search result
 	 *
 	 * @param array $resultRow

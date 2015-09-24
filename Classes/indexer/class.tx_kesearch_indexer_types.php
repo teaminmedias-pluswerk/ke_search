@@ -176,6 +176,11 @@ class tx_kesearch_indexer_types {
 			$this->pageRecords[$row['uid']]['tags'] = $row['tags'];
 		}
 
+		// add system categories as tags
+		foreach ($uids as $page_uid) {
+			tx_kesearch_helper::makeSystemCategoryTags($this->pageRecords[$page_uid]['tags'], $page_uid, 'pages');
+		}
+
 		// add tags which are defined by filteroption records
 		$fields = 'automated_tagging, automated_tagging_exclude, tag';
 		$table = 'tx_kesearch_filteroptions';

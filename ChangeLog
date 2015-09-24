@@ -3,10 +3,14 @@ ChangeLog
 Version 2.0.0
 IMPORTANT: This version has breaking changes: Marker based templatating has been removed completely, support for TYPO 4.5 has been dropped!
 - feature: add fluid based templating.
-- task: remove "wrap" option for filter rendering, this can be done in the fluid template.
-- task: raise minimun requirement to TYPO3 version 6.2
+- task: raise minimum requirement to TYPO3 version 6.2
 - task: remove all checks for TYPO3 version.
-- feature: make content types which should be indexed configurable. https://forge.typo3.org/issues/58631.
+- task: add default typoscript template ext_typoscript_setup.txt containing paths for fluid templates.
+- task: remove "wrap" option for filter rendering, this can be done in the fluid template.
+- task: remove ajax based rendering option in flexform.
+- feature: make content types which should be indexed configurable. https://forge.typo3.org/issues/58631. (This can now be done as a comma separated list in the indexer configuration record in the backend.)
+- feature: add system categories as generic tags for pages, content elements and files (eg. "syscat123").
+- bugfix: fix path information for indexed files, remove the filename from the path, eg. "fileadmin/user_upload/test.pdf" should be "fileadmin/user_upload/".
 
 Version 1.10.2
 - bugfix: add langDisable in flexform, https://forge.typo3.org/issues/64579

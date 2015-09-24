@@ -271,6 +271,7 @@ class tx_kesearch_indexer_types_file extends tx_kesearch_indexer_types {
 			$metadata = $file->_getMetaData();
 			$orig_uid = $file->getUid();
 		} else {
+			$metadata = false;
 			$orig_uid = 0;
 		}
 
@@ -317,6 +318,9 @@ class tx_kesearch_indexer_types_file extends tx_kesearch_indexer_types {
 			// make tags from assigned categories
 			$categories = tx_kesearch_helper::getCategories($metadata['uid'], 'sys_file_metadata');
 			tx_kesearch_helper::makeTags($indexRecordValues['tags'], $categories['title_list']);
+
+			// assign categories as generic tags (eg. "syscat123")
+			tx_kesearch_helper::makeSystemCategoryTags($indexRecordValues['tags'], $metadata['uid'], 'sys_file_metadata');
 		}
 
 		// hook for custom modifications of the indexed data, e. g. the tags

@@ -172,6 +172,9 @@ class tx_kesearch_indexer_types_news extends tx_kesearch_indexer_types {
 				// add categories from from ext:news as tags
 				$tags = $this->addTagsFromNewsCategories($tags, $categoryData);
 
+				// add system categories as tags
+				tx_kesearch_helper::makeSystemCategoryTags($tags, $newsRecord['uid'], $table);
+
 				// set additional fields
 				$additionalFields = array();
 				$additionalFields['orig_uid'] = $newsRecord['uid'];
