@@ -946,7 +946,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			unset($imageConf);
 			$imageConf['file'] = ExtensionManagementUtility::siteRelPath($this->extKey).'res/img/attention.gif';
 			$imageConf['altText'] = $this->pi_getLL('no_results_found');
-			$attentionImage = $this->$cObj->cObjGetSingle('IMAGE', $imageConf);
+			$attentionImage = $this->cObj->cObjGetSingle('IMAGE', $imageConf);
 		}
 
 		// hook to implement your own idea of a no result message
@@ -986,7 +986,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		unset($imageConf);
 		$imageConf['file'] = ExtensionManagementUtility::siteRelPath($this->extKey) . 'res/img/attention.gif';
 		$imageConf['altText'] = $this->pi_getLL('no_results_found');
-		$attentionImage = $this->$cObj->cObjGetSingle('IMAGE', $imageConf);
+		$attentionImage = $this->cObj->cObjGetSingle('IMAGE', $imageConf);
 
 		// set attention icon?
 		$content = $this->cObj->substituteMarker($content, '###IMAGE###', $attentionImage);
