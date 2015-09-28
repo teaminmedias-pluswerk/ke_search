@@ -330,6 +330,17 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types {
 	public function getPageContent($uid) {
 		// get content elements for this page
 		$fields = 'uid, pid, header, bodytext, CType, sys_language_uid, header_layout, fe_group';
+
+		// hook to modify the page content fields
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyPageContentFields'])) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyPageContentFields'] as $_classRef) {
+				$_procObj = & \TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+				$_procObj->modifyPageContentFields(
+					$fields, $this
+				);
+			}
+		}
+
 		$table = 'tt_content';
 		$where = 'pid = ' . intval($uid);
 		$where .= ' AND (' . $this->whereClauseForCType . ')';
@@ -763,6 +774,17 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types {
 			$bodytext = str_replace('|', ' ', $bodytext);
 		}
 		$bodytext = strip_tags($bodytext);
+
+		// hook for modifiying a content elements content
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyContentFromContentElement'])) {
+			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyContentFromContentElement'] as $_classRef) {
+				$_procObj = & \TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+				$_procObj->modifyContentFromContentElement(
+					$bodytext, $ttContentRow, $this
+				);
+			}
+		}
+
 		return $bodytext;
 	}
 
