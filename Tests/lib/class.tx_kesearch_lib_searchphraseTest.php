@@ -153,4 +153,3 @@ class SearchPhraseTest extends Tx_Extbase_BaseTestCase {
 		$this->assertEquals($shouldMatches, $matches);
 	}
 }
-?>

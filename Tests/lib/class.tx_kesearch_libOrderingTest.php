@@ -2,23 +2,23 @@
 class LibOrderingTest extends Tx_Extbase_BaseTestCase {
 
 	var $conf = array();
-	
-	
-	
-	
-	
+
+
+
+
+
 	public function setUp() {
 		$this->div = new tx_kesearch_lib_div;
 	}
-	
+
 	public function tearDown() {
 		unset($this->div);
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	/**
 	 * Test ordering if no searchword was given
 	 *
@@ -31,7 +31,7 @@ class LibOrderingTest extends Tx_Extbase_BaseTestCase {
 			'sortByVisitor' => 'sortdate,title,tstamp',
 		);
 		$this->numberOfResults = 35;
-		
+
 		$lib = new tx_kesearch_lib;
 		$this->assertEquals('', $lib->renderOrdering());
 
@@ -42,7 +42,7 @@ class LibOrderingTest extends Tx_Extbase_BaseTestCase {
 		);
 		$this->numberOfResults = 35;
 		$this->assertEquals('', $lib->renderOrdering());
-		
+
 		// Test with numberOfResults = 0
 		$this->conf = array(
 			'showSortInFrontend' => true,
@@ -52,4 +52,3 @@ class LibOrderingTest extends Tx_Extbase_BaseTestCase {
 		$this->assertEquals('', $lib->renderOrdering());
 	}
 }
-?>

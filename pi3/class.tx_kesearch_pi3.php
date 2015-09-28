@@ -169,9 +169,3 @@ class tx_kesearch_pi3 extends tx_kesearch_lib {
 		return $this->pi_wrapInBaseClass($content);
 	}
 }
-
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/pi3/class.tx_kesearch_pi3.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/pi3/class.tx_kesearch_pi3.php']);
-}
-?>

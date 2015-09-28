@@ -91,7 +91,7 @@ class tx_kesearch_pi1 extends tx_kesearch_lib {
 		} else {
 			$htmlOutput = $this->pi_wrapInBaseClass($content);
 		}
-		
+
 		return $htmlOutput;
 	}
 
@@ -99,7 +99,7 @@ class tx_kesearch_pi1 extends tx_kesearch_lib {
 	 * renders the "spinner" and loading note and provides a hook for
 	 * even more content in the searchbox (only for static and ajax
 	 * template, not for fluid template)
-	 * 
+	 *
 	 * @param string $content
 	 * @return string
 	 */
@@ -167,8 +167,3 @@ class tx_kesearch_pi1 extends tx_kesearch_lib {
 		$this->searchFormView->assign('extConfPremium', $this->extConfPremium);
 	}
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/pi1/class.tx_kesearch_pi1.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/pi1/class.tx_kesearch_pi1.php']);
-}
-?>

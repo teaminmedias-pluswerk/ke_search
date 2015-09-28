@@ -2,38 +2,38 @@
 class DatabaseOrderingTest extends Tx_Extbase_BaseTestCase {
 
 	var $conf = array();
-	
+
 	/**
 	 * @var tx_kesearch_pi1
 	 */
 	var $pObj;
-	
+
 	/**
 	 * @var tx_kesearch_lib_div
 	 */
 	var $div;
-	
-	
-	
-	
-	
-	
+
+
+
+
+
+
 	public function setUp() {
 		$this->pObj = $this->getMock('tx_kesearch_pi1');
 		$this->pObj->expects($this->any())->method('pi_getLL')->will($this->returnValue('Suchbegriff'));
-		
+
 		$this->div = new tx_kesearch_lib_div;
 	}
-	
+
 	public function tearDown() {
 		unset($this->pObj);
 		unset($this->div);
 	}
-	
-	
-	
-	
-	
+
+
+
+
+
 	/**
 	 * Test ordering if no searchword was given
 	 * - test in case of visible in FE
@@ -48,11 +48,11 @@ class DatabaseOrderingTest extends Tx_Extbase_BaseTestCase {
 			'showSortInFrontend' => false,
 			'sortByAdmin' => 'sortdate desc'
 		);
-		
+
 		$this->pObj->piVars = $this->div->cleanPiVars($this->pObj->piVars);
-		
+
 		$db = new tx_kesearch_db($this->pObj);
-		
+
 		$this->assertEquals('sortdate desc', $db->getOrdering());
 
 		$this->pObj->sword = '';
@@ -61,15 +61,15 @@ class DatabaseOrderingTest extends Tx_Extbase_BaseTestCase {
 			'showSortInFrontend' => true,
 			'sortByAdmin' => 'sortdate desc'
 		);
-		
+
 		$this->pObj->piVars = $this->div->cleanPiVars($this->pObj->piVars);
-		
+
 		$db = new tx_kesearch_db($this->pObj);
-		
+
 		$this->assertEquals('sortdate desc', $db->getOrdering());
 	}
-	
-	
+
+
 	/**
 	 * Test ordering if a searchword was given
 	 * - show sorting in FE is forbidden
@@ -84,15 +84,15 @@ class DatabaseOrderingTest extends Tx_Extbase_BaseTestCase {
 			'showSortInFrontend' => false,
 			'sortByAdmin' => 'sortdate desc'
 		);
-		
+
 		$this->pObj->piVars = $this->div->cleanPiVars($this->pObj->piVars);
-		
+
 		$db = new tx_kesearch_db($this->pObj);
-		
+
 		$this->assertEquals('sortdate desc', $db->getOrdering());
 	}
-	
-	
+
+
 	/**
 	 * Test ordering if a searchword was given
 	 * - show sorting in FE is allowed
@@ -110,15 +110,15 @@ class DatabaseOrderingTest extends Tx_Extbase_BaseTestCase {
 			'sortByVisitor' => 'sortdate,tstamp,title',
 			'sortByAdmin' => 'sortdate desc'
 		);
-		
+
 		$this->pObj->piVars = $this->div->cleanPiVars($this->pObj->piVars);
-		
+
 		$db = new tx_kesearch_db($this->pObj);
-		
+
 		$this->assertEquals('tstamp asc', $db->getOrdering());
 	}
-	
-	
+
+
 	/**
 	 * Test ordering if a searchword was given
 	 * - show sorting in FE is allowed
@@ -140,15 +140,15 @@ class DatabaseOrderingTest extends Tx_Extbase_BaseTestCase {
 			'orderByField' => 'content',
 			'orderByDir' => 'asc',
 		);
-		
+
 		$this->pObj->piVars = $this->div->cleanPiVars($this->pObj->piVars);
-		
+
 		$db = new tx_kesearch_db($this->pObj);
-		
+
 		$this->assertEquals('tstamp asc', $db->getOrdering());
 	}
-	
-	
+
+
 	/**
 	 * Test ordering if a searchword was given
 	 * - show sorting in FE is allowed
@@ -170,16 +170,16 @@ class DatabaseOrderingTest extends Tx_Extbase_BaseTestCase {
 			'orderByField' => 'title',
 			'orderByDir' => 'trallala',
 		);
-		
+
 		$this->pObj->piVars = $this->div->cleanPiVars($this->pObj->piVars);
-		
+
 		$db = new tx_kesearch_db($this->pObj);
-		
+
 		// orderdirections fallback is "asc"
 		$this->assertEquals('title asc', $db->getOrdering());
 	}
-	
-	
+
+
 	/**
 	 * Test ordering if a searchword was given
 	 * - show sorting in FE is allowed
@@ -201,13 +201,12 @@ class DatabaseOrderingTest extends Tx_Extbase_BaseTestCase {
 			'orderByField' => 'title',
 			'orderByDir' => 'asc',
 		);
-		
+
 		$this->pObj->piVars = $this->div->cleanPiVars($this->pObj->piVars);
-		
+
 		$db = new tx_kesearch_db($this->pObj);
-		
+
 		$this->assertEquals('title asc', $db->getOrdering());
 	}
-	
+
 }
-?>

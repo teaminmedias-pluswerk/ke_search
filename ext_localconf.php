@@ -29,4 +29,3 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_kesearch_ind
     'title'            => 'Indexing process for ke_search',
     'description'      => 'This task updates the ke_search index'
 );
-?>

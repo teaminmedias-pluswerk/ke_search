@@ -178,7 +178,7 @@ class  tx_kesearch_module1 extends \TYPO3\CMS\Backend\Module\BaseScriptClass {
 				// action: start indexer or remove lock
 				if ($do == 'startindexer') {
 					// start indexing in verbose mode with cleanup process
-					$content .= $indexer->startIndexing(true, $this->extConf); 
+					$content .= $indexer->startIndexing(true, $this->extConf);
 				} else if ($do == 'rmLock') {
 					// remove lock from registry - admin only!
 					if ($GLOBALS['BE_USER']->user['admin']) {
@@ -677,4 +677,3 @@ $SOBE = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_module
 $SOBE->init();
 $SOBE->main();
 $SOBE->printContent();
-?>

@@ -24,4 +24,3 @@ return array(
 	'tx_kesearch_db' => $extensionPath . 'Classes/lib/class.tx_kesearch_db.php',
 	'tx_kesearch_filters' => $extensionPath . 'Classes/lib/class.tx_kesearch_filters.php',
 );
-?>

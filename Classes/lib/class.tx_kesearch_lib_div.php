@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Stefan Froemken 
+*  (c) 2010 Stefan Froemken
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -26,7 +26,7 @@
 /**
  * Plugin 'Faceted search - searchbox and filters' for the 'ke_search' extension.
  *
- * @author	Stefan Froemken 
+ * @author	Stefan Froemken
  * @package	TYPO3
  * @subpackage	tx_kesearch
  */
@@ -93,7 +93,7 @@ class tx_kesearch_lib_div {
 	 * Use removeXSS function from t3lib_div / GeneralUtility
 	 * that function exists in the TYPO3 Core at least since version 4.5,
 	 * which is the minimum system requirement for ke_search currentliy (07 / 2015)
-	 * 
+	 *
 	 * @param string value
 	 * @return string XSS safe value
 	*/
@@ -136,7 +136,7 @@ class tx_kesearch_lib_div {
 					break;
 
 				// array of strings. Defined in the TYPO3 backend
-				// and posted as piVar. Should not contain any special 
+				// and posted as piVar. Should not contain any special
 				// chars (<>"), but just to make sure we remove them here.
 				case 'filter':
 					if(is_array($piVars[$key])) {
@@ -154,7 +154,7 @@ class tx_kesearch_lib_div {
 					}
 					break;
 
-				// string, no further XSS cleaning here (except removeXSS, 
+				// string, no further XSS cleaning here (except removeXSS,
 				// see above), cleaning is done on output
 				case 'sword':
 					$piVars[$key] = trim($piVars[$key]);
@@ -185,8 +185,3 @@ class tx_kesearch_lib_div {
 		return $piVars;
 	}
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/lib/class.tx_kesearch_lib_div.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/lib/class.tx_kesearch_lib_div.php']);
-}
-?>

@@ -26,7 +26,7 @@
  * Plugin 'Faceted search' for the 'ke_search' extension.
  *
  * @author	Andreas Kiefer (kennziffer.com) <kiefer@kennziffer.com>
- * @author	Stefan Froemken 
+ * @author	Stefan Froemken
  * @package	TYPO3
  * @subpackage	tx_kesearch
  */
@@ -45,7 +45,7 @@ class tx_kesearch_indexer_types_tt_content extends tx_kesearch_indexer_types_pag
 		$where .= ' AND (' . $this->whereClauseForCType. ')';
 
 		// don't index elements which are hidden or deleted, but do index
-		// those with time restrictons, the time restrictens will be 
+		// those with time restrictons, the time restrictens will be
 		// copied to the index
 		//$where .= t3lib_BEfunc::BEenableFields($table);
 		$where .= ' AND hidden=0';
@@ -186,8 +186,3 @@ class tx_kesearch_indexer_types_tt_content extends tx_kesearch_indexer_types_pag
 		return;
 	}
 }
-
-if (defined('TYPO3_MODE') && $GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/indexer/types/class.tx_kesearch_indexer_types_tt_content.php'])	{
-	include_once($GLOBALS['TYPO3_CONF_VARS'][TYPO3_MODE]['XCLASS']['ext/ke_search/Classes/indexer/types/class.tx_kesearch_indexer_types_tt_content.php']);
-}
-?>
