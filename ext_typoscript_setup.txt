@@ -2,8 +2,15 @@
 # Typoscript configuration for ke_search
 # ==============================================
 
-plugin.tx_kesearch.view {
-	templateRootPaths.0 = EXT:ke_search/Resources/Private/Templates/
-	partialRootPaths.0 = EXT:ke_search/Resources/Private/Partials/
-	layoutRootPaths.0 = EXT:ke_search/Resources/Private/Layouts/
+# paths for fluid templating
+plugin.tx_kesearch_pi1 {
+	templateRootPath = EXT:ke_search/Resources/Private/Templates/
+	partialRootPath = EXT:ke_search/Resources/Private/Partials/
+	layoutRootPath = EXT:ke_search/Resources/Private/Layouts/
+}
+
+plugin.tx_kesearch_pi2 {
+	templateRootPath = EXT:ke_search/Resources/Private/Templates/
+	partialRootPath = EXT:ke_search/Resources/Private/Partials/
+	layoutRootPath = EXT:ke_search/Resources/Private/Layouts/
 }
