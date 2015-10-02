@@ -1,0 +1,12 @@
+{
+    "name": "teaminmedias-pluswerk/ke_search",
+    "type": "typo3-cms-extension",
+    "description": "Search Extension for TYPO3, including faceting search functions.",
+    "homepage": "https://www.typo3-macher.de/en/facetted-search-ke-search/",
+    "license": ["GPL-2.0+"],
+    "keywords": ["TYPO3 CMS", "search", "ke_search", "kesearch", "faceting", "faceted search"],
+    "support": {
+        "issues": "https://forge.typo3.org/projects/extension-ke_search/issues"
+    },
+    "version": "1.99.0"
+}

@@ -18,6 +18,7 @@ Version 2.0.0
 [FEATURE] add hook modifyContentFromContentElement which allows to restructure a content elements bodytext. Thanks to Felix Jacobi. See https://github.com/teaminmedias-pluswerk/ke_search/pull/3 for usage.
 [CLEANUP] Use usestatement + adjust deprecated methods to new one. Thanks to Ruud Silvrants.
 [BUGFIX]  Fix invoking cObj $this->$cObj to $this->CObj. Thanks to Ruud Silvrants.
+[TASK]    add composer.json
 
 Version 1.10.2
 * bugfix: add langDisable in flexform, https://forge.typo3.org/issues/64579
