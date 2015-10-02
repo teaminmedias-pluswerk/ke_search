@@ -1,24 +1,30 @@
 ChangeLog
 
 Version 2.0.0
-IMPORTANT: This version has breaking changes: Marker based templatating has been deprecated and will be dropped completely, support for TYPO 4.5 has been dropped, parameters of hook calls have changed!
-- feature: add fluid based templating.
-- task: raise minimum requirement to TYPO3 version 6.2
-- task: remove all checks for TYPO3 version.
-- task: add default typoscript template ext_typoscript_setup.txt containing paths for fluid templates.
-- task: remove "wrap" option for filter rendering, this can be done in the fluid template.
-- task: remove ajax based rendering option in flexform.
-- feature: make content types which should be indexed configurable. https://forge.typo3.org/issues/58631. (This can now be done as a comma separated list in the indexer configuration record in the backend.)
-- feature: add system categories as generic tags for pages, content elements and files (eg. "syscat123").
-- bugfix: fix path information for indexed files, remove the filename from the path, eg. "fileadmin/user_upload/test.pdf" should be "fileadmin/user_upload/".
-- feature: add indexer object to hook modifyPagesIndexEntry in pages indexer. Thanks To Ricky Bohse. https://forge.typo3.org/issues/69835.
+*IMPORTANT* This version has breaking changes: Marker based templatating has been deprecated and will be dropped completely, support for TYPO 4.5 has been dropped, parameters of hook calls have changed!
+[TASK]    move code hosting to github.com
+[FEATURE] add fluid based templating.
+[TASK]    raise minimum requirement to TYPO3 version 6.2
+[TASK]    remove all checks for TYPO3 version.
+[TASK]    add default typoscript template ext_typoscript_setup.txt containing paths for fluid templates.
+[TASK]    remove "wrap" option for filter rendering, this can be done in the fluid template.
+[TASK]    remove ajax based rendering option in flexform.
+[FEATURE] make content types which should be indexed configurable. https://forge.typo3.org/issues/58631. (This can now be done as a comma separated list in the indexer configuration record in the backend.)
+[FEATURE] add system categories as generic tags for pages, content elements and files (eg. "syscat123").
+[BUGFIX]  fix path information for indexed files, remove the filename from the path, eg. "fileadmin/user_upload/test.pdf" should be "fileadmin/user_upload/".
+[FEATURE] add indexer object to hook modifyPagesIndexEntry in pages indexer. Thanks To Ricky Bohse. https://forge.typo3.org/issues/69835.
+[CLEANUP] Remove xclassdefintion and php close tags. Thanks to Ruud Silvrants.
+[BUGFIX]  Fix invoking cObj $this->$cObj to $this->CObj. Thanks to Ruud Silvrants.
+[FEATURE] add hook modifyContentFromContentElement which allows to restructure a content elements bodytext. Thanks to Felix Jacobi. See https://github.com/teaminmedias-pluswerk/ke_search/pull/3 for usage.
+[CLEANUP] Use usestatement + adjust deprecated methods to new one. Thanks to Ruud Silvrants.
+[BUGFIX]  Fix invoking cObj $this->$cObj to $this->CObj. Thanks to Ruud Silvrants.
 
 Version 1.10.2
-- bugfix: add langDisable in flexform, https://forge.typo3.org/issues/64579
-- bugfix: fix check for templvoila in templavoila indexer.
-- bugfix: remove debug output. Thanks to Felix Jacobi. https://forge.typo3.org/issues/69616
-- bugfix: do not try to index folders, only files can be indexed. Thanks to Ricky Bohse. https://forge.typo3.org/issues/68156
-- task: add hint to backend form for file indexer that _cli_scheduler must have access rights to file mounts. Thanks to Urs Braem. https://forge.typo3.org/issues/67983
+* bugfix: add langDisable in flexform, https://forge.typo3.org/issues/64579
+* bugfix: fix check for templvoila in templavoila indexer.
+* bugfix: remove debug output. Thanks to Felix Jacobi. https://forge.typo3.org/issues/69616
+* bugfix: do not try to index folders, only files can be indexed. Thanks to Ricky Bohse. https://forge.typo3.org/issues/68156
+* task: add hint to backend form for file indexer that _cli_scheduler must have access rights to file mounts. Thanks to Urs Braem. https://forge.typo3.org/issues/67983
 
 Version 1.10.1
 * task: Output error message if PDF file is encrypted but return empty content instead of false.
