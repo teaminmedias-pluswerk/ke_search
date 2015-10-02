@@ -22,6 +22,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+use \TYPO3\CMS\Core\Utility\GeneralUtility;
+use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
 /**
  * Plugin 'Faceted search - searchbox and filters' for the 'ke_search' extension.
  *
@@ -38,11 +41,11 @@ class tx_kesearch_pi1 extends tx_kesearch_lib {
 	 *
 	 * @param	string		$content: The PlugIn content
 	 * @param	array		$conf: The PlugIn configuration
-	 * @return	The content that is displayed on the website
+	 * @return	string The content that is displayed on the website
 	 */
 	function main($content, $conf) {
 
-		$this->ms = TYPO3\CMS\Core\Utility\GeneralUtility::milliseconds();
+		$this->ms = GeneralUtility::milliseconds();
 		$this->conf = $conf;
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
@@ -70,7 +73,7 @@ class tx_kesearch_pi1 extends tx_kesearch_lib {
 		// hook for initials
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['initials'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['initials'] as $_classRef) {
-				$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$_procObj->addInitials($this);
 			}
 		}
@@ -116,7 +119,7 @@ class tx_kesearch_pi1 extends tx_kesearch_lib {
 		// hook for additional searchbox markers
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['additionalSearchboxContent'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['additionalSearchboxContent'] as $_classRef) {
-				$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$_procObj->additionalSearchboxContent($content, $this);
 			}
 		}
@@ -131,7 +134,7 @@ class tx_kesearch_pi1 extends tx_kesearch_lib {
 	public function initMarkerTemplate() {
 		// init XAJAX?
 		if ($this->conf['renderMethod'] != 'static') {
-			$xajaxIsLoaded = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('xajax');
+			$xajaxIsLoaded = ExtensionManagementUtility::isLoaded('xajax');
 			if (!$xajaxIsLoaded) {
 				return ('<span style="color: red;"><b>ke_search error:</b>"XAJAX" must be installed for this mode.</span>');
 			}
@@ -142,7 +145,7 @@ class tx_kesearch_pi1 extends tx_kesearch_lib {
 		if ($this->conf['spinnerImageFile']) {
 			$spinnerSrc = $this->conf['spinnerImageFile'];
 		} else {
-			$spinnerSrc = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath($this->extKey).'res/img/spinner.gif';
+			$spinnerSrc = ExtensionManagementUtility::siteRelPath($this->extKey).'res/img/spinner.gif';
 		}
 		$this->spinnerImageFilters = '<img id="kesearch_spinner_filters" src="'.$spinnerSrc.'" alt="'.$this->pi_getLL('loading').'" />';
 		$this->spinnerImageResults = '<img id="kesearch_spinner_results" src="'.$spinnerSrc.'" alt="'.$this->pi_getLL('loading').'" />';
@@ -156,7 +159,7 @@ class tx_kesearch_pi1 extends tx_kesearch_lib {
 	 */
 	public function initFluidTemplate() {
 		/** @var \TYPO3\CMS\Fluid\View\StandaloneView $this->searchFormView */
-		$this->searchFormView = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
+		$this->searchFormView = GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
 		$this->searchFormView->setPartialRootPath($this->conf['partialRootPath']);
 		$this->searchFormView->setLayoutRootPath($this->conf['layoutRootPath']);
 		$this->searchFormView->setTemplatePathAndFilename($this->conf['templateRootPath'] . 'SearchForm.html');

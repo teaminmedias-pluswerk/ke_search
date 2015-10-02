@@ -22,6 +22,9 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+use \TYPO3\CMS\Core\Utility\GeneralUtility;
+use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+
 /**
  * Parent class for plugins pi1 and pi2
  *
@@ -96,10 +99,10 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	 */
 	public function init() {
 		// get some helper functions
-		$this->div = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_lib_div', $this);
+		$this->div = GeneralUtility::makeInstance('tx_kesearch_lib_div', $this);
 
 		// set start of query timer
-		if(!$GLOBALS['TSFE']->register['ke_search_queryStartTime']) $GLOBALS['TSFE']->register['ke_search_queryStartTime'] = TYPO3\CMS\Core\Utility\GeneralUtility::milliseconds();
+		if(!$GLOBALS['TSFE']->register['ke_search_queryStartTime']) $GLOBALS['TSFE']->register['ke_search_queryStartTime'] = GeneralUtility::milliseconds();
 
 		// make settings from flexform available in general configuration ($this->conf)
 		$this->moveFlexFormDataToConf();
@@ -133,19 +136,19 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		// hook: modifyFlexFormData
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFlexFormData'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFlexFormData'] as $_classRef) {
-				$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$_procObj->modifyFlexFormData($this->conf, $this->cObj, $this->piVars);
 			}
 		}
 
 		// prepare database object
-		$this->db = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_db', $this);
+		$this->db = GeneralUtility::makeInstance('tx_kesearch_db', $this);
 
 		// set startingPoints
 		$this->startingPoints = $this->div->getStartingPoint();
 
 		// get filter class
-		$this->filters = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_filters');
+		$this->filters = GeneralUtility::makeInstance('tx_kesearch_filters');
 
 		// get extension configuration array
 		$this->extConf = tx_kesearch_helper::getExtConf();
@@ -161,14 +164,14 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		$this->firstStartingPoint = $this->div->getFirstStartingPoint($this->startingPoints);
 
 		// build words searchphrase
-		$searchPhrase = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_lib_searchphrase');
+		$searchPhrase = GeneralUtility::makeInstance('tx_kesearch_lib_searchphrase');
 		$searchPhrase->initialize($this);
 		$searchWordInformation = $searchPhrase->buildSearchPhrase();
 
 		// Hook: modifySearchWords
 		if(isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifySearchWords'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifySearchWords'] as $classRef) {
-				$hookObj = TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($classRef);
+				$hookObj = GeneralUtility::getUserObj($classRef);
 				if(method_exists($hookObj, 'modifySearchWords')) {
 					$hookObj->modifySearchWords($searchWordInformation, $this);
 				}
@@ -192,7 +195,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		// * sorting for "relevance" is allowed (internal: "score")
 		// * user did not select his own sorting yet
 		// * a searchword is given
-		$isInList = TYPO3\CMS\Core\Utility\GeneralUtility::inList($this->conf['sortByVisitor'], 'score');
+		$isInList = GeneralUtility::inList($this->conf['sortByVisitor'], 'score');
 		if ($this->conf['showSortInFrontend'] && $isInList && !$this->piVars['sortByField'] && $this->sword) {
 			$this->piVars['sortByField'] = 'score';
 			$this->piVars['sortByDir'] = 'desc';
@@ -233,12 +236,12 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		// check for rendering method
 		if ($this->conf['renderMethod'] == 'fluidtemplate') {
 			// set default template paths
-			$this->conf['templateRootPath'] = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($this->conf['templateRootPath'] ? $this->conf['templateRootPath'] : 'EXT:ke_search/Resources/Private/Templates/');
-			$this->conf['partialRootPath'] = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($this->conf['partialRootPath'] ? $this->conf['partialRootPath'] : 'EXT:ke_search/Resources/Private/Partials/');
-			$this->conf['layoutRootPath'] = \TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($this->conf['layoutRootPath'] ? $this->conf['layoutRootPath'] : 'EXT:ke_search/Resources/Private/Layouts/');
+			$this->conf['templateRootPath'] = GeneralUtility::getFileAbsFileName($this->conf['templateRootPath'] ? $this->conf['templateRootPath'] : 'EXT:ke_search/Resources/Private/Templates/');
+			$this->conf['partialRootPath'] = GeneralUtility::getFileAbsFileName($this->conf['partialRootPath'] ? $this->conf['partialRootPath'] : 'EXT:ke_search/Resources/Private/Partials/');
+			$this->conf['layoutRootPath'] = GeneralUtility::getFileAbsFileName($this->conf['layoutRootPath'] ? $this->conf['layoutRootPath'] : 'EXT:ke_search/Resources/Private/Layouts/');
 		} else {
 			// get html template
-			$this->templateFile = $this->conf['templateFile'] ? $this->conf['templateFile'] : TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath($this->extKey) . 'res/template_pi1.tpl';
+			$this->templateFile = $this->conf['templateFile'] ? $this->conf['templateFile'] : ExtensionManagementUtility::siteRelPath($this->extKey) . 'res/template_pi1.tpl';
 			$this->templateCode = $this->cObj->fileResource($this->templateFile);
 		}
 	}
@@ -366,10 +369,10 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		$this->fluidTemplateVariables['targetpage'] = $this->conf['resultPage'];
 
 		// set form action
-		$siteUrl = TYPO3\CMS\Core\Utility\GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
-		$lParam = TYPO3\CMS\Core\Utility\GeneralUtility::_GET('L');
-		$mpParam = TYPO3\CMS\Core\Utility\GeneralUtility::_GET('MP');
-		$typeParam = TYPO3\CMS\Core\Utility\GeneralUtility::_GP('type');
+		$siteUrl = GeneralUtility::getIndpEnv('TYPO3_SITE_URL');
+		$lParam = GeneralUtility::_GET('L');
+		$mpParam = GeneralUtility::_GET('MP');
+		$typeParam = GeneralUtility::_GP('type');
 		$actionUrl =  $siteUrl . 'index.php';
 		$content = $this->cObj->substituteMarker($content,'###FORM_ACTION###', $actionUrl);
 		$this->fluidTemplateVariables['actionUrl'] = $actionUrl;
@@ -435,7 +438,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			// rendering of this filter. The filter is only used
 			// to add preselected filter options to the query and
 			// must not be rendered.
-			$isInList = TYPO3\CMS\Core\Utility\GeneralUtility::inList($this->conf['hiddenfilters'], $filter['uid']);
+			$isInList = GeneralUtility::inList($this->conf['hiddenfilters'], $filter['uid']);
 
 			if ($isInList) {
 				continue;
@@ -452,7 +455,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			// hook for modifying filter options
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptionsArray'])) {
 				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptionsArray'] as $_classRef) {
-					$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+					$_procObj = & GeneralUtility::getUserObj($_classRef);
 					$options = $_procObj->modifyFilterOptionsArray($filter['uid'], $options, $this);
 				}
 			}
@@ -483,7 +486,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			// special classes / custom code
 			switch($filter['rendertype']) {
 				case 'textlinks':
-					$textLinkObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_lib_filters_textlinks', $this);
+					$textLinkObj = GeneralUtility::makeInstance('tx_kesearch_lib_filters_textlinks', $this);
 					$textLinkObj->renderTextlinks($filter['uid'], $options, $this);
 					break;
 
@@ -492,7 +495,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 					// hook for custom filter renderer
 					if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customFilterRenderer'])) {
 						foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customFilterRenderer'] as $_classRef) {
-							$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+							$_procObj = & GeneralUtility::getUserObj($_classRef);
 							$_procObj->customFilterRenderer($filter['uid'], $options, $this);
 						}
 					}
@@ -565,7 +568,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		// modify filter options by hook
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptions'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptions'] as $_classRef) {
-				$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$contentOptions .= $_procObj->modifyFilterOptions(
 					$filter,
 					$checkboxOptions,
@@ -691,7 +694,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	 */
 	public function getFilterOptions($optionList, $returnSortedByTitle = false) {
 		// check/convert if list contains only integers
-		$optionIdArray = TYPO3\CMS\Core\Utility\GeneralUtility::intExplode(',', $optionList, true);
+		$optionIdArray = GeneralUtility::intExplode(',', $optionList, true);
 		$optionList = implode(',', $optionIdArray);
 		if($returnSortedByTitle) {
 			$sortBy = 'title';
@@ -729,11 +732,11 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	public function initXajax()	{
 		// Include xaJax
 		if(!class_exists('xajax')) {
-			$path_to_xajax = t3lib_extMgm::extPath('xajax') . 'class.tx_xajax.php';
+			$path_to_xajax = ExtensionManagementUtility::extPath('xajax') . 'class.tx_xajax.php';
 			require_once($path_to_xajax);
 		}
 		// Make the instance
-		$this->xajax = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_xajax');
+		$this->xajax = GeneralUtility::makeInstance('tx_xajax');
 		// Decode form vars from utf8
 		$this->xajax->decodeUTF8InputOn();
 		// Encoding of the response to utf-8.
@@ -757,7 +760,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		$this->xajax->processRequests();
 
 		// Create javacript and add it to the normal output
-		$jsCode = $this->xajax->getJavascript(t3lib_extMgm::siteRelPath('xajax'));
+		$jsCode = $this->xajax->getJavascript(ExtensionManagementUtility::siteRelPath('xajax'));
 		$GLOBALS['TSFE']->getPageRenderer()->addHeaderData($jsCode);
 	}
 
@@ -770,7 +773,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	 */
 	public function createHideSpinner() {
 		// generate onload image
-		$path = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath($this->extKey) . 'res/img/blank.gif';
+		$path = ExtensionManagementUtility::siteRelPath($this->extKey) . 'res/img/blank.gif';
 		if ($GLOBALS['TSFE']->id != $this->conf['resultPage']) {
 			$spinnerFunction = 'hideSpinnerFiltersOnly()';
 		} else $spinnerFunction = 'hideSpinner()';
@@ -870,7 +873,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			if ($this->conf['showQueryTime']) {
 				// Calculate Querytime
 				// we have two plugin. That's why we work with register here.
-				$GLOBALS['TSFE']->register['ke_search_queryTime'] = (TYPO3\CMS\Core\Utility\GeneralUtility::milliseconds() - $GLOBALS['TSFE']->register['ke_search_queryStartTime']);
+				$GLOBALS['TSFE']->register['ke_search_queryTime'] = (GeneralUtility::milliseconds() - $GLOBALS['TSFE']->register['ke_search_queryStartTime']);
 				$objResponse->addAssign('kesearch_query_time', 'innerHTML', sprintf($this->pi_getLL('query_time'), $GLOBALS['TSFE']->register['ke_search_queryTime']));
 			}
 		}
@@ -941,15 +944,15 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 
 			// attention icon (only in marker based template)
 			unset($imageConf);
-			$imageConf['file'] = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath($this->extKey).'res/img/attention.gif';
+			$imageConf['file'] = ExtensionManagementUtility::siteRelPath($this->extKey).'res/img/attention.gif';
 			$imageConf['altText'] = $this->pi_getLL('no_results_found');
-			$attentionImage = $this->cObj->IMAGE($imageConf);
+			$attentionImage = $this->cObj->cObjGetSingle('IMAGE', $imageConf);
 		}
 
 		// hook to implement your own idea of a no result message
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['noResultsHandler'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['noResultsHandler'] as $_classRef) {
-				$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$_procObj->noResultsHandler($noResultsText, $this);
 			}
 		}
@@ -981,9 +984,9 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 
 		// attention icon
 		unset($imageConf);
-		$imageConf['file'] = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath($this->extKey) . 'res/img/attention.gif';
+		$imageConf['file'] = ExtensionManagementUtility::siteRelPath($this->extKey) . 'res/img/attention.gif';
 		$imageConf['altText'] = $this->pi_getLL('no_results_found');
-		$attentionImage=$this->cObj->IMAGE($imageConf);
+		$attentionImage = $this->cObj->cObjGetSingle('IMAGE', $imageConf);
 
 		// set attention icon?
 		$content = $this->cObj->substituteMarker($content, '###IMAGE###', $attentionImage);
@@ -1035,7 +1038,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 
 		// init counter and loop through the search results
 		$resultCount = 1;
-		$this->searchResult = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_lib_searchresult', $this);
+		$this->searchResult = GeneralUtility::makeInstance('tx_kesearch_lib_searchresult', $this);
 
 		$this->fluidTemplateVariables['resultrows'] = array();
 
@@ -1054,7 +1057,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 					// make curent row number available to hook
 				$this->currentRowNumber = $resultCount;
 				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['additionalResultMarker'] as $_classRef) {
-					$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+					$_procObj = & GeneralUtility::getUserObj($_classRef);
 					$_procObj->additionalResultMarker(
 						$tempMarkerArray,
 						$row,
@@ -1172,7 +1175,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		// hook for additional content AFTER the result list
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['additionalContentAfterResultList'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['additionalContentAfterResultList'] as $_classRef) {
-				$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$content .= $_procObj->additionalContentAfterResultList($this);
 			}
 		}
@@ -1252,13 +1255,13 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	public function countSearchWordWithKeStats($searchphrase='') {
 
 		$searchphrase = trim($searchphrase);
-		$keStatsIsLoaded = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('ke_stats');
+		$keStatsIsLoaded = ExtensionManagementUtility::isLoaded('ke_stats');
 		if ($keStatsIsLoaded && !empty($searchphrase)) {
-			$keStatsObj = TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj('EXT:ke_stats/pi1/class.tx_kestats_pi1.php:tx_kestats_pi1');
+			$keStatsObj = GeneralUtility::getUserObj('EXT:ke_stats/pi1/class.tx_kestats_pi1.php:tx_kestats_pi1');
 			$keStatsObj->initApi();
 
 				// count words
-			$wordlist = TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(' ', $searchphrase, true);
+			$wordlist = GeneralUtility::trimExplode(' ', $searchphrase, true);
 			foreach ($wordlist as $singleword) {
 				$keStatsObj->increaseCounter(
 					'ke_search Words',
@@ -1344,7 +1347,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		$content = '';
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['renderPagebrowserInit'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['renderPagebrowserInit'] as $_classRef) {
-				$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$content = $_procObj->renderPagebrowserInit($this);
 			}
 		}
@@ -1499,7 +1502,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		// use only if you use marker based templating, not for fluid based templating!
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['pagebrowseAdditionalMarker'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['pagebrowseAdditionalMarker'] as $_classRef) {
-				$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$_procObj->pagebrowseAdditionalMarker(
 					$markerArray,
 					$this
@@ -1514,7 +1517,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 
 
 	public function renderOrdering() {
-		$sortObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_lib_sorting', $this);
+		$sortObj = GeneralUtility::makeInstance('tx_kesearch_lib_sorting', $this);
 		return $sortObj->renderSorting($this->fluidTemplateVariables);
 	}
 
@@ -1534,7 +1537,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			// if index record is of type "file" and contains an orig_uid, this is the reference
 			// to a FAL record. Otherwise we use the path directly.
 			if ($row['orig_uid']) {
-				$fileRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
+				$fileRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
 				$fileObject = $fileRepository->findByUid($row['orig_uid']);
 				$metadata = $fileObject->_getMetaData();
 				$imageConf['file'] = $fileObject->getPublicUrl();
@@ -1562,7 +1565,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		$imageHtml = '';
 
 		$imageConf = $this->conf['previewImage.'];
-		$fileRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
+		$fileRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
 		$fileObjects = $fileRepository->findByRelation($table, $fieldname, $uid);
 		if (count($fileObjects)) {
 			$fileObject = $fileObjects[0];
@@ -1609,17 +1612,17 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		} else {
 			// custom image (old configuration option, only for gif images)
 			if ($this->conf['additionalPathForTypeIcons']) {
-				$imageConf['file'] = str_replace(PATH_site, '', TYPO3\CMS\Core\Utility\GeneralUtility::getFileAbsFileName($this->conf['additionalPathForTypeIcons'] . $name . '.gif'));
+				$imageConf['file'] = str_replace(PATH_site, '', GeneralUtility::getFileAbsFileName($this->conf['additionalPathForTypeIcons'] . $name . '.gif'));
 			}
 		}
 
 		// fallback: default image
 		if(!is_file(PATH_site . $imageConf['file'])) {
-			$imageConf['file'] = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath($this->extKey) . 'res/img/types/' . $name . '.gif';
+			$imageConf['file'] = ExtensionManagementUtility::siteRelPath($this->extKey) . 'res/img/types/' . $name . '.gif';
 
 			// fallback for file results: use default if no image for this file extension is available
 			if($type == 'file' && !is_file(PATH_site . $imageConf['file'])) {
-				$imageConf['file'] = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath($this->extKey) . 'res/img/types/file.gif';
+				$imageConf['file'] = ExtensionManagementUtility::siteRelPath($this->extKey) . 'res/img/types/file.gif';
 			}
 		}
 
@@ -1731,7 +1734,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		// and proceed only when preselectedFilter was not set
 		// this reduces the amount of sql queries, too
 		if($this->conf['preselected_filters'] && count($this->preselectedFilter) == 0) {
-			$preselectedArray = TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $this->conf['preselected_filters'], true);
+			$preselectedArray = GeneralUtility::trimExplode(',', $this->conf['preselected_filters'], true);
 			foreach ($preselectedArray as $option) {
 				$option = intval($option);
 				$fields = '
@@ -1787,7 +1790,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		$linkconf['parameter'] = $this->conf['resultPage'];
 		$linkconf['additionalParams'] = '';
 		$linkconf['useCacheHash'] = false;
-		$targetUrl = TYPO3\CMS\Core\Utility\GeneralUtility::locationHeaderUrl($this->cObj->typoLink_URL($linkconf));
+		$targetUrl = GeneralUtility::locationHeaderUrl($this->cObj->typoLink_URL($linkconf));
 
 		$content = $this->cObj->getSubpart($this->templateCode, '###JS_SEARCH_ALL###');
 		if($this->conf['renderMethod'] != 'static' ) {
@@ -1806,7 +1809,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		}
 
 		// define some additional markers
-		$markerArray['###SITE_REL_PATH###'] = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::siteRelPath($this->extKey);
+		$markerArray['###SITE_REL_PATH###'] = ExtensionManagementUtility::siteRelPath($this->extKey);
 		$markerArray['###TARGET_URL###'] = $targetUrl;
 		$markerArray['###PREFIX_ID###'] = $this->prefixId;
 		$markerArray['###SEARCHBOX_DEFAULT_VALUE###'] = $this->pi_getLL('searchbox_default_value');
