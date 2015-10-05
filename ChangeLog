@@ -1,7 +1,7 @@
 ChangeLog
 
 Version 2.0.0
-*IMPORTANT* This version has breaking changes: Marker based templatating has been deprecated and will be dropped completely, support for TYPO 4.5 has been dropped, parameters of hook calls have changed!
+*IMPORTANT* This version has breaking changes: Marker based templating has been deprecated and will be dropped completely, support for TYPO 4.5 has been dropped, parameters of hook calls have changed!
 [TASK]    move code hosting to github.com
 [FEATURE] add fluid based templating.
 [TASK]    raise minimum requirement to TYPO3 version 6.2
@@ -19,6 +19,8 @@ Version 2.0.0
 [CLEANUP] Use usestatement + adjust deprecated methods to new one. Thanks to Ruud Silvrants.
 [BUGFIX]  Fix invoking cObj $this->$cObj to $this->CObj. Thanks to Ruud Silvrants.
 [TASK]    add composer.json
+[TASK]    remove indexer for DAM since that extension is not available for 6.2 and above.
+[TASK]    change TCA for indexer configuration so that dependencies to tt_news and news are only set when these extensions are installed.
 
 Version 1.10.2
 * bugfix: add langDisable in flexform, https://forge.typo3.org/issues/64579

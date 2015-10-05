@@ -51,7 +51,6 @@
 			<label index="tx_kesearch_indexerconfig.type.I.0">Pages</label>
 			<label index="tx_kesearch_indexerconfig.type.I.1">Calendar (ke_yac)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.2">News (tt_news)</label>
-			<label index="tx_kesearch_indexerconfig.type.I.3">DAM (tx_dam)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.5">Address records (tt_address)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.6">Content records (tt_content)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.7">Files</label>
@@ -73,9 +72,6 @@
 			<label index="tx_kesearch_indexerconfig.index_extnews_category_selection">Categories:</label>
 			<label index="tx_kesearch_indexerconfig.index_news_useHRDatesSingle">Use dates for single-view-URLs:</label>
 			<label index="tx_kesearch_indexerconfig.index_news_useHRDatesSingleWithoutDay">Use dates without day for single-view-URLs:</label>
-			<label index="tx_kesearch_indexerconfig.index_dam_categories">Select DAM categories</label>
-			<label index="tx_kesearch_indexerconfig.index_dam_without_categories">Index dam records without defined categories</label>
-			<label index="tx_kesearch_indexerconfig.index_dam_categories_recursive">Index DAM categories recursive?</label>
 			<label index="tx_kesearch_indexerconfig.index_use_page_tags">Add tags of parent pages/sys-folders?</label>
 			<label index="tx_kesearch_indexerconfig.index_use_page_tags_for_files">Add tags to files also?</label>
 			<label index="tx_kesearch_indexerconfig.index_passed_events.I.0">Yes</label>
@@ -136,7 +132,6 @@
 			<label index="tx_kesearch_indexerconfig.type.I.0">Seiten</label>
 			<label index="tx_kesearch_indexerconfig.type.I.1">Kalendar (ke_yac)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.2">Nachrichten (tt_news)</label>
-			<label index="tx_kesearch_indexerconfig.type.I.3">DAM (tx_dam)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.5">Adressen (tt_address)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.6">Inhaltselemente (tt_content)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.7">Dateien</label>
@@ -158,9 +153,6 @@
 			<label index="tx_kesearch_indexerconfig.index_extnews_category_selection">Kategorien:</label>
 			<label index="tx_kesearch_indexerconfig.index_news_useHRDatesSingle">Datum in Single-View-URLs:</label>
 			<label index="tx_kesearch_indexerconfig.index_news_useHRDatesSingleWithoutDay">Datum ohne Tag in Single-View-URLs:</label>
-			<label index="tx_kesearch_indexerconfig.index_dam_categories">Welche Kategorien sollen indiziert werden?</label>
-			<label index="tx_kesearch_indexerconfig.index_dam_without_categories">Indexiere DAM Datensätze, die keiner Kategorie zugeordnet sind?</label>
-			<label index="tx_kesearch_indexerconfig.index_dam_categories_recursive">Kategorien rekursiv indizieren?</label>
 			<label index="tx_kesearch_indexerconfig.index_use_page_tags">Schlagworte der übergeordneten Seite/des Sys-Ordners übernehmen?</label>
 			<label index="tx_kesearch_indexerconfig.index_use_page_tags_for_files">Schlagworte auch für Dateien übernehmen?</label>
 			<label index="tx_kesearch_indexerconfig.index_passed_events.I.0">Ja</label>
@@ -213,7 +205,6 @@
 			<label index="tx_kesearch_indexerconfig.type.I.0">Pagina's</label>
 			<label index="tx_kesearch_indexerconfig.type.I.1">Kalender (ke_yac)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.2">Nieuws (tt_news)</label>
-			<label index="tx_kesearch_indexerconfig.type.I.3">DAM (tx_dam)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.5">Adres velden (tt_address)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.6">Inhouds elementen (tt_content)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.7">Bestanden</label>
@@ -225,9 +216,6 @@
 			<label index="tx_kesearch_indexerconfig.index_content_with_restrictions.I.0">Ja</label>
 			<label index="tx_kesearch_indexerconfig.index_content_with_restrictions.I.1">Nee</label>
 			<label index="tx_kesearch_indexerconfig.index_passed_events">Indexeer verstreken gebeurtenissen?</label>
-			<label index="tx_kesearch_indexerconfig.index_dam_categories">Selecteer DAM categorieën</label>
-			<label index="tx_kesearch_indexerconfig.index_dam_without_categories">Indexeer DAM records zonder gedefinieerde categorieën</label>
-			<label index="tx_kesearch_indexerconfig.index_dam_categories_recursive">DAM categorieën recursief indexeren?</label>
 			<label index="tx_kesearch_indexerconfig.index_passed_events.I.0">Ja</label>
 			<label index="tx_kesearch_indexerconfig.index_passed_events.I.1">Nee</label>
 			<label index="tx_kesearch_indexerconfig.directories">Mappen (fileadmin/my_directory/,fileadmin/my_other_directory)</label>

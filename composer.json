@@ -11,7 +11,7 @@
     "version": "1.99.2",
 	"autoload": {
         "psr-4": {
-            "teaminmedias-pluswerk\\ke_search\\": "typo3conf/ext/ke_search/Classes/"
+            "teaminmedias-pluswerk\\ke_search\\": "Classes"
         }
     }
 }

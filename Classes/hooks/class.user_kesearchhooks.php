@@ -89,30 +89,6 @@ class user_kesearch_sortdate {
 		}
 	}
 
-	public function modifyDAMIndexEntry(&$title, &$abstract, &$fullContent, &$params, &$tags, $damRecord, $targetPID, &$clearTextTags, &$additionalFields) {
-		// crdate is always given, but can be overwritten
-		if(isset($damRecord['crdate']) && $damRecord['crdate'] > 0) {
-			$additionalFields['sortdate'] = $damRecord['crdate'];
-		}
-		// if TYPO3 sets last changed
-		if(isset($damRecord['file_ctime']) && $damRecord['file_ctime'] > 0) {
-			$additionalFields['sortdate'] = $damRecord['file_ctime'];
-		}
-		// if TYPO3 sets last changed
-		if(isset($damRecord['file_mtime']) && $damRecord['file_mtime'] > 0) {
-			$additionalFields['sortdate'] = $damRecord['file_mtime'];
-		}
-
-		// fill orig_uid
-		if(isset($damRecord['uid']) && $damRecord['uid'] > 0) {
-			$additionalFields['orig_uid'] = $damRecord['uid'];
-		}
-		// fill orig_pid
-		if(isset($damRecord['pid']) && $damRecord['pid'] > 0) {
-			$additionalFields['orig_pid'] = $damRecord['pid'];
-		}
-	}
-
 	public function modifyContentIndexEntry(&$title, &$contentRecord, &$tags, $contentUid, &$additionalFields) {
 		// crdate is always given, but can be overwritten
 		if(isset($contentRecord['crdate']) && $contentRecord['crdate'] > 0) {

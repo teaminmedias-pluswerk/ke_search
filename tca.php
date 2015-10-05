@@ -476,7 +476,6 @@ $TCA['tx_kesearch_indexerconfig'] = array (
 					array('LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.0', 'page',         $extRelPath . 'res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_0.gif'),
 					array('LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.1', 'ke_yac',       $extRelPath . 'res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_1.gif'),
 					array('LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.2', 'ttnews',       $extRelPath . 'res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_2.gif'),
-					array('LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.3', 'dam',          $extRelPath . 'res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_3.gif'),
 					array('LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.5', 'tt_address',   $extRelPath . 'res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_5.gif'),
 					array('LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.6', 'tt_content',   $extRelPath . 'res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_6.gif'),
 					array('LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.7', 'file',         $extRelPath . 'res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_7.gif'),
@@ -496,7 +495,7 @@ $TCA['tx_kesearch_indexerconfig'] = array (
 		'startingpoints_recursive' => array (
 			'exclude' => 0,
 			'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.startingpoints_recursive',
-			'displayCond' => 'FIELD:type:=:page,tt_content,ttnews,tt_address,templavoila,comments,news,a21glossary',
+			'displayCond' => 'FIELD:type:IN:page,tt_content,ttnews,tt_address,templavoila,comments,news,a21glossary',
 			'config' => array (
 				'type' => 'group',
 				'internal_type' => 'db',
@@ -509,7 +508,7 @@ $TCA['tx_kesearch_indexerconfig'] = array (
 		'single_pages' => array (
 			'exclude' => 0,
 			'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.single_pages',
-			'displayCond' => 'FIELD:type:=:page,tt_content,templavoila',
+			'displayCond' => 'FIELD:type:IN:page,tt_content,templavoila',
 			'config' => array (
 				'type' => 'group',
 				'internal_type' => 'db',
@@ -522,7 +521,7 @@ $TCA['tx_kesearch_indexerconfig'] = array (
 		'sysfolder' => array (
 			'exclude' => 0,
 			'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.sysfolder',
-			'displayCond' => 'FIELD:type:IN:ke_yac,ttnews,dam,tt_address,mmforum,comments,news,a21glossary',
+			'displayCond' => 'FIELD:type:IN:ke_yac,ttnews,tt_address,mmforum,comments,news,a21glossary',
 			'config' => array (
 				'type' => 'group',
 				'internal_type' => 'db',
@@ -564,7 +563,7 @@ $TCA['tx_kesearch_indexerconfig'] = array (
 		'index_news_category_mode' => array (
 			'exclude' => 0,
 			'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_category_mode',
-			'displayCond' => 'FIELD:type:=:ttnews,news',
+			'displayCond' => 'FIELD:type:IN:ttnews,news',
 			'config' => array (
 				'type' => 'select',
 				'items' => array (
@@ -580,14 +579,7 @@ $TCA['tx_kesearch_indexerconfig'] = array (
 			'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_category_selection',
 			'displayCond' => 'FIELD:type:=:ttnews',
 			'config' => Array (
-				'type' => 'select',
-				'form_type' => 'user',
-				'userFunc' => 'tx_ttnews_TCAform_selectTree->renderCategoryFields',
-				'treeView' => 1,
-				'foreign_table' => 'tt_news_cat',
-				'autoSizeMax' => 50,
-				'minitems' => 0,
-				'maxitems' => 500,
+				'type' => 'none',
 			)
 		),
 		'index_extnews_category_selection' => array(
@@ -596,17 +588,7 @@ $TCA['tx_kesearch_indexerconfig'] = array (
 			'label' => 'LLL:EXT:news/Resources/Private/Language/locallang_db.xml:tx_news_domain_model_news.categories',
 			'displayCond' => 'FIELD:type:=:news',
 			'config' => array(
-				'type' => 'select',
-				'renderMode' => 'tree',
-				'treeConfig' => array(
-					'parentField' => 'parentcategory',
-				),
-				'foreign_table' => 'tx_news_domain_model_category',
-				'foreign_table_where' => ' AND (tx_news_domain_model_category.sys_language_uid = 0 OR tx_news_domain_model_category.l10n_parent = 0) ORDER BY tx_news_domain_model_category.sorting',
-				'size' => 10,
-				'autoSizeMax' => 20,
-				'minitems' => 0,
-				'maxitems' => 20,
+				'type' => 'none',
 			)
 		),
 		'index_news_useHRDatesSingle' => array (
@@ -627,45 +609,10 @@ $TCA['tx_kesearch_indexerconfig'] = array (
 				'default' => '0'
 			)
 		),
-		'index_dam_categories' => array (
-			'exclude' => 0,
-			'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_dam_categories',
-			'displayCond' => 'FIELD:type:=:dam',
-			'config' => array (
-				'type' => 'select',
-				'form_type' => 'user',
-				'userFunc' => 'EXT:dam/lib/class.tx_dam_tcefunc.php:&tx_dam_tceFunc->getSingleField_selectTree',
-				'treeViewBrowseable' =>  0,
-				'treeViewClass' => 'EXT:dam/components/class.tx_dam_selectionCategory.php:&tx_dam_selectionCategory',
-				'foreign_table' => 'tx_dam_cat',
-				'size' => 10,
-				'autoSizeMax' => 10,
-				'minitems' => 0,
-				'maxitems' => 100,
-			)
-		),
-		'index_dam_without_categories' => array (
-			'exclude' => 0,
-			'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_dam_without_categories',
-			'displayCond' => 'FIELD:type:=:dam',
-			'config' => array (
-				'type' => 'check',
-				'default' => '0'
-			)
-		),
-		'index_dam_categories_recursive' => array (
-			'exclude' => 0,
-			'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_dam_categories_recursive',
-			'displayCond' => 'FIELD:type:=:dam',
-			'config' => array (
-				'type'    => 'check',
-				'default' => '0'
-			)
-		),
 		'index_use_page_tags' => array (
 			'exclude' => 0,
 			'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_use_page_tags',
-			'displayCond' => 'FIELD:type:=:ttnews,tt_address,mmforum,comments,news',
+			'displayCond' => 'FIELD:type:IN:ttnews,tt_address,mmforum,comments,news',
 			'config' => array (
 				'type'    => 'check',
 				'default' => '0'
@@ -695,7 +642,7 @@ $TCA['tx_kesearch_indexerconfig'] = array (
 		'index_use_page_tags_for_files' => array (
 			'exclude' => 0,
 			'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_use_page_tags_for_files',
-			'displayCond' => 'FIELD:type:=:page,tt_content',
+			'displayCond' => 'FIELD:type:IN:page,tt_content',
 			'config' => array (
 				'type'    => 'check',
 				'default' => '0'
@@ -738,7 +685,7 @@ $TCA['tx_kesearch_indexerconfig'] = array (
 		'fal_storage' => array (
 			'exclude' => 0,
 			'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.fal_storage',
-			'displayCond' => 'FIELD:type:IN:file',
+			'displayCond' => 'FIELD:type:=:file',
 			'config' => array (
 				'type' => 'select',
 				'items' => array (
@@ -763,18 +710,48 @@ $TCA['tx_kesearch_indexerconfig'] = array (
 		),
 	),
 	'types' => array (
-		'0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2, storagepid,targetpid;;;;3-3-3,type,startingpoints_recursive,single_pages,sysfolder,index_content_with_restrictions,index_passed_events,index_news_category_mode,index_news_category_selection,index_extnews_category_selection,index_news_useHRDatesSingle,index_news_useHRDatesSingleWithoutDay,index_dam_categories,index_dam_without_categories,index_dam_categories_recursive,index_use_page_tags,fal_storage,directories,fileext,contenttypes,commenttypes,filteroption,tvpath,index_use_page_tags_for_files')
+		'0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2, storagepid,targetpid;;;;3-3-3,type,startingpoints_recursive,single_pages,sysfolder,index_content_with_restrictions,index_passed_events,index_news_category_mode,index_news_category_selection,index_extnews_category_selection,index_news_useHRDatesSingle,index_news_useHRDatesSingleWithoutDay,index_use_page_tags,fal_storage,directories,fileext,contenttypes,commenttypes,filteroption,tvpath,index_use_page_tags_for_files')
 	),
 	'palettes' => array (
 		'1' => array('showitem' => '')
 	)
 );
 
-// news version 3 features system categories instead of it's own
-// category system which was used in previous versions
-$ttnewsVersion = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getExtensionVersion('news');
-if (version_compare($ttnewsVersion, '3.0.0') >= 0) {
-	$TCA['tx_kesearch_indexerconfig']['columns']['index_extnews_category_selection']['config']['treeConfig']['parentField'] = 'parent';
-	$TCA['tx_kesearch_indexerconfig']['columns']['index_extnews_category_selection']['config']['foreign_table'] = 'sys_category';
-	$TCA['tx_kesearch_indexerconfig']['columns']['index_extnews_category_selection']['config']['foreign_table_where'] = '';
+// define dependencies to tt_news only if tt_news is installed
+if (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('tt_news')) {
+	$TCA['tx_kesearch_indexerconfig']['columns']['index_news_category_selection']['config'] = array (
+		'type' => 'select',
+		'form_type' => 'user',
+		'userFunc' => 'tx_ttnews_TCAform_selectTree->renderCategoryFields',
+		'treeView' => 1,
+		'foreign_table' => 'tt_news_cat',
+		'autoSizeMax' => 50,
+		'minitems' => 0,
+		'maxitems' => 500,
+	);
+}
+
+// define dependencies to news only if news is installed
+if (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')) {
+	$TCA['tx_kesearch_indexerconfig']['columns']['index_extnews_category_selection']['config'] = array(
+		'type' => 'select',
+		'renderMode' => 'tree',
+		'treeConfig' => array(
+			'parentField' => 'parentcategory',
+		),
+		'foreign_table' => 'tx_news_domain_model_category',
+		'foreign_table_where' => ' AND (tx_news_domain_model_category.sys_language_uid = 0 OR tx_news_domain_model_category.l10n_parent = 0) ORDER BY tx_news_domain_model_category.sorting',
+		'size' => 10,
+		'autoSizeMax' => 20,
+		'minitems' => 0,
+		'maxitems' => 20,
+	);
+
+	// news version 3 features system categories instead of it's own
+	// category system which was used in previous versions
+	if (version_compare(TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getExtensionVersion('news'), '3.0.0') >= 0) {
+		$TCA['tx_kesearch_indexerconfig']['columns']['index_extnews_category_selection']['config']['treeConfig']['parentField'] = 'parent';
+		$TCA['tx_kesearch_indexerconfig']['columns']['index_extnews_category_selection']['config']['foreign_table'] = 'sys_category';
+		$TCA['tx_kesearch_indexerconfig']['columns']['index_extnews_category_selection']['config']['foreign_table_where'] = '';
+	}
 }

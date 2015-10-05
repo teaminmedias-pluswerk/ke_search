@@ -1601,7 +1601,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	/**
 	 * renders an image tag which will prepend the teaser if activated by user.
 	 *
-	 * @param $typeComplete string A value like page, dam, tt_address, for files eg. "file:pdf"
+	 * @param $typeComplete string A value like page, tt_address, for files eg. "file:pdf"
 	 */
 	public function renderTypeIcon($typeComplete) {
 		list($type) = explode(':', $typeComplete);
