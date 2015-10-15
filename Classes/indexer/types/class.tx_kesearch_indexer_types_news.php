@@ -116,9 +116,9 @@ class tx_kesearch_indexer_types_news extends tx_kesearch_indexer_types {
 					$content .= "\n" . $newsRecord['keywords'];
 				}
 
-				// TODO:
-				// in ext:news it is possible to assign content elements
-				// to news elements. This content elements should be indexed.
+				// index attached content elements
+				$contentElements = $this->getAttachedContentElements($newsRecord);
+				$content .= $this->getContentFromContentElements($contentElements);
 
 				// create content
 				$fullContent = '';
@@ -357,5 +357,81 @@ class tx_kesearch_indexer_types_news extends tx_kesearch_indexer_types {
 	private function addTagsFromNewsCategories($tags, $categoryData) {
 		tx_kesearch_helper::makeTags($tags, $categoryData['title_list']);
 		return $tags;
+	}
+
+	/**
+	 * Fetches related content elements for a given news record.
+	 *
+	 * @author Christian Bülter <buelter@kennziffer.com>
+	 * @since 15.10.15
+	 * @param array $newsRecord
+	 * @return array
+	 */
+	public function getAttachedContentElements($newsRecord) {
+
+		// since version 3.2.0 news does not use a mm-table anymore for attached
+		// content elements
+		if (version_compare(\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getExtensionVersion('news'), '3.2.0') >= 0) {
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
+				'*',
+				'tt_content',
+				'tx_news_related_news=' . $newsRecord['uid']
+				. \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('tt_content')
+				. \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('tt_content')
+			);
+		} else {
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
+				'*',
+				'tx_news_domain_model_news',
+				'tx_news_domain_model_news_ttcontent_mm',
+				'tt_content',
+				' AND tx_news_domain_model_news.uid = ' . $newsRecord['uid']
+				. \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('tt_content')
+				. \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('tt_content')
+			);
+		}
+
+		$contentElements = array();
+		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
+			while (($contentElement = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))) {
+				$contentElements[] = $contentElement;
+			}
+		}
+
+		return $contentElements;
+	}
+
+
+	/**
+	 * fetches the bare text content of an array of content elements.
+	 * makes use of the already given functions the page indexer provides.
+	 *
+	 * @author Christian Bülter <christian.buelter@inmedias.de>
+	 * @since 15.10.15
+	 * @param type $contentElements
+	 * @return string
+	 */
+	public function getContentFromContentElements($contentElements) {
+		$content = '';
+
+		// get content from content elements
+		// NOTE: If the content elements contain links to files, those files will NOT be indexed.
+		// NOTE: There's no restriction to certain content element types. All attached content elements will be indexed. Only fields "header" and "bodytext" will be indexed.
+		if (count($contentElements)) {
+			/* @var $pageIndexerObject tx_kesearch_indexer_types_page  */
+			$pageIndexerObject = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_indexer_types_page', $this->pObj);
+
+			foreach($contentElements as $contentElement) {
+				// index header, add header only if not set to "hidden"
+				if ($contentElement['header_layout'] != 100) {
+					$content .= strip_tags($contentElement['header']) . "\n";
+				}
+
+				// index bodytext (main content)
+				$content .= $pageIndexerObject->getContentFromContentElement($contentElement);
+			}
+		}
+
+		return $content;
 	}
 }

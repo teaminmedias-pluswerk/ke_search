@@ -21,6 +21,7 @@ Version 2.0.0
 [TASK]    add composer.json
 [TASK]    remove indexer for DAM since that extension is not available for 6.2 and above.
 [TASK]    change TCA for indexer configuration so that dependencies to tt_news and news are only set when these extensions are installed.
+[FEATURE] index content elements attached to news (ext:news). Thanks to TRITUM GmbH for sponsoring.
 
 Version 1.10.2
 * bugfix: add langDisable in flexform, https://forge.typo3.org/issues/64579
