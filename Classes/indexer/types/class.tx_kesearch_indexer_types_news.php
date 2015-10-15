@@ -424,11 +424,11 @@ class tx_kesearch_indexer_types_news extends tx_kesearch_indexer_types {
 			foreach($contentElements as $contentElement) {
 				// index header, add header only if not set to "hidden"
 				if ($contentElement['header_layout'] != 100) {
-					$content .= strip_tags($contentElement['header']) . "\n";
+					$content .= "\n" . strip_tags($contentElement['header']) . "\n";
 				}
 
 				// index bodytext (main content)
-				$content .= $pageIndexerObject->getContentFromContentElement($contentElement);
+				$content .= "\n" . $pageIndexerObject->getContentFromContentElement($contentElement);
 			}
 		}
 
