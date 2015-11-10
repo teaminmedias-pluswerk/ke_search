@@ -87,7 +87,7 @@ $GLOBALS['TCA']['tx_kesearch_filters'] = array(
 	    'disabled' => 'hidden',
 	),
 	'dynamicConfigFile' => $extPath . 'tca.php',
-	'iconfile' => $extRelPath . 'res/img/table_icons/icon_tx_kesearch_filters.gif',
+	'iconfile' => 'EXT:ke_search/res/img/table_icons/icon_tx_kesearch_filters.gif',
 	'searchFields' => 'title'
     ),
 );
@@ -108,7 +108,7 @@ $GLOBALS['TCA']['tx_kesearch_filteroptions'] = array(
 	    'disabled' => 'hidden',
 	),
 	'dynamicConfigFile' => $extPath . 'tca.php',
-	'iconfile' => $extRelPath . 'res/img/table_icons/icon_tx_kesearch_filteroptions.gif',
+	'iconfile' => 'EXT:ke_search/res/img/table_icons/icon_tx_kesearch_filteroptions.gif',
 	'searchFields' => 'title,tag'
     ),
 );
@@ -127,7 +127,7 @@ $GLOBALS['TCA']['tx_kesearch_index'] = array(
 	    'fe_group' => 'fe_group',
 	),
 	'dynamicConfigFile' => $extPath . 'tca.php',
-	'iconfile' => $extRelPath . 'res/img/table_icons/icon_tx_kesearch_index.gif',
+	'iconfile' => 'EXT:ke_search/res/img/table_icons/icon_tx_kesearch_index.gif',
     ),
 );
 
@@ -149,7 +149,7 @@ $GLOBALS['TCA']['tx_kesearch_indexerconfig'] = array(
 	    'disabled' => 'hidden',
 	),
 	'dynamicConfigFile' => $extPath . 'tca.php',
-	'iconfile' => $extRelPath . 'res/img/table_icons/icon_tx_kesearch_indexerconfig.gif',
+	'iconfile' => 'EXT:ke_search/res/img/table_icons/icon_tx_kesearch_indexerconfig.gif',
 	'searchFields' => 'title'
     ),
 );
