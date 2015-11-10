@@ -1,7 +1,15 @@
 ChangeLog
-
 Version 2.0.0
 *IMPORTANT* This version has breaking changes: Marker based templating has been deprecated and will be dropped completely, support for TYPO 4.5 has been dropped, parameters of hook calls have changed!
+
+Version 1.99.4
+[BUGFIX]  Declare makeSystemCategoryTags in tx_kesearch_helper as static. Thanks to Johannes Steu.
+[BUGFIX]  Add classmap to composer.json in order to fix autoloading in composer mode. Thanks to Johannes Steu.
+
+Version 1.99.3
+[FEATURE] index content elements attached to news (ext:news). Thanks to TRITUM GmbH for sponsoring.
+
+Version 1.99.2
 [TASK]    move code hosting to github.com
 [FEATURE] add fluid based templating.
 [TASK]    raise minimum requirement to TYPO3 version 6.2
@@ -21,7 +29,6 @@ Version 2.0.0
 [TASK]    add composer.json
 [TASK]    remove indexer for DAM since that extension is not available for 6.2 and above.
 [TASK]    change TCA for indexer configuration so that dependencies to tt_news and news are only set when these extensions are installed.
-[FEATURE] index content elements attached to news (ext:news). Thanks to TRITUM GmbH for sponsoring.
 
 Version 1.10.2
 * bugfix: add langDisable in flexform, https://forge.typo3.org/issues/64579

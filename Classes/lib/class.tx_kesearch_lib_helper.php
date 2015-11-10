@@ -173,7 +173,7 @@ class tx_kesearch_helper {
 	 * @author Christian Bülter <christian.buelter@inmedias.de>
 	 * @since 24.09.15
 	 */
-	public function makeSystemCategoryTags(&$tags, $uid, $tablename) {
+	public static function makeSystemCategoryTags(&$tags, $uid, $tablename) {
 			$categories = tx_kesearch_helper::getCategories($uid, $tablename);
 			if (count($categories['uid_list'])) {
 				foreach ($categories['uid_list'] as $category_uid) {
