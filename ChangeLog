@@ -2,6 +2,9 @@ ChangeLog
 Version 2.0.0
 *IMPORTANT* This version has breaking changes: Marker based templating has been deprecated and will be dropped completely, support for TYPO 4.5 has been dropped, parameters of hook calls have changed!
 
+Version 1.99.5
+[BUGFIX]  Fix icon file registration.
+
 Version 1.99.4
 [BUGFIX]  Declare makeSystemCategoryTags in tx_kesearch_helper as static. Thanks to Johannes Steu.
 [BUGFIX]  Add classmap to composer.json in order to fix autoloading in composer mode. Thanks to Johannes Steu.
