@@ -15,6 +15,7 @@ $TCA['tx_kesearch_filters'] = array (
 			'label'  => 'LLL:EXT:lang/locallang_general.xml:LGL.language',
 			'config' => array (
 				'type'                => 'select',
+                'renderType' => 'selectSingle',
 				'foreign_table'       => 'sys_language',
 				'foreign_table_where' => 'ORDER BY sys_language.title',
 				'items' => array(
@@ -29,6 +30,7 @@ $TCA['tx_kesearch_filters'] = array (
 			'label'       => 'LLL:EXT:lang/locallang_general.xml:LGL.l18n_parent',
 			'config'      => array (
 				'type'  => 'select',
+                'renderType' => 'selectSingle',
 				'items' => array (
 					array('', 0),
 				),
@@ -62,6 +64,7 @@ $TCA['tx_kesearch_filters'] = array (
 			'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filters.rendertype',
 			'config' => array (
 				'type' => 'select',
+                'renderType' => 'selectSingle',
 				'items' => array (
 					array('LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filters.rendertype.I.0', 'select'),
 					array('LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filters.rendertype.I.1', 'list'),
@@ -156,6 +159,7 @@ $TCA['tx_kesearch_filteroptions'] = array (
 			'label'  => 'LLL:EXT:lang/locallang_general.xml:LGL.language',
 			'config' => array (
 				'type'                => 'select',
+                'renderType' => 'selectSingle',
 				'foreign_table'       => 'sys_language',
 				'foreign_table_where' => 'ORDER BY sys_language.title',
 				'items' => array(
@@ -170,6 +174,7 @@ $TCA['tx_kesearch_filteroptions'] = array (
 			'label'       => 'LLL:EXT:lang/locallang_general.xml:LGL.l18n_parent',
 			'config'      => array (
 				'type'  => 'select',
+                'renderType' => 'selectSingle',
 				'items' => array (
 					array('', 0),
 				),
@@ -280,6 +285,7 @@ $TCA['tx_kesearch_index'] = array (
 			'label'   => 'LLL:EXT:lang/locallang_general.xml:LGL.fe_group',
 			'config'  => array (
 				'type'  => 'select',
+                'renderType' => 'selectSingleBox',
 				'items' => array (
 					array('', 0),
 					array('LLL:EXT:lang/locallang_general.xml:LGL.hide_at_login', -1),
@@ -363,6 +369,7 @@ $TCA['tx_kesearch_index'] = array (
 			'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_index.language',
 			'config' => array (
 				'type' => 'select',
+				'renderType' => 'selectSingle',
 				'items' => array (
 					array('LLL:EXT:lang/locallang_general.xlf:LGL.allLanguages', -1),
 					array('LLL:EXT:lang/locallang_general.xlf:LGL.default_value', 0)
@@ -472,6 +479,7 @@ $TCA['tx_kesearch_indexerconfig'] = array (
 			'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type',
 			'config' => array (
 				'type' => 'select',
+				'renderType' => 'selectSingle',
 				'items' => array (
 					array('LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.0', 'page',         $extRelPath . 'res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_0.gif'),
 					array('LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.1', 'ke_yac',       $extRelPath . 'res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_1.gif'),
@@ -537,6 +545,7 @@ $TCA['tx_kesearch_indexerconfig'] = array (
 			'displayCond' => 'FIELD:type:=:page',
 			'config' => array (
 				'type' => 'select',
+				'renderType' => 'selectSingle',
 				'items' => array (
 					array('LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_content_with_restrictions.I.0', 'yes'),
 					array('LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_content_with_restrictions.I.1', 'no'),
@@ -552,6 +561,7 @@ $TCA['tx_kesearch_indexerconfig'] = array (
 			'displayCond' => 'FIELD:type:=:ke_yac',
 			'config' => array (
 				'type' => 'select',
+				'renderType' => 'selectSingle',
 				'items' => array (
 					array('LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_passed_events.I.0', 'yes'),
 					array('LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_passed_events.I.1', 'no'),
@@ -566,6 +576,7 @@ $TCA['tx_kesearch_indexerconfig'] = array (
 			'displayCond' => 'FIELD:type:IN:ttnews,news',
 			'config' => array (
 				'type' => 'select',
+				'renderType' => 'selectSingle',
 				'items' => array (
 					array('LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_category_mode.I.1', '1'),
 					array('LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_category_mode.I.2', '2'),
@@ -663,6 +674,7 @@ $TCA['tx_kesearch_indexerconfig'] = array (
 			'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.filteroption',
 			'config' => array (
 				'type'   => 'select',
+				'renderType' => 'selectSingle',
 				'items' => array (
 					array('', 0),
 				),
@@ -688,6 +700,7 @@ $TCA['tx_kesearch_indexerconfig'] = array (
 			'displayCond' => 'FIELD:type:=:file',
 			'config' => array (
 				'type' => 'select',
+				'renderType' => 'selectSingle',
 				'items' => array (
 					array('LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.fal_storage.dont_use_fal', -1),
 				),
@@ -735,6 +748,7 @@ if (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('tt_news')) {
 if (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')) {
 	$TCA['tx_kesearch_indexerconfig']['columns']['index_extnews_category_selection']['config'] = array(
 		'type' => 'select',
+		'renderType' => 'selectTree',
 		'renderMode' => 'tree',
 		'treeConfig' => array(
 			'parentField' => 'parentcategory',
