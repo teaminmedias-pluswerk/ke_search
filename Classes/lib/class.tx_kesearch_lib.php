@@ -95,7 +95,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	/**
 	 * Initializes flexform, conf vars and some more
 	 *
-	 * @return nothing
+	 * @return void
 	 */
 	public function init() {
 		// get some helper functions
@@ -223,7 +223,6 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		// add cssTag to header if set
 		$cssFile = $GLOBALS['TSFE']->tmpl->getFileName($this->conf['cssFile']);
 		if(!empty($cssFile)) {
-			$cssTag = $this->cObj->wrap($cssFile, '<link rel="stylesheet" type="text/css" href="|" />');
 			$GLOBALS['TSFE']->getPageRenderer()->addCssFile($cssFile);
 		}
 	}
@@ -511,9 +510,9 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	/**
 	 * compiles a list of checkbox records
 	 *
-	 * @param $filterUid UID of the filter for which we need the checkboxes
-	 * @param $options contains all options which are found in the search result
-	 * @return $array list of checkboxes records
+	 * @param integer $filterUid UID of the filter for which we need the checkboxes
+	 * @param array $options contains all options which are found in the search result
+	 * @return array list of checkboxes records
 	 */
 	public function compileCheckboxOptions($filter, $options) {
 		$allOptionsOfCurrentFilter = $filter['options'];
@@ -625,7 +624,10 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 				$options[$option['uid']] = array(
 					'title' => $option['title'],
 					'value' => $option['tag'],
-					'selected' => is_array($filter['selectedOptions']) && !empty($filter['selectedOptions']) && in_array($option['uid'], $filter['selectedOptions']),
+					'selected' =>
+							is_array($filter['selectedOptions'])
+							&& !empty($filter['selectedOptions'])
+							&& in_array($option['uid'], $filter['selectedOptions']),
 				);
 			}
 		}
@@ -663,10 +665,10 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			$where = 'pid in ('.$GLOBALS['TYPO3_DB']->quoteStr($this->startingPoints, $table).')';
 			$where .= ' AND uid in ('.$GLOBALS['TYPO3_DB']->quoteStr($this->conf['filters'], 'tx_kesearch_filters').')';
 			$where .= $this->cObj->enableFields($table);
-			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields,$table,$where);
-			while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+			$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
+			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 				// Perform overlay on each record
-				if(is_array($row) && $GLOBALS['TSFE']->sys_language_contentOL) {
+				if (is_array($row) && $GLOBALS['TSFE']->sys_language_contentOL) {
 					$row = $GLOBALS['TSFE']->sys_page->getRecordOverlay(
 						'tx_kesearch_filters',
 						$row,
@@ -800,9 +802,9 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		if (is_array($this->piVars['filter'])) {
 			foreach($this->piVars['filter'] as $key => $value) {
 				if(is_array($this->piVars['filter'][$key])) {
-					$filterString .= implode($this->piVars['filter'][$key]);
+					$filterString = implode($this->piVars['filter'][$key]);
 				} else {
-					$filterString .= $this->piVars['filter'][$key];
+					$filterString = $this->piVars['filter'][$key];
 				}
 			}
 		}
@@ -1817,6 +1819,11 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	}
 
 
+	/**
+	 * @param array $array
+	 * @param string $field
+	 * @return array
+	 */
 	public function sortArrayRecursive($array, $field) {
 
 		$sortArray = Array();
@@ -1842,6 +1849,11 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	}
 
 
+	/**
+	 * @param array $wert_a
+	 * @param array $wert_b
+	 * @return int
+	 */
 	public function sortArrayRecursive2($wert_a, $wert_b) {
 		// Sortierung nach dem zweiten Wert des Array (Index: 1)
 		$a = $wert_a[2];
