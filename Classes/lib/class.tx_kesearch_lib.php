@@ -568,11 +568,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptions'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptions'] as $_classRef) {
 				$_procObj = & GeneralUtility::getUserObj($_classRef);
-				$contentOptions .= $_procObj->modifyFilterOptions(
-					$filter,
-					$checkboxOptions,
-					$this
-				);
+				$_procObj->modifyFilterOptions($filter, $checkboxOptions, $this);
 			}
 		}
 
