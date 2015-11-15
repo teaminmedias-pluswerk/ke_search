@@ -528,14 +528,13 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		if(is_array($allOptionsOfCurrentFilter)) {
 			foreach($allOptionsOfCurrentFilter as $key => $data) {
 				$data['key'] = $key;
-				$isOptionInOptionArray = FALSE;
 
 				// check if current option (of searchresults) is in array of all possible options
-				$isOptionInOptionArray = 0;
+				$isOptionInOptionArray = false;
 				if (is_array($options)) {
 					foreach($options as $optionInResultList) {
 						if ($optionInResultList['value'] == $data['tag']) {
-							$isOptionInOptionArray = TRUE;
+							$isOptionInOptionArray = true;
 							$data['results'] = $optionInResultList['results'];
 							break;
 						}
