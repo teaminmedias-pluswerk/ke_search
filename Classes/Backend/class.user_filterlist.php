@@ -33,13 +33,20 @@
 class user_filterlist {
 
 	function getListOfAvailableFiltersForFlexforms(&$config) {
+
+        if (TYPO3_VERSION_INTEGER >= 7006000) {
+            $parentRow = $config['flexParentDatabaseRow'];
+        } else {
+            $parentRow = $config['row'];
+        }
+
 		// get id from string
-		if (strstr($config['row']['pages'],'pages_')) {
-			$intString = str_replace('pages_','',$config['row']['pages']);
+		if (strstr($parentRow['pages'],'pages_')) {
+			$intString = str_replace('pages_','',$parentRow['pages']);
 			$intString = substr($intString,0,strpos($intString,'|'));
 			$intString = intval($intString);
 		} else {
-			$intString = intval($config['row']['pages']);
+			$intString = intval($parentRow['pages']);
 		}
 
 		// print message if no startingpoint is set in plugin config
@@ -63,11 +70,16 @@ class user_filterlist {
 
 	function getListOfAvailableFiltersForTCA(&$config) {
 
+        if (TYPO3_VERSION_INTEGER >= 7006000) {
+            $parentRow = $config['flexParentDatabaseRow'];
+        } else {
+            $parentRow = $config['row'];
+        }
 		// get current pid
 		if ($config['table'] == 'pages') {
-			$currentPid = $config['row']['uid'];
+			$currentPid = $parentRow['uid'];
 		} else {
-			$currentPid = $config['row']['pid'];
+			$currentPid = $parentRow['pid'];
 		}
 
 		// get the page TSconfig
@@ -111,13 +123,20 @@ class user_filterlist {
 
 
 	function getListOfAvailableFilteroptionsForFlexforms(&$config) {
+
+        if (TYPO3_VERSION_INTEGER >= 7006000) {
+            $parentRow = $config['flexParentDatabaseRow'];
+        } else {
+            $parentRow = $config['row'];
+        }
+
 		// get id from string
-		if (strstr($config['row']['pages'],'pages_')) {
-			$intString = str_replace('pages_','',$config['row']['pages']);
+		if (strstr($parentRow,'pages_')) {
+			$intString = str_replace('pages_','',$parentRow['pages']);
 			$intString = substr($intString,0,strpos($intString,'|'));
 			$intString = intval($intString);
 		} else {
-			$intString = intval($config['row']['pages']);
+			$intString = intval($parentRow['pages']);
 		}
 
 		// print message if no startingpoint is set in plugin config
