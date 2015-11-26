@@ -1,6 +1,5 @@
 <?php
 
-$GLOBALS['TCA']['tx_kesearch_indexerconfig']['ctrl']['requestUpdate'] = 'type';
 $GLOBALS['TCA']['tx_kesearch_indexerconfig'] = array(
     'ctrl' => array(
         'title' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig',
@@ -13,6 +12,7 @@ $GLOBALS['TCA']['tx_kesearch_indexerconfig'] = array(
         'enablecolumns' => array(
             'disabled' => 'hidden',
         ),
+        'requestUpdate' => 'type',
         'iconfile' => 'EXT:ke_search/res/img/table_icons/icon_tx_kesearch_indexerconfig.gif',
         'searchFields' => 'title'
     ),
