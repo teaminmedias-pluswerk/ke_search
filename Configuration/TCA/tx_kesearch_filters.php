@@ -1,6 +1,6 @@
 <?php
 
-$GLOBALS['TCA']['tx_kesearch_filters'] = array(
+return array(
     'ctrl' => array(
         'title' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filters',
         'label' => 'title',

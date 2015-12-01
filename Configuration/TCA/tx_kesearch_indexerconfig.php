@@ -1,7 +1,6 @@
 <?php
 
-$GLOBALS['TCA']['tx_kesearch_indexerconfig']['ctrl']['requestUpdate'] = 'type';
-$GLOBALS['TCA']['tx_kesearch_indexerconfig'] = array(
+$configurationArray = array(
     'ctrl' => array(
         'title' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig',
         'label' => 'title',
@@ -14,7 +13,8 @@ $GLOBALS['TCA']['tx_kesearch_indexerconfig'] = array(
             'disabled' => 'hidden',
         ),
         'iconfile' => 'EXT:ke_search/res/img/table_icons/icon_tx_kesearch_indexerconfig.gif',
-        'searchFields' => 'title'
+        'searchFields' => 'title',
+        'requestUpdate' => 'type'
     ),
     'interface' => array(
         'showRecordFieldList' => 'hidden,title,storagepid,startingpoints_recursive,single_pages,sysfolder,type,index_content_with_restrictions,index_passed_events,,index_news_category_mode,index_news_category_selection,directories,fileext,filteroption'
@@ -396,7 +396,7 @@ if (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('tt_news')) {
 
 // define dependencies to news only if news is installed
 if (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')) {
-    $GLOBALS['TCA']['tx_kesearch_indexerconfig']['columns']['index_extnews_category_selection']['config'] = array(
+    $configurationArray['columns']['index_extnews_category_selection']['config'] = array(
         'type' => 'select',
         'renderType' => 'selectTree',
         'renderMode' => 'tree',
@@ -414,8 +414,11 @@ if (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')) {
     // news version 3 features system categories instead of it's own
     // category system which was used in previous versions
     if (version_compare(TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getExtensionVersion('news'), '3.0.0') >= 0) {
-        $GLOBALS['TCA']['tx_kesearch_indexerconfig']['columns']['index_extnews_category_selection']['config']['treeConfig']['parentField'] = 'parent';
-        $GLOBALS['TCA']['tx_kesearch_indexerconfig']['columns']['index_extnews_category_selection']['config']['foreign_table'] = 'sys_category';
-        $GLOBALS['TCA']['tx_kesearch_indexerconfig']['columns']['index_extnews_category_selection']['config']['foreign_table_where'] = '';
+        $configurationArray['columns']['index_extnews_category_selection']['config']['treeConfig']['parentField'] = 'parent';
+        $configurationArray['columns']['index_extnews_category_selection']['config']['foreign_table'] = 'sys_category';
+        $configurationArray['columns']['index_extnews_category_selection']['config']['foreign_table_where'] = '';
     }
 }
+
+
+return $configurationArray;
