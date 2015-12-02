@@ -8,7 +8,7 @@
     "support": {
         "issues": "https://forge.typo3.org/projects/extension-ke_search/issues"
     },
-    "version": "1.99.6",
+    "version": "1.99.7",
 	"autoload": {
         "psr-4": {
             "teaminmedias-pluswerk\\ke_search\\": "Classes"
