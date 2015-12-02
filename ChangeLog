@@ -2,7 +2,10 @@ ChangeLog
 Version 2.0.0
 *IMPORTANT* This version has breaking changes: Marker based templating has been deprecated and will be dropped completely, support for TYPO 4.5 has been dropped, parameters of hook calls have changed!
 
-dev-master 1.99.6
+dev-master 
+[BUGFIX]  Fix flexform userfunc for TYPO3 7.6 breaking change #70132. Thanks to Kevin Purrmann.
+
+Version 1.99.6
 [BUGFIX]  Fix TCA for "select"-Type. Add "renderType" option. Thanks to Kevin Purrmann.
 
 Version 1.99.5
