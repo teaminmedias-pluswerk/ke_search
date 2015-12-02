@@ -1,10 +1,11 @@
 ChangeLog
-Version 2.0.0
+Version 2.0.0 (featuring fluid templating, composer support and 7LTS compatibility)
 *IMPORTANT* This version has breaking changes: Marker based templating has been deprecated and will be dropped completely, support for TYPO 4.5 has been dropped, parameters of hook calls have changed!
 
 dev-master 
 [BUGFIX]  Fix flexform userfunc for TYPO3 7.6 breaking change #70132. Thanks to Kevin Purrmann.
 [TASK]    Refactored TCA definition. Removed tca.php and established Configuration/TCA. Thanks to Kevin Purrmann.
+[TASK]    Moved typoscript to Configuration/TypoScript. Thanks to Kevin Purrmann.
 
 Version 1.99.6
 [BUGFIX]  Fix TCA for "select"-Type. Add "renderType" option. Thanks to Kevin Purrmann.
