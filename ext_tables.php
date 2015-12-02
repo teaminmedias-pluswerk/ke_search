@@ -70,89 +70,11 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(array(
 	$extRelPath . 'ext_icon.gif'), 'list_type'
 );
 
-$GLOBALS['TCA']['tx_kesearch_filters'] = array(
-    'ctrl' => array(
-	'title' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filters',
-	'label' => 'title',
-	'tstamp' => 'tstamp',
-	'crdate' => 'crdate',
-	'cruser_id' => 'cruser_id',
-	'languageField' => 'sys_language_uid',
-	'transOrigPointerField' => 'l10n_parent',
-	'transOrigDiffSourceField' => 'l10n_diffsource',
-	'default_sortby' => 'ORDER BY crdate',
-	'delete' => 'deleted',
-	'type' => 'rendertype',
-	'enablecolumns' => array(
-	    'disabled' => 'hidden',
-	),
-	'dynamicConfigFile' => $extPath . 'tca.php',
-	'iconfile' => 'EXT:ke_search/res/img/table_icons/icon_tx_kesearch_filters.gif',
-	'searchFields' => 'title'
-    ),
-);
-
-$GLOBALS['TCA']['tx_kesearch_filteroptions'] = array(
-    'ctrl' => array(
-	'title' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filteroptions',
-	'label' => 'title',
-	'tstamp' => 'tstamp',
-	'crdate' => 'crdate',
-	'cruser_id' => 'cruser_id',
-	'languageField' => 'sys_language_uid',
-	'transOrigPointerField' => 'l10n_parent',
-	'transOrigDiffSourceField' => 'l10n_diffsource',
-	'sortby' => 'sorting',
-	'delete' => 'deleted',
-	'enablecolumns' => array(
-	    'disabled' => 'hidden',
-	),
-	'dynamicConfigFile' => $extPath . 'tca.php',
-	'iconfile' => 'EXT:ke_search/res/img/table_icons/icon_tx_kesearch_filteroptions.gif',
-	'searchFields' => 'title,tag'
-    ),
-);
-
-$GLOBALS['TCA']['tx_kesearch_index'] = array(
-    'ctrl' => array(
-	'title' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_index',
-	'label' => 'title',
-	'tstamp' => 'tstamp',
-	'crdate' => 'crdate',
-	'cruser_id' => 'cruser_id',
-	'default_sortby' => 'ORDER BY crdate',
-	'enablecolumns' => array(
-	    'starttime' => 'starttime',
-	    'endtime' => 'endtime',
-	    'fe_group' => 'fe_group',
-	),
-	'dynamicConfigFile' => $extPath . 'tca.php',
-	'iconfile' => 'EXT:ke_search/res/img/table_icons/icon_tx_kesearch_index.gif',
-    ),
-);
-
 // class for displaying the category tree for tt_news in BE forms.
 if (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('tt_news')) {
 	include_once(TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('tt_news') . 'lib/class.tx_ttnews_TCAform_selectTree.php');
 }
 
-$GLOBALS['TCA']['tx_kesearch_indexerconfig'] = array(
-    'ctrl' => array(
-	'title' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig',
-	'label' => 'title',
-	'tstamp' => 'tstamp',
-	'crdate' => 'crdate',
-	'cruser_id' => 'cruser_id',
-	'default_sortby' => 'ORDER BY crdate',
-	'delete' => 'deleted',
-	'enablecolumns' => array(
-	    'disabled' => 'hidden',
-	),
-	'dynamicConfigFile' => $extPath . 'tca.php',
-	'iconfile' => 'EXT:ke_search/res/img/table_icons/icon_tx_kesearch_indexerconfig.gif',
-	'searchFields' => 'title'
-    ),
-);
 
 if (TYPO3_MODE == 'BE') {
 	$TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_kesearch_pi1_wizicon'] = $extPath . 'pi1/class.tx_kesearch_pi1_wizicon.php';
