@@ -2,7 +2,10 @@ ChangeLog
 Version 2.0.0 (featuring fluid templating, composer support and 7LTS compatibility)
 *IMPORTANT* This version has breaking changes: Marker based templating has been deprecated and will be dropped completely, support for TYPO 4.5 has been dropped, parameters of hook calls have changed!
 
-Version 1.99.7, dev-master
+dev-master
+[BUGFIX]  Fix if-condition to not show results on empty search but show a custom message. Thanks to Marc Neuhaus.
+
+Version 1.99.7
 [BUGFIX]  Fix flexform userfunc for TYPO3 7.6 breaking change #70132. Thanks to Kevin Purrmann.
 [TASK]    Refactored TCA definition. Removed tca.php and established Configuration/TCA. Thanks to Kevin Purrmann.
 [TASK]    Moved typoscript to Configuration/TypoScript. Thanks to Kevin Purrmann.
