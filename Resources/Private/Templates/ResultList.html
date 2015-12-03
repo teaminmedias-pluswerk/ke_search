@@ -16,11 +16,13 @@ Settings are available via
 	<f:if condition="{isEmptySearch}">
 		<f:then>
 			<f:if condition="{conf.showTextInsteadOfResults}">
-				<f:format.raw>{conf.textForResults}</f:format.raw>
+				<f:then>
+					<f:format.raw>{conf.textForResults}</f:format.raw>
+				</f:then>
+				<f:else>
+					<f:render partial="ResultRows" arguments="{conf: conf, numberofresults: numberofresults, resultrows: resultrows, sortingLinks: sortingLinks, pagebrowser:pagebrowser, queryTime:queryTime, queryTimeText:queryTimeText}" />
+				</f:else>
 			</f:if>
-			<f:else>
-				<f:render partial="ResultRows" arguments="{conf: conf, numberofresults: numberofresults, resultrows: resultrows, sortingLinks: sortingLinks, pagebrowser:pagebrowser, queryTime:queryTime, queryTimeText:queryTimeText}" />
-			</f:else>
 		</f:then>
 		<f:else>
 			<f:if condition="{numberofresults} == 0">
