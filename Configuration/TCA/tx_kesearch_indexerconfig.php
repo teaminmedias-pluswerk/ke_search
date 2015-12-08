@@ -240,8 +240,24 @@ $configurationArray = array(
             'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_archived',
             'displayCond' => 'FIELD:type:IN:news',
             'config' => array(
-                'type' => 'check',
-                'default' => '1'
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => array(
+                    array(
+                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_archived.I.0',
+                        '0'
+                    ),
+                    array(
+                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_archived.I.1',
+                        '1'
+                    ),
+                    array(
+                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_archived.I.2',
+                        '2'
+                    ),
+                ),
+                'size' => 1,
+                'maxitems' => 1,
             )
         ),
         'index_news_category_selection' => Array(
