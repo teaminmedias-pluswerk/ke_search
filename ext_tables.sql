@@ -120,7 +120,7 @@ CREATE TABLE tx_kesearch_indexerconfig (
 	index_news_category_mode tinyint(4) DEFAULT '0' NOT NULL,
 	index_news_category_selection text,
 	index_extnews_category_selection text,
-	index_news_archived tinyint(4) DEFAULT '1' NOT NULL,
+	index_news_archived tinyint(4) DEFAULT '0' NOT NULL,
 	index_news_useHRDatesSingle tinyint(4) DEFAULT '0' NOT NULL,
 	index_news_useHRDatesSingleWithoutDay tinyint(4) DEFAULT '0' NOT NULL,
 	index_use_page_tags tinyint(3) DEFAULT '0' NOT NULL,
