@@ -68,7 +68,10 @@
 			<label index="tx_kesearch_indexerconfig.index_news_category_mode">Index only news of the following categories:</label>
 			<label index="tx_kesearch_indexerconfig.index_news_category_mode.I.1">All</label>
 			<label index="tx_kesearch_indexerconfig.index_news_category_mode.I.2">Only the following categories:</label>
-			<label index="tx_kesearch_indexerconfig.index_news_archived">Index archived items</label>
+			<label index="tx_kesearch_indexerconfig.index_news_archived">Index all news?</label>
+			<label index="tx_kesearch_indexerconfig.index_news_archived.I.0">All</label>
+			<label index="tx_kesearch_indexerconfig.index_news_archived.I.1">Only active news</label>
+			<label index="tx_kesearch_indexerconfig.index_news_archived.I.2">Only archived news</label>
 			<label index="tx_kesearch_indexerconfig.index_news_category_selection">Categories:</label>
 			<label index="tx_kesearch_indexerconfig.index_extnews_category_selection">Categories:</label>
 			<label index="tx_kesearch_indexerconfig.index_news_useHRDatesSingle">Use dates for single-view-URLs:</label>
