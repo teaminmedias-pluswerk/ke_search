@@ -1,9 +1,13 @@
 ChangeLog
-Version 2.0.0 (featuring fluid templating, composer support and 7LTS compatibility)
-*IMPORTANT* This version has breaking changes: Marker based templating has been deprecated and will be dropped completely, support for TYPO 4.5 has been dropped, parameters of hook calls have changed!
 
-dev-master
-[BUGFIX]  Fix icon registration for indexer type icons for TYPO3 7.6.
+Version 2.0.0
+This version features fluid templating, composer support and 7LTS compatibility.
+*IMPORTANT* This version has breaking changes: Marker based templating has been deprecated and will be
+dropped completely, support for TYPO 4.5 has been dropped, parameters of hook calls have changed!
+There may be some minor incompatibilities with 6.2 (eg. the icons in the backend) since this versions is mainly
+developed for TYPO3 7.
+
+[BUGFIX]  [BREAKING] Fix icon registration for indexer type icons for TYPO3 7.6. Since this is not compatible with 6.2, Icons will not be shown in the backend anymore.
 [FEATURE] News indexer should be able to differentiate between active and archived news. Thanks to Felix Jacobi.
 [BUGFIX]  Fix if-condition to not show results on empty search but show a custom message. Thanks to Marc Neuhaus.
 [BUGFIX]  Fix selection of tags in page properties. Thanks to Martin Voss. https://github.com/teaminmedias-pluswerk/ke_search/issues/14
@@ -19,7 +23,7 @@ Version 1.99.6
 [BUGFIX]  Fix TCA for "select"-Type. Add "renderType" option. Thanks to Kevin Purrmann.
 
 Version 1.99.5
-[BUGFIX]  Fix icon file registration.
+[BUGFIX]  [BREAKING] Fix icon file registration for TYPO3 7.6. Since this is not compatible with 6.2, Icons will not be shown in the backend anymore.
 
 Version 1.99.4
 [BUGFIX]  Declare makeSystemCategoryTags in tx_kesearch_helper as static. Thanks to Johannes Steu.
