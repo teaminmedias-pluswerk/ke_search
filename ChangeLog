@@ -4,6 +4,7 @@ Version 2.0.0 (featuring fluid templating, composer support and 7LTS compatibili
 
 dev-master
 [BUGFIX]  Fix if-condition to not show results on empty search but show a custom message. Thanks to Marc Neuhaus.
+[BUGFIX]  Fix selection of tags in page properties. Thanks to Martin Voss. https://github.com/teaminmedias-pluswerk/ke_search/issues/14
 
 Version 1.99.7
 [BUGFIX]  Fix flexform userfunc for TYPO3 7.6 breaking change #70132. Thanks to Kevin Purrmann.

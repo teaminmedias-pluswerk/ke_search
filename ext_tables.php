@@ -17,6 +17,7 @@ $tempColumns = array(
 	'label' => 'LLL:EXT:ke_search/locallang_db.xml:pages.tx_kesearch_tags',
 	'config' => array(
 	    'type' => 'select',
+		'renderType' => 'selectSingleBox',
 	    'size' => 10,
 	    'minitems' => 0,
 	    'maxitems' => 100,
