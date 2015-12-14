@@ -235,6 +235,31 @@ $configurationArray = array(
                 'maxitems' => 1,
             )
         ),
+        'index_news_archived' => array(
+            'exclude' => 0,
+            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_archived',
+            'displayCond' => 'FIELD:type:IN:news',
+            'config' => array(
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => array(
+                    array(
+                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_archived.I.0',
+                        '0'
+                    ),
+                    array(
+                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_archived.I.1',
+                        '1'
+                    ),
+                    array(
+                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_archived.I.2',
+                        '2'
+                    ),
+                ),
+                'size' => 1,
+                'maxitems' => 1,
+            )
+        ),
         'index_news_category_selection' => Array(
             'exclude' => 1,
             'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_category_selection',
@@ -373,7 +398,7 @@ $configurationArray = array(
         ),
     ),
     'types' => array(
-        '0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2, storagepid,targetpid;;;;3-3-3,type,startingpoints_recursive,single_pages,sysfolder,index_content_with_restrictions,index_passed_events,index_news_category_mode,index_news_category_selection,index_extnews_category_selection,index_news_useHRDatesSingle,index_news_useHRDatesSingleWithoutDay,index_use_page_tags,fal_storage,directories,fileext,contenttypes,commenttypes,filteroption,tvpath,index_use_page_tags_for_files')
+        '0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2, storagepid,targetpid;;;;3-3-3,type,startingpoints_recursive,single_pages,sysfolder,index_content_with_restrictions,index_passed_events,index_news_archived,index_news_category_mode,index_news_category_selection,index_extnews_category_selection,index_news_useHRDatesSingle,index_news_useHRDatesSingleWithoutDay,index_use_page_tags,fal_storage,directories,fileext,contenttypes,commenttypes,filteroption,tvpath,index_use_page_tags_for_files')
     ),
     'palettes' => array(
         '1' => array('showitem' => '')

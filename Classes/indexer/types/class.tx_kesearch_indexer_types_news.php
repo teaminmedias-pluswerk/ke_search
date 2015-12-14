@@ -64,6 +64,13 @@ class tx_kesearch_indexer_types_news extends tx_kesearch_indexer_types {
 		// Copy those restrictions to the index.
 		$fields = '*';
 		$where = 'pid IN (' . implode(',', $indexPids) . ') ';
+
+		if($this->indexerConfig['index_news_archived'] == 1) {
+			$where .= 'AND ( archive = 0 OR archive > ' . time() . ') ';
+		} elseif($this->indexerConfig['index_news_archived'] == 2) {
+			$where .= 'AND ( archive > 0 AND archive < ' . time() . ') ';
+		}
+
 		$where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table);
 		$where .= \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
