@@ -3,6 +3,7 @@ Version 2.0.0 (featuring fluid templating, composer support and 7LTS compatibili
 *IMPORTANT* This version has breaking changes: Marker based templating has been deprecated and will be dropped completely, support for TYPO 4.5 has been dropped, parameters of hook calls have changed!
 
 dev-master
+[BUGFIX]  Fix icon registration for indexer type icons for TYPO3 7.6.
 [FEATURE] News indexer should be able to differentiate between active and archived news. Thanks to Felix Jacobi.
 [BUGFIX]  Fix if-condition to not show results on empty search but show a custom message. Thanks to Marc Neuhaus.
 [BUGFIX]  Fix selection of tags in page properties. Thanks to Martin Voss. https://github.com/teaminmedias-pluswerk/ke_search/issues/14

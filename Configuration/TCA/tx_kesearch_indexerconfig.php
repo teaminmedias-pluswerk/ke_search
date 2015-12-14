@@ -71,62 +71,62 @@ $configurationArray = array(
                     array(
                         'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.0',
                         'page',
-                        $extRelPath . 'res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_0.gif'
+                        'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_0.gif'
                     ),
                     array(
                         'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.1',
                         'ke_yac',
-                        $extRelPath . 'res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_1.gif'
+                        'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_1.gif'
                     ),
                     array(
                         'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.2',
                         'ttnews',
-                        $extRelPath . 'res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_2.gif'
+                        'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_2.gif'
                     ),
                     array(
                         'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.5',
                         'tt_address',
-                        $extRelPath . 'res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_5.gif'
+                        'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_5.gif'
                     ),
                     array(
                         'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.6',
                         'tt_content',
-                        $extRelPath . 'res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_6.gif'
+                        'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_6.gif'
                     ),
                     array(
                         'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.7',
                         'file',
-                        $extRelPath . 'res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_7.gif'
+                        'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_7.gif'
                     ),
                     array(
                         'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.8',
                         't3s_content',
-                        $extRelPath . 'res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_8.gif'
+                        'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_8.gif'
                     ),
                     array(
                         'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.9',
                         'templavoila',
-                        $extRelPath . 'res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_9.gif'
+                        'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_9.gif'
                     ),
                     array(
                         'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.10',
                         'mmforum',
-                        $extRelPath . 'res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_10.gif'
+                        'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_10.gif'
                     ),
                     array(
                         'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.11',
                         'comments',
-                        $extRelPath . 'res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_11.gif'
+                        'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_11.gif'
                     ),
                     array(
                         'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.12',
                         'news',
-                        $extRelPath . 'res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_12.gif'
+                        'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_12.gif'
                     ),
                     array(
                         'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.13',
                         'a21glossary',
-                        $extRelPath . 'res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_13.gif'
+                        'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_13.gif'
                     ),
                 ),
                 'itemsProcFunc' => 'tx_kesearch_lib_items->fillIndexerConfig',
