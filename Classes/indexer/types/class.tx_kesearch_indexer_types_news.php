@@ -53,7 +53,7 @@ class tx_kesearch_indexer_types_news extends tx_kesearch_indexer_types {
 		$indexPids = $this->getPidList($this->indexerConfig['startingpoints_recursive'], $this->indexerConfig['sysfolder'], $table);
 
 		// add the tags of each page to the global page array
-		if($this->indexerConfig['index_use_page_tags']) {
+		if ($this->indexerConfig['index_use_page_tags']) {
 			$this->pageRecords = $this->getPageRecords($indexPids);
 			$this->addTagsToRecords($indexPids);
 		}
@@ -65,9 +65,13 @@ class tx_kesearch_indexer_types_news extends tx_kesearch_indexer_types {
 		$fields = '*';
 		$where = 'pid IN (' . implode(',', $indexPids) . ') ';
 
-		if($this->indexerConfig['index_news_archived'] == 1) {
+		// index archived news
+		// 0: index all news
+		// 1: index only active (not archived) news
+		// 2: index only archived news
+		if ($this->indexerConfig['index_news_archived'] == 1) {
 			$where .= 'AND ( archive = 0 OR archive > ' . time() . ') ';
-		} elseif($this->indexerConfig['index_news_archived'] == 2) {
+		} elseif ($this->indexerConfig['index_news_archived'] == 2) {
 			$where .= 'AND ( archive > 0 AND archive < ' . time() . ') ';
 		}
 
@@ -99,7 +103,7 @@ class tx_kesearch_indexer_types_news extends tx_kesearch_indexer_types {
 
 					// if category was not fount stop further processing
 					// and continue with next news record
-					if(!$isInList) {
+					if (!$isInList) {
 						continue ;
 					}
 				}
