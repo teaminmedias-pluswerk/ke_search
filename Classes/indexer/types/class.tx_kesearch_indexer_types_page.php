@@ -67,6 +67,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types {
 	 */
 	var $defaultIndexCTypes = array(
 	    'text',
+		'textmedia',
 	    'textpic',
 	    'bullets',
 	    'table',

@@ -393,7 +393,7 @@ $configurationArray = array(
             'config' => array(
                 'type' => 'input',
                 'size' => '30',
-                'default' => 'text,textpic,bullets,table,html,header,uploads'
+                'default' => 'text,textmedia,textpic,bullets,table,html,header,uploads'
             )
         ),
     ),
