@@ -1496,10 +1496,8 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			'until' => $this->pi_getLL('until'),
 			'of' => $this->pi_getLL('of'),
 		);
-		$this->fluidTemplateVariables['pagebrowser'] = $markerArray;
 
 		// hook for additional markers in pagebrowse
-		// use only if you use marker based templating, not for fluid based templating!
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['pagebrowseAdditionalMarker'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['pagebrowseAdditionalMarker'] as $_classRef) {
 				$_procObj = & GeneralUtility::getUserObj($_classRef);
@@ -1510,6 +1508,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			}
 		}
 
+		$this->fluidTemplateVariables['pagebrowser'] = $markerArray;
 		$content = $this->cObj->substituteMarkerArray($content,$markerArray,$wrap='###|###',$uppercase=1);
 
 		return $content;
