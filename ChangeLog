@@ -3,6 +3,7 @@ ChangeLog
 Version 2.0.1
 [TASK]    index new content elements of type "textmedia" coming with fluid_styled_content. IMPORTANT: Re-Create your page / content element indexer configurations or add "textmedia" manually to the list of content element types which should be indexed.
 [FEATURE] Add orig_uid/orig_pid to template at resultrow in order to give more possibilites for conditions.
+[FEATURE] Add date as timestamp to template at resultrow in order to make it easier to generate custom date formats.
 
 Version 2.0.0
 This version features fluid templating, composer support and 7LTS compatibility.

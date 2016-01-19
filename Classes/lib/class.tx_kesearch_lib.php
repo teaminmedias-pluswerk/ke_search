@@ -1121,6 +1121,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			}
 			$tempContent = $this->cObj->substituteSubpart ($tempContent, '###SUB_DATE###', $subContent, $recursive=1);
 			$resultrowTemplateValues['date'] = $resultDate;
+			$resultrowTemplateValues['date_timestamp'] = $row['sortdate'];
 
 			// show percental score?
 			if ($this->conf['showPercentalScore'] && $row['percent']) {
