@@ -203,7 +203,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types {
 		}
 
 		// show indexer content
-		$content .= '<p><b>Indexer "' . $this->indexerConfig['title'] . '": </b><br />'
+		$content = '<p><b>Indexer "' . $this->indexerConfig['title'] . '": </b><br />'
 			. count($indexPids) . ' pages in ' . count($this->sysLanguages) . ' languages have been found for indexing.<br />' . "\n"
 			. $this->counter . ' ' . $this->indexedElementsName . ' have been indexed (' . $this->counterWithoutContent .' more had no content).<br />' . "\n"
 			. $this->fileCounter . ' files have been indexed.<br />' . "\n"
