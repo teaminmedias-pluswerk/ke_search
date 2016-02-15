@@ -1,5 +1,9 @@
 ChangeLog
 
+Version 2.0.2
+[BUGFIX]  RTE will not be loaded for 7 LTS. Thanks to Johannes Steu.
+[BUGFIX]  Initialize local variable $content. Thanks to Armin Vieweg.
+
 Version 2.0.1
 [TASK]    index new content elements of type "textmedia" coming with fluid_styled_content. IMPORTANT: Re-Create your page / content element indexer configurations or add "textmedia" manually to the list of content element types which should be indexed.
 [FEATURE] Add orig_uid/orig_pid to template at resultrow in order to give more possibilites for conditions.
