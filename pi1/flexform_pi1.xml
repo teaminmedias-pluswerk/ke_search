@@ -160,7 +160,7 @@
 								<cols>52</cols>
 								<rows>5</rows>
 							</config>
-							<defaultExtras>richtext[*]:rte_transform[flag=rte_enabled|mode=ts_css]</defaultExtras>
+							<defaultExtras>richtext[]</defaultExtras>
 						</TCEforms>
 					</textForResults>
 
@@ -184,7 +184,7 @@
 								<cols>52</cols>
 								<rows>5</rows>
 							</config>
-							<defaultExtras>richtext[*]:rte_transform[flag=rte_enabled|mode=ts_css]</defaultExtras>
+							<defaultExtras>richtext[]</defaultExtras>
 						</TCEforms>
 					</noResultsText>
 
