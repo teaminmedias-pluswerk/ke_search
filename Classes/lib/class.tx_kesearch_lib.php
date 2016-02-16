@@ -121,9 +121,11 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		// get preselected filter from rootline
 		$this->getFilterPreselect();
 
-		// add stdWrap properties to each config value
+		// add stdWrap properties to each config value (not to arrays)
 		foreach($this->conf as $key => $value) {
-			$this->conf[$key] = $this->cObj->stdWrap($value, $this->conf[$key . '.']);
+			if (!is_array($this->conf[$key])) {
+				$this->conf[$key] = $this->cObj->stdWrap($value, $this->conf[$key . '.']);
+			}
 		}
 
 		// set some default values (this part have to be after stdWrap!!!)
