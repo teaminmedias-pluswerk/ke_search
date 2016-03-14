@@ -44,6 +44,11 @@ class tx_kesearch_indexer_types_tt_content extends tx_kesearch_indexer_types_pag
 		$where = 'pid = ' . intval($uid);
 		$where .= ' AND (' . $this->whereClauseForCType. ')';
 
+		// add condition for not indexing gridelement columns with colPos = -2 (= invalid)
+		if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('gridelements')) {
+			$where .= ' AND colPos <> -2 ';
+		}
+
 		// don't index elements which are hidden or deleted, but do index
 		// those with time restrictons, the time restrictens will be
 		// copied to the index
