@@ -24,7 +24,7 @@
 
 /**
  * helper functions
- * may be used used statically!
+ * must be used used statically!
  * Example:
  * $this->extConf = tx_kesearch_helper::getExtConf();
  */

@@ -26,40 +26,6 @@
 						</TCEforms>
 					</resultPage>
 
-					<renderMethod>
-						<TCEforms>
-							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.renderMethod</label>
-							<config>
-								<type>select</type>
-								<items>
-									<numIndex index="2">
-										<numIndex index="0">LLL:EXT:ke_search/pi1/locallang.xml:ff.renderMethod.I.2</numIndex>
-										<numIndex index="1">fluidtemplate</numIndex>
-									</numIndex>
-									<numIndex index="0">
-										<numIndex index="0">[DEPRECATED] marker based templating</numIndex>
-										<numIndex index="1">static</numIndex>
-									</numIndex>
-								</items>
-								<size>1</size>
-								<default>fluidtemplate</default>
-							</config>
-						</TCEforms>
-					</renderMethod>
-
-					<templateFile>
-						<TCEforms>
-							<exclude>1</exclude>
-							<displayCond>FIELD:renderMethod:!=:fluidtemplate</displayCond>
-							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.templateFile</label>
-							<config>
-								<type>input</type>
-								<default>EXT:ke_search/res/template_pi1.tpl</default>
-								<eval>trim</eval>
-							</config>
-						</TCEforms>
-					</templateFile>
-
 					<cssFile>
 						<TCEforms>
 							<exclude>1</exclude>

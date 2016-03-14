@@ -3,6 +3,8 @@ ChangeLog
 Version 2.0.4
 [BUGFIX]  Do not index content elements with colPos -2 which is set by GridElements when you unlink the item from the grid. Thanks to Bernhard Berger. Fixes #21.
 [BUGFIX]  Wrong preselectedFilter access in tx_kesearch_filters. Thanks to  Tim Lochmüller. https://forge.typo3.org/issues/73535.
+[BUGFIX]  Search word is replaced with placeholder value but shouldn't. https://forge.typo3.org/issues/70026.
+[TASK]    Remove marker based template and obsolete code. Fixes #23.
 
 Version 2.0.3
 [BUGFIX]  do not add stdWrap properties to arrays in typoscript.
