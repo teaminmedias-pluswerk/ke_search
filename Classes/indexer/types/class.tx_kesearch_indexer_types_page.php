@@ -345,6 +345,13 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types {
 		$table = 'tt_content';
 		$where = 'pid = ' . intval($uid);
 		$where .= ' AND (' . $this->whereClauseForCType . ')';
+
+		// add condition for not indexing gridelement columns with colPos = -2 (= invalid)
+		if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('gridelements')) {
+			$where .= ' AND colPos <> -2 ';
+		}
+
+
 		$where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table);
 		$where .= \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table);
 
