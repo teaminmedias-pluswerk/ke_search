@@ -27,10 +27,6 @@
 			<label index="ff.previewMode.I.0">Always show abstract if set</label>
 			<label index="ff.previewMode.I.1">Show abstract if it contains searchword, otherwise show content</label>
 			<label index="ff.resultsPerPage">Results per page</label>
-			<label index="ff.renderMethod">Templating</label>
-			<label index="ff.renderMethod.I.0">marker based: static</label>
-			<label index="ff.renderMethod.I.1">marker based: AJAX after page load</label>
-			<label index="ff.renderMethod.I.2">Fluid</label>
 			<label index="ff.countSearchPhrases">Count search phrases in statistic tables?</label>
 			<label index="ff.templateFile">Template File</label>
 			<label index="ff.cssFile">CSS File</label>
@@ -133,10 +129,6 @@
 			<label index="ff.previewMode.I.0">Immer Abstract anzeigen (wenn gesetzt)</label>
 			<label index="ff.previewMode.I.1">Abstract anzeigen wenn Suchwort enthalten, ansonsten Inhaltstext</label>
 			<label index="ff.resultsPerPage">Ergebnisse pro Seite</label>
-			<label index="ff.renderMethod">Templating</label>
-			<label index="ff.renderMethod.I.0">Marker-basiert: statisch</label>
-			<label index="ff.renderMethod.I.1">Marker-basiert: AJAX nach Seitenaufbau</label>
-			<label index="ff.renderMethod.I.2">Fluid</label>
 			<label index="ff.countSearchPhrases">Statistik über Suchbegriffe führen?</label>
 			<label index="ff.templateFile">Template-Datei</label>
 			<label index="ff.cssFile">CSS-Datei</label>
@@ -235,9 +227,6 @@
 			<label index="ff.previewMode.I.0">Toon altijd samenvatting indien ingesteld</label>
 			<label index="ff.previewMode.I.1">Toon samenvatting als het de zoekterm bevat, toon anders de inhoud</label>
 			<label index="ff.resultsPerPage">Resultaten per pagina</label>
-			<label index="ff.renderMethod">render-methode</label>
-			<label index="ff.renderMethod.I.0">statisch</label>
-			<label index="ff.renderMethod.I.1">AJAX na pagina laden</label>
 			<label index="ff.countSearchPhrases">Tel zoektermen in statistiek tabellen?</label>
 			<label index="ff.templateFile">Sjabloon bestand</label>
 			<label index="ff.cssFile">CSS bestand</label>

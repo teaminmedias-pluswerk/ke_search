@@ -31,7 +31,9 @@
  * @subpackage	tx_kesearch
  */
 class tx_kesearch_pi3 extends tx_kesearch_lib {
-	var $scriptRelPath      = 'pi1/class.tx_kesearch_pi1.php';	// Path to this script relative to the extension dir.
+
+	// Path to this script relative to the extension dir.
+	var $scriptRelPath      = 'pi3/class.tx_kesearch_pi3.php';
 
 	/**
 	 * The main method of the PlugIn
@@ -46,19 +48,13 @@ class tx_kesearch_pi3 extends tx_kesearch_lib {
 		$this->conf = $conf;
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
-		$this->pi_USER_INT_obj = 1;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
+
+		// Configuring so caching is not expected. This value means that no cHash params are ever set.
+		// We do this, because it's a USER_INT object!
+		$this->pi_USER_INT_obj = 1;
 
 		// initializes plugin configuration
 		$this->init();
-
-		// init XAJAX?
-		if ($this->conf['renderMethod'] != 'static') {
-			$xajaxIsLoaded = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('xajax');
-			if (!$xajaxIsLoaded) {
-				return ('<span style="color: red;"><b>ke_search error:</b>"XAJAX" must be installed for this mode.</span>');
-			}
-			else $this->initXajax();
-		}
 
 		// hook for initials
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['initials'])) {
@@ -89,6 +85,7 @@ class tx_kesearch_pi3 extends tx_kesearch_lib {
 				$content = $_procObj->modifyMultiselectContent($template['multiselect'], $filter, $this);
 			}
 		}
+
 		if(is_array($filter) && count($filter)) {
 			$contentOptions = '';
 			$optionsAmountArray = $GLOBALS['TSFE']->fe_user->getKey('ses', 'ke_search.tagsInSearchResults');

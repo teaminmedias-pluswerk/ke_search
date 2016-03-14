@@ -45,14 +45,13 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	var $scoreAgainst        = ''; // searchphrase for score/non boolean mode (karl heinz)
 	var $isEmptySearch       = true; // true if no searchparams given; otherwise false
 
-	var $templateFile        = ''; // Template file
-	var $templateCode        = ''; // content of template file
-
 	var $startingPoints      = 0; // comma seperated list of startingPoints
 	var $firstStartingPoint  = 0; // first entry in list of startingpoints
+
 	var $conf                = array(); // FlexForm-Configuration
 	var $extConf             = array(); // Extension-Configuration
 	var $extConfPremium      = array(); // Extension-Configuration of ke_search_premium if installed
+
 	var $numberOfResults     = 0; // count search results
 	var $indexToUse          = ''; // it's for 'USE INDEX ($indexToUse)' to speed up queries
 	var $tagsInSearchResult  = false; // contains all tags of current search result
@@ -231,20 +230,24 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 
 	/**
 	 *
-	 * initializes the marker based or fluid based template
+	 * initializes the fluid template
 	 */
 	public function initTemplate() {
-		// check for rendering method
-		if ($this->conf['renderMethod'] == 'fluidtemplate') {
-			// set default template paths
-			$this->conf['templateRootPath'] = GeneralUtility::getFileAbsFileName($this->conf['templateRootPath'] ? $this->conf['templateRootPath'] : 'EXT:ke_search/Resources/Private/Templates/');
-			$this->conf['partialRootPath'] = GeneralUtility::getFileAbsFileName($this->conf['partialRootPath'] ? $this->conf['partialRootPath'] : 'EXT:ke_search/Resources/Private/Partials/');
-			$this->conf['layoutRootPath'] = GeneralUtility::getFileAbsFileName($this->conf['layoutRootPath'] ? $this->conf['layoutRootPath'] : 'EXT:ke_search/Resources/Private/Layouts/');
-		} else {
-			// get html template
-			$this->templateFile = $this->conf['templateFile'] ? $this->conf['templateFile'] : ExtensionManagementUtility::siteRelPath($this->extKey) . 'res/template_pi1.tpl';
-			$this->templateCode = $this->cObj->fileResource($this->templateFile);
-		}
+		// set default template paths
+		$this->conf['templateRootPath'] =
+			GeneralUtility::getFileAbsFileName($this->conf['templateRootPath']
+				? $this->conf['templateRootPath']
+				: 'EXT:ke_search/Resources/Private/Templates/');
+
+		$this->conf['partialRootPath'] =
+			GeneralUtility::getFileAbsFileName($this->conf['partialRootPath']
+				? $this->conf['partialRootPath']
+				: 'EXT:ke_search/Resources/Private/Partials/');
+
+		$this->conf['layoutRootPath']
+			= GeneralUtility::getFileAbsFileName($this->conf['layoutRootPath']
+			? $this->conf['layoutRootPath']
+			: 'EXT:ke_search/Resources/Private/Layouts/');
 	}
 
 	/**
@@ -271,54 +274,19 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		}
 	}
 
-	/*
-	 * function initOnclickActions
-	 */
-	public function initOnclickActions() {
-
-		switch ($this->conf['renderMethod']) {
-
-			// AJAX after reload version
-			case 'ajax_after_reload':
-
-				// set pagebrowser onclick
-				$this->onclickPagebrowser = 'pagebrowserAction(); ';
-
-				// $this->onclickFilter = 'this.form.submit();';
-				$this->onclickFilter = 'document.getElementById(\'pagenumber\').value=1; document.getElementById(\'xajax_form_kesearch_pi1\').submit();';
-
-				break;
-
-			// STATIC version
-			case 'static':
-				return;
-				break;
-		}
-	}
-
 	/**
 	 * creates the searchbox
-	 * 1. fills the marker for marker based templating and renders the searchbox
-	 * 2. fills fluid variables for fluid based templating to $this->fluidTemplateVariables
+	 * fills fluid variables for the fluid template to $this->fluidTemplateVariables
 	 *
-	 * @return string rendered searchbox (for static or ajax templating, not for fluid templating)
+	 * @return void
 	 */
 	public function getSearchboxContent() {
 
-		// get main template code
-		$content = $this->cObj->getSubpart($this->templateCode,'###SEARCHBOX_STATIC###');
-
-		// set page = 1 if not set yet or if we are in static mode
-		if (!$this->piVars['page'] || $this->conf['renderMethod'] == 'static' || $this->conf['renderMethod'] == "fluidtemplate") {
-			$pageValue = 1;
-		} else {
-			$pageValue = $this->piVars['page'];
-		}
-		$content = $this->cObj->substituteMarker($content,'###HIDDEN_PAGE_VALUE###', $pageValue);
+		// set page = 1 for every new search
+		$pageValue = 1;
 		$this->fluidTemplateVariables['page'] = $pageValue;
 
 		// submit
-		$content = $this->cObj->substituteMarker($content,'###SUBMIT_VALUE###', $this->pi_getLL('submit'));
 		$this->fluidTemplateVariables['submitAltText'] = $this->pi_getLL('submit');
 
 		// searchword input value
@@ -326,47 +294,20 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 
 		if(!empty($searchString) && $searchString != $this->pi_getLL('searchbox_default_value')) {
 			$this->swordValue = $searchString;
-			$searchboxFocusJS = '';
-			$searchboxBlurJS = '';
 		} else {
-			$this->swordValue = $this->pi_getLL('searchbox_default_value');
-
-			// set javascript for resetting searchbox value
-			$searchboxFocusJS = 'searchboxFocus(this);';
-			$searchboxBlurJS = 'searchboxBlur(this);';
+			$this->swordValue = '';
 		}
 
-		$content = $this->cObj->substituteMarker($content,'###SWORD_VALUE###', htmlspecialchars($this->swordValue));
 		$this->fluidTemplateVariables['searchword'] = htmlspecialchars($this->swordValue);
-
-		$content = $this->cObj->substituteMarker($content,'###SEARCHBOX_DEFAULT_VALUE###', htmlspecialchars($this->pi_getLL('searchbox_default_value')));
 		$this->fluidTemplateVariables['searchwordDefault'] = htmlspecialchars($this->pi_getLL('searchbox_default_value'));
-
-		$content = $this->cObj->substituteMarker($content,'###SWORD_ONFOCUS###', $searchboxFocusJS);
-
-		$content = $this->cObj->substituteMarker($content,'###SWORD_ONBLUR###', $searchboxBlurJS);
-
-		$content = $this->cObj->substituteMarker($content,'###SORTBYFIELD###', $this->piVars['sortByField']);
 		$this->fluidTemplateVariables['sortByField'] = $this->piVars['sortByField'];
-
-		$content = $this->cObj->substituteMarker($content,'###SORTBYDIR###', $this->piVars['sortByDir']);
 		$this->fluidTemplateVariables['sortByDir'] = $this->piVars['sortByDir'];
-
-		// set onsubmit action
-		if ($this->conf['renderMethod'] != 'static') {
-			$onSubmitMarker = 'onsubmit="document.getElementById(\'pagenumber\').value=1;"';
-		} else {
-			$onSubmitMarker = '';
-		}
-		$content = $this->cObj->substituteMarker($content,'###ONSUBMIT###', $onSubmitMarker);
 
 		// get filters
 		$renderedFilters = $this->renderFilters();
-		$content = $this->cObj->substituteMarker($content, '###FILTER###', $renderedFilters);
 		$this->fluidTemplateVariables['filter'] = $renderedFilters;
 
 		// set form action pid
-		$content = $this->cObj->substituteMarker($content,'###FORM_TARGET_PID###', $this->conf['resultPage']);
 		$this->fluidTemplateVariables['targetpage'] = $this->conf['resultPage'];
 
 		// set form action
@@ -374,17 +315,12 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		$lParam = GeneralUtility::_GET('L');
 		$mpParam = GeneralUtility::_GET('MP');
 		$typeParam = GeneralUtility::_GP('type');
-		$actionUrl =  $siteUrl . 'index.php';
-		$content = $this->cObj->substituteMarker($content,'###FORM_ACTION###', $actionUrl);
+		$actionUrl = $siteUrl . 'index.php';
 		$this->fluidTemplateVariables['actionUrl'] = $actionUrl;
-
-		// set other hidden fields
-		$hiddenFieldsContent = '';
 
 		// language parameter
 		if (isset($lParam)) {
 			$hiddenFieldValue = intval($lParam);
-			$hiddenFieldsContent .= '<input type="hidden" name="L" value="'.$hiddenFieldValue.'" />';
 			$this->fluidTemplateVariables['lparam'] = $hiddenFieldValue;
 		}
 
@@ -392,40 +328,20 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		if (isset($mpParam)) {
 			// the only allowed characters in the MP parameter are digits and , and -
 			$hiddenFieldValue = preg_replace('/[^0-9,-]/', '', $mpParam);
-			$hiddenFieldsContent .= '<input type="hidden" name="MP" value="'.$hiddenFieldValue.'" />';
 			$this->fluidTemplateVariables['mpparam'] = $hiddenFieldValue;
 		}
-		$content = $this->cObj->substituteMarker($content,'###HIDDENFIELDS###', $hiddenFieldsContent);
 
 		// type param
 		if ($typeParam) {
 			$hiddenFieldValue = intval($typeParam);
-			$typeContent = $this->cObj->getSubpart($this->templateCode,'###SUB_PAGETYPE###');
-			$typeContent = $this->cObj->substituteMarker($typeContent,'###PAGETYPE###',$typeParam);
 			$this->fluidTemplateVariables['typeparam'] = $hiddenFieldValue;
-		} else $typeContent = '';
-		$content = $this->cObj->substituteSubpart ($content, '###SUB_PAGETYPE###', $typeContent, $recursive=1);
-
-		// add submit button in static mode
-		if ($this->conf['renderMethod'] == 'static') {
-			$submitButton = '<input type="submit" value="' . $this->pi_getLL('submit') . '" />';
-		} else {
-			$submitButton = '';
 		}
-		$content = $this->cObj->substituteMarker($content,'###SUBMIT###',$submitButton);
 
 		// set reset link
 		unset($linkconf);
 		$linkconf['parameter'] = $this->conf['resultPage'];
 		$resetUrl = $this->cObj->typoLink_URL($linkconf);
 		$this->fluidTemplateVariables['resetUrl'] = $resetUrl;
-		$resetLink = '<a href="' . $resetUrl . '" class="resetButton"><span>' . $this->pi_getLL('reset_button') . '</span></a>';
-		$content = $this->cObj->substituteMarker($content,'###RESET###',$resetLink);
-
-		// init onDomReadyAction
-		$this->initDomReadyAction();
-
-		return $content;
 	}
 
 	/**
@@ -724,228 +640,19 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		return $optionArray;
 	}
 
-
 	/**
-	 * Init XAJAX
-	 */
-	public function initXajax()	{
-		// Include xaJax
-		if(!class_exists('xajax')) {
-			$path_to_xajax = ExtensionManagementUtility::extPath('xajax') . 'class.tx_xajax.php';
-			require_once($path_to_xajax);
-		}
-		// Make the instance
-		$this->xajax = GeneralUtility::makeInstance('tx_xajax');
-		// Decode form vars from utf8
-		$this->xajax->decodeUTF8InputOn();
-		// Encoding of the response to utf-8.
-		$this->xajax->setCharEncoding('utf-8');
-		// $this->xajax->setCharEncoding('iso-8859-1');
-		// To prevent conflicts, prepend the extension prefix.
-		$this->xajax->setWrapperPrefix($this->prefixId);
-		// Do you want messages in the status bar?
-		$this->xajax->statusMessagesOn();
-		// Turn only on during testing
-		// $this->xajax->debugOn();
-
-		// Register the names of the PHP functions you want to be able to call through xajax
-		$this->xajax->registerFunction(array('refresh', &$this, 'refresh'));
-		if ($this->conf['renderMethod'] != 'static') {
-			$this->xajax->registerFunction(array('refreshFiltersOnLoad', &$this, 'refreshFiltersOnLoad'));
-		}
-		// $this->xajax->registerFunction(array('resetSearchbox', &$this, 'resetSearchbox'));
-
-		// If this is an xajax request call our registered function, send output and exit
-		$this->xajax->processRequests();
-
-		// Create javacript and add it to the normal output
-		$jsCode = $this->xajax->getJavascript(ExtensionManagementUtility::siteRelPath('xajax'));
-		$GLOBALS['TSFE']->getPageRenderer()->addHeaderData($jsCode);
-	}
-
-
-	/**
-	 * create hide spinner img-tag
-	 * this is needed to make results and filters visible in AJAX-Mode
+	 * set the text for "no results"
 	 *
-	 * @return string HTML IMG-Tag
 	 */
-	public function createHideSpinner() {
-		// generate onload image
-		$path = ExtensionManagementUtility::siteRelPath($this->extKey) . 'res/img/blank.gif';
-		if ($GLOBALS['TSFE']->id != $this->conf['resultPage']) {
-			$spinnerFunction = 'hideSpinnerFiltersOnly()';
-		} else $spinnerFunction = 'hideSpinner()';
-		return $this->cObj->fileResource($path, 'onload="' . $spinnerFunction . ';" alt="" title=""');
-	}
-
-
-	/**
-	 * This function will be called from AJAX directly, so this must be public
-	 *
-	 * @param $data
-	 */
-	public function refresh($data) {
-		// initializes plugin configuration
-		$this->init();
-
-			// set pivars
-		foreach($data[$this->prefixId] as $key => $value) {
-			if(is_array($data[$this->prefixId][$key])) {
-				foreach($data[$this->prefixId][$key] as $subkey => $subtag)  {
-					$this->piVars[$key][$subkey] = $subtag;
-				}
-			} else {
-				$this->piVars[$key] = $value;
-			}
-		}
-
-		// create a list of all filters in piVars
-		if (is_array($this->piVars['filter'])) {
-			foreach($this->piVars['filter'] as $key => $value) {
-				if(is_array($this->piVars['filter'][$key])) {
-					$filterString = implode($this->piVars['filter'][$key]);
-				} else {
-					$filterString = $this->piVars['filter'][$key];
-				}
-			}
-		}
-
-		// generate onload image
-		$this->onloadImage = $this->createHideSpinner();
-
-		// init javascript onclick actions
-		$this->initOnclickActions();
-
-		// reset filters?
-		if ($this->piVars['resetFilters'] && is_array($this->piVars['filter'])) {
-			foreach ($this->piVars['filter'] as $key => $value) {
-				// do not reset the preselected filters
-				if ($this->preselectedFilter[$key]) {
-					$this->piVars['filter'][$key] = $this->preselectedFilter[$key];
-				}
-			}
-		}
-
-		// make xajax response object
-		$objResponse = new tx_xajax_response();
-
-		if(!$filterString && !$this->piVars['sword'] && $this->conf['showTextInsteadOfResults']) {
-			$objResponse->addAssign('kesearch_results', 'innerHTML', $this->pi_RTEcssText($this->conf['textForResults']));
-			$objResponse->addAssign('kesearch_query_time', 'innerHTML', '');
-			$objResponse->addAssign('kesearch_ordering', 'innerHTML', '');
-			$objResponse->addAssign('kesearch_pagebrowser_top', 'innerHTML', '');
-			$objResponse->addAssign('kesearch_pagebrowser_bottom', 'innerHTML', '');
-			$objResponse->addAssign('kesearch_updating_results', 'innerHTML', '');
-			$objResponse->addAssign('kesearch_num_results', 'innerHTML', '');
-			$objResponse->addAssign('kesearch_filters', 'innerHTML', $this->renderFilters() . $this->onloadImage);
-		} else {
-			// set search results
-			// process if on result page
-			if ($GLOBALS['TSFE']->id == $this->conf['resultPage']) {
-				$objResponse->addAssign('kesearch_results', 'innerHTML', $this->getSearchResults() . $this->onloadImage);
-				$objResponse->addAssign('kesearch_num_results', 'innerHTML', sprintf($this->pi_getLL('num_results'), $this->numberOfResults));
-				$objResponse->addAssign('kesearch_ordering', 'innerHTML', $this->renderOrdering());
-			}
-
-			// set pagebrowser
-			if ($GLOBALS['TSFE']->id == $this->conf['resultPage']) {
-				if ($this->conf['pagebrowserOnTop'] || $this->conf['pagebrowserAtBottom']) {
-					$pagebrowserContent = $this->renderPagebrowser();
-				}
-				if ($this->conf['pagebrowserOnTop']) {
-					$objResponse->addAssign('kesearch_pagebrowser_top', 'innerHTML', $pagebrowserContent);
-				} else {
-					$objResponse->addAssign('kesearch_pagebrowser_top', 'innerHTML', '');
-				}
-				if ($this->conf['pagebrowserAtBottom']) {
-					$objResponse->addAssign('kesearch_pagebrowser_bottom', 'innerHTML', $pagebrowserContent);
-				} else {
-					$objResponse->addAssign('kesearch_pagebrowser_bottom', 'innerHTML', '');
-				}
-			}
-
-			// set filters
-			$objResponse->addAssign('kesearch_filters', 'innerHTML', $this->renderFilters() . $this->onloadImage);
-
-			// set end milliseconds for query time calculation
-			if ($this->conf['showQueryTime']) {
-				// Calculate Querytime
-				// we have two plugin. That's why we work with register here.
-				$GLOBALS['TSFE']->register['ke_search_queryTime'] = (GeneralUtility::milliseconds() - $GLOBALS['TSFE']->register['ke_search_queryStartTime']);
-				$objResponse->addAssign('kesearch_query_time', 'innerHTML', sprintf($this->pi_getLL('query_time'), $GLOBALS['TSFE']->register['ke_search_queryTime']));
-			}
-		}
-		// return response xml
-		return $objResponse->getXML();
-	}
-
-	/*
-	 * function refresh
-	 * @param $arg
-	 */
-	public function refreshFiltersOnload($data) {
-		// initializes plugin configuration
-		$this->init();
-
-		// set pivars
-		$this->piVars = $data[$this->prefixId];
-		foreach ($this->piVars as $key => $value) {
-			$this->piVars[$key] = $value;
-		}
-
-		// init javascript onclick actions
-		$this->initOnclickActions();
-
-		// reset filters?
-		if ($this->piVars['resetFilters'] && is_array($this->piVars['filter'])) {
-			foreach ($this->piVars['filter'] as $key => $value) {
-				// do not reset the preselected filters
-				if ($this->preselectedFilter[$key]) {
-					$this->piVars['filter'][$key] = $this->preselectedFilter[$key];
-				}
-				else {
-					$this->piVars['filter'][$key] = '';
-				}
-			}
-		}
-
-		// make xajax response object
-		$objResponse = new tx_xajax_response();
-
-		// generate onload image
-		$this->onloadImage = $this->createHideSpinner();
-
-		// set filters
-		$objResponse->addAssign('kesearch_filters', 'innerHTML', $this->renderFilters().$this->onloadImage );
-
-		// return response xml
-		return $objResponse->getXML();
-	}
-
-	/**
-	 * render the text for "no results"
-	 *
-	 * @return string
-	 */
-	public function renderNoResultsText() {
-		// get subpart for general message
-		$content = $this->cObj->getSubpart($this->templateCode, '###GENERAL_MESSAGE###');
+	public function setNoResultsText() {
 
 		// no results found
 		if($this->conf['showNoResultsText']) {
 			// use individual text set in flexform
 			$noResultsText = $this->pi_RTEcssText($this->conf['noResultsText']);
-			$attentionImage = '';
 		} else {
 			// use general text
 			$noResultsText = $this->pi_getLL('no_results_found');
-
-			// attention icon (only in marker based template)
-			unset($imageConf);
-			$imageConf['file'] = ExtensionManagementUtility::siteRelPath($this->extKey).'res/img/attention.gif';
-			$imageConf['altText'] = $this->pi_getLL('no_results_found');
-			$attentionImage = $this->cObj->cObjGetSingle('IMAGE', $imageConf);
 		}
 
 		// hook to implement your own idea of a no result message
@@ -956,54 +663,17 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			}
 		}
 
-		// set text for "no results found"
-		$content = $this->cObj->substituteMarker($content,'###MESSAGE###', $noResultsText);
+		// fill the fluid template marker
 		$this->fluidTemplateVariables['noResultsText'] = $noResultsText;
-
-		// set attention icon. Note: Not used for fluid template. Use the "NoResults"-Partial to set an image.
-		$content = $this->cObj->substituteMarker($content,'###IMAGE###', $attentionImage);
-
-		// add onload image if in AJAX mode
-		if($this->conf['renderMethod'] == 'ajax_after_reload') {
-			$content .= $this->onloadImage;
-		}
-
-		return $content;
-	}
-
-	/**
-	 * render message if at least one word in the search phrase is too short
-	 *
-	 * @return string
-	 */
-	public function renderTooShortWordsText() {
-		// get subpart for general message
-		$content = $this->cObj->getSubpart($this->templateCode, '###GENERAL_MESSAGE###');
-		$content = $this->cObj->substituteMarker($content, '###MESSAGE###', $this->pi_getLL('searchword_length_error'));
-
-		// attention icon
-		unset($imageConf);
-		$imageConf['file'] = ExtensionManagementUtility::siteRelPath($this->extKey) . 'res/img/attention.gif';
-		$imageConf['altText'] = $this->pi_getLL('no_results_found');
-		$attentionImage = $this->cObj->cObjGetSingle('IMAGE', $imageConf);
-
-		// set attention icon?
-		$content = $this->cObj->substituteMarker($content, '###IMAGE###', $attentionImage);
-
-		return $content;
 	}
 
 	/**
 	 * creates the search result list
 	 * 1. does the actual searching (fetches the results to $rows)
-	 * 2. fills the marker for marker based templating and renders the resultlist
-	 * 3. fills fluid variables for fluid based templating to $this->fluidTemplateVariables
+	 * 2. fills fluid variables for fluid templates to $this->fluidTemplateVariables
 	 *
-	 * @return string rendered searchbox (for static or ajax templating, not for fluid templating)
 	 */
 	public function getSearchResults() {
-		// generate and add onload image
-		$this->onloadImage = $this->createHideSpinner();
 
 		// fetch the search results
 		$limit = $this->db->getLimit();
@@ -1027,13 +697,11 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 
 		// render "no results" text and stop here
 		if ($this->numberOfResults == 0) {
-			return $this->renderNoResultsText();
+			return $this->setNoResultsText();
 		}
 
-		if($this->hasTooShortWords) {
-			$content = $this->renderTooShortWordsText();
-			$this->fluidTemplateVariables['wordsTooShort'] = 1;
-		}
+		// set switch for too short words
+		$this->fluidTemplateVariables['wordsTooShort'] = $this->hasTooShortWords ? 1 : 0;
 
 		// init counter and loop through the search results
 		$resultCount = 1;
@@ -1042,8 +710,6 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		$this->fluidTemplateVariables['resultrows'] = array();
 
 		foreach($rows as $row) {
-			// generate row content
-			$tempContent = $this->cObj->getSubpart($this->templateCode, '###RESULT_ROW###');
 			$this->searchResult->setRow($row);
 
 			$tempMarkerArray = array(
@@ -1053,17 +719,13 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 				'teaser' => $this->searchResult->getTeaser(),
 			);
 
-			// hook for additional markers in result (only valid for maker based templating)
+			// hook for additional markers in result row
 			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['additionalResultMarker'])) {
 					// make curent row number available to hook
 				$this->currentRowNumber = $resultCount;
 				foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['additionalResultMarker'] as $_classRef) {
 					$_procObj = & GeneralUtility::getUserObj($_classRef);
-					$_procObj->additionalResultMarker(
-						$tempMarkerArray,
-						$row,
-						$this
-					);
+					$_procObj->additionalResultMarker($tempMarkerArray, $row, $this);
 				}
 				unset($this->currentRowNumber);
 			}
@@ -1073,121 +735,44 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			list($type) = explode(':', $row['type']);
 			$tempMarkerArray['type'] = str_replace(' ', '_', $type);
 
-			// replace markers
-			$tempContent = $this->cObj->substituteMarkerArray($tempContent, $tempMarkerArray, $wrap='###|###', $uppercase=1);
+			// use the markers array as a base for the fluid template values
 			$resultrowTemplateValues = $tempMarkerArray;
 
-			// show result url?
+			// set result url
 			$resultUrl = $this->searchResult->getResultUrl($this->conf['renderResultUrlAsLink']);
-			if ($this->conf['showResultUrl']) {
-				$subContent = $this->cObj->getSubpart($this->templateCode, '###SUB_RESULTURL###');
-				$subContent = $this->cObj->substituteMarker($subContent, '###LABEL_RESULTURL###', $this->pi_getLL('label_resulturl'));
-				$subContent = $this->cObj->substituteMarker($subContent, '###RESULTURL###', $resultUrl);
-			} else {
-				$subContent = '';
-			}
-			$tempContent = $this->cObj->substituteSubpart($tempContent, '###SUB_RESULTURL###', $subContent, $recursive=1);
 			$resultrowTemplateValues['url'] = $resultUrl;
 
-			// show result numeration?
+			// set result numeration
 			$resultNumber = $resultCount + ($this->piVars['page'] * $this->conf['resultsPerPage']) - $this->conf['resultsPerPage'];
-			if ($this->conf['resultsNumeration']) {
-				$subContent = $this->cObj->getSubpart($this->templateCode, '###SUB_NUMERATION###');
-				$subContent = $this->cObj->substituteMarker($subContent, '###NUMBER###', $resultNumber);
-			} else {
-				$subContent = '';
-			}
-			$tempContent = $this->cObj->substituteSubpart($tempContent, '###SUB_NUMERATION###', $subContent, $recursive=1);
 			$resultrowTemplateValues['number'] = $resultNumber;
 
-			// show score?
-			$resultScore = number_format($row['score'],2,',','');
-			if ($this->conf['showScore'] && $row['score']) {
-				$subContent = $this->cObj->getSubpart($this->templateCode, '###SUB_SCORE###');
-				$subContent = $this->cObj->substituteMarker($subContent, '###LABEL_SCORE###', $this->pi_getLL('label_score'));
-				$subContent = $this->cObj->substituteMarker($subContent, '###SCORE###', $resultScore);
-			} else {
-				$subContent = '';
-			}
-			$tempContent = $this->cObj->substituteSubpart($tempContent, '###SUB_SCORE###', $subContent, $recursive=1);
+			// set score (used for plain score output and score scale)
+			$resultScore = number_format($row['score'], 2, ',', '');
 			$resultrowTemplateValues['score'] = $resultScore;
 
-			// show date?
+			// set date (formatted and raw as a timestamp)
 			$resultDate = date($GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'], $row['sortdate']);
-			if ($this->conf['showDate'] && $row['sortdate']) {
-				$subContent = $this->cObj->getSubpart($this->templateCode, '###SUB_DATE###');
-				$subContent = $this->cObj->substituteMarker($subContent, '###LABEL_DATE###', $this->pi_getLL('label_date'));
-				$subContent = $this->cObj->substituteMarker($subContent, '###DATE###', $resultDate);
-			} else {
-				$subContent = '';
-			}
-			$tempContent = $this->cObj->substituteSubpart ($tempContent, '###SUB_DATE###', $subContent, $recursive=1);
 			$resultrowTemplateValues['date'] = $resultDate;
 			$resultrowTemplateValues['date_timestamp'] = $row['sortdate'];
 
-			// show percental score?
-			if ($this->conf['showPercentalScore'] && $row['percent']) {
-				$subContent = $this->cObj->getSubpart($this->templateCode,'###SUB_SCORE_PERCENT###');
-				$subContent = $this->cObj->substituteMarker($subContent,'###LABEL_SCORE_PERCENT###', $this->pi_getLL('label_score_percent'));
-				$subContent = $this->cObj->substituteMarker($subContent,'###SCORE_PERCENT###', $row['percent']);
-			} else {
-				$subContent = '';
-			}
-			$tempContent = $this->cObj->substituteSubpart ($tempContent, '###SUB_SCORE_PERCENT###', $subContent, $recursive=1);
+			// set percental score
 			$resultrowTemplateValues['percent'] = $row['percent'];
-
-			// show score scale?
-			if ($this->conf['showScoreScale'] && $row['percent']) {
-				$subContent = $this->cObj->getSubpart($this->templateCode, '###SUB_SCORE_SCALE###');
-				$subContent = $this->cObj->substituteMarker($subContent, '###SCORE###', $row['percent']);
-			} else {
-				$subContent = '';
-			}
-			$tempContent = $this->cObj->substituteSubpart ($tempContent, '###SUB_SCORE_SCALE###', $subContent, $recursive=1);
 
 			// show tags?
 			$tags = $row['tags'];
 			$tags = str_replace('#', ' ', $tags);
-			if ($this->conf['showTags']) {
-				$subContent = $this->cObj->getSubpart($this->templateCode,'###SUB_TAGS###');
-				$subContent = $this->cObj->substituteMarker($subContent,'###LABEL_TAGS###', $this->pi_getLL('label_tags'));
-				$subContent = $this->cObj->substituteMarker($subContent,'###TAGS###', htmlspecialchars($tags));
-			} else {
-				$subContent = '';
-			}
-			$tempContent = $this->cObj->substituteSubpart ($tempContent, '###SUB_TAGS###', $subContent, $recursive=1);
 			$resultrowTemplateValues['tags'] = $tags;
 
-			// preview image
+			// set preview image
 			$renderedImage = $this->renderPreviewImageOrTypeIcon($row);
-			$resultrowTemplateValues['imageHtml'] = $renderedImage[0];
-			$tempContent = $this->cObj->substituteSubpart ($tempContent, '###SUB_TYPE_ICON###', $renderedImage[1], $recursive=1);
+			$resultrowTemplateValues['imageHtml'] = $renderedImage;
 
-			// fluid templating: add result row to the variables array
+			// add result row to the variables array
 			$this->fluidTemplateVariables['resultrows'][] = $resultrowTemplateValues;
-
-			// marker based templating: add temp content to result list
-			$content .= $tempContent;
 
 			// increase result counter
 			$resultCount++;
-
 		}
-
-		// hook for additional content AFTER the result list
-		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['additionalContentAfterResultList'])) {
-			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['additionalContentAfterResultList'] as $_classRef) {
-				$_procObj = & GeneralUtility::getUserObj($_classRef);
-				$content .= $_procObj->additionalContentAfterResultList($this);
-			}
-		}
-
-		// add onload image if in AJAX mode
-		if($this->conf['renderMethod'] != 'static') {
-			$content .= $this->onloadImage;
-		}
-
-		return $content;
 	}
 
 
@@ -1208,7 +793,6 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	function renderPreviewImageOrTypeIcon($row) {
 
 			// preview image (instead of type icon)
-			$subContent = $this->cObj->getSubpart($this->templateCode,'###SUB_TYPE_ICON###');
 			list($type, $filetype) = explode(':', $row['type']);
 			switch ($type) {
 
@@ -1234,16 +818,13 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 					$imageHtml = '';
 					break;
 			}
-			$subContent = $this->cObj->substituteMarker($subContent,'###TYPE_ICON###', $imageHtml);
 
 			// render type icon if no preview image is available (or preview is disabled)
 			if ($this->conf['showTypeIcon'] && empty($imageHtml)) {
 				$imageHtml = $this->renderTypeIcon($row['type']);
-				$subContent = $this->cObj->getSubpart($this->templateCode,'###SUB_TYPE_ICON###');
-				$subContent = $this->cObj->substituteMarker($subContent,'###TYPE_ICON###', $imageHtml);
 			}
 
-			return array($imageHtml, $subContent);
+			return $imageHtml;
 	}
 
 	/**
@@ -1311,16 +892,16 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	}
 
 
-	/*
+	/**
 	 * function betterSubstr
-	 *
 	 * better substring function
 	 *
-	 * @param $str
-	 * @param $length
-	 * @param $minword
+	 * @param $str string
+	 * @param $length integer
+	 * @param $minword integer
+	 * @return string
 	 */
-	public function betterSubstr($str, $length, $minword = 3) {
+	public function betterSubstr($str, $length = 0, $minword = 3) {
 		$sub = '';
 		$len = 0;
 		foreach (explode(' ', $str) as $word) {
@@ -1335,27 +916,11 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	}
 
 
-	/*
-	 * function renderPagebrowser
-	 * @param $arg
+	/**
+	 * render parts for the pagebrowser
+	 * @todo do the rendering completely in fluid
 	 */
 	public function renderPagebrowser() {
-
-		$this->initOnclickActions();
-
-		// hook for third party pagebrowsers or for modification of build in browser
-		// if the hook return content then return that content
-		// use only if you use marker based templating, not for fluid based templating!
-		$content = '';
-		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['renderPagebrowserInit'])) {
-			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['renderPagebrowserInit'] as $_classRef) {
-				$_procObj = & GeneralUtility::getUserObj($_classRef);
-				$content = $_procObj->renderPagebrowserInit($this);
-			}
-		}
-		if($content) {
-			return $content;
-		}
 
 		$numberOfResults = $this->numberOfResults;
 		$resultsPerPage = $this->conf['resultsPerPage'];
@@ -1368,17 +933,15 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			$this->limit = $resultsPerPage;
 		} else {
 			// do not show pagebrowser
-			return '';
+			return ;
 		}
 
 		// set db limit
 		$start = ($this->piVars['page'] * $resultsPerPage) - $resultsPerPage;
-		$this->dbLimit = $start.','.$resultsPerPage;
+		$this->dbLimit = $start . ',' . $resultsPerPage;
 
 		// number of pages
 		$pagesTotal = ceil($numberOfResults/ $resultsPerPage);
-
-		$interval = ceil($maxPages/2);
 
 		$startPage = $this->piVars['page'] - ceil(($maxPages/2));
 		$endPage = $startPage + $maxPages - 1;
@@ -1396,6 +959,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		}
 
 		// render pages list
+		$tempContent = '';
 		for ($i=1; $i<=$pagesTotal; $i++) {
 			if ($i >= $startPage && $i <= $endPage) {
 
@@ -1405,15 +969,14 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 				$linkconf['addQueryString'] = 1;
 				$linkconf['addQueryString.']['exclude'] = 'id';
 				$linkconf['additionalParams'] = '&tx_kesearch_pi1[page]=' . intval($i);
-				$filterArray = $this->filters->getFilters();
 
 				if (is_array($this->piVars['filter'])) {
 					foreach($this->piVars['filter'] as $filterId => $data) {
 						if(is_array($data)) {
 							foreach($data as $tagKey => $tag) {
-								$linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter]['.$filterId.'][' . $tagKey . ']='.$tag;
+								$linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter][' . $filterId . '][' . $tagKey . ']='.$tag;
 							}
-						} else $linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter]['.$filterId.']='.$this->piVars['filter'][$filterId];
+						} else $linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter][' . $filterId . ']=' . $this->piVars['filter'][$filterId];
 					}
 				}
 
@@ -1428,23 +991,22 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		// previous image with link
 		if ($this->piVars['page'] > 1) {
 
-			$previousPage = $this->piVars['page']-1;
+			$previousPage = $this->piVars['page'] - 1;
 
 			// get static version
 			unset($linkconf);
 			$linkconf['parameter'] = $GLOBALS['TSFE']->id;
 			$linkconf['addQueryString'] = 1;
-			$linkconf['additionalParams'] = '&tx_kesearch_pi1[sword]='.$this->piVars['sword'];
-			$linkconf['additionalParams'] .= '&tx_kesearch_pi1[page]='.intval($previousPage);
-			$filterArray = $this->filters->getFilters();
+			$linkconf['additionalParams'] = '&tx_kesearch_pi1[sword]=' . $this->piVars['sword'];
+			$linkconf['additionalParams'] .= '&tx_kesearch_pi1[page]=' . intval($previousPage);
 
 			if (is_array($this->piVars['filter'])) {
 				foreach($this->piVars['filter'] as $filterId => $data) {
 					if(is_array($data)) {
 						foreach($data as $tagKey => $tag) {
-							$linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter]['.$filterId.'][' . $tagKey . ']='.$tag;
+							$linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter][' . $filterId . '][' . $tagKey . ']=' . $tag;
 						}
-					} else $linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter]['.$filterId.']='.$this->piVars['filter'][$filterId];
+					} else $linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter][' . $filterId . ']=' . $this->piVars['filter'][$filterId];
 				}
 			}
 
@@ -1470,9 +1032,9 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 				foreach($this->piVars['filter'] as $filterId => $data) {
 					if(is_array($data)) {
 						foreach($data as $tagKey => $tag) {
-							$linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter]['.$filterId.'][' . $tagKey . ']='.$tag;
+							$linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter][' . $filterId . '][' . $tagKey . ']=' . $tag;
 						}
-					} else $linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter]['.$filterId.']='.$this->piVars['filter'][$filterId];
+					} else $linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter][' . $filterId . ']=' . $this->piVars['filter'][$filterId];
 				}
 			}
 
@@ -1484,7 +1046,6 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 
 
 		// render pagebrowser content
-		$content = $this->cObj->getSubpart($this->templateCode, '###PAGEBROWSER###');
 		$markerArray = array(
 			'current' => $this->piVars['page'],
 			'pages_total' => $pagesTotal,
@@ -1511,9 +1072,6 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		}
 
 		$this->fluidTemplateVariables['pagebrowser'] = $markerArray;
-		$content = $this->cObj->substituteMarkerArray($content,$markerArray,$wrap='###|###',$uppercase=1);
-
-		return $content;
 	}
 
 
@@ -1558,7 +1116,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	 * @param integer $uid uid of referencing record
 	 * @param string $table table name of the original table
 	 * @param string $fieldname field which holds the FAL reference
-	 * @author Christian Bülter <buelter@kennziffer.com>
+	 * @author Christian Bülter <christian.buelter@inmedias.de>
 	 * @since 5.11.14
 	 * @return string
 	 */
@@ -1603,6 +1161,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 	 * renders an image tag which will prepend the teaser if activated by user.
 	 *
 	 * @param $typeComplete string A value like page, tt_address, for files eg. "file:pdf"
+	 * @return string
 	 */
 	public function renderTypeIcon($typeComplete) {
 		list($type) = explode(':', $typeComplete);
@@ -1631,37 +1190,6 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 
 		return $rendered;
 	}
-
-	/*
-	 * function initDomReadyAction
-	 */
-	public function initDomReadyAction() {
-
-		// is current page the result page?
-		$resultPage = ($GLOBALS['TSFE']->id == $this->conf['resultPage']) ? TRUE : FALSE;
-
-		switch ($this->conf['renderMethod']) {
-			case 'ajax_after_reload':
-				// refresh results only if we are on the defined result page
-				// do not refresh results if default text is shown (before filters and swords are sent)
-				if ($resultPage) {
-					if($this->isEmptySearch && $this->conf['showTextInsteadOfResults']) {
-						$domReadyAction = 'onloadFilters();';
-					} else {
-						$domReadyAction = 'onloadFiltersAndResults();';
-					}
-				} else {
-					$domReadyAction = 'onloadFilters();';
-				}
-				break;
-			case 'static':
-			default:
-				$domReadyAction = '';
-				break;
-		}
-		$this->onDomReady = empty($domReadyAction) ? '' : 'domReady(function() {'.$domReadyAction.'});';
-	}
-
 
 	/*
 	 * count searchwords and phrases in statistic tables
@@ -1783,47 +1311,6 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 
 
 	/**
-	 * function includeJavascript
-	 */
-	public function addHeaderParts() {
-		// build target URL if not result page
-		unset($linkconf);
-		$linkconf['parameter'] = $this->conf['resultPage'];
-		$linkconf['additionalParams'] = '';
-		$linkconf['useCacheHash'] = false;
-		$targetUrl = GeneralUtility::locationHeaderUrl($this->cObj->typoLink_URL($linkconf));
-
-		$content = $this->cObj->getSubpart($this->templateCode, '###JS_SEARCH_ALL###');
-		if($this->conf['renderMethod'] != 'static' ) {
-			$content .= $this->cObj->getSubpart($this->templateCode, '###JS_SEARCH_NON_STATIC###');
-		}
-
-		// include js for "ajax after page reload" mode
-		if ($this->conf['renderMethod'] == 'ajax_after_reload') {
-			$content .= $this->cObj->getSubpart($this->templateCode, '###JS_SEARCH_AJAX_RELOAD###');
-		}
-
-		// loop through LL and fill $markerArray
-		array_key_exists($this->LLkey, $this->LOCAL_LANG) ? $langKey = $this->LLkey : $langKey = 'default';
-		foreach($this->LOCAL_LANG[$langKey] as $key => $value) {
-			$markerArray['###' . strtoupper($key) . '###'] = $value;
-		}
-
-		// define some additional markers
-		$markerArray['###SITE_REL_PATH###'] = ExtensionManagementUtility::siteRelPath($this->extKey);
-		$markerArray['###TARGET_URL###'] = $targetUrl;
-		$markerArray['###PREFIX_ID###'] = $this->prefixId;
-		$markerArray['###SEARCHBOX_DEFAULT_VALUE###'] = $this->pi_getLL('searchbox_default_value');
-		$markerArray['###DOMREADYACTION###'] = $this->onDomReady;
-
-		$content = $this->cObj->substituteMarkerArray($content, $markerArray);
-
-		// add JS to page header
-		$GLOBALS['TSFE']->getPageRenderer()->addHeaderData($content);
-	}
-
-
-	/**
 	 * @param array $array
 	 * @param string $field
 	 * @return array
@@ -1872,12 +1359,11 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 
 	/**
 	 * implements a recursive in_array function
-	 *
 	 * @param mixed $needle
-	 * @param array $array
-	 * @return boolean
+	 * @param array $haystack
 	 * @author Christian Bülter <buelter@kennziffer.com>
 	 * @since 11.07.12
+	 * @return bool
 	 */
 	public function in_multiarray($needle, $haystack) {
 		foreach ($haystack as $value) {
@@ -1892,8 +1378,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		return false;
 	}
 
-
-	/*
+	/**
 	 * Sort array by given column
 	 *
 	 * @param array $arr	the array

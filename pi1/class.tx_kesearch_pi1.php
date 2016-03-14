@@ -34,7 +34,9 @@ use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
  * @subpackage	tx_kesearch
  */
 class tx_kesearch_pi1 extends tx_kesearch_lib {
-	var $scriptRelPath      = 'pi1/class.tx_kesearch_pi1.php';	// Path to this script relative to the extension dir.
+
+	// Path to this script relative to the extension dir.
+	var $scriptRelPath      = 'pi1/class.tx_kesearch_pi1.php';
 
 	/**
 	 * The main method of the PlugIn
@@ -44,31 +46,20 @@ class tx_kesearch_pi1 extends tx_kesearch_lib {
 	 * @return	string The content that is displayed on the website
 	 */
 	function main($content, $conf) {
-
 		$this->ms = GeneralUtility::milliseconds();
 		$this->conf = $conf;
 		$this->pi_setPiVarDefaults();
 		$this->pi_loadLL();
-		$this->pi_USER_INT_obj = 1;	// Configuring so caching is not expected. This value means that no cHash params are ever set. We do this, because it's a USER_INT object!
+
+		// Configuring so caching is not expected. This value means that no cHash params are ever set.
+		// We do this, because it's a USER_INT object!
+		$this->pi_USER_INT_obj = 1;
 
 		// initializes plugin configuration
 		$this->init();
 
-		// init domReady action
-		$this->initDomReadyAction();
-
-		// add header parts when in searchbox mode
-		$this->addHeaderParts();
-
 		// init template for pi1
-		if ($this->conf['renderMethod'] == 'fluidtemplate') {
-			$this->initFluidTemplate();
-		} else {
-			$content = $this->initMarkerTemplate();
-			if ($content) {
-				return $content;
-			}
-		}
+		$this->initFluidTemplate();
 
 		// hook for initials
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['initials'])) {
@@ -78,80 +69,14 @@ class tx_kesearch_pi1 extends tx_kesearch_lib {
 			}
 		}
 
-		// get content for searchbox (get the real content for marker based
-		// templating and fill the variables for fluid rendering)
-		$content = $this->getSearchboxContent();
+		// get content for searchbox
+		$this->getSearchboxContent();
 
-		// show loading message for marker based and ajax template
-		if ($this->conf['renderMethod'] != 'fluidtemplate') {
-			$content = $this->renderAdditionalSearchboxContent($content);
-		}
-
-		if ($this->conf['renderMethod'] == 'fluidtemplate') {
-			// assign variables and do the rendering
-			$this->searchFormView->assignMultiple($this->fluidTemplateVariables);
-			$htmlOutput = $this->searchFormView->render();
-		} else {
-			$htmlOutput = $this->pi_wrapInBaseClass($content);
-		}
+		// assign variables and do the rendering
+		$this->searchFormView->assignMultiple($this->fluidTemplateVariables);
+		$htmlOutput = $this->searchFormView->render();
 
 		return $htmlOutput;
-	}
-
-	/**
-	 * renders the "spinner" and loading note and provides a hook for
-	 * even more content in the searchbox (only for static and ajax
-	 * template, not for fluid template)
-	 *
-	 * @param string $content
-	 * @return string
-	 */
-	public function renderAdditionalSearchboxContent($content) {
-		$subpart = $this->cObj->getSubpart($content, '###SHOW_SPINNER###');
-		if($this->conf['renderMethod'] == 'static') {
-			$content = $this->cObj->substituteSubpart($content, '###SHOW_SPINNER###', '');
-		} else {
-			$subpart = $this->cObj->substituteMarker($subpart, '###SPINNER###', $this->spinnerImageFilters);
-			$content = $this->cObj->substituteSubpart($content, '###SHOW_SPINNER###', $subpart);
-		}
-		$content = $this->cObj->substituteMarker($content,'###LOADING###',$this->pi_getLL('loading'));
-
-		// hook for additional searchbox markers
-		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['additionalSearchboxContent'])) {
-			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['additionalSearchboxContent'] as $_classRef) {
-				$_procObj = & GeneralUtility::getUserObj($_classRef);
-				$_procObj->additionalSearchboxContent($content, $this);
-			}
-		}
-		return $content;
-	}
-
-	/**
-	 * inits the "old school" marker based templates (static or ajax)
-	 *
-	 * @return string
-	 */
-	public function initMarkerTemplate() {
-		// init XAJAX?
-		if ($this->conf['renderMethod'] != 'static') {
-			$xajaxIsLoaded = ExtensionManagementUtility::isLoaded('xajax');
-			if (!$xajaxIsLoaded) {
-				return ('<span style="color: red;"><b>ke_search error:</b>"XAJAX" must be installed for this mode.</span>');
-			}
-			else $this->initXajax();
-		}
-
-		// Spinner Image
-		if ($this->conf['spinnerImageFile']) {
-			$spinnerSrc = $this->conf['spinnerImageFile'];
-		} else {
-			$spinnerSrc = ExtensionManagementUtility::siteRelPath($this->extKey).'res/img/spinner.gif';
-		}
-		$this->spinnerImageFilters = '<img id="kesearch_spinner_filters" src="'.$spinnerSrc.'" alt="'.$this->pi_getLL('loading').'" />';
-		$this->spinnerImageResults = '<img id="kesearch_spinner_results" src="'.$spinnerSrc.'" alt="'.$this->pi_getLL('loading').'" />';
-
-		// get javascript onclick actions
-		$this->initOnclickActions();
 	}
 
 	/**
