@@ -121,7 +121,7 @@ class tx_kesearch_filters {
 					$selected = true;
 				}
 			} else if (!isset($this->pObj->piVars['filter'][$filter['uid']]) && !is_array($this->pObj->piVars['filter'][$filter['uid']])) {
-				if (is_array($this->preselectedFilter) && $this->in_multiarray($option['tag'], $this->preselectedFilter)) {
+				if (is_array($this->pObj->preselectedFilter) && $this->pObj->in_multiarray($option['tag'], $this->pObj->preselectedFilter)) {
 					$selected = true;
 					// add preselected filter to piVars
 					$this->pObj->piVars['filter'][$filter['uid']] = array($option['uid'] => $option['tag']);

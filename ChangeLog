@@ -2,6 +2,7 @@ ChangeLog
 
 Version 2.0.4
 [BUGFIX]  Do not index content elements with colPos -2 which is set by GridElements when you unlink the item from the grid. Thanks to Bernhard Berger. Fixes #21.
+[BUGFIX]  Wrong preselectedFilter access in tx_kesearch_filters. Thanks to  Tim Lochmüller. https://forge.typo3.org/issues/73535.
 
 Version 2.0.3
 [BUGFIX]  do not add stdWrap properties to arrays in typoscript.
@@ -14,7 +15,7 @@ Version 2.0.1
 [TASK]    index new content elements of type "textmedia" coming with fluid_styled_content. IMPORTANT: Re-Create your page / content element indexer configurations or add "textmedia" manually to the list of content element types which should be indexed.
 [FEATURE] Add orig_uid/orig_pid to template at resultrow in order to give more possibilites for conditions.
 [FEATURE] Add date as timestamp to template at resultrow in order to make it easier to generate custom date formats.
-[TASK]    Make hook for additional markers for the pagebrows usable in fluid template. Thanks to Tim Lochmüller. https://forge.typo3.org/issues/72562.
+[TASK]    Make hook for additional markers for the pagebrowser usable in fluid template. Thanks to Tim Lochmüller. https://forge.typo3.org/issues/72562.
 
 Version 2.0.0
 This version features fluid templating, composer support and 7LTS compatibility.
