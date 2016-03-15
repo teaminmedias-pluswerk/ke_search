@@ -355,8 +355,8 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types {
 		$where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table);
 		$where .= \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table);
 
-		// Get access restrictions for this page, this access restrictians apply to all
-		// content elements of this pages. Individuel access restrictions
+		// Get access restrictions for this page, this access restrictions apply to all
+		// content elements of this pages. Individual access restrictions
 		// set for the content elements will be ignored. Use the content
 		// element indexer if you need that feature!
 		$pageAccessRestrictions = $this->getInheritedAccessRestrictions($uid);
@@ -394,8 +394,10 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types {
 					$content .= $this->getContentFromContentElement($ttContentRow) . "\n";
 				}
 
-				// index the files fond
-				$this->indexFiles($fileObjects, $ttContentRow, $pageAccessRestrictions['fe_group'], $tags) . "\n";
+				// index the files found
+				if (!$pageAccessRestrictions['hidden']) {
+					$this->indexFiles($fileObjects, $ttContentRow, $pageAccessRestrictions['fe_group'], $tags) . "\n";
+				}
 
 				// add content from this content element to page content
 				// ONLY if this content element is not access protected
