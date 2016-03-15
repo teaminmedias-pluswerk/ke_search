@@ -767,6 +767,11 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			$renderedImage = $this->renderPreviewImageOrTypeIcon($row);
 			$resultrowTemplateValues['imageHtml'] = $renderedImage;
 
+			// set end date for cal events
+			if ($type == 'cal') {
+				$resultrowTemplateValues['enddate_timestamp'] = $this->getCalEventEnddate($row['orig_uid']);
+			}
+
 			// add result row to the variables array
 			$this->fluidTemplateVariables['resultrows'][] = $resultrowTemplateValues;
 
@@ -1307,6 +1312,20 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 
 		if($emptySearchword && !$filterSet) return true;
 		else return false;
+	}
+
+	/**
+	 * @param $eventUid
+	 * @return int
+	 */
+	public function getCalEventEnddate($eventUid) {
+		$fields = 'end_date, end_time';
+		$table = 'tx_cal_event';
+		$where = 'uid = '.intval($eventUid);
+		$where .= $this->cObj->enableFields($table);
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields,$table,$where);
+		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+		return strtotime($row['end_date']) + $row['end_time'];
 	}
 
 
