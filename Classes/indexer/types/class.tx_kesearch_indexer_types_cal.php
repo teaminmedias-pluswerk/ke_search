@@ -83,19 +83,8 @@ class tx_kesearch_indexer_types_cal extends tx_kesearch_indexer_types {
 			while (($record = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))) {
 
 				// compile the information which should go into the index:
-				// title, start_date, start_time, end_date, end_time
+				// title, description
 
-				/*
-				$eventTime = $this->generateCalEventTime(
-					strtotime($record['start_date']),
-					$record['start_time'],
-					strtotime($record['end_date']),
-					$record['end_time'],
-					$record['allday']
-				);
-				*/
-
-				// $title = $eventTime
 				$title = strip_tags($record['title']);
 				$abstract = '';
 				$fullContent = $title ."\n" . strip_tags($record['description']);
@@ -125,6 +114,7 @@ class tx_kesearch_indexer_types_cal extends tx_kesearch_indexer_types {
 				$additionalFields = array();
 				$additionalFields['orig_uid'] = $record['uid'];
 				$additionalFields['orig_pid'] = $record['pid'];
+				// set event start date as sortdate
 				$additionalFields['sortdate'] = strtotime($record['start_date']) + $record['start_time'];
 
 				// hook for custom modifications of the indexed data, e.g. the tags
@@ -166,7 +156,7 @@ class tx_kesearch_indexer_types_cal extends tx_kesearch_indexer_types {
 			}
 
 			$content = '<p><b>Indexer "' . $this->indexerConfig['title'] . '":</b><br />' . "\n"
-					. $indexedRecordsCounter . ' cal records have been indexed.</p>' . "\n";
+					. $indexedRecordsCounter . ' "Calendar Base" records have been indexed.</p>' . "\n";
 
 			$content .= $this->showErrors();
 			$content .= $this->showTime();
@@ -175,6 +165,10 @@ class tx_kesearch_indexer_types_cal extends tx_kesearch_indexer_types {
 		return $content;
 	}
 
+	/**
+	 * @param $eventUid
+	 * @param $tags
+	 */
 	private function buildCategoryTags($eventUid, &$tags) {
 
 		$table = 'tx_cal_event_category_mm, tx_cal_category';
@@ -189,48 +183,13 @@ class tx_kesearch_indexer_types_cal extends tx_kesearch_indexer_types {
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
 		$resCount = $GLOBALS['TYPO3_DB']->sql_num_rows($res, 'res count: ');
 
-		// build tags for connected categories
 		if ($resCount) {
 			while (($catRecord = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))) {
+				// build tags for connected categories
 				tx_kesearch_helper::makeTags($tags, array($catRecord['title']));
 			}
 		}
 
 	}
-
-
-	/*
-private function generateCalEventTime($startDate, $startTime, $endDate, $endTime, $allDay) {
-
-    $composition = '';
-
-    if ($allDay) {
-        // do not process time settings
-        $composition .= strftime('%d.%m.%Y', $startDate);
-        $composition .= ' - ' . strftime('%d.%m.%Y', $endDate);
-    } else {
-        // event has start and end date plus ...
-        if ($startTime && $endTime) { // start time and end time
-            $composition .= strftime('%d.%m.%Y', $startDate);
-            $composition .= ' ' . gmstrftime('%H:%M', $startTime);
-            if ($startDate != $endDate) $composition .= ' - ' . strftime('%d.%m.%Y', $endDate);
-            $composition .= ' ' . gmstrftime('%H:%M', $endTime);
-        } else if($startTime) { // start time only
-            $composition .= strftime('%d.%m.%Y', $startDate);
-            $composition .= ' ' . gmstrftime('%H:%M', $startTime);
-            $composition .= ' - ' . strftime('%d.%m.%Y', $endDate);
-        } else if ($endTime) { // end time only
-            $composition .= strftime('%d.%m.%Y', $startDate);
-            $composition .= ' - ' . strftime('%d.%m.%Y', $endDate);
-            $composition .= ' ' . gmstrftime('%H:%M', $endTime);
-        } else { // no start and no end time
-            $composition .= strftime('%d.%m.%Y', $startDate);
-            $composition .= ' - ' . strftime('%d.%m.%Y', $endDate);
-        }
-    }
-
-    return $composition;
-}
-*/
 
 }
