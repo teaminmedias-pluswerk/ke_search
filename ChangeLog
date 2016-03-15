@@ -1,5 +1,8 @@
 ChangeLog
 
+master
+[BUGFIX]  remove obsolete javascript code from searchbox. https://forge.typo3.org/issues/75134.
+
 Version 2.0.4
 [BUGFIX]  Do not index content elements with colPos -2 which is set by GridElements when you unlink the item from the grid. Thanks to Bernhard Berger. Fixes #21.
 [BUGFIX]  Wrong preselectedFilter access in tx_kesearch_filters. Thanks to  Tim Lochmüller. https://forge.typo3.org/issues/73535.
