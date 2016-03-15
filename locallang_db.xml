@@ -60,6 +60,7 @@
 			<label index="tx_kesearch_indexerconfig.type.I.11">Comments (comments)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.12">News (news)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.13">Glossary (a21glossary)</label>
+			<label index="tx_kesearch_indexerconfig.type.I.14">Calendar Base (cal)</label>
 			<label index="tx_kesearch_indexerconfig.type">Type</label>
 			<label index="tx_kesearch_indexerconfig.index_content_with_restrictions">Index content elements with restrictions?</label>
 			<label index="tx_kesearch_indexerconfig.index_content_with_restrictions.I.0">Yes</label>
@@ -87,6 +88,7 @@
 			<label index="tx_kesearch_indexerconfig.fal_storage">FAL Storage (IMPORTANT: backend user _cli_scheduler needs access to this storage!)</label>
 			<label index="tx_kesearch_indexerconfig.fal_storage.dont_use_fal">Dont' use FAL (write directories like 'fileadmin/user_upload/')</label>
 			<label index="tx_kesearch_indexerconfig.fal_storage.use_fal">Use FAL (write directories like 'user_upload/')</label>
+			<label index="tx_kesearch_indexerconfig.cal_expired_events">Index expired events?</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="pages.tx_kesearch_tags">Schlagworte für facettierte Suche</label>
@@ -143,6 +145,7 @@
 			<label index="tx_kesearch_indexerconfig.type.I.11">Kommentare (comments)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.12">Nachrichten (news)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.13">Glossar (a21glossary)</label>
+			<label index="tx_kesearch_indexerconfig.type.I.14">Calendar Base (cal)</label>
 			<label index="tx_kesearch_indexerconfig.type">Typ</label>
 			<label index="tx_kesearch_indexerconfig.index_content_with_restrictions">Indiziere Content-Elemente mit eingeschränkter Zugänglichkeit?</label>
 			<label index="tx_kesearch_indexerconfig.index_content_with_restrictions.I.0">Ja</label>
@@ -164,6 +167,7 @@
 			<label index="tx_kesearch_indexerconfig.commenttypes">Komma-separierte Liste von zu indexierenden Kommentartypen (pages):</label>
 			<label index="tx_kesearch_indexerconfig.filteroption">Allen indexierten Elementen dieses Schlagwort hinzufügen:</label>
 			<label index="tx_kesearch_indexerconfig.tvpath">Geben Sie an in welcher Feldkonfiguration der Indexer die Aufstellung aller enthaltenen tt_content UIS findet. Normalerweise "field_content". Mehrere Felder können kommasepariert eingetragen werden:</label>
+			<label index="tx_kesearch_indexerconfig.cal_expired_events">Abgelaufene Termine indexieren?</label>
 		</languageKey>
 		<languageKey index="nl" type="array">
 			<label index="pages.tx_kesearch_tags">Labels voor Facet Zoeken</label>
@@ -223,6 +227,7 @@
 			<label index="tx_kesearch_indexerconfig.directories">Mappen (fileadmin/my_directory/,fileadmin/my_other_directory)</label>
 			<label index="tx_kesearch_indexerconfig.fileext">Door komma's gescheiden lijst van toegestane bestandsextensies (bijv. pdf,ppt,doc,xls)</label>
 			<label index="tx_kesearch_indexerconfig.tvpath">Tell us in which field configuration the indexer can find the tt_content uids. Normally it should be "field_content":</label>
+			<label index="tx_kesearch_indexerconfig.cal_expired_events">Index expired events?</label>
 		</languageKey>
 	</data>
 </T3locallang>
