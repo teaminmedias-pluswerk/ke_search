@@ -128,6 +128,11 @@ $configurationArray = array(
                         'a21glossary',
                         'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_13.gif'
                     ),
+                    array(
+                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.14',
+                        'cal',
+                        'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_14.gif'
+                    ),
                 ),
                 'itemsProcFunc' => 'tx_kesearch_lib_items->fillIndexerConfig',
                 'size' => 1,
@@ -138,7 +143,7 @@ $configurationArray = array(
         'startingpoints_recursive' => array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.startingpoints_recursive',
-            'displayCond' => 'FIELD:type:IN:page,tt_content,ttnews,tt_address,templavoila,comments,news,a21glossary',
+            'displayCond' => 'FIELD:type:IN:page,tt_content,ttnews,tt_address,templavoila,comments,news,a21glossary,cal',
             'config' => array(
                 'type' => 'group',
                 'internal_type' => 'db',
@@ -164,7 +169,7 @@ $configurationArray = array(
         'sysfolder' => array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.sysfolder',
-            'displayCond' => 'FIELD:type:IN:ke_yac,ttnews,tt_address,mmforum,comments,news,a21glossary',
+            'displayCond' => 'FIELD:type:IN:ke_yac,ttnews,tt_address,mmforum,comments,news,a21glossary,cal',
             'config' => array(
                 'type' => 'group',
                 'internal_type' => 'db',
@@ -396,9 +401,18 @@ $configurationArray = array(
                 'default' => 'text,textmedia,textpic,bullets,table,html,header,uploads'
             )
         ),
+        'cal_expired_events' => array(
+            'exclude' => 0,
+            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.cal_expired_events',
+            'displayCond' => 'FIELD:type:IN:cal',
+            'config' => array(
+                'type' => 'check',
+                'default' => '0'
+            )
+        )
     ),
     'types' => array(
-        '0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2, storagepid,targetpid;;;;3-3-3,type,startingpoints_recursive,single_pages,sysfolder,index_content_with_restrictions,index_passed_events,index_news_archived,index_news_category_mode,index_news_category_selection,index_extnews_category_selection,index_news_useHRDatesSingle,index_news_useHRDatesSingleWithoutDay,index_use_page_tags,fal_storage,directories,fileext,contenttypes,commenttypes,filteroption,tvpath,index_use_page_tags_for_files')
+        '0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2, storagepid,targetpid;;;;3-3-3,type,startingpoints_recursive,single_pages,sysfolder,index_content_with_restrictions,index_passed_events,index_news_archived,index_news_category_mode,index_news_category_selection,index_extnews_category_selection,index_news_useHRDatesSingle,index_news_useHRDatesSingleWithoutDay,index_use_page_tags,fal_storage,directories,fileext,contenttypes,commenttypes,filteroption,tvpath,index_use_page_tags_for_files,cal_expired_events')
     ),
     'palettes' => array(
         '1' => array('showitem' => '')

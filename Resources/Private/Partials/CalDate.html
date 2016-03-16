@@ -1,0 +1,39 @@
+<!--
+	=====================
+	Partials/CalDate.html
+-->
+
+<i>{f:translate(key: 'LLL:EXT:ke_search/pi1/locallang.xml:label_date')}:</i>
+<f:if condition="{resultrow.cal.allday} != 1">
+    <f:then>
+        <f:if condition="{resultrow.cal.sameday}">
+            <f:then>
+                <f:format.date format='{f:translate(key: "LLL:EXT:ke_search/pi1/locallang.xml:dateformat.dateAndTime")}'>@{resultrow.date_timestamp}</f:format.date>
+                - <f:format.date format='{f:translate(key: "LLL:EXT:ke_search/pi1/locallang.xml:dateformat.time")}'>@{resultrow.cal.end_timestamp}</f:format.date>
+            </f:then>
+            <f:else>
+                <f:format.date format='{f:translate(key: "LLL:EXT:ke_search/pi1/locallang.xml:dateformat.dateAndTimeWithoutYear")}'>@{resultrow.date_timestamp}</f:format.date>
+                -
+                <f:if condition="{f:format.date(date: '@{resultrow.cal.end_timestamp}', format: '%H:%M')} == '00:00'">
+                    <f:then>
+                        <f:format.date format='{f:translate(key: "LLL:EXT:ke_search/pi1/locallang.xml:dateformat.dateWithYear")}'>@{resultrow.cal.end_timestamp}</f:format.date>
+                    </f:then>
+                    <f:else>
+                        <f:format.date format='{f:translate(key: "LLL:EXT:ke_search/pi1/locallang.xml:dateformat.dateAndTime")}'>@{resultrow.cal.end_timestamp}</f:format.date>
+                    </f:else>
+                </f:if>
+            </f:else>
+        </f:if>
+    </f:then>
+    <f:else>
+        <f:if condition="{resultrow.cal.sameday}">
+            <f:then>
+                <f:format.date format='{f:translate(key: "LLL:EXT:ke_search/pi1/locallang.xml:dateformat.dateWithYear")}'>@{resultrow.date_timestamp}</f:format.date>
+            </f:then>
+            <f:else>
+                <f:format.date format='{f:translate(key: "LLL:EXT:ke_search/pi1/locallang.xml:dateformat.dateWithYear")}'>@{resultrow.date_timestamp}</f:format.date>
+                - <f:format.date format='{f:translate(key: "LLL:EXT:ke_search/pi1/locallang.xml:dateformat.dateWithYear")}'>@{resultrow.cal.end_timestamp}</f:format.date>
+            </f:else>
+        </f:if>
+    </f:else>
+</f:if>
