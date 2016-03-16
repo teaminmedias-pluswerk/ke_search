@@ -86,7 +86,7 @@ class tx_kesearch_indexer_types_cal extends tx_kesearch_indexer_types {
 
 				$title = strip_tags($record['title']);
 				$abstract = '';
-				$fullContent = $title ."\n" . strip_tags($record['description']);
+				$fullContent = strip_tags($record['description']);
 
 				// compile params for single view, example:
 				// index.php?id=4749&tx_cal_controller[view]=event&tx_cal_controller[type]=tx_cal_phpicalendar&tx_cal_controller[uid]=3&tx_cal_controller[year]=2016&tx_cal_controller[month]=3&tx_cal_controller%5Bday%5D=13&cHash=02c5c65558b8f44e16bee0c6703132bf
