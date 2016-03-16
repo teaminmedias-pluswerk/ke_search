@@ -769,7 +769,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 
 			// set end date for cal events
 			if ($type == 'cal') {
-				$resultrowTemplateValues['enddate_timestamp'] = $this->getCalEventEnddate($row['orig_uid']);
+				$resultrowTemplateValues['cal'] = $this->getCalEventEnddate($row['orig_uid']);
 			}
 
 			// add result row to the variables array
@@ -1316,16 +1316,22 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 
 	/**
 	 * @param $eventUid
-	 * @return int
+	 * @return array
 	 */
 	public function getCalEventEnddate($eventUid) {
-		$fields = 'end_date, end_time';
+		$fields = 'end_date, end_time, allday, start_date';
 		$table = 'tx_cal_event';
 		$where = 'uid = '.intval($eventUid);
 		$where .= $this->cObj->enableFields($table);
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields,$table,$where);
 		$row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-		return strtotime($row['end_date']) + $row['end_time'];
+		return array(
+			'end_timestamp' => strtotime($row['end_date']) + $row['end_time'],
+			'end_date' => strtotime($row['end_date']),
+			'end_time' => $row['end_time'],
+			'allday' => $row['allday'],
+			'sameday' => ($row['end_date'] == $row['start_date']) ? 1 : 0
+		);
 	}
 
 

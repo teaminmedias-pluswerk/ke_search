@@ -21,10 +21,40 @@
 
 		<f:if condition="{resultrow.type} == 'cal'">
 			<f:then>
+				<f:comment><!-- Special date rendering for cal result rows --></f:comment>
+				<f:debug>{resultrow.cal}</f:debug>
 				<i>{f:translate(key: 'LLL:EXT:ke_search/pi1/locallang.xml:label_date')}:</i>
-				<f:format.date format='%d.%m.%Y %H:%M'>@{resultrow.date_timestamp}</f:format.date> - <f:format.date format='%d.%m.%Y %H:%M'>@{resultrow.enddate_timestamp}</f:format.date><br />
+				<f:if condition="{resultrow.cal.allday} != 1">
+					<f:then>
+						<f:if condition="{resultrow.cal.sameday}">
+							<f:then>
+								<f:format.date format='%e. %B %Y, %H:%M Uhr'>@{resultrow.date_timestamp}</f:format.date>
+								- <f:format.date format='%H:%M Uhr'>@{resultrow.cal.end_timestamp}</f:format.date>
+							</f:then>
+							<f:else>
+								<f:format.date format='%e. %B %H:%M Uhr'>@{resultrow.date_timestamp}</f:format.date>
+								- <f:format.date format='%e. %B  %Y %H:%M Uhr'>@{resultrow.cal.end_timestamp}</f:format.date>
+							</f:else>
+						</f:if>
+					</f:then>
+					<f:else>
+						<f:comment><!-- allday event without time --></f:comment>
+						<f:if condition="{resultrow.cal.sameday}">
+							<f:then>
+								<f:format.date format='%e. %B %Y'>@{resultrow.date_timestamp}</f:format.date>
+							</f:then>
+							<f:else>
+								<f:comment><!-- event lasts several days --></f:comment>
+								<f:format.date format='%e. %B'>@{resultrow.date_timestamp}</f:format.date>
+								- <f:format.date format='%e. %B  %Y'>@{resultrow.cal.end_timestamp}</f:format.date>
+							</f:else>
+						</f:if>
+					</f:else>
+				</f:if>
+
 			</f:then>
 			<f:else>
+				<f:comment><!-- Default date rendering --></f:comment>
 				<f:if condition="{conf.showDate}">
 					<i>{f:translate(key: 'LLL:EXT:ke_search/pi1/locallang.xml:label_date')}:</i> {resultrow.date}<br />
 				</f:if>

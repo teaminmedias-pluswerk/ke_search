@@ -26,7 +26,6 @@
  * Plugin 'Faceted search' for the 'ke_search' extension.
  *
  * @author	Andreas Kiefer (kennziffer.com) <kiefer@kennziffer.com>
- * @author	Stefan Frömken
  * @author	Christian Bülter (kennziffer.com) <buelter@kennziffer.com>
  * @package	TYPO3
  * @subpackage	tx_kesearch
