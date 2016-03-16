@@ -105,6 +105,12 @@
 			<label index="searchbox_default_value">Your search phrase</label>
 			<label index="linktext_more">More %s and Multiselection</label>
 			<label index="show_results">Show results</label>
+
+			<label index="dateformat.dateAndTime">%B %e, %Y, %I:%M %p</label>
+			<label index="dateformat.dateAndTimeWithoutYear">%B %e, %I:%M %p</label>
+			<label index="dateformat.time">%I:%M %p</label>
+			<label index="dateformat.dateWithYear">%B %e, %Y</label>
+			<label index="dateformat.dateWithoutYear">%B %e</label>
 		</languageKey>
 
 		<!-- GERMAN -->
@@ -207,6 +213,12 @@
 			<label index="searchbox_default_value">Suchbegriff</label>
 			<label index="linktext_more">Weitere %s und Mehrfachauswahl</label>
 			<label index="show_results">Ergebnisse anzeigen</label>
+
+			<label index="dateformat.dateAndTime">%e. %B %Y, %H:%M Uhr</label>
+			<label index="dateformat.dateAndTimeWithoutYear">%e. %B, %H:%M Uhr</label>
+			<label index="dateformat.time">%H:%M Uhr</label>
+			<label index="dateformat.dateWithYear">%e. %B %Y</label>
+			<label index="dateformat.dateWithoutYear">%e. %B</label>
 		</languageKey>
 		<languageKey index="nl" type="array">
 			<label index="pi_title">Facet Zoeken</label>
@@ -289,6 +301,12 @@
 			<label index="searchbox_default_value">Je zoekterm</label>
 			<label index="linktext_more">Meer %s en Multiselectie</label>
 			<label index="show_results">Toon resultaten</label>
+
+			<label index="dateformat.dateAndTime">%B %e, %Y, %I:%M %p</label>
+			<label index="dateformat.dateAndTimeWithoutYear">%B %e, %I:%M %p</label>
+			<label index="dateformat.time">%I:%M %p</label>
+			<label index="dateformat.dateWithYear">%B %e, %Y</label>
+			<label index="dateformat.dateWithoutYear">%B %e</label>
 		</languageKey>
 	</data>
 </T3locallang>
