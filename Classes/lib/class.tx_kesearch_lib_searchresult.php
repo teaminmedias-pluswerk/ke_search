@@ -99,9 +99,7 @@ class tx_kesearch_lib_searchresult {
 		switch($type) {
 			case 'file':
 				// if we use FAL, see if we have a title in the metadata
-				if ($this->row['orig_uid']) {
-					$fileRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
-					$fileObject = $fileRepository->findByUid($this->row['orig_uid']);
+				if ($this->row['orig_uid'] && ($fileObject = tx_kesearch_helper::getFile($this->row['orig_uid']))) {
 					$metadata = $fileObject->_getMetaData();
 					$linktext = ($metadata['title'] ? $metadata['title'] : $this->row['title']);
 				} else {

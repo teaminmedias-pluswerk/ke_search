@@ -22,6 +22,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+use TYPO3\CMS\Core\Resource\ResourceFactory;
+
 /**
  * helper functions
  * must be used used statically!
@@ -202,10 +204,7 @@ class tx_kesearch_helper {
 			case 'file':
 				// render a link for files
 				// if we use FAL, we can use the API
-				if ($resultRow['orig_uid']) {
-					/* @var $fileRepository TYPO3\CMS\Core\Resource\FileRepository */
-					$fileRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
-					$fileObject = $fileRepository->findByUid($resultRow['orig_uid']);
+				if ($resultRow['orig_uid'] && ($fileObject = tx_kesearch_helper::getFile($resultRow['orig_uid']))) {
 					$linkconf['parameter'] = $fileObject->getPublicUrl();
 				} else {
 					$linkconf['parameter'] = $resultRow['directory'] . rawurlencode($resultRow['title']);
@@ -235,5 +234,22 @@ class tx_kesearch_helper {
 		}
 
 		return $linkconf;
+	}
+
+	/**
+	 *
+	 * @param  integer $uid
+	 * @return File|NULL
+	 */
+	public static function getFile($uid) {
+
+		try {
+			$fileObject = ResourceFactory::getInstance()->getFileObject($uid);
+		} catch (\TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException $e) {
+			$fileObject = NULL;
+		}
+
+		return $fileObject;
+
 	}
 }
