@@ -5,6 +5,7 @@ master
 [BUGFIX]  Remove obsolete javascript code from searchbox. Thanks to Olaf Döring. https://forge.typo3.org/issues/75134.
 [BUGFIX]  Do not index files found on hidden pages. Thanks to Olaf Döring. https://forge.typo3.org/issues/75125.
 [FEATURE] Add indexer for extension Calendar Base (cal).
+[BUGFIX]  Prevent error in result list when file is missing.
 
 Version 2.0.4
 [BUGFIX]  Do not index content elements with colPos -2 which is set by GridElements when you unlink the item from the grid. Thanks to Bernhard Berger. Fixes #21.
