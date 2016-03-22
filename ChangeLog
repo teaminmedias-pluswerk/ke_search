@@ -1,6 +1,6 @@
 ChangeLog
 
-master
+Version 2.1.0, March 2016
 [!!!] This version changes the database structure!
 [BUGFIX]  Remove obsolete javascript code from searchbox. Thanks to Olaf Döring. https://forge.typo3.org/issues/75134.
 [BUGFIX]  Do not index files found on hidden pages. Thanks to Olaf Döring. https://forge.typo3.org/issues/75125.
