@@ -1100,9 +1100,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 
 			// if index record is of type "file" and contains an orig_uid, this is the reference
 			// to a FAL record. Otherwise we use the path directly.
-			if ($row['orig_uid']) {
-				$fileRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
-				$fileObject = $fileRepository->findByUid($row['orig_uid']);
+			if ($row['orig_uid'] && ($fileObject = tx_kesearch_helper::getFile($row['orig_uid']))) {
 				$metadata = $fileObject->_getMetaData();
 				$imageConf['file'] = $fileObject->getPublicUrl();
 				$imageConf['altText'] = $metadata['alternative'];
