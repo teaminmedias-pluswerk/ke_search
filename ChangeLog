@@ -4,6 +4,7 @@ master
 [!!!] In order to restrict the filter options in the backend to those on a certain page, please use the page TSconfig option tx_kesearch.filterStorage = 123 (formerly: kesearch.filterStorage = 123). The syntax has been adopted to the official guidelines.
 [BUGFIX]  Fix fetching the right page uid in class user_filterlist, follow up to https://github.com/teaminmedias-pluswerk/ke_search/pull/9.
 [TASK]    cleanup user_filterlist
+[FEATURE] Add system categories as tags to indexed pages. That makes it possible to create filters for pages based on system categories.
 
 Version 2.1.0, March 2016
 [!!!] This version changes the database structure!

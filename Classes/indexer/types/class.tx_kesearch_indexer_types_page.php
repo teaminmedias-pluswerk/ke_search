@@ -361,8 +361,11 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types {
 		// element indexer if you need that feature!
 		$pageAccessRestrictions = $this->getInheritedAccessRestrictions($uid);
 
-		// get Tags for current page
+		// add ke_search tags current page
 		$tags = $this->pageRecords[intval($uid)]['tags'];
+
+		// add system categories as tags
+		tx_kesearch_helper::makeSystemCategoryTags($tags, $uid, $table);
 
 		// Compile content for this page from individual content elements with
 		// respect to the language.
