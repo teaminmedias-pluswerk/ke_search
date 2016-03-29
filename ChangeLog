@@ -1,5 +1,9 @@
 ChangeLog
 
+master
+[BUGFIX]  Fix fetching the right page uid in class user_filterlist, follow up to https://github.com/teaminmedias-pluswerk/ke_search/pull/9.
+[TASK]    cleanup user_filterlist
+
 Version 2.1.0, March 2016
 [!!!] This version changes the database structure!
 [BUGFIX]  Remove obsolete javascript code from searchbox. Thanks to Olaf Döring. https://forge.typo3.org/issues/75134.

@@ -1,4 +1,5 @@
 <?php
+use \TYPO3\CMS\Backend\Utility\BackendUtility;
 
 /***************************************************************
 *  Copyright notice
@@ -32,8 +33,12 @@
  */
 class user_filterlist {
 
+	/**
+	 * compiles a list of filters in order to display them to in the backend plugin configuration (pi1)
+	 *
+	 * @param $config
+	 */
 	function getListOfAvailableFiltersForFlexforms(&$config) {
-
 
         if ($this->isTypo3LTS7()) {
             $parentRow = $config['flexParentDatabaseRow'];
@@ -59,70 +64,86 @@ class user_filterlist {
 		$fields = '*';
 		$table = 'tx_kesearch_filters';
 		$where = 'pid IN('.$intString.') ';
-		$where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table,$inv=0);
-		$where .= \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table,$inv=0);
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields,$table,$where,$groupBy='',$orderBy='',$limit='');
-		$anz = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
-		while ($row=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-			$config['items'][] = array($row['title'], $row['uid']);
+		$where .= BackendUtility::BEenableFields($table);
+		$where .= BackendUtility::deleteClause($table);
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
+		$count = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+		if ($count) {
+			while ($row=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+				$config['items'][] = array($row['title'], $row['uid']);
+			}
 		}
 	}
 
 
+	/**
+	 * compiles the list of available filter options in order to display them in the page or content element
+	 * record in the backend, so that the editor can assign a tag to a page or a content element.
+	 *
+	 * @param $config
+	 */
 	function getListOfAvailableFiltersForTCA(&$config) {
 
-        if ($this->isTypo3LTS7()) {
-            $parentRow = $config['flexParentDatabaseRow'];
-        } else {
-            $parentRow = $config['row'];
-        }
 		// get current pid
 		if ($config['table'] == 'pages') {
-			$currentPid = $parentRow['uid'];
+			$currentPid = $config['row']['uid'];
 		} else {
+			if ($this->isTypo3LTS7()) {
+				$parentRow = $config['flexParentDatabaseRow'];
+			} else {
+				$parentRow = $config['row'];
+			}
 			$currentPid = $parentRow['pid'];
 		}
 
 		// get the page TSconfig
-		$this->pageTSconfig = \TYPO3\CMS\Backend\Utility\BackendUtility::GetPagesTSconfig($currentPid);
-        $this->modTSconfig=$this->pageTSconfig['ke_search.'];
+		$pageTSconfig = BackendUtility::GetPagesTSconfig($currentPid);
+        $modTSconfig = $pageTSconfig['tx_kesearch.'];
 
 		// get filters
 		$fields = '*';
 		$table = 'tx_kesearch_filters';
 
 		// storage pid for filter options
-		if (!empty($this->modTSconfig['filterStorage'])) {
+		if (!empty($modTSconfig['filterStorage'])) {
 			// storage pid is set in page ts config
-			$where = 'pid IN ('.$this->modTSconfig['filterStorage'].') ';
+			$where = 'pid IN (' . $modTSconfig['filterStorage'] . ') ';
 		} else {
 			// no storage pid set in page ts config
 			$where = '1=1 ';
 		}
 
-		$where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table,$inv=0);
-		$where .= \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table,$inv=0);
+		$where .= BackendUtility::BEenableFields($table);
+		$where .= BackendUtility::deleteClause($table);
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields,$table,$where,$groupBy='',$orderBy='',$limit='');
-		$anz = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
-		while ($row=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
+		$count = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+		if ($count) {
+			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 
-			if (!empty($row['options'])) {
-				$fields2 = '*';
-				$table2 = 'tx_kesearch_filteroptions';
-				$where2 = 'uid in ('.$row['options'].')';
-				$where2 .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table2);
-				$where2 .= \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table2);
+				if (!empty($row['options'])) {
+					$fields2 = '*';
+					$table2 = 'tx_kesearch_filteroptions';
+					$where2 = 'uid in (' . $row['options'] . ')';
+					$where2 .= BackendUtility::BEenableFields($table2);
+					$where2 .= BackendUtility::deleteClause($table2);
 
-				$res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields2,$table2,$where2);
-				while($row2 = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res2)) {
-					$config['items'][] = array($row['title'].': '.$row2['title'], $row2['uid']);
+					$res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields2,$table2,$where2);
+					while($row2 = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res2)) {
+						$config['items'][] = array($row['title'].': '.$row2['title'], $row2['uid']);
+					}
 				}
 			}
 		}
 	}
 
 
+	/**
+	 *
+	 * compiles a list of filter options in order to display them to in plugin (pi1)
+	 *
+	 * @param $config
+	 */
 	function getListOfAvailableFilteroptionsForFlexforms(&$config) {
 
         if ($this->isTypo3LTS7()) {
@@ -149,30 +170,33 @@ class user_filterlist {
 		$fields = '*';
 		$table = 'tx_kesearch_filters';
 		$where = 'pid IN('.$intString.') ';
-		$where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table,$inv=0);
-		$where .= \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table,$inv=0);
+		$where .= BackendUtility::BEenableFields($table);
+		$where .= BackendUtility::deleteClause($table);
 
-		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields,$table,$where,$groupBy='',$orderBy='',$limit='');
-		while ($rowFilter=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
+		$count = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+		if ($count) {
+			while ($rowFilter=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 
-			if (!empty($rowFilter['options'])) {
-				// get filteroptions
-				$fieldsOpts = '*';
-				$tableOpts = 'tx_kesearch_filteroptions';
-				$whereOpts = 'uid in ('.$rowFilter['options'].')';
-				$whereOpts .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($tableOpts,$inv=0);
-				$whereOpts .= \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($tableOpts,$inv=0);
+				if (!empty($rowFilter['options'])) {
+					// get filteroptions
+					$fieldsOpts = '*';
+					$tableOpts = 'tx_kesearch_filteroptions';
+					$whereOpts = 'uid in ('.$rowFilter['options'].')';
+					$whereOpts .= BackendUtility::BEenableFields($tableOpts);
+					$whereOpts .= BackendUtility::deleteClause($tableOpts);
 
-				$resOpts = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fieldsOpts,$tableOpts,$whereOpts,$groupBy='',$orderBy='',$limit='');
-				while ($rowOpts=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($resOpts)) {
-					$config['items'][] = array($rowFilter['title'].': '.$rowOpts['title'], $rowOpts['uid']);
+					$resOpts = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fieldsOpts, $tableOpts, $whereOpts);
+					while ($rowOpts=$GLOBALS['TYPO3_DB']->sql_fetch_assoc($resOpts)) {
+						$config['items'][] = array($rowFilter['title'].': ' . $rowOpts['title'], $rowOpts['uid']);
+					}
 				}
-			}
 
-			if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilteroptionsForFlexforms'])) {
-				foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilteroptionsForFlexforms'] as $_classRef) {
-					$_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
-					$_procObj->modifyFilteroptionsForFlexforms($config, $rowFilter, $this);
+				if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilteroptionsForFlexforms'])) {
+					foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilteroptionsForFlexforms'] as $_classRef) {
+						$_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+						$_procObj->modifyFilteroptionsForFlexforms($config, $rowFilter, $this);
+					}
 				}
 			}
 		}
@@ -181,8 +205,7 @@ class user_filterlist {
     /**
      * @return bool
      */
-	private function isTypo3LTS7()
-	{
+	private function isTypo3LTS7() {
 		return (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(\TYPO3\CMS\Core\Utility\VersionNumberUtility::getNumericTypo3Version()) >= 7006000);
 	}
 }
