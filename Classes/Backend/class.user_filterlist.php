@@ -70,8 +70,8 @@ class user_filterlist {
 
 
 	/**
-	 * compiles the list of available filter options in order to display them in the page or content element
-	 * record in the backend, so that the editor can assign a tag to a page or a content element.
+	 * compiles the list of available filter options in order to display them in the page record
+	 * in the backend, so that the editor can assign a tag to a page
 	 * @param $config
 	 */
 	function getListOfAvailableFiltersForTCA(&$config) {
