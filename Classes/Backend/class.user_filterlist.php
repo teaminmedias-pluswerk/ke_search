@@ -80,12 +80,7 @@ class user_filterlist {
 		if ($config['table'] == 'pages') {
 			$currentPid = $config['row']['uid'];
 		} else {
-			if ($this->isTypo3LTS7()) {
-				$parentRow = $config['flexParentDatabaseRow'];
-			} else {
-				$parentRow = $config['row'];
-			}
-			$currentPid = $parentRow['pid'];
+			$currentPid = $config['row']['pid'];
 		}
 
 		// get the page TSconfig
