@@ -396,8 +396,10 @@ $configurationArray = array(
             'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.contenttypes',
             'displayCond' => 'FIELD:type:IN:page,tt_content',
             'config' => array(
-                'type' => 'input',
-                'size' => '30',
+                'type' => 'text',
+                'cols' => 48,
+                'rows' => 10,
+                'eval' => 'trim',
                 'default' => 'text,textmedia,textpic,bullets,table,html,header,uploads'
             )
         ),
