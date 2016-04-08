@@ -45,8 +45,20 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('pages', $tempC
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('pages', 'tx_kesearch_tags;;;;1-1-1');
 
 if (TYPO3_MODE == 'BE') {
-	TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addModulePath('web_txkesearchM1', $extPath . 'mod1/');
-	TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addModule('web', 'txkesearchM1', '', $extPath . 'mod1/');
+	\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
+		'TeaminmediasPluswerk.' . $_EXTKEY,
+		'web',          // Main area
+		'backend_module',         // Name of the module
+		'',             // Position of the module
+		array(          // Allowed controller action combinations
+			'BackendModule' => 'startIndexing,indexedContent,indexTableInformation,searchwordStatistics,clearSearchIndex,lastIndexingReport,alert',
+		),
+		array(          // Additional configuration
+			'access'    => 'user,group',
+			'icon'      => 'EXT:ke_search/Resources/Public/Icons/moduleicon.gif',
+			'labels'    => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml',
+		)
+	);
 }
 
 $TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY . '_pi1'] = 'layout,select_key';
