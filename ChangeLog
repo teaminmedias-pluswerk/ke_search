@@ -1,7 +1,8 @@
 ChangeLog
 
 master
-[!!!] In order to restrict the filter options in the backend to those on a certain page, please use the page TSconfig option tx_kesearch.filterStorage = 123 (formerly: kesearch.filterStorage = 123). The syntax has been adopted to the official guidelines.
+[!!!]     In order to restrict the filter options in the backend to those on a certain page, please use the page TSconfig option tx_kesearch.filterStorage = 123 (formerly: kesearch.filterStorage = 123). The syntax has been adopted to the official guidelines.
+[!!!]     This version changes the database structure!
 [BUGFIX]  Fix fetching the right page uid in class user_filterlist, follow up to https://github.com/teaminmedias-pluswerk/ke_search/pull/9.
 [TASK]    cleanup user_filterlist
 [FEATURE] Add system categories as tags to indexed pages. That makes it possible to create filters for pages based on system categories.
@@ -11,9 +12,10 @@ master
 [TASK]    Remove marker based template.
 [TASK]    Remove obsolete images and CSS code.
 [BUGFIX]  Fix missing locallang values in the frontend. Use pi1 locallang values for pi1, pi2 and pi3. https://github.com/teaminmedias-pluswerk/ke_search/issues/28.
+[FEATURE] Change contenttypes to text to allow a greater list of content elements. Thanks to Felix Jacobi. https://github.com/teaminmedias-pluswerk/ke_search/pull/29.
 
 Version 2.1.0, March 2016
-[!!!] This version changes the database structure!
+[!!!]     This version changes the database structure!
 [BUGFIX]  Remove obsolete javascript code from searchbox. Thanks to Olaf Döring. https://forge.typo3.org/issues/75134.
 [BUGFIX]  Do not index files found on hidden pages. Thanks to Olaf Döring. https://forge.typo3.org/issues/75125.
 [FEATURE] Add indexer for extension Calendar Base (cal).
