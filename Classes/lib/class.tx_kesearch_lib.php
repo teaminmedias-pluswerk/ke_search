@@ -964,12 +964,16 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		}
 
 		// render pages list
-		$tempContent = '';
+		$tempContent = '<ul>';
+		$currentPage = intval($startPage/$resultsPerPage) + 1;
 		for ($i=1; $i<=$pagesTotal; $i++) {
 			if ($i >= $startPage && $i <= $endPage) {
 
 				// render static version
 				unset($linkconf);
+				if ($i === $currentPage) {
+					$linkconf['class'] = 'current';
+				}
 				$linkconf['parameter'] = $GLOBALS['TSFE']->id;
 				$linkconf['addQueryString'] = 1;
 				$linkconf['addQueryString.']['exclude'] = 'id';
@@ -986,10 +990,10 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 				}
 
 				if ($this->piVars['page'] == $i) $linkconf['ATagParams'] = 'class="current" ';
-				$tempContent .= $this->cObj->typoLink($i, $linkconf) . ' ';
+				$tempContent .= '<li>' . $this->cObj->typoLink($i, $linkconf) . '</li> ';
 			}
 		}
-
+		$tempContent .= '</ul>';
 		// end
 		$end = ($start+$resultsPerPage > $numberOfResults) ? $numberOfResults : ($start+$resultsPerPage);
 
