@@ -47,7 +47,10 @@ class tx_kesearch_pi3 extends tx_kesearch_lib {
 		$this->ms = TYPO3\CMS\Core\Utility\GeneralUtility::milliseconds();
 		$this->conf = $conf;
 		$this->pi_setPiVarDefaults();
-		$this->pi_loadLL();
+
+		// use pi1 locallang values, since all the frontend locallang values for
+		// pi1, pi2 and pi3 are set in pi1 language file
+		$this->pi_loadLL('EXT:ke_search/pi1/locallang.xml');
 
 		// Configuring so caching is not expected. This value means that no cHash params are ever set.
 		// We do this, because it's a USER_INT object!
