@@ -71,9 +71,10 @@ class tx_kesearch_indexer_types_templavoila extends tx_kesearch_indexer_types {
 
 			$row = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('uid,title', 'pages', 'pid = 0' .  $enableFields);
 
-			$GLOBALS['TT'] = new t3lib_timeTrackNull;
-			$GLOBALS['TSFE'] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tslib_fe', $GLOBALS['TYPO3_CONF_VARS'], $row['uid'], 0);
-			$GLOBALS['TSFE']->sys_page = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('t3lib_pageSelect');
+			$GLOBALS['TT'] = new \TYPO3\CMS\Core\TimeTracker\NullTimeTracker();
+
+			$GLOBALS['TSFE'] = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Frontend\Controller\TypoScriptFrontendController', $GLOBALS['TYPO3_CONF_VARS'], $row['uid'], 0);
+			$GLOBALS['TSFE']->sys_page = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Frontend\Page\PageRepository');
 			$GLOBALS['TSFE']->sys_page->init(TRUE);
 			$GLOBALS['TSFE']->initTemplate();
 
@@ -84,7 +85,7 @@ class tx_kesearch_indexer_types_templavoila extends tx_kesearch_indexer_types {
 
 			// override it with the page/type-specific "config."
 			if (is_array($GLOBALS['TSFE']->pSetup['config.'])) {
-				$GLOBALS['TSFE']->config['config'] = TYPO3\CMS\Core\Utility\GeneralUtility::array_merge_recursive_overrule($GLOBALS['TSFE']->config['config'], $GLOBALS['TSFE']->pSetup['config.']);
+				\TYPO3\CMS\Core\Utility\ArrayUtility::mergeRecursiveWithOverrule($GLOBALS['TSFE']->config['config'], $GLOBALS['TSFE']->pSetup['config.']);
 			}
 
 			// generate basic rootline
@@ -96,6 +97,7 @@ class tx_kesearch_indexer_types_templavoila extends tx_kesearch_indexer_types {
 		}
 
 		$this->counter = 0;
+		$cTypes = array();
 		foreach($this->indexCTypes as $value) {
 			$cTypes[] = 'CType="' . $value . '"';
 		}
@@ -138,7 +140,7 @@ class tx_kesearch_indexer_types_templavoila extends tx_kesearch_indexer_types {
 		}
 
 		// show indexer content?
-		$content .= '<p><b>Indexer "' . $this->indexerConfig['title'] . '": </b><br />'
+		$content = '<p><b>Indexer "' . $this->indexerConfig['title'] . '": </b><br />'
 			. count($this->pageRecords) . ' pages for TemplaVoila have been found for indexing.<br />' . "\n"
 			. $this->counter . ' ' . $this->indexedElementsName . ' have been indexed.<br />' . "\n"
 			. '</p>' . "\n";
@@ -149,13 +151,14 @@ class tx_kesearch_indexer_types_templavoila extends tx_kesearch_indexer_types {
 		return $content;
 	}
 
-
 	/**
 	 * get array with all pages
 	 * but remove all pages we don't want to have
 	 * additionally generates a cachedPageArray
 	 *
-	 * @param array Array with all page cols
+	 * @param array $uids Array with all page cols
+	 *
+	 * @return array|mixed
 	 */
 	public function getPageRecords($uids) {
 		$fields = '*';
@@ -173,6 +176,7 @@ class tx_kesearch_indexer_types_templavoila extends tx_kesearch_indexer_types {
 
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
 
+		$pages = array();
 		while($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			$this->addLocalizedPagesToCache($row);
 			$pages[$row['uid']] = $row;
@@ -203,12 +207,16 @@ class tx_kesearch_indexer_types_templavoila extends tx_kesearch_indexer_types {
 		}
 	}
 
-
 	/**
 	 * get content of current page and save data to db
-	 * @param $uid page-UID that has to be indexed
+	 *
+	 * @param integer $uid page-UID that has to be indexed
+	 *
+	 * @return string
 	 */
 	public function getPageContent($uid) {
+		$pageContent = array();
+		$additionalFields = '';
 
 		$flex = $this->pageRecords[$uid]['tx_templavoila_flex'];
 		if(empty($flex)) return '';
@@ -246,9 +254,11 @@ class tx_kesearch_indexer_types_templavoila extends tx_kesearch_indexer_types {
 			$where .= ' AND (fe_group = "" OR fe_group = "0") ';
 		}
 
+
 		$rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($fields, $table, $where);
 		if(count($rows)) {
 			$this->counter++;
+
 			foreach($rows as $row) {
 				// header
 				// add header only if not set to "hidden"
@@ -319,5 +329,7 @@ class tx_kesearch_indexer_types_templavoila extends tx_kesearch_indexer_types {
 				$additionalFields                                      // additional fields added by hooks
 			);
 		}
+
+		return '';
 	}
 }
