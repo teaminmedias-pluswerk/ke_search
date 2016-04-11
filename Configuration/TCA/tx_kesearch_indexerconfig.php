@@ -46,6 +46,11 @@ $configurationArray = array(
                 'size' => 1,
                 'minitems' => 1,
                 'maxitems' => 1,
+                'wizards' => array(
+                    'suggest' => array(
+                        'type' => 'suggest',
+                    ),
+                ),
             )
         ),
         'targetpid' => array(
@@ -59,6 +64,11 @@ $configurationArray = array(
                 'size' => 1,
                 'minitems' => 1,
                 'maxitems' => 1,
+                'wizards' => array(
+                    'suggest' => array(
+                        'type' => 'suggest',
+                    ),
+                ),
             )
         ),
         'type' => array(
@@ -151,6 +161,11 @@ $configurationArray = array(
                 'size' => 10,
                 'minitems' => 0,
                 'maxitems' => 99,
+                'wizards' => array(
+                    'suggest' => array(
+                        'type' => 'suggest',
+                    ),
+                ),
             )
         ),
         'single_pages' => array(
@@ -164,6 +179,11 @@ $configurationArray = array(
                 'size' => 10,
                 'minitems' => 0,
                 'maxitems' => 99,
+                'wizards' => array(
+                    'suggest' => array(
+                        'type' => 'suggest',
+                    ),
+                ),
             )
         ),
         'sysfolder' => array(
@@ -177,6 +197,11 @@ $configurationArray = array(
                 'size' => 10,
                 'minitems' => 0,
                 'maxitems' => 99,
+                'wizards' => array(
+                    'suggest' => array(
+                        'type' => 'suggest',
+                    ),
+                ),
             )
         ),
         'index_content_with_restrictions' => array(

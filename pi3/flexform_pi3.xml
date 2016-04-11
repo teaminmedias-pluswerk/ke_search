@@ -20,6 +20,11 @@
 								<minitems>1</minitems>
 							</config>
 						</TCEforms>
+						<wizards>
+							<suggest>
+								<type>suggest</type>
+							</suggest>
+						</wizards>
 					</loadFlexformsFromOtherCE>
 
 				</el>
