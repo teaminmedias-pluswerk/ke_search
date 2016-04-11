@@ -11,6 +11,7 @@ master
 [TASK]    Remove marker based template.
 [TASK]    Remove obsolete images and CSS code.
 [BUGFIX]  Fix missing locallang values in the frontend. Use pi1 locallang values for pi1, pi2 and pi3. https://github.com/teaminmedias-pluswerk/ke_search/issues/28.
+[BUGFIX]  Fix marker in Checkbox.html. Thanks to Markus Klein. https://forge.typo3.org/issues/75398.
 
 Version 2.1.0, March 2016
 [!!!] This version changes the database structure!
