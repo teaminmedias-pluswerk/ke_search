@@ -242,7 +242,22 @@ class tx_kesearch_indexer_types {
 	 */
 	public function showErrors() {
 		if (count($this->errors)) {
-			return '<div class="error">' . implode('<br />' . "\n", $this->errors) . '</div>';
+			$messages = array();
+
+			foreach ($this->errors as $errorMessage) {
+				/** @var \TYPO3\CMS\Core\Messaging\FlashMessage $message */
+				$message = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+					'TYPO3\\CMS\\Core\\Messaging\\FlashMessage',
+					$errorMessage,
+					'',
+					\TYPO3\CMS\Core\Messaging\FlashMessage::ERROR,
+					false
+				);
+
+				$messages[] = $message->render();
+			}
+
+			return implode('<br>', $messages);
 		} else {
 			return '';
 		}
