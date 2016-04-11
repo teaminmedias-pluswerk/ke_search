@@ -389,6 +389,21 @@ div.kesearchbox{
 }
 
 /* Pagebrowser */
+.kesearch_pagebrowser ul {
+    display: inline;
+    margin: 0;
+    padding: 0;
+    -webkit-margin-before: 0;
+    -webkit-margin-after: 0;
+    -webkit-margin-start: 0;
+    -webkit-margin-end: 0;
+    -webkit-padding-start: 0;
+}
+.kesearch_pagebrowser ul li {
+    list-style-type: none;
+    display: inline;
+    margin: 0;
+}
 #kesearch_pagebrowser_top,
 #kesearch_pagebrowser_bottom {
     text-align: center;

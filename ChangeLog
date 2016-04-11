@@ -6,6 +6,8 @@ master
 [TASK]    cleanup user_filterlist
 [FEATURE] Add system categories as tags to indexed pages. That makes it possible to create filters for pages based on system categories.
 [BUGFIX]  Fix obsolete calls and missing variable declarations/initializations. Thanks to Bernhard Berger. https://github.com/teaminmedias-pluswerk/ke_search/pull/33. 
+[FEATURE] Add Suggest Wizard to Flexforms and TCA. Thanks to Bernhard Berger. https://github.com/teaminmedias-pluswerk/ke_search/pull/31.
+[TASK]    Render pagebrowser as a html list. Thanks to Fernando Arconada. https://github.com/teaminmedias-pluswerk/ke_search/pull/32.
 
 Version 2.1.0, March 2016
 [!!!] This version changes the database structure!
@@ -14,7 +16,6 @@ Version 2.1.0, March 2016
 [FEATURE] Add indexer for extension Calendar Base (cal).
 [BUGFIX]  Prevent error in result list when file is missing.
 [FEATURE] Add hook for getListOfAvailableFilteroptions. Thanks to Kevin Purrmann. https://github.com/teaminmedias-pluswerk/ke_search/pull/27.
-[FEATURE] Add Suggest Wizard to Flexforms and TCA. Thanks to Bernhard Berger. https://github.com/teaminmedias-pluswerk/ke_search/pull/31.
 
 Version 2.0.4
 [BUGFIX]  Do not index content elements with colPos -2 which is set by GridElements when you unlink the item from the grid. Thanks to Bernhard Berger. Fixes #21.
