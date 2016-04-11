@@ -367,17 +367,6 @@ div.kesearchbox{
     margin-right: 5px;
 }
 
-/* Spinner / updating */
-.tx-kesearch-pi1 #kesearch_updating_filters,
-.tx-kesearch-pi1 #kesearch_updating_results {
-    display:none;
-    text-align: center;
-}
-.tx-kesearch-pi1 #testbox {
-    margin-top: 100px;
-    border: 1px solid red;
-}
-
 /* General Message */
 .tx-kesearch-pi1 .general-message {
     padding: 5px;
