@@ -964,7 +964,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		}
 
 		// render pages list
-		$tempContent = '<ul>';
+		$tempContent = '';
 		$currentPage = intval($startPage/$resultsPerPage) + 1;
 		for ($i=1; $i<=$pagesTotal; $i++) {
 			if ($i >= $startPage && $i <= $endPage) {
@@ -993,7 +993,6 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 				$tempContent .= '<li>' . $this->cObj->typoLink($i, $linkconf) . '</li> ';
 			}
 		}
-		$tempContent .= '</ul>';
 		// end
 		$end = ($start+$resultsPerPage > $numberOfResults) ? $numberOfResults : ($start+$resultsPerPage);
 
@@ -1020,7 +1019,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			}
 
 			$linkconf['ATagParams'] = 'class="prev" ';
-			$previous = $this->cObj->typoLink($this->pi_getLL('pagebrowser_prev'), $linkconf);
+			$previous = '<li>' . $this->cObj->typoLink($this->pi_getLL('pagebrowser_prev'), $linkconf) . '</li>';
 		} else {
 			$previous = '';
 		}
@@ -1035,7 +1034,6 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			$linkconf['addQueryString'] = 1;
 			$linkconf['additionalParams'] = '&tx_kesearch_pi1[sword]='.$this->piVars['sword'];
 			$linkconf['additionalParams'] .= '&tx_kesearch_pi1[page]='.intval($nextPage);
-			$filterArray = $this->filters->getFilters();
 
 			if (is_array($this->piVars['filter'])) {
 				foreach($this->piVars['filter'] as $filterId => $data) {
@@ -1048,22 +1046,23 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			}
 
 			$linkconf['ATagParams'] = 'class="next" ';
-			$next = $this->cObj->typoLink($this->pi_getLL('pagebrowser_next'), $linkconf);
+			$next = '<li>' . $this->cObj->typoLink($this->pi_getLL('pagebrowser_next'), $linkconf) . '</li>';
 		} else {
 			$next = '';
 		}
+		
+		// compile previous, pages list and next link into one ul element
+		$pagebrowser_links = '<ul>' . $previous . $tempContent . $next . '</ul>';
 
 
 		// render pagebrowser content
 		$markerArray = array(
 			'current' => $this->piVars['page'],
 			'pages_total' => $pagesTotal,
-			'pages_list' => $tempContent,
+			'pages_list' => $pagebrowser_links,
 			'start' => $start+1,
 			'end' => $end,
 			'total' => $numberOfResults,
-			'previous' => $previous,
-			'next' => $next,
 			'results' => $this->pi_getLL('results'),
 			'until' => $this->pi_getLL('until'),
 			'of' => $this->pi_getLL('of'),
