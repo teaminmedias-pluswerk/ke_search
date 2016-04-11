@@ -8,6 +8,7 @@ master
 [BUGFIX]  Fix obsolete calls and missing variable declarations/initializations. Thanks to Bernhard Berger. https://github.com/teaminmedias-pluswerk/ke_search/pull/33. 
 [FEATURE] Add Suggest Wizard to Flexforms and TCA. Thanks to Bernhard Berger. https://github.com/teaminmedias-pluswerk/ke_search/pull/31.
 [TASK]    Render pagebrowser as a html list. Thanks to Fernando Arconada. https://github.com/teaminmedias-pluswerk/ke_search/pull/32.
+[TASK]    Remove marker based template.
 
 Version 2.1.0, March 2016
 [!!!] This version changes the database structure!
