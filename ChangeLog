@@ -1,6 +1,6 @@
 ChangeLog
 
-master
+Version 2.2.0, April 2016
 [!!!]     In order to restrict the filter options in the backend to those on a certain page, please use the page TSconfig option tx_kesearch.filterStorage = 123 (formerly: kesearch.filterStorage = 123). The syntax has been adopted to the official guidelines.
 [!!!]     This version changes the database structure!
 [BUGFIX]  Fix fetching the right page uid in class user_filterlist, follow up to https://github.com/teaminmedias-pluswerk/ke_search/pull/9.
