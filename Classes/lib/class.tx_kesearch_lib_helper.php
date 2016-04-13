@@ -156,6 +156,7 @@ class tx_kesearch_helper {
 				$tag = str_replace('(', '', $tag);
 				$tag = str_replace(')', '', $tag);
 				$tag = str_replace('_', '', $tag);
+				$tag = str_replace('&', '', $tag);
 
 				if (!empty($tags)) {
 					$tags .= ',';

@@ -1,5 +1,8 @@
 ChangeLog
 
+master
+[TASK]    remove &-character from automatically generated tags since tags with & lead to "no search results".
+
 Version 2.2.0, April 2016
 [!!!]     In order to restrict the filter options in the backend to those on a certain page, please use the page TSconfig option tx_kesearch.filterStorage = 123 (formerly: kesearch.filterStorage = 123). The syntax has been adopted to the official guidelines.
 [!!!]     This version changes the database structure!
