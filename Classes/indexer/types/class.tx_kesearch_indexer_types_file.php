@@ -206,7 +206,8 @@ class tx_kesearch_indexer_types_file extends tx_kesearch_indexer_types {
 	 * @return mixed false or fileinformations as array
 	 */
 	public function getFileContent($file) {
-		// we can continue only when given file is a true file and not a directory or what ever
+		
+		// we can continue only when given file is really file and not a directory 
 		if ($this->fileInfo->getIsFile()) {
 			$className = 'tx_kesearch_indexer_filetypes_' . $this->fileInfo->getExtension();
 
@@ -217,9 +218,17 @@ class tx_kesearch_indexer_types_file extends tx_kesearch_indexer_types {
 
 				// check if new object has interface implemented
 				if ($fileObj instanceof tx_kesearch_indexer_filetypes) {
-					// now we can execute the method of our new object
-					$fileContent = $fileObj->getContent($file);
-					$this->addError($fileObj->getErrors());
+
+					// Do the check if a file has already been indexed at this early point in order
+					// to skip the time expensive "get content" process which includes calls to external tools
+					// fetch the file content directly from the index 
+					$fileContent = $this->getFileContentFromIndex($this->getUniqueHashForFile());
+					
+					// if there's no matching index entry, we execute the  "get file content" method of our new object
+					if (!$fileContent) {
+						$fileContent = $fileObj->getContent($file);
+						$this->addError($fileObj->getErrors());
+					}
 					return $fileContent;
 				} else {
 					return false;
@@ -239,6 +248,23 @@ class tx_kesearch_indexer_types_file extends tx_kesearch_indexer_types {
 			$this->addError($file . ' is not a file.');
 			return false;
 		}
+	}
+
+	/**
+	 * checks if there's an entry in the index for the given file hash. Returns the content of that entry.
+	 * 
+	 * @param string $hash
+	 * @return string/boolean returns false if no entry has been found, otherwise the content as string
+	 */
+	public function getFileContentFromIndex($hash = "") {
+		$fileContent = false;
+		$res = $GLOBALS['TYPO3_DB']->sql_query( 'SELECT * FROM tx_kesearch_index WHERE hash = "' . $hash . '" LIMIT 1');
+		if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
+			if ($indexRow = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+				$fileContent = $indexRow['content'];
+			}
+		}
+		return $fileContent;
 	}
 
 	/**
