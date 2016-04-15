@@ -22,6 +22,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  * ************************************************************* */
 
+use \TYPO3\CMS\Core\Utility\GeneralUtility;
 /**
  * Plugin 'Faceted search' for the 'ke_search' extension.
  *
@@ -54,7 +55,7 @@ class tx_kesearch_indexer_types_file extends tx_kesearch_indexer_types {
 
 		// get extension configuration of ke_search
 		$this->extConf = tx_kesearch_helper::getExtConf();
-		$this->fileInfo = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_lib_fileinfo');
+		$this->fileInfo = GeneralUtility::makeInstance('tx_kesearch_lib_fileinfo');
 	}
 
 	/**
@@ -64,11 +65,11 @@ class tx_kesearch_indexer_types_file extends tx_kesearch_indexer_types {
 	 */
 	public function startIndexing() {
 		$directories = $this->indexerConfig['directories'];
-		$directoryArray = TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $directories, true);
+		$directoryArray = GeneralUtility::trimExplode(',', $directories, true);
 
 		if ($this->pObj->indexerConfig['fal_storage'] > 0) {
 			/* @var $storageRepository TYPO3\CMS\Core\Resource\StorageRepository */
-			$storageRepository = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(
+			$storageRepository = GeneralUtility::makeInstance(
 				'TYPO3\\CMS\\Core\\Resource\\StorageRepository'
 			);
 
@@ -108,7 +109,7 @@ class tx_kesearch_indexer_types_file extends tx_kesearch_indexer_types {
 				$filesInFolder = $folder->getFiles();
 				if (count($filesInFolder)) {
 					foreach ($filesInFolder as $file) {
-						if (\TYPO3\CMS\Core\Utility\GeneralUtility::inList($this->pObj->indexerConfig['fileext'], $file->getExtension())) {
+						if (GeneralUtility::inList($this->pObj->indexerConfig['fileext'], $file->getExtension())) {
 							$files[] = $file;
 						}
 					}
@@ -135,7 +136,7 @@ class tx_kesearch_indexer_types_file extends tx_kesearch_indexer_types {
 		$directoryArray = $this->getAbsoluteDirectoryPath($directoryArray);
 		if (is_array($directoryArray) && count($directoryArray)) {
 			foreach ($directoryArray as $directory) {
-				$foundFiles = TYPO3\CMS\Core\Utility\GeneralUtility::getAllFilesAndFoldersInPath(array(), $directory, $this->indexerConfig['fileext']);
+				$foundFiles = GeneralUtility::getAllFilesAndFoldersInPath(array(), $directory, $this->indexerConfig['fileext']);
 				if (is_array($foundFiles) && count($foundFiles)) {
 					foreach ($foundFiles as $file) {
 						$files[] = $file;
@@ -214,7 +215,7 @@ class tx_kesearch_indexer_types_file extends tx_kesearch_indexer_types {
 			// check if class exists
 			if (class_exists($className)) {
 				// make instance
-				$fileObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($className);
+				$fileObj = GeneralUtility::makeInstance($className);
 
 				// check if new object has interface implemented
 				if ($fileObj instanceof tx_kesearch_indexer_filetypes) {
@@ -352,7 +353,7 @@ class tx_kesearch_indexer_types_file extends tx_kesearch_indexer_types {
 		// hook for custom modifications of the indexed data, e. g. the tags
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFileIndexEntry'])) {
 			foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFileIndexEntry'] as $_classRef) {
-				$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$_procObj->modifyFileIndexEntry($file, $content, $additionalFields, $indexRecordValues, $this);
 			}
 		}
