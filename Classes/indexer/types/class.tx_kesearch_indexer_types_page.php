@@ -608,7 +608,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types {
 					// count indexed files, add it to the indexer output
 					if (!file_exists($filePath)) {
 						$this->addError('Could not index file ' . $filePath . ' (file does not exist).');
-					} else if ($fileIndexerObject->fileInfo->setFile($filePath)) {
+					} else if ($fileIndexerObject->fileInfo->setFile($fileObject)) {
 						if (($content = $fileIndexerObject->getFileContent($filePath))) {
 							$this->storeFileContentToIndex($fileObject, $content, $fileIndexerObject, $feGroups, $tags, $ttContentRow);
 							$this->fileCounter++;

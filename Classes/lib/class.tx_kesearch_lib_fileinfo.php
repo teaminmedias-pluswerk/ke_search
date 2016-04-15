@@ -48,7 +48,7 @@ class tx_kesearch_lib_fileinfo {
 	/**
 	 * set a filename to get informations of
 	 *
-	 * @param string|\TYPO3\CMS\Core\Resource\File $file
+	 * @param string|\TYPO3\CMS\Core\Resource\File|\TYPO3\CMS\Core\Resource\FileReference $file
 	 * @return boolean is valid file
 	 */
 	public function setFile($file) {
@@ -64,7 +64,12 @@ class tx_kesearch_lib_fileinfo {
 	 */
 	protected function setFileInformations($file) {
 		$this->fileInfo = array(); // reset previously information to have a cleaned object
-		$this->file = $file instanceof \TYPO3\CMS\Core\Resource\File ? $file : NULL;
+		if ($file instanceof \TYPO3\CMS\Core\Resource\File) {
+			$this->file = $file;
+		}
+		elseif ($file instanceof \TYPO3\CMS\Core\Resource\FileReference) {
+			$this->file = $file = $file->getOriginalFile();
+		}
 
 		if(is_string($file) && !empty($file)) {
 			$this->fileInfo = TYPO3\CMS\Core\Utility\GeneralUtility::split_fileref($file);
