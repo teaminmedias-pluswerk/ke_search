@@ -120,8 +120,8 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface {
 	* @return string
 	*/
 	function escapeString ( $string ) {
-		$from = array ( '\\', '(',')','|','-','!','@','~','"','&', '/', '^', '$', '=' );
-		$to   = array ( '\\\\', '\(','\)','\|','\-','\!','\@','\~','\"', '\&', '\/', '\^', '\$', '\=' );
+		$from = array ( '\\', '(',')','-','!','@','~','"','&', '/', '^', '$', '=' );
+		$to   = array ( '\\\\', '\(','\)','\-','\!','\@','\~','\"', '\&', '\/', '\^', '\$', '\=' );
 
 		return str_replace ( $from, $to, $string );
 	}
