@@ -328,46 +328,74 @@ class tx_kesearch_indexer {
 		$count = $GLOBALS['TYPO3_DB']->exec_SELECTcountRows('*', $table, $where);
 		$GLOBALS['TYPO3_DB']->exec_DELETEquery($table, $where);
 
+		$content .= '<p><b>Index cleanup:</b><br />' . "\n";
+		$content .= $count . ' entries deleted.<br />' . "\n";
+		
+		// rotate Sphinx Index (ke_search_premium function)
+		$content .= $this->rotateSphinxIndex();
+
+		// calculate duration of indexing process
+		$duration = ceil((microtime(true) - $startMicrotime) * 1000);
+		$content .= '<i>Cleanup process took ' . $duration . ' ms.</i></p>'."\n";
+
+		return $content;
+	}
+
+	/**
+	 * updates the sphinx index
+	 * 
+	 * @return string
+	 */
+	public function rotateSphinxIndex() {
+		$content = '';
+
 		// check if Sphinx is enabled
 		// in this case we have to update sphinx index, too.
 		if($this->extConfPremium['enableSphinxSearch']) {
 			if(!$this->extConfPremium['sphinxIndexerName']) $this->extConfPremium['sphinxIndexerConf'] = '--all';
 			if(is_file($this->extConfPremium['sphinxIndexerPath']) && is_executable($this->extConfPremium['sphinxIndexerPath']) && file_exists($this->extConfPremium['sphinxSearchdPath']) && is_executable($this->extConfPremium['sphinxIndexerPath'])) {
-				$found = preg_match_all('/exec|system/', ini_get('disable_functions'), $match);
-				if($found === 0) { // executables are allowed
-					$ret = system($this->extConfPremium['sphinxIndexerPath'] . ' --rotate ' . $this->extConfPremium['sphinxIndexerName']);
-					if (strpos($ret, 'WARNING') !== FALSE) {
-						$warning = strstr($ret, 'WARNING');
-						$content .= '<div class="error">SPHINX ' . $warning . '</div>';
-					}
-					$content .= $ret;
-				} elseif($found === 1) { // one executable is allowed
-					if($match[0] == 'system') {
-						$ret = system($this->extConfPremium['sphinxIndexerPath'] . ' --rotate ' . $this->extConfPremium['sphinxIndexerName']);
-					} else { // use exec
-						exec($this->extConfPremium['sphinxIndexerPath'] . ' --rotate ' . $this->extConfPremium['sphinxIndexerName'], $retArr);
-						foreach ($retArr as $retRow) {
-							if (strpos($retRow, 'WARNING') !== FALSE) {
-								$content .= '<div class="error">SPHINX ' . $retRow . '</div>';
-							}
+				if (function_exists('exec')) {
+
+					// check if daemon is running
+					$content .= '<p>';
+					$retArr = array();
+					exec($this->extConfPremium['sphinxSearchdPath'] . ' --status', $retArr);
+					$content .= '<b>Checking status of Sphinx daemon:</b> ';
+					$sphinxFailedToConnect = false;
+					foreach ($retArr as $retRow) {
+						if (strpos($retRow, 'WARNING') !== FALSE) {
+							$content .= '<div class="error">SPHINX ' . $retRow . '</div>' . "\n";
+							$sphinxFailedToConnect = true;
 						}
-						$ret = implode(';', $retArr);
 					}
-					$content .= $ret;
+
+					// try to start the sphinx daemon
+					if ($sphinxFailedToConnect) {
+						$retArr = array();
+						exec($this->extConfPremium['sphinxSearchdPath'], $retArr);
+						$content .= '<p><b>Trying to start Sphinx daemon.</b><br />' . implode('<br />', $retArr) . '</p>';
+					} else {
+						$content .= 'OK';
+					}
+					$content .= '</p>' . "\n";
+					
+					// update the index
+					$retArr = array();
+					exec($this->extConfPremium['sphinxIndexerPath'] . ' --rotate ' . $this->extConfPremium['sphinxIndexerName'], $retArr);
+					$content .= '<p><b>Creating new Sphinx index (rotating).</b><br />' . implode('<br />', $retArr) . '</p>' . "\n";
+					foreach ($retArr as $retRow) {
+						if (strpos($retRow, 'WARNING') !== FALSE) {
+							$content .= '<div class="error">SPHINX ' . $retRow . '</div>' . "\n";
+						}
+					}
+
 				} else {
-					$content .= '<div class="error">Check your php.ini configuration for disable_functions. For now it is not allowed to execute a shell script.</div>';
+					$content .= '<div class="error">SPHINX ERROR: "exec" call is not allowed. Check your disable_functions setting in php.ini.</div>';
 				}
 			} else {
-				$content .= '<div class="error">We can\'t find the sphinx executables or execution permission is missing.</div>';
+				$content .= '<div class="error">SPHINX ERROR: Sphinx executables not found or execution permission is missing.</div>';
 			}
 		}
-
-		$content .= '<p><b>Index cleanup:</b><br />' . "\n";
-		$content .= $count . ' entries deleted.<br />' . "\n";
-
-		// calculate duration of indexing process
-		$duration = ceil((microtime(true) - $startMicrotime) * 1000);
-		$content .= '<i>Cleanup process took ' . $duration . ' ms.</i></p>'."\n";
 
 		return $content;
 	}

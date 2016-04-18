@@ -3,6 +3,7 @@ ChangeLog
 master
 [TASK]    remove &-character from automatically generated tags since tags with & lead to "no search results".
 [FEATURE] Speed up file indexing process. Check if a file already has been indexed and in that case fetch the file content directly from the index without invoking external tools like pdf2text. Speeds upd the indexing process a lot if you have lots of indexed files.
+[TASK]    Improve call to sphinx indexer (ke_search_premium function).
 
 Version 2.2.0, April 2016
 [!!!]     In order to restrict the filter options in the backend to those on a certain page, please use the page TSconfig option tx_kesearch.filterStorage = 123 (formerly: kesearch.filterStorage = 123). The syntax has been adopted to the official guidelines.
