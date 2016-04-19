@@ -13,6 +13,10 @@ Settings are available via
 		<div class="messsage">{f:translate(key: 'LLL:EXT:ke_search/pi1/locallang.xml:searchword_length_error')}</div>
 	</f:if>
 
+	<f:if condition="{resultListAdditionalRawContent}">
+		<f:format.raw>{resultListAdditionalRawContent}</f:format.raw>
+	</f:if>
+
 	<f:if condition="{isEmptySearch}">
 		<f:then>
 			<f:if condition="{conf.showTextInsteadOfResults}">
