@@ -408,18 +408,19 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 					break;
 
 				// use custom code for filter rendering
+				// set $filterData['rendertype'] = 'custom'
+				// and $filterData['rawHtmlContent'] to your pre-rendered filter code
 				default:
 					// hook for custom filter renderer
 					if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customFilterRenderer'])) {
 						foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customFilterRenderer'] as $_classRef) {
 							$_procObj = & GeneralUtility::getUserObj($_classRef);
-							$_procObj->customFilterRenderer($filter['uid'], $options, $this);
+							$_procObj->customFilterRenderer($filter['uid'], $options, $this, $filterData);
 						}
 					}
 					break;
 			}
-
-
+			
 			// add values to fluid template
 			$this->fluidTemplateVariables['filters'][] = $filterData;
 		}

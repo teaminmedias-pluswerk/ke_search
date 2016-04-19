@@ -23,6 +23,8 @@
 *  This copyright notice MUST APPEAR in all copies of the script!
 ***************************************************************/
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * Plugin 'Faceted search - searchbox and filters' for the 'ke_search' extension.
  *
@@ -44,7 +46,7 @@ class tx_kesearch_pi2 extends tx_kesearch_lib {
 	 * @return	The content that is displayed on the website
 	 */
 	function main($content, $conf) {
-		$this->ms = TYPO3\CMS\Core\Utility\GeneralUtility::milliseconds();
+		$this->ms = GeneralUtility::milliseconds();
 		$this->conf = $conf;
 		$this->pi_setPiVarDefaults();
 		
@@ -70,7 +72,7 @@ class tx_kesearch_pi2 extends tx_kesearch_lib {
 		// hook for initials
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['initials'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['initials'] as $_classRef) {
-				$_procObj = & TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
 				$_procObj->addInitials($this);
 			}
 		}
@@ -88,7 +90,7 @@ class tx_kesearch_pi2 extends tx_kesearch_lib {
 		$this->renderOrdering();
 
 		// process query time
-		$queryTime = (TYPO3\CMS\Core\Utility\GeneralUtility::milliseconds() - $GLOBALS['TSFE']->register['ke_search_queryStartTime']);
+		$queryTime = (GeneralUtility::milliseconds() - $GLOBALS['TSFE']->register['ke_search_queryStartTime']);
 		$this->fluidTemplateVariables['queryTime'] = $queryTime;
 		$this->fluidTemplateVariables['queryTimeText'] = sprintf($this->pi_getLL('query_time'), $queryTime);
 
@@ -96,6 +98,14 @@ class tx_kesearch_pi2 extends tx_kesearch_lib {
 		if ($GLOBALS['TSFE']->id == $this->conf['resultPage']) {
 			if ($this->conf['pagebrowserOnTop'] || $this->conf['pagebrowserAtBottom']) {
 				$this->renderPagebrowser();
+			}
+		}
+		
+		// hook: modifyResultList
+		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyResultList'])) {
+			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyResultList'] as $_classRef) {
+				$_procObj = & GeneralUtility::getUserObj($_classRef);
+				$_procObj->modifyResultList($this->fluidTemplateVariables, $this);
 			}
 		}
 
@@ -111,7 +121,7 @@ class tx_kesearch_pi2 extends tx_kesearch_lib {
 	 */
 	public function initFluidTemplate() {
 		/** @var \TYPO3\CMS\Fluid\View\StandaloneView $this->resultListView */
-		$this->resultListView = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
+		$this->resultListView = GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
 		$this->resultListView->setPartialRootPath($this->conf['partialRootPath']);
 		$this->resultListView->setLayoutRootPath($this->conf['layoutRootPath']);
 		$this->resultListView->setTemplatePathAndFilename($this->conf['templateRootPath'] . 'ResultList.html');
