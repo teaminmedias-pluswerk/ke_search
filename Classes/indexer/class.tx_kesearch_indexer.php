@@ -373,7 +373,7 @@ class tx_kesearch_indexer {
 					if ($sphinxFailedToConnect) {
 						$retArr = array();
 						exec($this->extConfPremium['sphinxSearchdPath'], $retArr);
-						$content .= '<p><b>Trying to start Sphinx daemon.</b><br />' . implode('<br />', $retArr) . '</p>';
+						$content .= '<p><b>Trying to start Sphinx daemon.</b><br />' . implode('<br />', $retArr) . '</p>' . "\n";
 					} else {
 						$content .= 'OK';
 					}
@@ -382,7 +382,7 @@ class tx_kesearch_indexer {
 					// update the index
 					$retArr = array();
 					exec($this->extConfPremium['sphinxIndexerPath'] . ' --rotate ' . $this->extConfPremium['sphinxIndexerName'], $retArr);
-					$content .= '<p><b>Creating new Sphinx index (rotating).</b><br />' . implode('<br />', $retArr) . '</p>' . "\n";
+					$content .= '<p><b>Creating new Sphinx index (rotating).</b><br />' . "\n" . implode('<br />' . "\n", $retArr) . '</p>' . "\n\n";
 					foreach ($retArr as $retRow) {
 						if (strpos($retRow, 'WARNING') !== FALSE) {
 							$content .= '<div class="error">SPHINX ' . $retRow . '</div>' . "\n";
