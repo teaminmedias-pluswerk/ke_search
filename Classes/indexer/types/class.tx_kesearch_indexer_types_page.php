@@ -152,6 +152,10 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types {
 			$content_types_temp = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $this->indexerConfig['contenttypes']);
 		}
 
+		if(!empty($this->indexerConfig['index_page_doctypes'])){
+			$this->indexDokTypes =  \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $this->indexerConfig['index_page_doctypes']);
+		}
+
 		// create a mysql WHERE clause for the content element types
 		$cTypes = array();
 		foreach ($content_types_temp as $value) {
