@@ -23,4 +23,6 @@ return array(
 	'tx_kesearch_helper' => $extensionPath . 'Classes/lib/class.tx_kesearch_lib_helper.php',
 	'tx_kesearch_db' => $extensionPath . 'Classes/lib/class.tx_kesearch_db.php',
 	'tx_kesearch_filters' => $extensionPath . 'Classes/lib/class.tx_kesearch_filters.php',
+	'tx_kesearch_hooks_abstract_custom_indexer' => $extensionPath . 'Classes/hooks/class.tx_kesearch_hooks_abstract_custom_indexer.php',
+	'tx_kesearch_lib_vo_index_entry' => $extensionPath . 'Classes/lib/vo/class.tx_kesearch_lib_vo_index_entry.php'
 );

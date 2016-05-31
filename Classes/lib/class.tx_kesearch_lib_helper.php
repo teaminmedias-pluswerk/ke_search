@@ -23,6 +23,7 @@
 ***************************************************************/
 
 use TYPO3\CMS\Core\Resource\ResourceFactory;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 /**
  * helper functions
@@ -252,5 +253,45 @@ class tx_kesearch_helper {
 
 		return $fileObject;
 
+	}
+
+	/**
+	 * Gets the extension key of a given class.
+	 *
+	 * @param $object
+	 *
+	 * @return string
+	 */
+	public static function getExtensionKeyByObject($object)
+    {
+        $extensionKey = 'ke_search';
+        $className = get_class($object);
+
+        $prefix = substr($className, 0, strpos($className, '_', 5));
+        $extensionKeyCandidate = ExtensionManagementUtility::getExtensionKeyByPrefix($prefix);
+
+        if (!$extensionKeyCandidate)
+        {
+            //todo: check whether TYPO3 does the following, too.
+            $reflect = new \ReflectionClass($object);
+            $classPackage = explode('\\', $reflect->getNamespaceName())[1];
+            for ($i = 0; $i < strlen($classPackage); $i++) {
+                $chr = mb_substr($classPackage, $i, 1, 'UTF-8');
+
+                if ((mb_strtolower($chr, 'UTF-8') != $chr) && $i > 0) {
+                    $extensionKeyCandidate .= '_';
+                }
+
+                $extensionKeyCandidate .= $chr;
+            }
+            $extensionKeyCandidate = strtolower($extensionKeyCandidate);
+        }
+
+        if (ExtensionManagementUtility::getExtensionVersion($extensionKeyCandidate))
+        {
+            $extensionKey = $extensionKeyCandidate;
+        }
+
+		return $extensionKey;
 	}
 }
