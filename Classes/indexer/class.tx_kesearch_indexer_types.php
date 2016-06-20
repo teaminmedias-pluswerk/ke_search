@@ -105,7 +105,7 @@ class tx_kesearch_indexer_types {
 	 * @param array $uids Array with all page uids
 	 * @param string $whereClause Additional where clause for the query
 	 * @param string $table The table to select the fields from
-	 * @param fields $fields The requested fields
+	 * @param string $fields The requested fields
 	 * @return array Array containing page records with all available fields
 	 */
 	public function getPageRecords(array $uids, $whereClause = '', $table = 'pages', $fields = 'pages.*' ) {

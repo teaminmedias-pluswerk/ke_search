@@ -216,15 +216,21 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types {
 	}
 
 	/**
-	 * get array with all pages which should be indexed
+	 * get array with all pages
+	 * but remove all pages we don't want to have
 	 *
-	 * @param array Array with all page cols
+	 * @param array $uids Array with all page uids
+	 * @param string $whereClause Additional where clause for the query
+	 * @param string $table The table to select the fields from
+	 * @param string $fields The requested fields
+	 * @return array Array containing page records with all available fields
 	 */
-	public function getPageRecords($uids) {
+	public function getPageRecords(array $uids, $whereClause = '', $table = 'pages', $fields = 'pages.*' ) {
 		$fields = '*';
 		$table = 'pages';
 		$where = 'uid IN (' . implode(',', $uids) . ')';
 
+		$pages = array();
 		$res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
 		while ($pageRow = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
 			$pages[$pageRow['uid']] = $pageRow;
