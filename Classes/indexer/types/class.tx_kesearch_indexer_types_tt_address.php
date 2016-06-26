@@ -101,7 +101,20 @@ class tx_kesearch_indexer_types_tt_address extends tx_kesearch_indexer_types {
 			if (!empty($addressRow['phone']))   $content .= $addressRow['phone'] . "\n";
 			if (!empty($addressRow['fax']))     $content .= $addressRow['fax'] . "\n";
 			if (!empty($addressRow['mobile']))  $content .= $addressRow['mobile'] . "\n";
-			if (!empty($addressRow['www']))     $content .= $addressRow['www'];
+			if (!empty($addressRow['www'])) {
+				if ($this->indexerConfig['index_ttaddress_link_url']) {
+					$scheme = parse_url($addressRow['www'], PHP_URL_SCHEME);
+					if ($scheme === null) {
+						$uri = 'http://' . $addressRow['www'];
+					}
+
+					/** @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer $cObj */
+					$cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer');
+					$content .= $cObj->typoLink($addressRow['www'], array('parameter' => $uri, 'extTarget' => $this->indexerConfig['index_ttaddress_link_target']));
+				} else {
+					$content .= $addressRow['www'];
+				}
+			}
 
 			// put content together
 			$fullContent = $abstract . "\n" . $content;

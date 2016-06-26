@@ -65,6 +65,8 @@
 			<label index="tx_kesearch_indexerconfig.index_content_with_restrictions.I.0">Yes</label>
 			<label index="tx_kesearch_indexerconfig.index_content_with_restrictions.I.1">No</label>
 			<label index="tx_kesearch_indexerconfig.index_passed_events">Index passed events?</label>
+			<label index="tx_kesearch_indexerconfig.index_ttaddress_link_url">Link URL in result text?</label>
+			<label index="tx_kesearch_indexerconfig.index_ttaddress_link_target">Target of link</label>
 			<label index="tx_kesearch_indexerconfig.index_news_category_mode">Index only news of the following categories:</label>
 			<label index="tx_kesearch_indexerconfig.index_news_category_mode.I.1">All</label>
 			<label index="tx_kesearch_indexerconfig.index_news_category_mode.I.2">Only the following categories:</label>
