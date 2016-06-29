@@ -74,6 +74,7 @@ return array(
         ),
         'rendertype' => array(
             'exclude' => 0,
+            'l10n_mode' => 'exclude',
             'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filters.rendertype',
             'config' => array(
                 'type' => 'select',
@@ -92,6 +93,7 @@ return array(
 
         'markAllCheckboxes' => array(
             'exclude' => 0,
+            'l10n_mode' => 'exclude',
             'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filters.markAllCheckboxes',
             'config' => array(
                 'type' => 'check',
@@ -100,19 +102,35 @@ return array(
         ),
         'options' => array(
             'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filters.options',
-            'config' => Array(
+            'config' => array(
                 'type' => 'inline',
                 'foreign_table' => 'tx_kesearch_filteroptions',
                 'maxitems' => 500,
                 'appearance' => Array(
-                    'collapseAll' => 1,
-                    'expandSingle' => 1,
-                    'useSortable' => 1,
+                    'collapseAll' => true,
+                    'expandSingle' => true,
+                    'useSortable' => true,
+                    'showPossibleLocalizationRecords' => true,
+                    'showAllSynchronizationLink' => true,
+                    'showSynchronizationLink' => true,
+                    'enabledControls' => array(
+                        'info' => true,
+                        'dragdrop' => true,
+                        'sort' => true,
+                        'hide' => true,
+                        'delete' => true,
+                        'localize' => true,
+                    )
                 ),
+                'behaviour' => array(
+                    'localizationMode' => 'select',
+                    'localizeChildrenAtParentLocalization' => true,
+                )
             ),
         ),
         'target_pid' => array(
             'exclude' => 1,
+            'l10n_mode' => 'exclude',
             'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filters.target_pid',
             'config' => array(
                 'type' => 'group',
@@ -130,6 +148,7 @@ return array(
         ),
         'amount' => array(
             'exclude' => 0,
+            'l10n_mode' => 'exclude',
             'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filters.amount',
             'config' => array(
                 'type' => 'input',
@@ -140,6 +159,7 @@ return array(
         ),
         'shownumberofresults' => array(
             'exclude' => 0,
+            'l10n_mode' => 'exclude',
             'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filters.shownumberofresults',
             'config' => array(
                 'type' => 'check',
@@ -148,6 +168,7 @@ return array(
         ),
         'alphabeticalsorting' => array(
             'exclude' => 0,
+            'l10n_mode' => 'exclude',
             'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filters.alphabeticalsorting',
             'config' => array(
                 'type' => 'check',
