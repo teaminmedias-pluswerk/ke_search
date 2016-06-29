@@ -5,6 +5,7 @@ current master
 [BUGFIX]  Set correct fileinfo for file references. Fixes duplicate indexing of files (if attached via content element and direct indexing). Thanks to Martin Voss. https://github.com/teaminmedias-pluswerk/ke_search/pull/36.
 [FEATURE] Refactor backend module to extbase. Thanks to Bernhard Berger. https://github.com/teaminmedias-pluswerk/ke_search/pull/34.
 [TASK]    Properly configure filters and filteroptions for localization. Thanks to Bernhard Berger. https://github.com/teaminmedias-pluswerk/ke_search/pull/38.
+[FEATURE] Add raw links to pagebrowser fluid template in order to make it possible to create individual markup for the pagebrowser. Thanks to Andre Michaelis. https://github.com/teaminmedias-pluswerk/ke_search/pull/39.
 
 Version 2.2.1, May 2016
 [TASK]    remove &-character from automatically generated tags since tags with & lead to "no search results".

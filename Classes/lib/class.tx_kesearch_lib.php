@@ -966,7 +966,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 
 		// render pages list
 		$tempContent = '';
-		$pagebrowser_linkarray = [];
+		$links = [];
 		$currentPage = intval($startPage/$resultsPerPage) + 1;
 		for ($i=1; $i<=$pagesTotal; $i++) {
 			if ($i >= $startPage && $i <= $endPage) {
@@ -993,7 +993,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 
 				if ($this->piVars['page'] == $i) $linkconf['ATagParams'] = 'class="current" ';
 				$tempContent .= '<li>' . $this->cObj->typoLink($i, $linkconf) . '</li> ';
-				$pagebrowser_linkarray[] = $this->cObj->typoLink($i, $linkconf);
+				$links[] = $this->cObj->typoLink($i, $linkconf);
 			}
 		}
 		// end
@@ -1022,7 +1022,8 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			}
 
 			$linkconf['ATagParams'] = 'class="prev" ';
-			$previous = '<li>' . $this->cObj->typoLink($this->pi_getLL('pagebrowser_prev'), $linkconf) . '</li>';
+			$links['previous'] = $this->cObj->typoLink($this->pi_getLL('pagebrowser_prev'), $linkconf);
+			$previous = '<li>' . $links['previous'] . '</li>';
 		} else {
 			$previous = '';
 		}
@@ -1049,7 +1050,8 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			}
 
 			$linkconf['ATagParams'] = 'class="next" ';
-			$next = '<li>' . $this->cObj->typoLink($this->pi_getLL('pagebrowser_next'), $linkconf) . '</li>';
+			$links['next'] = $this->cObj->typoLink($this->pi_getLL('pagebrowser_next'), $linkconf);
+			$next = '<li>' . $links['next'] . '</li>';
 		} else {
 			$next = '';
 		}
@@ -1063,7 +1065,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			'current' => $this->piVars['page'],
 			'pages_total' => $pagesTotal,
 			'pages_list' => $pagebrowser_links,
-			'pages_array' => $pagebrowser_linkarray,
+			'links' => $links,
 			'start' => $start+1,
 			'end' => $end,
 			'total' => $numberOfResults,
