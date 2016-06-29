@@ -966,6 +966,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 
 		// render pages list
 		$tempContent = '';
+		$pagebrowser_linkarray = [];
 		$currentPage = intval($startPage/$resultsPerPage) + 1;
 		for ($i=1; $i<=$pagesTotal; $i++) {
 			if ($i >= $startPage && $i <= $endPage) {
@@ -992,6 +993,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 
 				if ($this->piVars['page'] == $i) $linkconf['ATagParams'] = 'class="current" ';
 				$tempContent .= '<li>' . $this->cObj->typoLink($i, $linkconf) . '</li> ';
+				$pagebrowser_linkarray[] = $this->cObj->typoLink($i, $linkconf);
 			}
 		}
 		// end
@@ -1051,7 +1053,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 		} else {
 			$next = '';
 		}
-		
+
 		// compile previous, pages list and next link into one ul element
 		$pagebrowser_links = '<ul>' . $previous . $tempContent . $next . '</ul>';
 
@@ -1061,6 +1063,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			'current' => $this->piVars['page'],
 			'pages_total' => $pagesTotal,
 			'pages_list' => $pagebrowser_links,
+			'pages_array' => $pagebrowser_linkarray,
 			'start' => $start+1,
 			'end' => $end,
 			'total' => $numberOfResults,
