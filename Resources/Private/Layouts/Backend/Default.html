@@ -1,0 +1,38 @@
+<f:be.container includeCssFiles="{0: '../typo3conf/ext/ke_search/Resources/Public/Css/backendModule.css'}">
+    <div class="typo3-fullDoc">
+        <div id="typo3-docheader">
+            <div class="typo3-docheader-functions">
+                <div class="left">
+                    <f:be.buttons.csh />
+                    <f:be.menus.actionMenu>
+                        <f:be.menus.actionMenuItem label="{f:translate(key: 'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:function1')}" controller="BackendModule" action="startIndexing" />
+                        <f:be.menus.actionMenuItem label="{f:translate(key: 'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:function2')}" controller="BackendModule" action="indexedContent" />
+                        <f:be.menus.actionMenuItem label="{f:translate(key: 'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:function3')}" controller="BackendModule" action="indexTableInformation" />
+                        <f:be.menus.actionMenuItem label="{f:translate(key: 'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:function4')}" controller="BackendModule" action="searchwordStatistics" />
+                        <f:be.menus.actionMenuItem label="{f:translate(key: 'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:function5')}" controller="BackendModule" action="clearSearchIndex" />
+                        <f:be.menus.actionMenuItem label="{f:translate(key: 'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:function6')}" controller="BackendModule" action="lastIndexingReport" />
+                    </f:be.menus.actionMenu>
+                </div>
+                <div class="right">
+                </div>
+            </div>
+
+                <div class="typo3-docheader-buttons">
+                    <div class="left">
+                    </div>
+                    <div class="right">
+                        <f:be.buttons.shortcut />
+                    </div>
+                </div>
+        </div>
+        <div id="typo3-docbody">
+            <div id="typo3-inner-docbody" class="realurl-backend">
+                <h1>
+                    <f:translate key="LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:title" />
+                </h1>
+                <f:render section="content" />
+            </div>
+        </div>
+    </div>
+
+</f:be.container>
