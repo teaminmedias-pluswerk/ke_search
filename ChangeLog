@@ -2,6 +2,7 @@ ChangeLog
 
 current master
 [BUGFIX]  Overridden methods need compatible method signatures in PHP7. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/49.
+[BUGFIX]  Set correct fileinfo for file references. Fixes duplicate indexing of files (if attached via content element and direct indexing). Thanks to Martin Voss. https://github.com/teaminmedias-pluswerk/ke_search/pull/36.
 
 Version 2.2.1, May 2016
 [TASK]    remove &-character from automatically generated tags since tags with & lead to "no search results".
