@@ -7,6 +7,7 @@ current master
 [TASK]    Properly configure filters and filteroptions for localization. Thanks to Bernhard Berger. https://github.com/teaminmedias-pluswerk/ke_search/pull/38.
 [FEATURE] Add raw links to pagebrowser fluid template in order to make it possible to create individual markup for the pagebrowser. Thanks to Andre Michaelis. https://github.com/teaminmedias-pluswerk/ke_search/pull/39.
 [BUGFIX]  Fix broken "conflicts" in ext_emconf.php. https://github.com/teaminmedias-pluswerk/ke_search/pull/40.
+[BUGFIX]  Fix autoloading and cleanup composer.json. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/54.
 
 Version 2.2.1, May 2016
 [TASK]    remove &-character from automatically generated tags since tags with & lead to "no search results".
