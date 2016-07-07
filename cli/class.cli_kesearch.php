@@ -25,10 +25,7 @@
 
 if (!defined('TYPO3_cliMode'))  die('You cannot run this script directly!');
 
-// Include basis cli class
-require_once(TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_search') . 'Classes/indexer/class.tx_kesearch_indexer.php');
-
-class tx_kesearch_cli extends t3lib_cli {
+class tx_kesearch_cli extends \TYPO3\CMS\Core\Controller\CommandLineController  {
 
 	/**
 	 * Constructor

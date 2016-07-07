@@ -1,17 +1,36 @@
 {
-    "name": "teaminmedias-pluswerk/ke_search",
-    "type": "typo3-cms-extension",
-    "description": "Search Extension for TYPO3, including faceting search functions.",
-    "homepage": "https://www.typo3-macher.de/en/facetted-search-ke-search/",
-    "license": ["GPL-2.0+"],
-    "keywords": ["TYPO3 CMS", "search", "ke_search", "kesearch", "faceting", "faceted search"],
-    "support": {
-        "issues": "https://forge.typo3.org/projects/extension-ke_search/issues"
+  "name": "teaminmedias-pluswerk/ke_search",
+  "type": "typo3-cms-extension",
+  "description": "Search Extension for TYPO3, including faceting search functions.",
+  "homepage": "https://www.typo3-macher.de/en/facetted-search-ke-search/",
+  "license": [
+    "GPL-2.0+"
+  ],
+  "keywords": [
+    "TYPO3 CMS",
+    "search",
+    "ke_search",
+    "kesearch",
+    "faceting",
+    "faceted search"
+  ],
+  "support": {
+    "issues": "https://forge.typo3.org/projects/extension-ke_search/issues"
+  },
+  "require": {
+    "php": ">=5.3.0",
+    "typo3/cms-core": "^7.6"
+  },
+  "autoload": {
+    "psr-4": {
+      "TeaminmediasPluswerk\\KeSearch\\": "Classes"
     },
-	"autoload": {
-        "psr-4": {
-            "TeaminmediasPluswerk\\KeSearch\\": "Classes"
-        },
-        "classmap": ["Classes", "cli", "pi1", "pi2", "pi3"]
-    }
+    "classmap": [
+      "Classes",
+      "cli",
+      "pi1",
+      "pi2",
+      "pi3"
+    ]
+  }
 }

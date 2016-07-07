@@ -1,6 +1,7 @@
 ChangeLog
 
 current master
+[!!!]     This version requires TYPO3 7.6 and is not compatible with TYPO3 6.2 anymore.
 [BUGFIX]  Overridden methods need compatible method signatures in PHP7. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/49.
 [BUGFIX]  Set correct fileinfo for file references. Fixes duplicate indexing of files (if attached via content element and direct indexing). Thanks to Martin Voss. https://github.com/teaminmedias-pluswerk/ke_search/pull/36.
 [FEATURE] Refactor backend module to extbase. Thanks to Bernhard Berger. https://github.com/teaminmedias-pluswerk/ke_search/pull/34.
@@ -8,6 +9,9 @@ current master
 [FEATURE] Add raw links to pagebrowser fluid template in order to make it possible to create individual markup for the pagebrowser. Thanks to Andre Michaelis. https://github.com/teaminmedias-pluswerk/ke_search/pull/39.
 [BUGFIX]  Fix broken "conflicts" in ext_emconf.php. https://github.com/teaminmedias-pluswerk/ke_search/pull/40.
 [BUGFIX]  Fix autoloading and cleanup composer.json. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/54.
+[BUGFIX]  Fix invoking the indexer via cli script in TYPO3 7.X. Task not working due to inheriting from non-existing class. https://github.com/teaminmedias-pluswerk/ke_search/issues/45.
+[TASK]    Raise TYPO3 minimum version to 7.6.
+[TASK]    Add PHP version requirement to composer.json.
 
 Version 2.2.1, May 2016
 [TASK]    remove &-character from automatically generated tags since tags with & lead to "no search results".
