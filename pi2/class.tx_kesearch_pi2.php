@@ -35,6 +35,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class tx_kesearch_pi2 extends tx_kesearch_lib {
 
+    /**
+     * @var \TYPO3\CMS\Fluid\View\StandaloneView
+     */
+    protected $resultListView;
+
 	// Path to this script relative to the extension dir.
 	var $scriptRelPath      = 'pi2/class.tx_kesearch_pi2.php';
 
@@ -43,13 +48,13 @@ class tx_kesearch_pi2 extends tx_kesearch_lib {
 	 *
 	 * @param	string		$content: The PlugIn content
 	 * @param	array		$conf: The PlugIn configuration
-	 * @return	The content that is displayed on the website
+	 * @return	string The content that is displayed on the website
 	 */
 	function main($content, $conf) {
 		$this->ms = GeneralUtility::milliseconds();
 		$this->conf = $conf;
 		$this->pi_setPiVarDefaults();
-		
+
 		// use pi1 locallang values, since all the frontend locallang values for
 		// pi1, pi2 and pi3 are set in pi1 language file
 		$this->pi_loadLL('EXT:ke_search/pi1/locallang.xml');
@@ -100,7 +105,7 @@ class tx_kesearch_pi2 extends tx_kesearch_lib {
 				$this->renderPagebrowser();
 			}
 		}
-		
+
 		// hook: modifyResultList
 		if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyResultList'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyResultList'] as $_classRef) {
@@ -120,10 +125,9 @@ class tx_kesearch_pi2 extends tx_kesearch_lib {
 	 * inits the standalone fluid template
 	 */
 	public function initFluidTemplate() {
-		/** @var \TYPO3\CMS\Fluid\View\StandaloneView $this->resultListView */
 		$this->resultListView = GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
-		$this->resultListView->setPartialRootPath($this->conf['partialRootPath']);
-		$this->resultListView->setLayoutRootPath($this->conf['layoutRootPath']);
+		$this->resultListView->setPartialRootPaths([$this->conf['partialRootPath']]);
+		$this->resultListView->setLayoutRootPaths([$this->conf['layoutRootPath']]);
 		$this->resultListView->setTemplatePathAndFilename($this->conf['templateRootPath'] . 'ResultList.html');
 
 		// make settings available in fluid template
