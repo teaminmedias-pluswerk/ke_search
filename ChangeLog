@@ -1,5 +1,8 @@
 ChangeLog
 
+current master
+[FEATURE] Enable changing doc_type in page indexer. Thanks to András Ottó. https://github.com/teaminmedias-pluswerk/ke_search/pull/42
+
 Version 2.3.0, July 2016
 [!!!]     This version requires TYPO3 7.6 and is not compatible with TYPO3 6.2 anymore.
 [BUGFIX]  Overridden methods need compatible method signatures in PHP7. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/49.

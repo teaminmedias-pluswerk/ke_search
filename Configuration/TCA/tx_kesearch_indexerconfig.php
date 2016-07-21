@@ -371,6 +371,7 @@ $configurationArray = array(
             'config' => array(
                 'type' => 'input',
                 'size' => '30',
+				'default' => '1,2,5'
             )
         ),
         'commenttypes' => array(
