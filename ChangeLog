@@ -1,6 +1,6 @@
 ChangeLog
 
-current master
+Version 2.3.0, July 2016
 [!!!]     This version requires TYPO3 7.6 and is not compatible with TYPO3 6.2 anymore.
 [BUGFIX]  Overridden methods need compatible method signatures in PHP7. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/49.
 [BUGFIX]  Set correct fileinfo for file references. Fixes duplicate indexing of files (if attached via content element and direct indexing). Thanks to Martin Voss. https://github.com/teaminmedias-pluswerk/ke_search/pull/36.
