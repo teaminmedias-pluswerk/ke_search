@@ -79,7 +79,7 @@
 			<label index="tx_kesearch_indexerconfig.index_use_page_tags_for_files">Add tags to files also?</label>
 			<label index="tx_kesearch_indexerconfig.index_passed_events.I.0">Yes</label>
 			<label index="tx_kesearch_indexerconfig.index_passed_events.I.1">No</label>
-			<label index="tx_kesearch_indexerconfig.index_page_doctypes">Index pages only with docTypes (default: 1,2,5):</label>
+			<label index="tx_kesearch_indexerconfig.index_page_doctypes">Page types which should be indexed (field:doktype, default: 1,2,5):</label>
 			<label index="tx_kesearch_indexerconfig.directories">Directories (comma-separated, e.g. fileadmin/my_directory/,fileadmin/my_other_directory or my_directory/,my_other_directory/ if you use FAL)</label>
 			<label index="tx_kesearch_indexerconfig.fileext">File indexer: Comma separated list of allowed file extensions (eg. pdf,ppt,doc,xls):</label>
 			<label index="tx_kesearch_indexerconfig.contenttypes">Content element types which should be indexed (default: text,textpic,bullets,table,html,header,uploads):</label>
@@ -163,7 +163,7 @@
 			<label index="tx_kesearch_indexerconfig.index_use_page_tags_for_files">Schlagworte auch für Dateien übernehmen?</label>
 			<label index="tx_kesearch_indexerconfig.index_passed_events.I.0">Ja</label>
 			<label index="tx_kesearch_indexerconfig.index_passed_events.I.1">Nein</label>
-			<label index="tx_kesearch_indexerconfig.index_page_doctypes">Es werden Seiten nur mit den folenden Dokumenttypen indexiert (default: 1,2,5):</label>
+			<label index="tx_kesearch_indexerconfig.index_page_doctypes">Seitentypen, die indexiert werden sollen (Feld:doktype, Standard: 1,2,5):</label>
 			<label index="tx_kesearch_indexerconfig.directories">Verzeichnisse (komma-getrennt, z. B. fileadmin/my_directory/,fileadmin/my_other_directory  oder my_directory/,my_other_directory/ bei FAL-Benutzung)</label>
 			<label index="tx_kesearch_indexerconfig.fileext">Datei-Indexer: Komma-separierte Liste von zu indexierenden Dateiendungen (z.B. pdf,ppt,doc,xls):</label>
 			<label index="tx_kesearch_indexerconfig.commenttypes">Komma-separierte Liste von zu indexierenden Kommentartypen (pages):</label>
