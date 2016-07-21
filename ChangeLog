@@ -6,6 +6,7 @@ current master
 [TASK]    Refactor tx_kesearch_indexer and remove the memory buffering because it may cause duplicate index entries. https://github.com/teaminmedias-pluswerk/ke_search/issues/50.
 [TASK]    Remove legacy OpenOffice documention (doc/ folder) in favor of a simple README.rst as proposed in https://docs.typo3.org/typo3cms/CoreApiReference/ExtensionArchitecture/Documentation/Index.html.
 [TASK]    Restructure the flexform plugin configuration for a better overview.
+[TASK]    Add ke_search_premium fields to "not allowed fields" for ordering because they caused untitled entries in the ordering select box.
 
 Version 2.3.0, July 2016
 [!!!]     This version requires TYPO3 7.6 and is not compatible with TYPO3 6.2 anymore.
