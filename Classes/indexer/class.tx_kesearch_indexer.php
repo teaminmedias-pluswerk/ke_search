@@ -2,7 +2,7 @@
 /***************************************************************
 *  Copyright notice
 *
-*  (c) 2010 Andreas Kiefer (kennziffer.com) <kiefer@kennziffer.com>
+*  (c) 2010 Andreas Kiefer (team.inmedias) <andreas.kiefer@inmedias.de>
 *  All rights reserved
 *
 *  This script is part of the TYPO3 project. The TYPO3 project is
@@ -25,8 +25,9 @@
 /**
  * Plugin 'Faceted search' for the 'ke_search' extension.
  *
- * @author	Andreas Kiefer (kennziffer.com) <kiefer@kennziffer.com>
+ * @author	Andreas Kiefer (team.inmedias) <andreas.kiefer@inmedias.de>
  * @author	Stefan Froemken
+ * @author	Christian Bülter (team.inmedias) <christian.buelter@inmedias.de>
  * @package	TYPO3
  * @subpackage	tx_kesearch
  */
@@ -40,12 +41,6 @@ class tx_kesearch_indexer {
 	var $indexingErrors = array();
 	var $startTime;
 	var $currentRow = array(); // current row which have to be inserted/updated to database
-
-	// We collect some records before saving
-	// this is faster than waiting till the next record was builded
-	var $tempArrayForUpdatingExistingRecords = array();
-	var $tempArrayForInsertNewRecords = array();
-	var $amountOfRecordsToSaveInMem = 100;
 
 	/**
 	 * @var t3lib_Registry
@@ -75,17 +70,19 @@ class tx_kesearch_indexer {
 		foreach ($GLOBALS['TCA']['tx_kesearch_indexerconfig']['columns']['type']['config']['items'] as $indexerType) {
 			$this->defaultIndexerTypes[] = $indexerType[1];
 		}
-
 	}
 
-	/*
+	
+	/**
 	 * function startIndexing
-	 * @param $verbose boolean 	if set, information about the indexing process is returned, otherwise processing is quiet
-	 * @param $extConf array			extension config array from EXT Manager
-	 * @param $mode string				"CLI" if called from command line, otherwise empty
-	 * @return string							only if param $verbose is true
+	 * @param $verbose boolean if set, information about the indexing process is returned, otherwise processing is quiet
+	 * @param $extConf array extension config array from EXT Manager
+	 * @param $mode string "CLI" if called from command line, otherwise empty
+	 * @return string output is done only if param $verbose is true
 	 */
 	function startIndexing($verbose=true, $extConf, $mode='')  {
+		$content = '';
+		
 		// write starting timestamp into registry
 		// this is a helper to delete all records which are older than starting timestamp in registry
 		// this also prevents starting the indexer twice
@@ -110,9 +107,6 @@ class tx_kesearch_indexer {
 		// get configurations
 		$configurations = $this->getConfigurations();
 
-		// number of records that should be written to the database in one action
-		$this->amountOfRecordsToSaveInMem = 500;
-
 		// register additional fields which should be written to DB
 		if(is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['registerAdditionalFields'])) {
 			foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['registerAdditionalFields'] as $_classRef) {
@@ -135,7 +129,7 @@ class tx_kesearch_indexer {
 					$searchObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_indexer_types_' . $this->indexerConfig['type'], $this);
 					$content .= $searchObj->startIndexing();
 				} else {
-					$content = '<div class="error"> Could not find file ' . $path . '</div>' . "\n";
+					$content .= '<div class="error"> Could not find file ' . $path . '</div>' . "\n";
 				}
 			}
 
@@ -146,9 +140,6 @@ class tx_kesearch_indexer {
 					$content .= $_procObj->customIndexer($indexerConfig, $this);
 				}
 			}
-
-			// In most cases there are some records waiting in ram to be written to db
-			$this->storeTempRecordsToIndex('both');
 		}
 
 		// process index cleanup
@@ -404,20 +395,21 @@ class tx_kesearch_indexer {
 	/**
 	 * store collected data of defined indexers to db
 	 *
-	 * @param integer $storagepid
+	 * @param integer $storagePid
 	 * @param string $title
 	 * @param string $type
-	 * @param string $targetpid
+	 * @param integer $targetPid
 	 * @param string $content
 	 * @param string $tags
 	 * @param string $params
 	 * @param string $abstract
-	 * @param string $language
+	 * @param integer $language
 	 * @param integer $starttime
 	 * @param integer $endtime
 	 * @param string $fe_group
 	 * @param boolean $debugOnly
 	 * @param array $additionalFields
+	 * @return boolean|integer
 	 */
 	function storeInIndex($storagePid, $title, $type, $targetPid, $content, $tags='', $params='', $abstract='', $language=0, $starttime=0, $endtime=0, $fe_group='', $debugOnly=false, $additionalFields=array()) {
 		// if there are errors found in current record return false and break processing
@@ -456,17 +448,112 @@ class tx_kesearch_indexer {
 			if ($debugOnly) { // do not process - just debug query
 				t3lib_utility_Debug::debug($GLOBALS['TYPO3_DB']->UPDATEquery($table,$where,$fieldValues),1);
 			} else { // process storing of index record and return uid
-				$this->prepareRecordForUpdate($fieldValues);
+				$this->updateRecordInIndex($fieldValues);
 				return true;
 			}
 		} else { // insert new record
 			if($debugOnly) { // do not process - just debug query
 				t3lib_utility_Debug::debug($GLOBALS['TYPO3_DB']->INSERTquery($table, $fieldValues, FALSE));
 			} else { // process storing of index record and return uid
-				$this->prepareRecordForInsert($fieldValues);
+				$this->insertRecordIntoIndex($fieldValues);
 				return $GLOBALS['TYPO3_DB']->sql_insert_id();
 			}
 		}
+	}
+	
+	/**
+	 * inserts a new record into the index using a prepared statement
+	 * 
+	 * @param $fieldValues array
+	 */
+	public function insertRecordIntoIndex($fieldValues) {
+		$addQueryPartFor = $this->getQueryPartForAdditionalFields($fieldValues);
+
+		$queryArray = array();
+		$queryArray['set'] = 'SET
+			@pid = ' . $fieldValues['pid'] . ',
+			@title = ' . $fieldValues['title'] . ',
+			@type = ' . $fieldValues['type'] . ',
+			@targetpid = ' . $fieldValues['targetpid'] . ',
+			@content = ' . $fieldValues['content'] . ',
+			@tags = ' . $fieldValues['tags'] . ',
+			@params = ' . $fieldValues['params'] . ',
+			@abstract = ' . $fieldValues['abstract'] . ',
+			@language = ' . $fieldValues['language'] . ',
+			@starttime = ' . $fieldValues['starttime'] . ',
+			@endtime = ' . $fieldValues['endtime'] . ',
+			@fe_group = ' . $fieldValues['fe_group'] . ',
+			@tstamp = ' . $fieldValues['tstamp'] . ',
+			@crdate = ' . $fieldValues['crdate'] 
+			. $addQueryPartFor['set'] . '
+		;';
+		
+		$queryArray['execute'] = 'EXECUTE insertStmt USING '
+			. '@pid, ' 
+			. '@title, ' 
+			. '@type, ' 
+			. '@targetpid, ' 
+			. '@content, ' 
+			. '@tags, ' 
+			. '@params, ' 
+			. '@abstract, ' 
+			. '@language, ' 
+			. '@starttime, ' 
+			. '@endtime, ' 
+			. '@fe_group, ' 
+			. '@tstamp, ' 
+			. '@crdate' 
+			. $addQueryPartFor['execute'] . ';';
+
+		$GLOBALS['TYPO3_DB']->sql_query($queryArray['set']);
+		$GLOBALS['TYPO3_DB']->sql_query($queryArray['execute']);
+	}
+
+	/**
+	 * updates a record in the index using a prepared statement
+	 * @param $fieldValues
+	 */
+	public function updateRecordInIndex($fieldValues) {
+		$addQueryPartFor = $this->getQueryPartForAdditionalFields($fieldValues);
+
+		$queryArray = array();
+		$queryArray['set'] = 'SET
+			@pid = ' . $fieldValues['pid'] . ',
+			@title = ' . $fieldValues['title'] . ',
+			@type = ' . $fieldValues['type'] . ',
+			@targetpid = ' . $fieldValues['targetpid'] . ',
+			@content = ' . $fieldValues['content'] . ',
+			@tags = ' . $fieldValues['tags'] . ',
+			@params = ' . $fieldValues['params'] . ',
+			@abstract = ' . $fieldValues['abstract'] . ',
+			@language = ' . $fieldValues['language'] . ',
+			@starttime = ' . $fieldValues['starttime'] . ',
+			@endtime = ' . $fieldValues['endtime'] . ',
+			@fe_group = ' . $fieldValues['fe_group'] . ',
+			@tstamp = ' . $fieldValues['tstamp'] . 
+			$addQueryPartFor['set'] . ',
+			@uid = ' . $this->currentRow['uid'] . '
+		';
+
+		$queryArray['execute'] = 'EXECUTE updateStmt USING ' 
+			. '@pid, ' 
+			. '@title, ' 
+			. '@type, ' 
+			. '@targetpid, ' 
+			. '@content, ' 
+			. '@tags, ' 
+			. '@params, ' 
+			. '@abstract, ' 
+			. '@language, ' 
+			. '@starttime, ' 
+			. '@endtime, ' 
+			. '@fe_group, ' 
+			. '@tstamp' 
+			. $addQueryPartFor['execute'] 
+			. ', @uid;';
+
+		$GLOBALS['TYPO3_DB']->sql_query($queryArray['set']);
+		$GLOBALS['TYPO3_DB']->sql_query($queryArray['execute']);
 	}
 
 
@@ -487,131 +574,9 @@ class tx_kesearch_indexer {
 		return array('set' => $queryForSet, 'execute' => $queryForExecute);
 	}
 
-
+	
 	/**
-	 * concatnate each query one after the other before executing
-	 *
-	 * @param array $fieldValues
-	 */
-	public function prepareRecordForInsert($fieldValues) {
-		$addQueryPartFor = $this->getQueryPartForAdditionalFields($fieldValues);
-
-		$queryArray = array();
-		$queryArray['set'] = 'SET
-			@pid = ' . $fieldValues['pid'] . ',
-			@title = ' . $fieldValues['title'] . ',
-			@type = ' . $fieldValues['type'] . ',
-			@targetpid = ' . $fieldValues['targetpid'] . ',
-			@content = ' . $fieldValues['content'] . ',
-			@tags = ' . $fieldValues['tags'] . ',
-			@params = ' . $fieldValues['params'] . ',
-			@abstract = ' . $fieldValues['abstract'] . ',
-			@language = ' . $fieldValues['language'] . ',
-			@starttime = ' . $fieldValues['starttime'] . ',
-			@endtime = ' . $fieldValues['endtime'] . ',
-			@fe_group = ' . $fieldValues['fe_group'] . ',
-			@tstamp = ' . $fieldValues['tstamp'] . ',
-			@crdate = ' . $fieldValues['crdate'] . $addQueryPartFor['set'] . '
-		;';
-		$queryArray['execute'] = '
-			EXECUTE insertStmt USING @pid, @title, @type, @targetpid, @content, @tags, @params, @abstract, @language, @starttime, @endtime, @fe_group, @tstamp, @crdate' . $addQueryPartFor['execute'] . ';
-		';
-
-		$this->tempArrayForInsertNewRecords[] = $queryArray;
-
-		// if a defined maximum is reached...store temp records into database
-		if(count($this->tempArrayForInsertNewRecords) >= $this->amountOfRecordsToSaveInMem) {
-			$this->storeTempRecordsToIndex('insert');
-		}
-	}
-
-
-	/**
-	 * concatnate each query one after the other before executing
-	 *
-	 * @param array $fieldValues
-	 */
-	public function prepareRecordForUpdate($fieldValues) {
-		$addQueryPartFor = $this->getQueryPartForAdditionalFields($fieldValues);
-
-		$queryArray = array();
-		$queryArray['set'] = 'SET
-			@pid = ' . $fieldValues['pid'] . ',
-			@title = ' . $fieldValues['title'] . ',
-			@type = ' . $fieldValues['type'] . ',
-			@targetpid = ' . $fieldValues['targetpid'] . ',
-			@content = ' . $fieldValues['content'] . ',
-			@tags = ' . $fieldValues['tags'] . ',
-			@params = ' . $fieldValues['params'] . ',
-			@abstract = ' . $fieldValues['abstract'] . ',
-			@language = ' . $fieldValues['language'] . ',
-			@starttime = ' . $fieldValues['starttime'] . ',
-			@endtime = ' . $fieldValues['endtime'] . ',
-			@fe_group = ' . $fieldValues['fe_group'] . ',
-			@tstamp = ' . $fieldValues['tstamp'] . $addQueryPartFor['set'] . ',
-			@uid = ' . $this->currentRow['uid'] . '
-		';
-
-		$queryArray['execute'] = '
-			EXECUTE updateStmt USING @pid, @title, @type, @targetpid, @content, @tags, @params, @abstract, @language, @starttime, @endtime, @fe_group, @tstamp' . $addQueryPartFor['execute'] . ', @uid;
-		';
-
-		$this->tempArrayForUpdatingExistingRecords[] = $queryArray;
-
-		// if a defined maximum is reached...store temp records into database
-		if(count($this->tempArrayForUpdatingExistingRecords) >= $this->amountOfRecordsToSaveInMem) {
-			$this->storeTempRecordsToIndex('update');
-		}
-	}
-
-
-	/**
-	 * This method decides which temp array will be saved
-	 *
-	 * @param string $which
-	 */
-	public function storeTempRecordsToIndex($which = 'both') {
-		switch($which) {
-			case 'insert':
-				$this->insertRecordsToIndexer();
-				break;
-			case 'update':
-				$this->updateRecordsInIndexer();
-				break;
-			case 'both':
-			default:
-				$this->insertRecordsToIndexer();
-				$this->updateRecordsInIndexer();
-		}
-	}
-
-
-	/**
-	 * Update temporary saved records to db
-	 */
-	public function updateRecordsInIndexer() {
-		foreach($this->tempArrayForUpdatingExistingRecords as $query) {
-			$GLOBALS['TYPO3_DB']->sql_query($query['set']);
-			$GLOBALS['TYPO3_DB']->sql_query($query['execute']);
-		}
-		$this->tempArrayForUpdatingExistingRecords = array();
-	}
-
-
-	/**
-	 * Insert temporary saved records to db
-	 */
-	public function insertRecordsToIndexer() {
-		foreach($this->tempArrayForInsertNewRecords as $query) {
-			$GLOBALS['TYPO3_DB']->sql_query($query['set']);
-			$GLOBALS['TYPO3_DB']->sql_query($query['execute']);
-		}
-		$this->tempArrayForInsertNewRecords = array();
-	}
-
-
-	/**
-	 * try to find an allready indexed record
+	 * try to find an already indexed record
 	 * This function also sets $this->currentRow
 	 * parameters should be already fullQuoted. see storeInIndex
 	 *
@@ -639,9 +604,9 @@ class tx_kesearch_indexer {
 		}
 	}
 
-
+	
 	/**
-	 * try to find an allready indexed record
+	 * try to find an already indexed record
 	 * This function also sets $this->currentRow
 	 * parameters should be already fullQuoted. see storeInIndex
 	 *
@@ -667,7 +632,7 @@ class tx_kesearch_indexer {
 		}
 	}
 
-
+	
 	/**
 	 * Create fieldValues to save them in db later on
 	 * sets some default values, too
@@ -680,11 +645,12 @@ class tx_kesearch_indexer {
 	 * @param string $tags
 	 * @param string $params
 	 * @param string $abstract
-	 * @param string $language
+	 * @param integer $language
 	 * @param integer $starttime
 	 * @param integer $endtime
 	 * @param string $fe_group
 	 * @param array $additionalFields
+	 * @return boolean true if record was found, false if not
 	 */
 	public function createFieldValuesForIndexing($storagepid, $title, $type, $targetpid, $content, $tags='', $params='', $abstract='', $language=0, $starttime=0, $endtime=0, $fe_group='', $additionalFields=array()) {
 		$now = time();
@@ -730,6 +696,7 @@ class tx_kesearch_indexer {
 	 * @param string $title
 	 * @param string $type
 	 * @param string $targetPid
+	 * @return boolean
 	 */
 	public function checkIfRecordHasErrorsBeforeIndexing($storagePid, $title, $type, $targetPid) {
 		$errors = array();
@@ -741,7 +708,6 @@ class tx_kesearch_indexer {
 
 		// collect error messages if an error was found
 		if (count($errors)) {
-			$errormessage = '';
 			$errormessage = implode(',', $errors);
 			if (!empty($type)) $errormessage .= 'TYPE: ' . $type . '; ';
 			if (!empty($targetPid)) $errormessage .= 'TARGET PID: ' . $targetPid . '; ';
