@@ -1,6 +1,7 @@
 ChangeLog
 
 current master
+[!!!]     This version changes the database structure!
 [FEATURE] Enable changing doc_type in page indexer. Thanks to András Ottó. https://github.com/teaminmedias-pluswerk/ke_search/pull/42
 
 Version 2.3.0, July 2016
@@ -45,7 +46,7 @@ Version 2.1.0, March 2016
 [!!!] This version changes the database structure!
 [BUGFIX]  Remove obsolete javascript code from searchbox. Thanks to Olaf Döring. https://forge.typo3.org/issues/75134.
 [BUGFIX]  Do not index files found on hidden pages. Thanks to Olaf Döring. https://forge.typo3.org/issues/75125.
-[FEATURE] Add indexer for extension Calendar Base (cal).
+[FEATURE] Add indexer for extension Calendar Base (cal). Thanks to Andreas Kiefer.
 [BUGFIX]  Prevent error in result list when file is missing.
 [FEATURE] Add hook for getListOfAvailableFilteroptions. Thanks to Kevin Purrmann. https://github.com/teaminmedias-pluswerk/ke_search/pull/27.
 
