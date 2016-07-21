@@ -23,7 +23,6 @@
 ***************************************************************/
 
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
-use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 /**
  * Plugin 'Faceted search - searchbox and filters' for the 'ke_search' extension.
@@ -34,6 +33,11 @@ use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
  * @subpackage	tx_kesearch
  */
 class tx_kesearch_pi1 extends tx_kesearch_lib {
+
+    /**
+     * @var \TYPO3\CMS\Fluid\View\StandaloneView
+     */
+    protected $searchFormView;
 
 	// Path to this script relative to the extension dir.
 	var $scriptRelPath      = 'pi1/class.tx_kesearch_pi1.php';
@@ -83,10 +87,9 @@ class tx_kesearch_pi1 extends tx_kesearch_lib {
 	 * inits the standalone fluid template
 	 */
 	public function initFluidTemplate() {
-		/** @var \TYPO3\CMS\Fluid\View\StandaloneView $this->searchFormView */
 		$this->searchFormView = GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
-		$this->searchFormView->setPartialRootPath($this->conf['partialRootPath']);
-		$this->searchFormView->setLayoutRootPath($this->conf['layoutRootPath']);
+		$this->searchFormView->setPartialRootPaths([$this->conf['partialRootPath']]);
+		$this->searchFormView->setLayoutRootPaths([$this->conf['layoutRootPath']]);
 		$this->searchFormView->setTemplatePathAndFilename($this->conf['templateRootPath'] . 'SearchForm.html');
 
 		// make settings available in fluid template
