@@ -1,5 +1,15 @@
+.. ==================================================
+.. FOR YOUR INFORMATION
+.. --------------------------------------------------
+.. -*- coding: utf-8 -*- with BOM.
+
+
+.. _start:
+
+=========
 ke_search
----------
+=========
+
 
 ke_search is a search engine for the TYPO3 content management system. It is offers fulltext search and
 faceting possibilities. Faceting means you can narrow down your search results by selecting certain categories,
@@ -16,8 +26,7 @@ That means there may not be an indexer
 already available for the content type you want to index. On the other hand, it's quite easy for a programmer
 to write it's own indexer for custom data records.
 
-There is a quickstart manual in the /doc directory.
-
 See https://www.typo3-macher.de/en/facetted-search-ke-search/documentation/introduction/ for further documentation.
 
-If you find bugs or want to ask for a feature, please use https://github.com/teaminmedias-pluswerk/ke_search/issues 
+If you find bugs or want to ask for a feature, please use https://github.com/teaminmedias-pluswerk/ke_search/issues
+
