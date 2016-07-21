@@ -3,6 +3,7 @@ ChangeLog
 current master
 [!!!]     This version changes the database structure!
 [FEATURE] Enable changing doc_type in page indexer. Thanks to András Ottó. https://github.com/teaminmedias-pluswerk/ke_search/pull/42
+[TASK]    Refactor tx_kesearch_indexer and remove the memory buffering because it may cause duplicate index entries. https://github.com/teaminmedias-pluswerk/ke_search/issues/50.
 
 Version 2.3.0, July 2016
 [!!!]     This version requires TYPO3 7.6 and is not compatible with TYPO3 6.2 anymore.
@@ -16,7 +17,6 @@ Version 2.3.0, July 2016
 [BUGFIX]  Fix invoking the indexer via cli script in TYPO3 7.X. Task not working due to inheriting from non-existing class. https://github.com/teaminmedias-pluswerk/ke_search/issues/45.
 [TASK]    Raise TYPO3 minimum version to 7.6.
 [TASK]    Add PHP version requirement to composer.json.
-[TASK]    Refactor tx_kesearch_indexer and remove the memory buffering because it may cause duplicate index entries. https://github.com/teaminmedias-pluswerk/ke_search/issues/50.
 [BUGFIX]  Set correct PHP version requirement. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/56.
 [BUGFIX]  Use correct setters for Fluid root paths. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/56.
 
