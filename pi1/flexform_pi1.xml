@@ -43,74 +43,6 @@
 						</TCEforms>
 					</cssFile>
 
-					<resultLinkTarget>
-						<TCEforms>
-							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.resultLinkTarget</label>
-							<config>
-								<type>select</type>
-								<items>
-									<numIndex index="0">
-										<numIndex index="0">LLL:EXT:ke_search/pi1/locallang.xml:ff.resultLinkTarget.I.1</numIndex>
-										<numIndex index="1">_self</numIndex>
-									</numIndex>
-									<numIndex index="1">
-										<numIndex index="0">LLL:EXT:ke_search/pi1/locallang.xml:ff.resultLinkTarget.I.0</numIndex>
-										<numIndex index="1">_blank</numIndex>
-									</numIndex>
-								</items>
-								<size>1</size>
-								<default>_self</default>
-							</config>
-						</TCEforms>
-					</resultLinkTarget>
-
-					<resultLinkTargetFiles>
-						<TCEforms>
-							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.resultLinkTargetFiles</label>
-							<config>
-								<type>select</type>
-								<items>
-									<numIndex index="0">
-										<numIndex index="0">LLL:EXT:ke_search/pi1/locallang.xml:ff.resultLinkTarget.I.1</numIndex>
-										<numIndex index="1">_self</numIndex>
-									</numIndex>
-									<numIndex index="1">
-										<numIndex index="0">LLL:EXT:ke_search/pi1/locallang.xml:ff.resultLinkTarget.I.0</numIndex>
-										<numIndex index="1">_blank</numIndex>
-									</numIndex>
-								</items>
-								<size>1</size>
-								<default>_blank</default>
-							</config>
-						</TCEforms>
-					</resultLinkTargetFiles>
-
-					<resultChars>
-						<TCEforms>
-							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.resultChars</label>
-							<config>
-								<type>input</type>
-								<size>4</size>
-								<eval>int</eval>
-								<range type="array">
-									<upper>9999</upper>
-									<lower>0</lower>
-								</range>
-								<default>200</default>
-							</config>
-						</TCEforms>
-					</resultChars>
-
-					<resultsNumeration>
-						<TCEforms>
-							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.resultsNumeration</label>
-							<config>
-								<type>check</type>
-								<default>1</default>
-							</config>
-						</TCEforms>
-					</resultsNumeration>
-
 					<showTextInsteadOfResults>
 						<TCEforms>
 							<onChange>reload</onChange>
@@ -158,54 +90,6 @@
 							<defaultExtras>richtext[]</defaultExtras>
 						</TCEforms>
 					</noResultsText>
-
-					<highlightSword>
-						<TCEforms>
-							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.highlightSword</label>
-							<config>
-								<type>check</type>
-								<default>1</default>
-							</config>
-						</TCEforms>
-					</highlightSword>
-
-					<previewMode>
-						<TCEforms>
-							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.previewMode</label>
-							<config>
-								<type>select</type>
-								<items>
-									<numIndex index="0">
-										<numIndex index="0">LLL:EXT:ke_search/pi1/locallang.xml:ff.previewMode.I.0</numIndex>
-										<numIndex index="1">abstract</numIndex>
-									</numIndex>
-									<numIndex index="1">
-										<numIndex index="0">LLL:EXT:ke_search/pi1/locallang.xml:ff.previewMode.I.1</numIndex>
-										<numIndex index="1">hit</numIndex>
-									</numIndex>
-								</items>
-								<size>1</size>
-								<default>hit</default>
-							</config>
-						</TCEforms>
-					</previewMode>
-
-					<resultsPerPage>
-						<TCEforms>
-							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.resultsPerPage</label>
-							<config>
-								<type>input</type>
-								<size>2</size>
-								<eval>int</eval>
-								<range type="array">
-									<upper>99</upper>
-									<lower>1</lower>
-								</range>
-								<default>10</default>
-							</config>
-						</TCEforms>
-					</resultsPerPage>
-
 
 					<countSearchPhrases>
 						<TCEforms>
@@ -291,41 +175,104 @@
 				<type>array</type>
 				<el>
 
-					<pagebrowserOnTop>
+					<highlightSword>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.pagebrowserOnTop</label>
-							<config>
-								<type>check</type>
-								<default>0</default>
-							</config>
-						</TCEforms>
-					</pagebrowserOnTop>
-
-					<pagebrowserAtBottom>
-						<TCEforms>
-							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.pagebrowserAtBottom</label>
+							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.highlightSword</label>
 							<config>
 								<type>check</type>
 								<default>1</default>
 							</config>
 						</TCEforms>
-					</pagebrowserAtBottom>
+					</highlightSword>
 
-					<maxPagesInPagebrowser>
+					<resultLinkTarget>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.maxPagesInPagebrowser</label>
+							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.resultLinkTarget</label>
 							<config>
-								<type>input</type>
-								<size>2</size>
-								<eval>int</eval>
-								<range type="array">
-									<upper>99</upper>
-									<lower>1</lower>
-								</range>
-								<default>10</default>
+								<type>select</type>
+								<items>
+									<numIndex index="0">
+										<numIndex index="0">LLL:EXT:ke_search/pi1/locallang.xml:ff.resultLinkTarget.I.1</numIndex>
+										<numIndex index="1">_self</numIndex>
+									</numIndex>
+									<numIndex index="1">
+										<numIndex index="0">LLL:EXT:ke_search/pi1/locallang.xml:ff.resultLinkTarget.I.0</numIndex>
+										<numIndex index="1">_blank</numIndex>
+									</numIndex>
+								</items>
+								<size>1</size>
+								<default>_self</default>
 							</config>
 						</TCEforms>
-					</maxPagesInPagebrowser>
+					</resultLinkTarget>
+
+					<resultLinkTargetFiles>
+						<TCEforms>
+							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.resultLinkTargetFiles</label>
+							<config>
+								<type>select</type>
+								<items>
+									<numIndex index="0">
+										<numIndex index="0">LLL:EXT:ke_search/pi1/locallang.xml:ff.resultLinkTarget.I.1</numIndex>
+										<numIndex index="1">_self</numIndex>
+									</numIndex>
+									<numIndex index="1">
+										<numIndex index="0">LLL:EXT:ke_search/pi1/locallang.xml:ff.resultLinkTarget.I.0</numIndex>
+										<numIndex index="1">_blank</numIndex>
+									</numIndex>
+								</items>
+								<size>1</size>
+								<default>_blank</default>
+							</config>
+						</TCEforms>
+					</resultLinkTargetFiles>
+
+					<previewMode>
+						<TCEforms>
+							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.previewMode</label>
+							<config>
+								<type>select</type>
+								<items>
+									<numIndex index="0">
+										<numIndex index="0">LLL:EXT:ke_search/pi1/locallang.xml:ff.previewMode.I.0</numIndex>
+										<numIndex index="1">abstract</numIndex>
+									</numIndex>
+									<numIndex index="1">
+										<numIndex index="0">LLL:EXT:ke_search/pi1/locallang.xml:ff.previewMode.I.1</numIndex>
+										<numIndex index="1">hit</numIndex>
+									</numIndex>
+								</items>
+								<size>1</size>
+								<default>hit</default>
+							</config>
+						</TCEforms>
+					</previewMode>
+
+					<resultChars>
+						<TCEforms>
+							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.resultChars</label>
+							<config>
+								<type>input</type>
+								<size>4</size>
+								<eval>int</eval>
+								<range type="array">
+									<upper>9999</upper>
+									<lower>0</lower>
+								</range>
+								<default>200</default>
+							</config>
+						</TCEforms>
+					</resultChars>
+
+					<resultsNumeration>
+						<TCEforms>
+							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.resultsNumeration</label>
+							<config>
+								<type>check</type>
+								<default>1</default>
+							</config>
+						</TCEforms>
+					</resultsNumeration>
 
 					<showQueryTime>
 						<TCEforms>
@@ -336,46 +283,6 @@
 							</config>
 						</TCEforms>
 					</showQueryTime>
-
-					<showFilePreview>
-						<TCEforms>
-							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.showFilePreview</label>
-							<config>
-								<type>check</type>
-								<default>1</default>
-							</config>
-						</TCEforms>
-					</showFilePreview>
-
-					<showPageImages>
-						<TCEforms>
-							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.showPageImages</label>
-							<config>
-								<type>check</type>
-								<default>1</default>
-							</config>
-						</TCEforms>
-					</showPageImages>
-
-					<showNewsImages>
-						<TCEforms>
-							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.showNewsImages</label>
-							<config>
-								<type>check</type>
-								<default>1</default>
-							</config>
-						</TCEforms>
-					</showNewsImages>
-
-					<showTypeIcon>
-						<TCEforms>
-							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.showTypeIcon</label>
-							<config>
-								<type>check</type>
-								<default>1</default>
-							</config>
-						</TCEforms>
-					</showTypeIcon>
 
 					<showResultUrl>
 						<TCEforms>
@@ -440,6 +347,120 @@
 				</el>
 			</ROOT>
 		</view>
+
+		<images>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:ke_search/pi1/locallang.xml:ff.page.images</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
+					<showTypeIcon>
+						<TCEforms>
+							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.showTypeIcon</label>
+							<config>
+								<type>check</type>
+								<default>1</default>
+							</config>
+						</TCEforms>
+					</showTypeIcon>
+
+					<showPageImages>
+						<TCEforms>
+							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.showPageImages</label>
+							<config>
+								<type>check</type>
+								<default>1</default>
+							</config>
+						</TCEforms>
+					</showPageImages>
+
+					<showNewsImages>
+						<TCEforms>
+							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.showNewsImages</label>
+							<config>
+								<type>check</type>
+								<default>1</default>
+							</config>
+						</TCEforms>
+					</showNewsImages>
+
+					<showFilePreview>
+						<TCEforms>
+							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.showFilePreview</label>
+							<config>
+								<type>check</type>
+								<default>1</default>
+							</config>
+						</TCEforms>
+					</showFilePreview>
+				</el>
+			</ROOT>
+		</images>
+
+		<pagebrowser>
+			<ROOT>
+				<TCEforms>
+					<sheetTitle>LLL:EXT:ke_search/pi1/locallang.xml:ff.page.pagebrowser</sheetTitle>
+				</TCEforms>
+				<type>array</type>
+				<el>
+					<pagebrowserOnTop>
+						<TCEforms>
+							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.pagebrowserOnTop</label>
+							<config>
+								<type>check</type>
+								<default>0</default>
+							</config>
+						</TCEforms>
+					</pagebrowserOnTop>
+
+					<pagebrowserAtBottom>
+						<TCEforms>
+							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.pagebrowserAtBottom</label>
+							<config>
+								<type>check</type>
+								<default>1</default>
+							</config>
+						</TCEforms>
+					</pagebrowserAtBottom>
+
+					<resultsPerPage>
+						<TCEforms>
+							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.resultsPerPage</label>
+							<config>
+								<type>input</type>
+								<size>2</size>
+								<eval>int</eval>
+								<range type="array">
+									<upper>99</upper>
+									<lower>1</lower>
+								</range>
+								<default>10</default>
+							</config>
+						</TCEforms>
+					</resultsPerPage>
+
+					<maxPagesInPagebrowser>
+						<TCEforms>
+							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.maxPagesInPagebrowser</label>
+							<config>
+								<type>input</type>
+								<size>2</size>
+								<eval>int</eval>
+								<range type="array">
+									<upper>99</upper>
+									<lower>1</lower>
+								</range>
+								<default>10</default>
+							</config>
+						</TCEforms>
+					</maxPagesInPagebrowser>
+
+				</el>
+			</ROOT>
+		</pagebrowser>
+
 
 		<filter>
 			<ROOT>

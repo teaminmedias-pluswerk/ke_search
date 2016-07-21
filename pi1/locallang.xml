@@ -12,23 +12,11 @@
 
 			<label index="ff.page.main">General</label>
 			<label index="ff.resultPage">Page with result list</label>
-			<label index="ff.resultLinkTarget">Target for result link</label>
-			<label index="ff.resultLinkTargetFiles">Target for result link for files</label>
-			<label index="ff.resultLinkTarget.I.0">Open in new window</label>
-			<label index="ff.resultLinkTarget.I.1">Open in same window</label>
-			<label index="ff.resultChars">Number of chars used by result preview</label>
-			<label index="ff.resultsNumeration">Number results consecutively?</label>
-			<label index="ff.showTextInsteadOfResults">Show text instead of searchresults if no filter or searchword has been given.</label>
+			<label index="ff.showTextInsteadOfResults">Show text instead of searchresults if no filter or searchword has been given?</label>
 			<label index="ff.textForResults">Insert this text if no filter or searchword has been given.</label>
 			<label index="ff.showNoResultsText">Show individual text if no results were found?</label>
 			<label index="ff.noResultsText">Individual text for "no results found"</label>
-			<label index="ff.highlightSword">Highlight search word in result preview</label>
-			<label index="ff.previewMode">Preview Mode</label>
-			<label index="ff.previewMode.I.0">Always show abstract if set</label>
-			<label index="ff.previewMode.I.1">Show abstract if it contains searchword, otherwise show content</label>
-			<label index="ff.resultsPerPage">Results per page</label>
 			<label index="ff.countSearchPhrases">Count search phrases in statistic tables?</label>
-			<label index="ff.templateFile">Template File</label>
 			<label index="ff.cssFile">CSS File</label>
 
 			<label index="ff.page.sorting">Sorting</label>
@@ -37,21 +25,36 @@
 			<label index="ff.sortByVisitor">Which fields should the visitor be able to order by?</label>
 			<label index="ff.sortByAdmin">All searchresults will be sorted by this value</label>
 
-			<label index="ff.page.view">Layout</label>
-			<label index="ff.pagebrowserOnTop">Show pagebrowser on top of result list</label>
-			<label index="ff.pagebrowserAtBottom">Show pagebrowser at the bottom of the result list</label>
-			<label index="ff.maxPagesInPagebrowser">Number of pages shown in pagebrowser</label>
+			<label index="ff.page.view">General Layout</label>
 			<label index="ff.showQueryTime">Show time (query process duration)?</label>
-			<label index="ff.showTypeIcon">Show result type icon?</label>
-			<label index="ff.showFilePreview">Show file preview instead of result icon if possible?</label>
-			<label index="ff.showPageImages">Show page images preview instead of result icon if available (images from page properties field "media")?</label>
-			<label index="ff.showNewsImages">Show news (ext:news) images preview?</label>
 			<label index="ff.showResultUrl">Show result URL?</label>
 			<label index="ff.renderResultUrlAsLink">Render result URL as link (a-Tag)?</label>
 			<label index="ff.showScore">Show score?</label>
 			<label index="ff.showDate">Show date?</label>
 			<label index="ff.showPercentalScore">Show percental score?</label>
 			<label index="ff.showScoreScale">Show score scale?</label>
+			<label index="ff.resultLinkTarget">Target for result link</label>
+			<label index="ff.resultLinkTargetFiles">Target for result link for files</label>
+			<label index="ff.resultLinkTarget.I.0">Open in new window</label>
+			<label index="ff.resultLinkTarget.I.1">Open in same window</label>
+			<label index="ff.resultsNumeration">Number results consecutively?</label>
+			<label index="ff.highlightSword">Highlight search word in result preview</label>
+			<label index="ff.previewMode">Text for used for search result (preview text)</label>
+			<label index="ff.previewMode.I.0">Always show the abstract if set.</label>
+			<label index="ff.previewMode.I.1">Show abstract if it contains searchword, otherwise show an excerpt from the content.</label>
+			<label index="ff.resultChars">Number of characters used for the result preview text.</label>
+
+			<label index="ff.page.images">Images</label>
+			<label index="ff.showTypeIcon">Show result type icon?</label>
+			<label index="ff.showFilePreview">Show file preview instead of result icon if possible?</label>
+			<label index="ff.showPageImages">Show page image preview instead of result icon? (Images is taken from the page "media" field.)</label>
+			<label index="ff.showNewsImages">Show news (ext:news) image preview instead of result icon?</label>
+
+			<label index="ff.page.pagebrowser">Pagebrower</label>
+			<label index="ff.pagebrowserOnTop">Show pagebrowser on top of result list</label>
+			<label index="ff.pagebrowserAtBottom">Show pagebrowser at the bottom of the result list</label>
+			<label index="ff.maxPagesInPagebrowser">Number of pages shown in pagebrowser</label>
+			<label index="ff.resultsPerPage">Results per page</label>
 
 			<label index="ff.page.debug">Debug (Admin)</label>
 			<label index="ff.showTags">Show tags?</label>
