@@ -20,10 +20,10 @@
 			<label index="ff.cssFile">CSS File</label>
 
 			<label index="ff.page.sorting">Sorting</label>
-			<label index="ff.sortWithoutSearchword">How should the sort results be sorted if no searchword/filter is given?</label>
-			<label index="ff.showSortInFrontend">Should the website visitor be able to order the searchresults?</label>
-			<label index="ff.sortByVisitor">Which fields should the visitor be able to order by?</label>
-			<label index="ff.sortByAdmin">All searchresults will be sorted by this value</label>
+			<label index="ff.sortByAdmin">Sorting for searchresults</label>
+			<label index="ff.sortWithoutSearchword">Sorting for searchresults if no searchword/filter is given</label>
+			<label index="ff.showSortInFrontend">The website visitor should be able to order the searchresults</label>
+			<label index="ff.sortByVisitor">Fields the website user should be able to order by</label>
 
 			<label index="ff.page.view">General Layout</label>
 			<label index="ff.showQueryTime">Show time (query process duration)?</label>
