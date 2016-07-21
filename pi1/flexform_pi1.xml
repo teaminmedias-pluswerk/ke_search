@@ -159,59 +159,6 @@
 						</TCEforms>
 					</noResultsText>
 
-					<sortWithoutSearchword>
-						<TCEforms>
-							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.sortWithoutSearchword</label>
-							<displayCond>FIELD:mode:=:0</displayCond>
-							<config type="array">
-								<type>select</type>
-								<maxitems>1</maxitems>
-								<size>5</size>
-								<relevanceNotAllowed>1</relevanceNotAllowed>
-								<default>sortdate desc</default>
-								<itemsProcFunc>EXT:ke_search/Classes/Backend/class.tx_kesearch_classes_flexform.php:tx_kesearch_classes_flexform->listAvailableOrderingsForAdmin</itemsProcFunc>
-							</config>
-						</TCEforms>
-					</sortWithoutSearchword>
-
-					<showSortInFrontend>
-						<TCEforms>
-							<onChange>reload</onChange>
-							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.showSortInFrontend</label>
-							<displayCond>FIELD:mode:=:0</displayCond>
-							<config>
-								<type>check</type>
-								<default>1</default>
-							</config>
-						</TCEforms>
-					</showSortInFrontend>
-
-					<sortByVisitor>
-						<TCEforms>
-							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.sortByVisitor</label>
-							<displayCond>FIELD:showSortInFrontend:=:1</displayCond>
-							<config type="array">
-								<type>select</type>
-								<maxitems>100</maxitems>
-								<size>5</size>
-								<itemsProcFunc>EXT:ke_search/Classes/Backend/class.tx_kesearch_classes_flexform.php:tx_kesearch_classes_flexform->listAvailableOrderingsForFrontend</itemsProcFunc>
-							</config>
-						</TCEforms>
-					</sortByVisitor>
-
-					<sortByAdmin>
-						<TCEforms>
-							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.sortByAdmin</label>
-							<displayCond>FIELD:showSortInFrontend:=:0</displayCond>
-							<config type="array">
-								<type>select</type>
-								<maxitems>1</maxitems>
-								<size>5</size>
-								<itemsProcFunc>EXT:ke_search/Classes/Backend/class.tx_kesearch_classes_flexform.php:tx_kesearch_classes_flexform->listAvailableOrderingsForAdmin</itemsProcFunc>
-							</config>
-						</TCEforms>
-					</sortByAdmin>
-
 					<highlightSword>
 						<TCEforms>
 							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.highlightSword</label>
