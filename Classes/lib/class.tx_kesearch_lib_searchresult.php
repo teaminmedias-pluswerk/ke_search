@@ -242,6 +242,7 @@ class tx_kesearch_lib_searchresult {
 			$charsBeforeAfterSearchWord = ceil($charsForEachSearchWord / 2);
 			$aSearchWordWasFound = FALSE;
 			$isSearchWordAtTheBeginning = FALSE;
+			$teaserArray = array();
 			foreach($this->pObj->swords as $word) {
 				$word = ' ' . $word; // our searchengine searches for wordbeginnings
 				$pos = stripos($content, $word);
@@ -271,7 +272,10 @@ class tx_kesearch_lib_searchresult {
 				// crop some words before searchword
 				// after last cropping our text is too short now. So we have to find a new cutting position
 				($startPos > 10)? $length = strlen($temp) - 10: $length = strlen($temp);
-				$teaserArray[] = $this->cObj->crop($temp, '-' . $length . '||1');
+				$croppedTeaser = $this->cObj->crop($temp, '-' . $length . '||1');
+				if(!in_array($croppedTeaser, $teaserArray)) {
+					$teaserArray[] = $croppedTeaser;
+				}
 			}
 
 			// When the searchword was found in title but not in content the teaser is empty
