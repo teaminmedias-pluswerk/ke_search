@@ -20,7 +20,7 @@ Templates/SearchForm.html
 			</f:if>
 
 			<div class="kesearchbox">
-				<input type="text" id="ke_search_sword" name="tx_kesearch_pi1[sword]" value="{searchword}" placeholder="{searchwordDefault}" />
+				<input type="text" id="ke_search_sword" name="tx_kesearch_pi1[sword]" value="{searchword -> f:format.raw()}" placeholder="{searchwordDefault}" />
 				<input type="image" id="kesearch_submit" src="typo3conf/ext/ke_search/res/img/kesearch_submit.png" alt="{submitAltText}" class="submit" />
 				<div class="clearer">&nbsp;</div>
 			</div>
