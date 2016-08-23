@@ -23,6 +23,9 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  * ************************************************************* */
 
+use TYPO3\CMS\Core\Utility\CommandUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * Plugin 'Faceted search' for the 'ke_search' extension.
  *
@@ -72,7 +75,7 @@ class tx_kesearch_indexer_filetypes_pdf extends tx_kesearch_indexer_types_file i
 	 * @return string The extracted content of the file
 	 */
 	public function getContent($file) {
-		$this->fileInfo = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_lib_fileinfo');
+		$this->fileInfo = GeneralUtility::makeInstance('tx_kesearch_lib_fileinfo');
 		$this->fileInfo->setFile($file);
 
 		// get PDF informations
@@ -80,22 +83,23 @@ class tx_kesearch_indexer_filetypes_pdf extends tx_kesearch_indexer_types_file i
 			return false;
 
 		// proceed only of there are any pages found
-		if (intval($pdfInfo['pages']) && $this->isAppArraySet) {
+		if ((int) $pdfInfo['pages'] && $this->isAppArraySet) {
 
 			// create the tempfile which will contain the content
-			$tempFileName = TYPO3\CMS\Core\Utility\GeneralUtility::tempnam('pdf_files-Indexer');
+			$tempFileName = GeneralUtility::tempnam('pdf_files-Indexer');
 
 			// Delete if exists, just to be safe.
 			@unlink($tempFileName);
 
 			// generate and execute the pdftotext commandline tool
-			$cmd = $this->app['pdftotext'] . ' -enc UTF-8 -q ' . escapeshellarg($file) . ' ' . escapeshellarg($tempFileName);
+			$fileEscaped = CommandUtility::escapeShellArgument($file);
+			$cmd = "{$this->app['pdftotext']} -enc UTF-8 -q $fileEscaped $tempFileName";
 
-			TYPO3\CMS\Core\Utility\CommandUtility::exec($cmd);
+			CommandUtility::exec($cmd);
 
 			// check if the tempFile was successfully created
 			if (@is_file($tempFileName)) {
-				$content = TYPO3\CMS\Core\Utility\GeneralUtility::getUrl($tempFileName);
+				$content = GeneralUtility::getUrl($tempFileName);
 				unlink($tempFileName);
 			}
 			else {
@@ -118,19 +122,19 @@ class tx_kesearch_indexer_filetypes_pdf extends tx_kesearch_indexer_types_file i
 	 * @return array The pdf informations as array
 	 */
 	public function getPdfInfo($file) {
-		if ($this->fileInfo->getIsFile()) {
-			if ($this->fileInfo->getExtension() == 'pdf' && $this->isAppArraySet) {
-				$cmd = $this->app['pdfinfo'] . ' ' . escapeshellarg($file);
-				\TYPO3\CMS\Core\Utility\CommandUtility::exec($cmd, $pdfInfoArray);
-				$pdfInfo = $this->splitPdfInfo($pdfInfoArray);
-				unset($pdfInfoArray);
-				return $pdfInfo;
-			}
-			else
-				return false;
+		if ($this->fileInfo->getIsFile()
+			&& $this->fileInfo->getExtension() == 'pdf'
+			&& $this->isAppArraySet
+		) {
+			$fileEscaped = CommandUtility::escapeShellArgument($file);
+			$cmd = "{$this->app['pdfinfo']} $fileEscaped";
+			CommandUtility::exec($cmd, $pdfInfoArray);
+			$pdfInfo = $this->splitPdfInfo($pdfInfoArray);
+
+			return $pdfInfo;
 		}
-		else
-			return false;
+
+		return false;
 	}
 
 	/**
@@ -139,7 +143,7 @@ class tx_kesearch_indexer_filetypes_pdf extends tx_kesearch_indexer_types_file i
 	 * @param array Array of PDF content, coming from the pdfinfo tool
 	 * @return array The pdf informations as array in a useable format
 	 */
-	function splitPdfInfo($pdfInfoArray) {
+	public function splitPdfInfo($pdfInfoArray) {
 		$res = array();
 		if (is_array($pdfInfoArray)) {
 			foreach ($pdfInfoArray as $line) {
@@ -158,7 +162,7 @@ class tx_kesearch_indexer_filetypes_pdf extends tx_kesearch_indexer_types_file i
 	 * @param string String to clean up
 	 * @return string Cleaned up string
 	 */
-	function removeEndJunk($string) {
+	public function removeEndJunk($string) {
 		return trim(preg_replace('/[' . LF . chr(12) . ']*$/', '', $string));
 	}
 
