@@ -8,6 +8,7 @@ current master
 [TASK]    Restructure the flexform plugin configuration for a better overview.
 [TASK]    Add ke_search_premium fields to "not allowed fields" for ordering because they caused untitled entries in the ordering select box.
 [BUGFIX]  Do not double escape html special characters in the searchword field. You have to adjust your fluid template, if you use your own and replace {searchword} with {searchword -> f:format.raw()}. https://forge.typo3.org/issues/75407.
+[BUGFIX]  Make external tools work w/ UTF-8 file names by using CommandUtility::escapeShellArgument(). Thanks to Martin Voss. https://github.com/teaminmedias-pluswerk/ke_search/pull/61.
 
 Version 2.3.1, July 2016
 [TASK]    Set version to 2.3.1, just to match the TER version number.
