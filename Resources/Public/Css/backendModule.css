@@ -4,23 +4,22 @@
 	clear: both;
 	display:block;
 }
-
 .box {
 	-moz-border-radius: 2px;
 	border-radius: 2px;
 	border: 1px solid #666;
 	padding: 5px;
 	margin-top: 10px;
-	background: #DDD;
-	box-shadow: 2px 2px 2px #AFAFAF;
-	-moz-box-shadow: 2px 2px 2px #AFAFAF;
-	-webkit-box-shadow: 2px 2px 2px #AFAFAF;
+	background: #eee;
+	box-shadow: 1px 1px 1px #AFAFAF;
+	-moz-box-shadow: 1px 1px 1px #AFAFAF;
+	-webkit-box-shadow: 1px 1px 1px #AFAFAF;
 }
 .box .headline {
 	-moz-border-radius: 2px;
 	border-radius: 2px;
 	border: 1px solid #666;
-	padding: 1px 1px 1px 5px;
+	padding: 3px 1px 1px 3px;
 	background: #888;
 	color: white;
 	margin-bottom: 3px;
@@ -30,34 +29,44 @@
 	-moz-border-radius: 2px;
 	border-radius: 2px;
 	border: 1px solid #666;
-	padding: 1px 1px 1px 5px;
+	padding: 1px 3px 1px 3px;
 	background: white;
 }
 
-.info, .tag {
+.info, .tag, .tagbig, .tagsmall {
 	padding: 2px 4px;
 	-moz-border-radius: 2px;
 	border-radius: 2px;
 	border: 1px solid black;
 	background: white;
-	margin-left:2px;
+	margin-right:2px;
+}
+.tagbig {
+	font-size:120%;
+    font-weight:bold;
+	color:white;
+	background:#666;
+}
+.tagsmall {
+	font-size:80%;
 }
 .info {
 	width:48%;
 	float:left;
 }
-
 .summary {
 	-moz-border-radius: 2px;
 	border-radius: 2px;
-	border: 3px solid #666;
-	padding: 10px;
+	border: 2px solid #666;
+	padding: 12px;
 	margin-top: 10px;
 	background: white;
-	box-shadow: 5px 5px 5px #AFAFAF;
-	-moz-box-shadow: 5px 5px 5px #AFAFAF;
-	-webkit-box-shadow: 5px 5px 5px #AFAFAF;
-
+	box-shadow: 1px 1px 1px #AFAFAF;
+	-moz-box-shadow: 1px 1px 1px #AFAFAF;
+	-webkit-box-shadow: 1px 1px 1px #AFAFAF;
+}
+.infobox {
+	max-width: 400px;
 }
 .summary .title {
 	font-size: 120%;
@@ -72,6 +81,11 @@
 	float: right;
 	text-align: left;
 }
+.orderedlist {
+    list-style: none;
+    margin:0;
+	padding:0;
+}
 .infolabel {
 	font-weight: bold;
 }
@@ -79,14 +93,17 @@
 	text-align: left;
 }
 
+a.lock-button:hover,
+.lock-button,
 .reindex-button,
 a.index-button:hover,
 .index-button {
+	font-size:120%;
 	-moz-border-radius: 2px;
 	border-radius: 2px;
 	background: green;
-	padding: 5px;
-	width: 250px;
+	padding: 8px;
+	max-width: 400px;
 	display: block;
 	text-align: center;
 	font-weight: bold;
@@ -103,15 +120,7 @@ a.index-button:hover {
 
 a.lock-button:hover,
 .lock-button {
-	-moz-border-radius: 2px;
-	border-radius: 2px;
 	background: red;
-	padding: 5px;
-	width: 250px;
-	display: block;
-	text-align: center;
-	font-weight: bold;
-	color: white
 }
 
 a.lock-button:hover {

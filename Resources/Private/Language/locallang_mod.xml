@@ -24,6 +24,8 @@
 			<label index="index_contains">The index currently contains</label>
 			<label index="last_indexing">Last indexing was done on</label>
 			<label index="records">records</label>
+			<label index="page">page</label>
+			<label index="type">type</label>
 			<label index="configurations_found">Indexer configurations have been found:</label>
 		</languageKey>
 		<languageKey index="de" type="array">

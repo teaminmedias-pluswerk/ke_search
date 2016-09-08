@@ -134,12 +134,6 @@ class BackendModuleController extends AbstractBackendModuleController
             }
         }
 
-        // show information about indexer configurations and number of records
-        // if action "start indexing" is not selected
-        if ($this->do != 'startindexer') {
-            $content .= $this->printIndexerConfigurations($indexerConfigurations);
-            $content .= $this->printNumberOfRecords();
-        }
 
         // check for index process lock in registry
         // remove lock if older than 12 hours
@@ -151,6 +145,13 @@ class BackendModuleController extends AbstractBackendModuleController
             $this->registry->removeAllByNamespace('tx_kesearch');
             $lockTime = null;
         }
+
+		// show information about indexer configurations and number of records
+		// if action "start indexing" is not selected
+		if ($this->do != 'startindexer') {
+			$content .= $this->printNumberOfRecords();
+			$content .= $this->printIndexerConfigurations($indexerConfigurations);
+		}
 
         // show "start indexing" or "remove lock" button
         if ($lockTime !== null) {
@@ -277,7 +278,7 @@ class BackendModuleController extends AbstractBackendModuleController
         $logrow = $this->databaseConnection->exec_SELECTgetSingleRow('*', 'sys_log', 'details LIKE "[ke_search]%"', '',
             'tstamp DESC');
         if ($logrow !== false) {
-            $content = '<pre>' . $logrow['details'] . '</pre>';
+            $content = '<div class="summary"><pre>' . $logrow['details'] . '</pre></div>';
         } else {
             $content = 'No report found.';
         }
@@ -315,13 +316,26 @@ class BackendModuleController extends AbstractBackendModuleController
         $content = '';
         // show indexer names
         if ($indexerConfigurations) {
-            $content .= '<p>' . LocalizationUtility::translate('LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:configurations_found',
-                    'KeSearch') . '</p>';
-            $content .= '<ul>';
+            $content .= '<ol class="orderedlist">';
             foreach ($indexerConfigurations as $indexerConfiguration) {
-                $content .= '<li>' . $indexerConfiguration['title'] . '</li>';
+                $content .= '<li class="summary infobox">'
+					. '<span class="title">' . $indexerConfiguration['title'] . '</span>'
+
+					. ' <span class="tagsmall">'
+					. $indexerConfiguration['type']
+					. '</span>'
+
+					. ' <span class="tagsmall">'
+					. 'UID ' . $indexerConfiguration['uid'] . '</span>'
+					. '</span>'
+
+					. ' <span class="tagsmall">'
+					. 'PID ' . $indexerConfiguration['pid'] . '</span>'
+					. '</span>'
+
+					. '</li>';
             }
-            $content .= '</ul>';
+            $content .= '</ol>';
         }
 
         return $content;
@@ -338,7 +352,7 @@ class BackendModuleController extends AbstractBackendModuleController
         $content = '';
         $numberOfRecords = $this->getNumberOfRecordsInIndex();
         if ($numberOfRecords) {
-            $content .= '<p><i>' . LocalizationUtility::translate('LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:index_contains',
+            $content .= '<p class="box infobox"><i>' . LocalizationUtility::translate('LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:index_contains',
                     'KeSearch') . ' ' . $numberOfRecords . ' ' . LocalizationUtility::translate('LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:records',
                     'KeSearch') . ': ';
 
