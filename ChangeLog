@@ -12,6 +12,7 @@ current master
 [BUGFIX]  Fix page browser issues with realurl. Thanks to Toben Schmidt. https://forge.typo3.org/issues/77454. https://github.com/teaminmedias-pluswerk/ke_search/pull/62.
 [TASK]    Do not hide "layout" field in the backend. https://github.com/teaminmedias-pluswerk/ke_search/issues/60.
 [TASK]    Add type, uid and pid to the overview page in the backend module and add some styling.
+[TASK]    Make tx_kesearch_tags an exclude-field. https://forge.typo3.org/issues/77281
 
 Version 2.3.1, July 2016
 [TASK]    Set version to 2.3.1, just to match the TER version number.

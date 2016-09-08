@@ -32,7 +32,7 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue($_EXTKEY .
 // add tag field to pages
 $tempColumns = array(
 	'tx_kesearch_tags' => array(
-		'exclude' => 0,
+		'exclude' => 1,
 		'label' => 'LLL:EXT:ke_search/locallang_db.xml:pages.tx_kesearch_tags',
 		'config' => array(
 			'type' => 'select',
