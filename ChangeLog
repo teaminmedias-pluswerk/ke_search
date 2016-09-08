@@ -9,6 +9,9 @@ current master
 [TASK]    Add ke_search_premium fields to "not allowed fields" for ordering because they caused untitled entries in the ordering select box.
 [BUGFIX]  Do not double escape html special characters in the searchword field. You have to adjust your fluid template, if you use your own and replace {searchword} with {searchword -> f:format.raw()}. https://forge.typo3.org/issues/75407.
 
+Version 2.3.1, July 2016
+[TASK]    Set version to 2.3.1, just to match the TER version number.
+
 Version 2.3.0, July 2016
 [!!!]     This version requires TYPO3 7.6 and is not compatible with TYPO3 6.2 anymore.
 [BUGFIX]  Overridden methods need compatible method signatures in PHP7. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/49.
