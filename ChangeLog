@@ -10,6 +10,7 @@ current master
 [BUGFIX]  Do not double escape html special characters in the searchword field. You have to adjust your fluid template, if you use your own and replace {searchword} with {searchword -> f:format.raw()}. https://forge.typo3.org/issues/75407.
 [BUGFIX]  Make external tools work w/ UTF-8 file names by using CommandUtility::escapeShellArgument(). Thanks to Martin Voss. https://github.com/teaminmedias-pluswerk/ke_search/pull/61.
 [BUGFIX]  Fix page browser issues with realurl. Thanks to Toben Schmidt. https://forge.typo3.org/issues/77454. https://github.com/teaminmedias-pluswerk/ke_search/pull/62.
+[TASK]    Do not hide "layout" field in the backend. https://github.com/teaminmedias-pluswerk/ke_search/issues/60.
 
 Version 2.3.1, July 2016
 [TASK]    Set version to 2.3.1, just to match the TER version number.
