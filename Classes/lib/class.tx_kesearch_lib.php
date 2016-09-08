@@ -978,7 +978,8 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 				}
 				$linkconf['parameter'] = $GLOBALS['TSFE']->id;
 				$linkconf['addQueryString'] = 1;
-				$linkconf['addQueryString.']['exclude'] = 'id';
+				$linkconf['addQueryString.']['exclude'] = 'id,cHash';
+				$linkconf['useCacheHash'] = 1;
 				$linkconf['additionalParams'] = '&tx_kesearch_pi1[page]=' . intval($i);
 
 				if (is_array($this->piVars['filter'])) {
@@ -1008,6 +1009,8 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			unset($linkconf);
 			$linkconf['parameter'] = $GLOBALS['TSFE']->id;
 			$linkconf['addQueryString'] = 1;
+			$linkconf['addQueryString.']['exclude'] = 'id,cHash';
+            		$linkconf['useCacheHash'] = 1;
 			$linkconf['additionalParams'] = '&tx_kesearch_pi1[sword]=' . $this->piVars['sword'];
 			$linkconf['additionalParams'] .= '&tx_kesearch_pi1[page]=' . intval($previousPage);
 
@@ -1036,6 +1039,8 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			unset($linkconf);
 			$linkconf['parameter'] = $GLOBALS['TSFE']->id;
 			$linkconf['addQueryString'] = 1;
+			$linkconf['addQueryString.']['exclude'] = 'id,cHash';
+            		$linkconf['useCacheHash'] = 1;
 			$linkconf['additionalParams'] = '&tx_kesearch_pi1[sword]='.$this->piVars['sword'];
 			$linkconf['additionalParams'] .= '&tx_kesearch_pi1[page]='.intval($nextPage);
 
