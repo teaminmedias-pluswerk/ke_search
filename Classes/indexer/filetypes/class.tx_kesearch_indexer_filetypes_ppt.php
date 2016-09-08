@@ -23,6 +23,9 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  * ************************************************************* */
 
+use TYPO3\CMS\Core\Utility\CommandUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * Plugin 'Faceted search' for the 'ke_search' extension.
  *
@@ -71,18 +74,19 @@ class tx_kesearch_indexer_filetypes_ppt extends tx_kesearch_indexer_types_file i
 	 */
 	public function getContent($file) {
 		// create the tempfile which will contain the content
-		$tempFileName = TYPO3\CMS\Core\Utility\GeneralUtility::tempnam('ppt_files-Indexer');
+		$tempFileName = GeneralUtility::tempnam('ppt_files-Indexer');
 
 		// Delete if exists, just to be safe.
 		@unlink($tempFileName);
 
 		// generate and execute the pdftotext commandline tool
-		$cmd = $this->app['catppt'] . ' -s8859-1 -dutf-8 ' . escapeshellarg($file) . ' > ' . escapeshellarg($tempFileName);
-		TYPO3\CMS\Core\Utility\CommandUtility::exec($cmd);
+		$fileEscaped = CommandUtility::escapeShellArgument($file);
+		$cmd = "{$this->app['catppt']} -s8859-1 -dutf-8 $fileEscaped > $tempFileName";
+		CommandUtility::exec($cmd);
 
 		// check if the tempFile was successfully created
 		if (@is_file($tempFileName)) {
-			$content = TYPO3\CMS\Core\Utility\GeneralUtility::getUrl($tempFileName);
+			$content = GeneralUtility::getUrl($tempFileName);
 			unlink($tempFileName);
 		}
 		else
