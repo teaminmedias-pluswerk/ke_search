@@ -140,7 +140,8 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface {
 		$this->user_kesearchpremium->setSorting($this->getOrdering());
 
 		// set limit
-		$this->user_kesearchpremium->setLimit(0, intval($this->pObj->extConfPremium['sphinxLimit']), intval($this->pObj->extConfPremium['sphinxLimit']));
+		$limit = $this->getLimit();
+		$this->user_kesearchpremium->setLimit($limit[0], $limit[1], intval($this->pObj->extConfPremium['sphinxLimit']));
 
 		// generate query
 		$queryForSphinx = '';

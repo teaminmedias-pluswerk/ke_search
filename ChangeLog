@@ -1,5 +1,8 @@
 ChangeLog
 
+current master
+[TASK]    set correct limit for ke_search_premium.
+
 Version 2.4.0, September 2016
 [!!!]     This version changes the database structure!
 [FEATURE] Enable changing the doktypes which should be indexed in page indexer. Thanks to András Ottó. https://github.com/teaminmedias-pluswerk/ke_search/pull/42
