@@ -90,9 +90,9 @@ return array(
                 'type' => 'group',
                 'internal_type' => 'db',
                 'allowed' => 'pages',
-                'size' => 1,
+                'size' => 5,
                 'minitems' => 0,
-                'maxitems' => 1,
+                'maxitems' => 99,
                 'wizards' => array(
                     'suggest' => array(
                         'type' => 'suggest',
