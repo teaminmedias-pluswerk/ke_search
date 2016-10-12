@@ -201,7 +201,12 @@ class tx_kesearch_indexer_types {
 				$whereRow = $where;
 			}
 
-			$pageList = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $this->queryGen->getTreeList($row['automated_tagging'], 99, 0, $whereRow));
+			$pageList = array();
+			$automated_tagging_arr = explode(',', $row['automated_tagging']);
+			foreach ($automated_tagging_arr as $key => $value) {
+				$tmpPageList = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $this->queryGen->getTreeList($value, 99, 0, $whereRow));
+				$pageList = array_merge($tmpPageList, $pageList);
+			}
 
 			foreach($pageList as $uid) {
 				if($this->pageRecords[$uid]['tags']) {
