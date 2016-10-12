@@ -102,6 +102,7 @@ return array(
         ),
         'options' => array(
             'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filters.options',
+            'l10n_mode' => 'exclude',
             'config' => array(
                 'type' => 'inline',
                 'foreign_table' => 'tx_kesearch_filteroptions',
