@@ -63,7 +63,10 @@ class user_filterlist {
 		$count = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
 		if ($count) {
 			while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-				$config['items'][] = array($row['title'], $row['uid']);
+			    if (!$row['l10n_parent'])
+                {
+                    $config['items'][] = array($row['title'], $row['uid']);
+                }
 			}
 		}
 	}
