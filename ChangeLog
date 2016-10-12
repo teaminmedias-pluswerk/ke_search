@@ -3,6 +3,7 @@ ChangeLog
 current master
 [TASK]    set correct limit for ke_search_premium.
 [BUGFIX]  Exclude options of filters from translations. Filters should have the same options in all translations. The filter options have to be translated separately. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/65.
+[FEATURE] Allow multiple entry points for automated page tagging. You can now select multiple page entry points in each filter option in order to give those page branches a certain tag. Thanks to A. Kalkhoff. https://github.com/teaminmedias-pluswerk/ke_search/pull/63.
 
 Version 2.4.0, September 2016
 [!!!]     This version changes the database structure!
