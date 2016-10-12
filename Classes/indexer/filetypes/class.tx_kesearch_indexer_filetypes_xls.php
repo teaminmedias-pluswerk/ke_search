@@ -28,77 +28,79 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Plugin 'Faceted search' for the 'ke_search' extension.
- *
- * @author	Stefan Froemken
- * @author	Lukas Kamber
- * @package	TYPO3
- * @subpackage	tx_kesearch
+ * @author    Stefan Froemken
+ * @author    Lukas Kamber
+ * @package    TYPO3
+ * @subpackage    tx_kesearch
  */
-class tx_kesearch_indexer_filetypes_xls extends tx_kesearch_indexer_types_file implements tx_kesearch_indexer_filetypes {
+class tx_kesearch_indexer_filetypes_xls extends tx_kesearch_indexer_types_file implements tx_kesearch_indexer_filetypes
+{
 
-	var $extConf = array(); // saves the configuration of extension ke_search_hooks
-	var $app = array(); // saves the path to the executables
-	var $isAppArraySet = false;
+    public $extConf = array(); // saves the configuration of extension ke_search_hooks
+    public $app = array(); // saves the path to the executables
+    public $isAppArraySet = false;
 
-	/**
-	 * class constructor
-	 */
-	public function __construct() {
-		// get extension configuration of ke_search
-		$this->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ke_search']);
+    /**
+     * class constructor
+     */
+    public function __construct()
+    {
+        // get extension configuration of ke_search
+        $this->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ke_search']);
 
-		// check if path to xls2csv is correct
-		if ($this->extConf['pathCatdoc']) {
-			$pathCatdoc = rtrim($this->extConf['pathCatdoc'], '/') . '/';
+        // check if path to xls2csv is correct
+        if ($this->extConf['pathCatdoc']) {
+            $pathCatdoc = rtrim($this->extConf['pathCatdoc'], '/') . '/';
 
-			$exe = (TYPO3_OS == 'WIN') ? '.exe' : '';
-			if (is_executable($pathCatdoc . 'xls2csv' . $exe)) {
-				$this->app['xls2csv'] = $pathCatdoc . 'xls2csv' . $exe;
-				$this->isAppArraySet = true;
-			} else {
-				$this->isAppArraySet = false;
-			}
-		} else {
-			$this->isAppArraySet = false;
-		}
+            $exe = (TYPO3_OS == 'WIN') ? '.exe' : '';
+            if (is_executable($pathCatdoc . 'xls2csv' . $exe)) {
+                $this->app['xls2csv'] = $pathCatdoc . 'xls2csv' . $exe;
+                $this->isAppArraySet = true;
+            } else {
+                $this->isAppArraySet = false;
+            }
+        } else {
+            $this->isAppArraySet = false;
+        }
 
-		if (!$this->isAppArraySet) {
-			$this->addError('The path for xls2csv is not correctly set in extConf. You can get the path with "which xls2csv".');
-		}
-	}
+        if (!$this->isAppArraySet) {
+            $this->addError('The path for xls2csv is not correctly set in '
+                . 'extConf. You can get the path with "which xls2csv".');
+        }
+    }
 
-	/**
-	 * get Content of DOC file
-	 *
-	 * @param string $file
-	 * @return string The extracted content of the file
-	 */
-	public function getContent($file) {
-		// create the tempfile which will contain the content
-		$tempFileName = GeneralUtility::tempnam('xls_files-Indexer');
+    /**
+     * get Content of DOC file
+     * @param string $file
+     * @return string The extracted content of the file
+     */
+    public function getContent($file)
+    {
+        // create the tempfile which will contain the content
+        $tempFileName = GeneralUtility::tempnam('xls_files-Indexer');
 
-		// Delete if exists, just to be safe.
-		@unlink($tempFileName);
+        // Delete if exists, just to be safe.
+        @unlink($tempFileName);
 
-		// generate and execute the pdftotext commandline tool
-		$fileEscaped = CommandUtility::escapeShellArgument($file);
-		$cmd = "{$this->app['xls2csv']} -c ' ' -q 0 -s8859-1 -dutf-8 $fileEscaped > $tempFileName";
-		CommandUtility::exec($cmd);
+        // generate and execute the pdftotext commandline tool
+        $fileEscaped = CommandUtility::escapeShellArgument($file);
+        $cmd = "{$this->app['xls2csv']} -c ' ' -q 0 -s8859-1 -dutf-8 $fileEscaped > $tempFileName";
+        CommandUtility::exec($cmd);
 
-		// check if the tempFile was successfully created
-		if (@is_file($tempFileName)) {
-			$content = GeneralUtility::getUrl($tempFileName);
-			unlink($tempFileName);
-		}
-		else
-			return false;
+        // check if the tempFile was successfully created
+        if (@is_file($tempFileName)) {
+            $content = GeneralUtility::getUrl($tempFileName);
+            unlink($tempFileName);
+        } else {
+            return false;
+        }
 
-		// check if content was found
-		if (strlen($content)) {
-			return $content;
-		}
-		else
-			return false;
-	}
+        // check if content was found
+        if (strlen($content)) {
+            return $content;
+        } else {
+            return false;
+        }
+    }
 
 }

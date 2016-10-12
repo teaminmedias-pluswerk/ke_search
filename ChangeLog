@@ -1,5 +1,8 @@
 ChangeLog
 
+current master
+[TASK]    Cleanup code according to PSR-2 coding styleguide.
+
 Version 2.4.1, October 2016
 [TASK]    Set correct limit for ke_search_premium.
 [BUGFIX]  Exclude options of filters from translations. Filters should have the same options in all translations. The filter options have to be translated separately. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/65.

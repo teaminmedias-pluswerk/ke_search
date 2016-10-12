@@ -68,7 +68,8 @@ abstract class AbstractBackendModuleController extends ActionController
             return;
         }
 
-        //Don't need to check if it is an array because getModuleData always returns an array. Only have to check if it's empty.
+        // Don't need to check if it is an array because getModuleData always
+        // returns an array. Only have to check if it's empty.
         if (!empty($moduleData)) {
             $currentController = $this->getControllerName();
             $currentAction = $this->getActionName();

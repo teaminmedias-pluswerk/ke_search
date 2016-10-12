@@ -2,25 +2,20 @@
 
 /***************************************************************
  *  Copyright notice
- *
  *  (c) 2010 Andreas Kiefer (kennziffer.com) <kiefer@kennziffer.com>
  *  (c) 2016 Bernhard Berger <bernhard.berger@gmail.com>
  *  All rights reserved
- *
  *  This script is part of the TYPO3 project. The TYPO3 project is
  *  free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
  *  the Free Software Foundation; either version 2 of the License, or
  *  (at your option) any later version.
- *
  *  The GNU General Public License can be found at
  *  http://www.gnu.org/copyleft/gpl.html.
- *
  *  This script is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  *  GNU General Public License for more details.
- *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
@@ -128,8 +123,13 @@ class BackendModuleController extends AbstractBackendModuleController
                 if ($this->getBackendUser()->user['admin']) {
                     $this->registry->removeAllByNamespace('tx_kesearch');
                 } else {
-                    $content .= '<p>' . LocalizationUtility::translate('LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:not_allowed_remove_indexer_lock',
-                            'KeSearch') . '</p>';
+                    $content .=
+                        '<p>'
+                        . LocalizationUtility::translate(
+                            'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:not_allowed_remove_indexer_lock',
+                            'KeSearch'
+                        )
+                        . '</p>';
                 }
             }
         }
@@ -146,12 +146,12 @@ class BackendModuleController extends AbstractBackendModuleController
             $lockTime = null;
         }
 
-		// show information about indexer configurations and number of records
-		// if action "start indexing" is not selected
-		if ($this->do != 'startindexer') {
-			$content .= $this->printNumberOfRecords();
-			$content .= $this->printIndexerConfigurations($indexerConfigurations);
-		}
+        // show information about indexer configurations and number of records
+        // if action "start indexing" is not selected
+        if ($this->do != 'startindexer') {
+            $content .= $this->printNumberOfRecords();
+            $content .= $this->printIndexerConfigurations($indexerConfigurations);
+        }
 
         // show "start indexing" or "remove lock" button
         if ($lockTime !== null) {
@@ -164,20 +164,38 @@ class BackendModuleController extends AbstractBackendModuleController
                 $content .= '<br /><p>The indexer is already running and can not be started twice.</p>';
                 $content .= '<p>The indexing process was started at ' . strftime('%c', $lockTime) . '.</p>';
                 $content .= '<p>You can remove the lock by clicking the following button.</p>';
-                $moduleUrl = BackendUtility::getModuleUrl('web_KeSearchBackendModule',
-                    array('id' => $this->id, 'do' => 'rmLock'));
+                $moduleUrl =
+                    BackendUtility::getModuleUrl(
+                        'web_KeSearchBackendModule',
+                        array('id' => $this->id, 'do' => 'rmLock')
+                    );
                 $content .= '<br /><a class="lock-button" href="' . $moduleUrl . '">RemoveLock</a>';
             }
         } else {
             // no lock set - show "start indexer" link if indexer configurations have been found
             if ($indexerConfigurations) {
-                $moduleUrl = BackendUtility::getModuleUrl('web_KeSearchBackendModule',
-                    array('id' => $this->id, 'do' => 'startindexer'));
-                $content .= '<br /><a class="index-button" href="' . $moduleUrl . '">' . LocalizationUtility::translate('LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:start_indexer',
-                        'KeSearch') . '</a>';
+                $moduleUrl =
+                    BackendUtility::getModuleUrl(
+                        'web_KeSearchBackendModule',
+                        array('id' => $this->id, 'do' => 'startindexer')
+                    );
+
+                $content .= '<br /><a class="index-button" href="' . $moduleUrl . '">'
+                    .
+                    LocalizationUtility::translate(
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:start_indexer',
+                        'KeSearch'
+                    )
+                    . '</a>';
             } else {
-                $content .= '<div class="alert alert-info">' . LocalizationUtility::translate('LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:no_indexer_configurations',
-                        'KeSearch') . '</div>';
+                $content .=
+                    '<div class="alert alert-info">'
+                    .
+                    LocalizationUtility::translate(
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:no_indexer_configurations',
+                        'KeSearch'
+                    )
+                    . '</div>';
             }
         }
 
@@ -192,13 +210,19 @@ class BackendModuleController extends AbstractBackendModuleController
         if ($this->id) {
             // page is selected: get indexed content
             $content = '<h2>Index content for page ' . $this->id . '</h2>';
-            $content .= $GLOBALS['LANG']->sL('LLL:EXT:lang/locallang_core.xml:labels.path') . ': ' . GeneralUtility::fixed_lgd_cs($this->pageinfo['_thePath'],
-                    -50);
+            $content .= $GLOBALS['LANG']->sL('LLL:EXT:lang/locallang_core.xml:labels.path')
+                . ': '
+                .
+                GeneralUtility::fixed_lgd_cs($this->pageinfo['_thePath'], -50);
             $content .= $this->getIndexedContent($this->id);
         } else {
             // no page selected: show message
-            $content = '<div class="alert alert-info">' . LocalizationUtility::translate('LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:select_a_page',
-                    'KeSearch') . '</div>';
+            $content = '<div class="alert alert-info">'
+                . LocalizationUtility::translate(
+                    'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:select_a_page',
+                    'KeSearch'
+                )
+                . '</div>';
         }
 
         $this->view->assign('content', $content);
@@ -236,19 +260,31 @@ class BackendModuleController extends AbstractBackendModuleController
 
         // admin only access
         if ($this->getBackendUser()->user['admin']) {
-
             if ($this->do == 'clear') {
                 $query = 'TRUNCATE TABLE tx_kesearch_index';
                 $res = $this->databaseConnection->sql_query($query);
             }
 
-            $content .= '<p>' . LocalizationUtility::translate('LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:index_contains',
-                    'KeSearch') . ' ' . $this->getNumberOfRecordsInIndex() . ' ' . LocalizationUtility::translate('LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:records',
-                    'KeSearch') . '.</p>';
+            $content .= '<p>'
+                .
+                LocalizationUtility::translate(
+                    'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:index_contains',
+                    'KeSearch'
+                )
+                . ' '
+                . $this->getNumberOfRecordsInIndex()
+                . ' '
+                . LocalizationUtility::translate(
+                    'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:records',
+                    'KeSearch'
+                )
+                . '.</p>';
 
             // show "clear index" link
-            $moduleUrl = BackendUtility::getModuleUrl('web_KeSearchBackendModule',
-                array('id' => $this->id, 'do' => 'clear'));
+            $moduleUrl = BackendUtility::getModuleUrl(
+                'web_KeSearchBackendModule',
+                array('id' => $this->id, 'do' => 'clear')
+            );
             $content .= '<br /><a class="index-button" href="' . $moduleUrl . '">Clear whole search index!</a>';
         } else {
             $content .= '<p>Clear search index: This function is available to admins only.</p>';
@@ -268,15 +304,20 @@ class BackendModuleController extends AbstractBackendModuleController
 
     /**
      * shows report from sys_log
-     *
      * @return string
      * @author Christian Bülter <christian.buelter@inmedias.de>
      * @since 29.05.15
      */
     public function showLastIndexingReport()
     {
-        $logrow = $this->databaseConnection->exec_SELECTgetSingleRow('*', 'sys_log', 'details LIKE "[ke_search]%"', '',
-            'tstamp DESC');
+        $logrow = $this->databaseConnection->exec_SELECTgetSingleRow(
+            '*',
+            'sys_log',
+            'details LIKE "[ke_search]%"',
+            '',
+            'tstamp DESC'
+        );
+
         if ($logrow !== false) {
             $content = '<div class="summary"><pre>' . $logrow['details'] . '</pre></div>';
         } else {
@@ -288,7 +329,6 @@ class BackendModuleController extends AbstractBackendModuleController
 
     /**
      * returns the number of records the index contains
-     *
      * @author Christian Bülter <buelter@kennziffer.com>
      * @since 26.03.15
      * @return integer
@@ -304,9 +344,7 @@ class BackendModuleController extends AbstractBackendModuleController
 
     /**
      * prints the indexer configurations available
-     *
      * @param array $indexerConfigurations
-     *
      * @author Christian Bülter <buelter@kennziffer.com>
      * @since 28.04.15
      * @return string
@@ -319,21 +357,21 @@ class BackendModuleController extends AbstractBackendModuleController
             $content .= '<ol class="orderedlist">';
             foreach ($indexerConfigurations as $indexerConfiguration) {
                 $content .= '<li class="summary infobox">'
-					. '<span class="title">' . $indexerConfiguration['title'] . '</span>'
+                    . '<span class="title">' . $indexerConfiguration['title'] . '</span>'
 
-					. ' <span class="tagsmall">'
-					. $indexerConfiguration['type']
-					. '</span>'
+                    . ' <span class="tagsmall">'
+                    . $indexerConfiguration['type']
+                    . '</span>'
 
-					. ' <span class="tagsmall">'
-					. 'UID ' . $indexerConfiguration['uid'] . '</span>'
-					. '</span>'
+                    . ' <span class="tagsmall">'
+                    . 'UID ' . $indexerConfiguration['uid'] . '</span>'
+                    . '</span>'
 
-					. ' <span class="tagsmall">'
-					. 'PID ' . $indexerConfiguration['pid'] . '</span>'
-					. '</span>'
+                    . ' <span class="tagsmall">'
+                    . 'PID ' . $indexerConfiguration['pid'] . '</span>'
+                    . '</span>'
 
-					. '</li>';
+                    . '</li>';
             }
             $content .= '</ol>';
         }
@@ -343,7 +381,6 @@ class BackendModuleController extends AbstractBackendModuleController
 
     /**
      * prints number of records in index
-     *
      * @author Christian Bülter <buelter@kennziffer.com>
      * @since 28.04.15
      */
@@ -352,9 +389,20 @@ class BackendModuleController extends AbstractBackendModuleController
         $content = '';
         $numberOfRecords = $this->getNumberOfRecordsInIndex();
         if ($numberOfRecords) {
-            $content .= '<p class="box infobox"><i>' . LocalizationUtility::translate('LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:index_contains',
-                    'KeSearch') . ' ' . $numberOfRecords . ' ' . LocalizationUtility::translate('LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:records',
-                    'KeSearch') . ': ';
+            $content .=
+                '<p class="box infobox"><i>'
+                . LocalizationUtility::translate(
+                    'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:index_contains',
+                    'KeSearch'
+                )
+                . ' '
+                . $numberOfRecords
+                . ' '
+                . LocalizationUtility::translate(
+                    'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:records',
+                    'KeSearch'
+                )
+                . ': ';
 
             $results_per_type = $this->getNumberOfRecordsInIndexPerType();
             $first = true;
@@ -366,8 +414,14 @@ class BackendModuleController extends AbstractBackendModuleController
                 $first = false;
             }
             $content .= '.<br/>';
-            $content .= LocalizationUtility::translate('LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:last_indexing',
-                    'KeSearch') . ' ' . $this->getLatestRecordDate() . '.';
+            $content .=
+                LocalizationUtility::translate(
+                    'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:last_indexing',
+                    'KeSearch'
+                )
+                . ' '
+                . $this->getLatestRecordDate() . '.';
+
             $content .= '</i></p>';
         }
 
@@ -376,7 +430,6 @@ class BackendModuleController extends AbstractBackendModuleController
 
     /**
      * returns number of records per type in an array
-     *
      * @author Christian Bülter <buelter@kennziffer.com>
      * @since 28.04.15
      * @return array
@@ -395,7 +448,6 @@ class BackendModuleController extends AbstractBackendModuleController
 
     /**
      * returns the date of the lates record (formatted in a string)
-     *
      * @author Christian Bülter <buelter@kennziffer.com>
      * @since 28.04.15
      * @return string
@@ -412,7 +464,7 @@ class BackendModuleController extends AbstractBackendModuleController
     /*
      * function renderIndexTableInformation
      */
-    function renderIndexTableInformation()
+    public function renderIndexTableInformation()
     {
 
         $table = 'tx_kesearch_index';
@@ -423,7 +475,6 @@ class BackendModuleController extends AbstractBackendModuleController
         $content = '';
         while ($row = $this->databaseConnection->sql_fetch_assoc($res)) {
             if ($row['Name'] == $table) {
-
                 $dataLength = $this->formatFilesize($row['Data_length']);
                 $indexLength = $this->formatFilesize($row['Index_length']);
                 $completeLength = $this->formatFilesize($row['Data_length'] + $row['Index_length']);
@@ -463,7 +514,7 @@ class BackendModuleController extends AbstractBackendModuleController
     /**
      * format file size from bytes to human readable format
      */
-    function formatFilesize($size, $decimals = 0)
+    public function formatFilesize($size, $decimals = 0)
     {
         $sizes = array(" B", " KB", " MB", " GB", " TB", " PB", " EB", " ZB", " YB");
         if ($size == 0) {
@@ -477,7 +528,7 @@ class BackendModuleController extends AbstractBackendModuleController
      * function getIndexedContent
      * @param $pageUid page uid
      */
-    function getIndexedContent($pageUid)
+    public function getIndexedContent($pageUid)
     {
 
         $fields = '*';
@@ -486,18 +537,13 @@ class BackendModuleController extends AbstractBackendModuleController
         $where .= 'OR (type<>"page" AND pid="' . intval($pageUid) . '")  ';
         $where .= BackendUtility::BEenableFields($table, $inv = 0);
         $where .= BackendUtility::deleteClause($table, $inv = 0);
-
-        $res = $this->databaseConnection->exec_SELECTquery($fields, $table, $where, $groupBy = '', $orderBy = '',
-            $limit = '');
-
+        $res = $this->databaseConnection->exec_SELECTquery($fields, $table, $where);
         $content = '';
-        while ($row = $this->databaseConnection->sql_fetch_assoc($res)) {
 
+        while ($row = $this->databaseConnection->sql_fetch_assoc($res)) {
             // build tag table
             $tagTable = '<div class="tags" >';
-            $cols = 3;
             $tags = GeneralUtility::trimExplode(',', $row['tags'], true);
-            $i = 1;
             foreach ($tags as $tag) {
                 $tagTable .= '<span class="tag">' . $tag . '</span>';
             }
@@ -505,8 +551,8 @@ class BackendModuleController extends AbstractBackendModuleController
 
             // build content
             $timeformat = '%d.%m.%Y %H:%M';
-            $content .= '
-				<div class="summary">'
+            $content .=
+                '<div class="summary">'
                 . '<span class="title">' . $row['title'] . '</span>'
                 . '<div class="clearer">&nbsp;</div>'
                 . $this->renderFurtherInformation('Type', $row['type'])
@@ -514,12 +560,18 @@ class BackendModuleController extends AbstractBackendModuleController
                 . $this->renderFurtherInformation('Language', $row['language'])
                 . $this->renderFurtherInformation('Created', strftime($timeformat, $row['crdate']))
                 . $this->renderFurtherInformation('Modified', strftime($timeformat, $row['tstamp']))
-                . $this->renderFurtherInformation('Sortdate',
-                    ($row['sortdate'] ? strftime($timeformat, $row['sortdate']) : ''))
-                . $this->renderFurtherInformation('Starttime',
-                    ($row['starttime'] ? strftime($timeformat, $row['starttime']) : ''))
-                . $this->renderFurtherInformation('Endtime',
-                    ($row['endtime'] ? strftime($timeformat, $row['endtime']) : ''))
+                . $this->renderFurtherInformation(
+                    'Sortdate',
+                    ($row['sortdate'] ? strftime($timeformat, $row['sortdate']) : '')
+                )
+                . $this->renderFurtherInformation(
+                    'Starttime',
+                    ($row['starttime'] ? strftime($timeformat, $row['starttime']) : '')
+                )
+                . $this->renderFurtherInformation(
+                    'Endtime',
+                    ($row['endtime'] ? strftime($timeformat, $row['endtime']) : '')
+                )
                 . $this->renderFurtherInformation('FE Group', $row['fe_group'])
                 . $this->renderFurtherInformation('Target Page', $row['targetpid'])
                 . $this->renderFurtherInformation('URL Params', $row['params'])
@@ -527,8 +579,10 @@ class BackendModuleController extends AbstractBackendModuleController
                 . $this->renderFurtherInformation('Original UID', $row['orig_uid'])
                 . $this->renderFurtherInformation('Path', $row['directory'])
                 . '<div class="clearer">&nbsp;</div>'
-                . '<div class="box"><div class="headline">Abstract</div><div class="content">' . nl2br($row['abstract']) . '</div></div>'
-                . '<div class="box"><div class="headline">Content</div><div class="content">' . nl2br($row['content']) . '</div></div>'
+                . '<div class="box"><div class="headline">Abstract</div><div class="content">'
+                . nl2br($row['abstract']) . '</div></div>'
+                . '<div class="box"><div class="headline">Content</div><div class="content">'
+                . nl2br($row['content']) . '</div></div>'
                 . '<div class="box"><div class="headline">Tags</div><div class="content">' . $tagTable . '</div></div>'
                 . '</div>';
         }
@@ -537,29 +591,35 @@ class BackendModuleController extends AbstractBackendModuleController
     }
 
     /**
-     *
      * @param string $label
      * @param string $content
-     *
      * @return string
      */
-    function renderFurtherInformation($label, $content)
+    public function renderFurtherInformation($label, $content)
     {
-        return '<div class="info"><span class="infolabel">' . $label . ': </span><span class="value">' . $content . '</span></div>';
+        return
+            '<div class="info"><span class="infolabel">'
+            . $label
+            . ': </span><span class="value">'
+            . $content
+            . '</span></div>';
     }
 
     /**
-     *
      * @param integer $pageUid
      * @param integer $days
-     *
      * @return string
      */
-    function getSearchwordStatistics($pageUid, $days)
+    public function getSearchwordStatistics($pageUid, $days)
     {
         if (!$pageUid) {
-            $content = '<div class="alert alert-info">' . LocalizationUtility::translate('LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:select_a_page',
-                    'KeSearch') . '</div>';
+            $content =
+                '<div class="alert alert-info">'
+                . LocalizationUtility::translate(
+                    'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:select_a_page',
+                    'KeSearch'
+                )
+                . '</div>';
 
             return $content;
         }
@@ -580,7 +640,10 @@ class BackendModuleController extends AbstractBackendModuleController
 
         $content = '';
         if (!$this->databaseConnection->sql_num_rows($languageResult)) {
-            $content .= '<div class="alert alert-info">No statistic data found! Please select the sysfolder where your index is stored or the page where your search plugin is placed.</div>';
+            $content .=
+                '<div class="alert alert-info">'
+                . 'No statistic data found! Please select the sysfolder where your index is stored or the page '
+                . 'where your search plugin is placed.</div>';
 
             return $content;
         }
@@ -588,13 +651,24 @@ class BackendModuleController extends AbstractBackendModuleController
         while (($languageRow = $this->databaseConnection->sql_fetch_assoc($languageResult))) {
             $content .= '<h1 style="clear:left; padding-top:1em;">Language ' . $languageRow['language'] . '</h1>';
             if ($isSysFolder) {
-                $content .= $this->getAndRenderStatisticTable('tx_kesearch_stat_search', $languageRow['language'],
-                    $timestampStart, $pidWhere, 'searchphrase');
+                $content .= $this->getAndRenderStatisticTable(
+                    'tx_kesearch_stat_search',
+                    $languageRow['language'],
+                    $timestampStart,
+                    $pidWhere,
+                    'searchphrase'
+                );
             } else {
-                $content .= '<i>Please select the sysfolder where your index is stored for a list of search phrases</i>';
+                $content .=
+                    '<i>Please select the sysfolder where your index is stored for a list of search phrases</i>';
             }
-            $content .= $this->getAndRenderStatisticTable('tx_kesearch_stat_word', $languageRow['language'],
-                $timestampStart, $pidWhere, 'word');
+            $content .= $this->getAndRenderStatisticTable(
+                'tx_kesearch_stat_word',
+                $languageRow['language'],
+                $timestampStart,
+                $pidWhere,
+                'word'
+            );
         }
         $content .= '<br style="clear:left;" />';
 
@@ -602,13 +676,11 @@ class BackendModuleController extends AbstractBackendModuleController
     }
 
     /**
-     *
      * @param string $table
      * @param integer $language
      * @param integer $timestampStart
      * @param string $pidWhere
      * @param string $tableCol
-     *
      * @return string
      */
     public function getAndRenderStatisticTable($table, $language, $timestampStart, $pidWhere, $tableCol)
@@ -659,16 +731,14 @@ class BackendModuleController extends AbstractBackendModuleController
      *
      * @return boolean
      */
-    function checkSysfolder()
+    public function checkSysfolder()
     {
-
         $fields = 'doktype';
         $table = 'pages';
         $where = 'uid="' . $this->id . '" ';
         $where .= BackendUtility::BEenableFields($table);
         $where .= BackendUtility::deleteClause($table);
-        $res = $this->databaseConnection->exec_SELECTquery($fields, $table, $where, $groupBy = '', $orderBy = '',
-            $limit = '1');
+        $res = $this->databaseConnection->exec_SELECTquery($fields, $table, $where, '', '', '1');
         $row = $this->databaseConnection->sql_fetch_assoc($res);
         if ($row['doktype'] == 254) {
             return true;
