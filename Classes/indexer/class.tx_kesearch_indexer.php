@@ -234,6 +234,10 @@ class tx_kesearch_indexer
      */
     public function prepareStatements()
     {
+        $addUpdateQuery = '';
+        $addInsertQueryFields = '';
+        $addInsertQueryValues = '';
+
         // create vars to keep statements dynamic
         foreach ($this->additionalFields as $value) {
             $addUpdateQuery .= ', ' . $value . ' = ?';
@@ -296,10 +300,8 @@ class tx_kesearch_indexer
      */
     public function cleanUpProcessAfterIndexing()
     {
-        // enable keys again if this was the first indexing process
-        if ($countIndex == 0) {
-            $GLOBALS['TYPO3_DB']->sql_query('ALTER TABLE tx_kesearch_index ENABLE KEYS');
-        }
+        // enable keys (may have been disabled because it was the first indexing)
+        $GLOBALS['TYPO3_DB']->sql_query('ALTER TABLE tx_kesearch_index ENABLE KEYS');
 
         $GLOBALS['TYPO3_DB']->sql_query('DEALLOCATE PREPARE searchStmt');
         $GLOBALS['TYPO3_DB']->sql_query('DEALLOCATE PREPARE updateStmt');
