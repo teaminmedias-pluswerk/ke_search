@@ -35,7 +35,7 @@ class tx_kesearch_indexer
     public $extConfPremium = array(); // extension configuration of ke_search_premium, if installed
     public $indexerConfig = array(); // saves the indexer configuration of current loop
     public $lockFile = '';
-    public $additionalFields = '';
+    public $additionalFields = array();
     public $indexingErrors = array();
     public $startTime;
     public $currentRow = array(); // current row which have to be inserted/updated to database
@@ -162,9 +162,9 @@ class tx_kesearch_indexer
             $content .= "\n\n" . '<br /><br /><br /><b>INDEXING ERRORS ('
                 . sizeof($this->indexingErrors)
                 . ')<br /><br />'
-                . CHR(10);
+                . chr(10);
             foreach ($this->indexingErrors as $error) {
-                $content .= $error . '<br />' . CHR(10);
+                $content .= $error . '<br />' . chr(10);
             }
         }
 
@@ -193,6 +193,8 @@ class tx_kesearch_indexer
         if ($verbose) {
             return $content;
         }
+
+        return '';
     }
 
     /**
@@ -519,14 +521,27 @@ class tx_kesearch_indexer
             $where = 'uid=' . intval($this->currentRow['uid']);
             unset($fieldValues['crdate']);
             if ($debugOnly) { // do not process - just debug query
-                t3lib_utility_Debug::debug($GLOBALS['TYPO3_DB']->UPDATEquery($table, $where, $fieldValues), 1);
+                \TYPO3\CMS\Core\Utility\DebugUtility::debug(
+                    $GLOBALS['TYPO3_DB']->UPDATEquery(
+                        $table,
+                        $where,
+                        $fieldValues
+                    ),
+                    1
+                );
             } else { // process storing of index record and return uid
                 $this->updateRecordInIndex($fieldValues);
                 return true;
             }
         } else { // insert new record
             if ($debugOnly) { // do not process - just debug query
-                t3lib_utility_Debug::debug($GLOBALS['TYPO3_DB']->INSERTquery($table, $fieldValues, false));
+                \TYPO3\CMS\Core\Utility\DebugUtility::debug(
+                    $GLOBALS['TYPO3_DB']->INSERTquery(
+                        $table,
+                        $fieldValues,
+                        false
+                    )
+                );
             } else { // process storing of index record and return uid
                 $this->insertRecordIntoIndex($fieldValues);
                 return $GLOBALS['TYPO3_DB']->sql_insert_id();
