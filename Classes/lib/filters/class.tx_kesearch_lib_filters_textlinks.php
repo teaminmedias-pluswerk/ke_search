@@ -123,6 +123,7 @@ class tx_kesearch_lib_filters_textlinks
             $this->saveRenderedTextlinkToGlobalArrays($filterUid, $data);
         }
 
+        $contentOptions = '';
         if (is_array($this->contentOfActiveOptions) && count($this->contentOfActiveOptions)) {
             foreach ($this->contentOfActiveOptions as $option) {
                 $contentOptions .= $option;

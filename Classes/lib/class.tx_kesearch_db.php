@@ -422,6 +422,7 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
      */
     protected function createQueryForTags(array $tags)
     {
+        $where = '';
         if (count($tags) && is_array($tags)) {
             foreach ($tags as $value) {
                 $value = $GLOBALS['TYPO3_DB']->quoteStr($value, 'tx_kesearch_index');

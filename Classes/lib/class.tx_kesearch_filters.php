@@ -284,17 +284,17 @@ class tx_kesearch_filters
 
     /**
      * check if an allowed tag (defined in a filteroption) was found in the current result list
+     *
      * @param string $tag The tag to match against the searchresult
      * @return boolean TRUE if tag was found. Else FALSE
      */
     public function checkIfTagMatchesRecords($tag)
     {
-
         // if tag list is empty, fetch them from the result list
         // otherwise use the cached result list
         if (!$this->tagsInSearchResult) {
             $this->tagsInSearchResult = $this->pObj->tagsInSearchResult = $this->db->getTagsFromSearchResult();
-            $GLOBALS['TSFE']->fe_user->setKey('ses', 'ke_search.tagsInSearchResults', $tagsInSearchResult);
+            $GLOBALS['TSFE']->fe_user->setKey('ses', 'ke_search.tagsInSearchResults', $this->tagsInSearchResult);
         }
 
         return array_key_exists($tag, $this->tagsInSearchResult);
@@ -302,6 +302,7 @@ class tx_kesearch_filters
 
     /**
      * returns the tag char: a character which wraps tags in the database
+     *
      * @return string
      */
     public function getTagChar()

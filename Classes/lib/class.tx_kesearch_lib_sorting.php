@@ -96,6 +96,7 @@ class tx_kesearch_lib_sorting
      */
     public function renderSorting(&$fluidTemplateVariables)
     {
+        $links = '';
         // show sorting:
         // if show Sorting is activated in FlexForm
         // if a value to sortBy is set in FlexForm (title, relevance, sortdate, what ever...)

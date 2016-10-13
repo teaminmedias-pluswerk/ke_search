@@ -160,6 +160,7 @@ class tx_kesearch_pi3 extends tx_kesearch_lib
             )
         );
         if (is_array($this->piVars['filter']) && count($this->piVars['filter'])) {
+            $hidden = '';
             foreach ($this->piVars['filter'] as $filterKey => $filterValue) {
                 if ($filterKey == $filter['uid']) {
                     continue;
