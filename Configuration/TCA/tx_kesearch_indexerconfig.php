@@ -17,7 +17,9 @@ $configurationArray = array(
         'requestUpdate' => 'type'
     ),
     'interface' => array(
-        'showRecordFieldList' => 'hidden,title,storagepid,startingpoints_recursive,single_pages,sysfolder,type,index_content_with_restrictions,index_passed_events,index_news_category_mode,index_news_category_selection,directories,fileext,filteroption,index_page_doctypes'
+        'showRecordFieldList' => 'hidden,title,storagepid,startingpoints_recursive,single_pages,sysfolder,'
+            . 'type,index_content_with_restrictions,index_passed_events,index_news_category_mode,'
+            . 'index_news_category_selection,directories,fileext,filteroption,index_page_doctypes'
     ),
     'columns' => array(
         'hidden' => array(
@@ -153,7 +155,8 @@ $configurationArray = array(
         'startingpoints_recursive' => array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.startingpoints_recursive',
-            'displayCond' => 'FIELD:type:IN:page,tt_content,ttnews,tt_address,templavoila,comments,news,a21glossary,cal',
+            'displayCond' => 'FIELD:type:IN:page,tt_content,ttnews,tt_address,templavoila,'
+                . 'comments,news,a21glossary,cal',
             'config' => array(
                 'type' => 'group',
                 'internal_type' => 'db',
@@ -213,11 +216,13 @@ $configurationArray = array(
                 'renderType' => 'selectSingle',
                 'items' => array(
                     array(
-                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_content_with_restrictions.I.0',
+                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.'
+                        . 'index_content_with_restrictions.I.0',
                         'yes'
                     ),
                     array(
-                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_content_with_restrictions.I.1',
+                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.'
+                        . 'index_content_with_restrictions.I.1',
                         'no'
                     ),
                 ),
@@ -290,11 +295,11 @@ $configurationArray = array(
                 'maxitems' => 1,
             )
         ),
-        'index_news_category_selection' => Array(
+        'index_news_category_selection' => array(
             'exclude' => 1,
             'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_category_selection',
             'displayCond' => 'FIELD:type:=:ttnews',
-            'config' => Array(
+            'config' => array(
                 'type' => 'none',
             )
         ),
@@ -318,7 +323,8 @@ $configurationArray = array(
         ),
         'index_news_useHRDatesSingleWithoutDay' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_useHRDatesSingleWithoutDay',
+            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.'
+                . 'index_news_useHRDatesSingleWithoutDay',
             'displayCond' => 'FIELD:type:=:ttnews',
             'config' => array(
                 'type' => 'check',
@@ -371,7 +377,7 @@ $configurationArray = array(
             'config' => array(
                 'type' => 'input',
                 'size' => '30',
-				'default' => '1,2,5'
+                'default' => '1,2,5'
             )
         ),
         'commenttypes' => array(
@@ -449,7 +455,12 @@ $configurationArray = array(
         )
     ),
     'types' => array(
-        '0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2, storagepid,targetpid;;;;3-3-3,type,startingpoints_recursive,single_pages,sysfolder,index_content_with_restrictions,index_passed_events,index_news_archived,index_news_category_mode,index_news_category_selection,index_extnews_category_selection,index_news_useHRDatesSingle,index_news_useHRDatesSingleWithoutDay,index_use_page_tags,fal_storage,directories,fileext,index_page_doctypes,contenttypes,commenttypes,filteroption,tvpath,index_use_page_tags_for_files,cal_expired_events')
+        '0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2, storagepid,targetpid;;;;3-3-3,type,'
+            . 'startingpoints_recursive,single_pages,sysfolder,index_content_with_restrictions,index_passed_events,'
+            . 'index_news_archived,index_news_category_mode,index_news_category_selection,'
+            . 'index_extnews_category_selection,index_news_useHRDatesSingle,index_news_useHRDatesSingleWithoutDay,'
+            . 'index_use_page_tags,fal_storage,directories,fileext,index_page_doctypes,contenttypes,commenttypes,'
+            . 'filteroption,tvpath,index_use_page_tags_for_files,cal_expired_events')
     ),
     'palettes' => array(
         '1' => array('showitem' => '')
@@ -480,7 +491,8 @@ if (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')) {
             'parentField' => 'parentcategory',
         ),
         'foreign_table' => 'tx_news_domain_model_category',
-        'foreign_table_where' => ' AND (tx_news_domain_model_category.sys_language_uid = 0 OR tx_news_domain_model_category.l10n_parent = 0) ORDER BY tx_news_domain_model_category.sorting',
+        'foreign_table_where' => ' AND (tx_news_domain_model_category.sys_language_uid = 0'
+            . ' OR tx_news_domain_model_category.l10n_parent = 0) ORDER BY tx_news_domain_model_category.sorting',
         'size' => 10,
         'autoSizeMax' => 20,
         'minitems' => 0,
@@ -490,7 +502,8 @@ if (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')) {
     // news version 3 features system categories instead of it's own
     // category system which was used in previous versions
     if (version_compare(TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getExtensionVersion('news'), '3.0.0') >= 0) {
-        $configurationArray['columns']['index_extnews_category_selection']['config']['treeConfig']['parentField'] = 'parent';
+        $configurationArray['columns']['index_extnews_category_selection']['config']['treeConfig']['parentField'] =
+            'parent';
         $configurationArray['columns']['index_extnews_category_selection']['config']['foreign_table'] = 'sys_category';
         $configurationArray['columns']['index_extnews_category_selection']['config']['foreign_table_where'] = '';
     }

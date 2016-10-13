@@ -47,7 +47,8 @@ return array(
                     array('', 0),
                 ),
                 'foreign_table' => 'tx_kesearch_filteroptions',
-                'foreign_table_where' => 'AND tx_kesearch_filteroptions.pid=###CURRENT_PID### AND tx_kesearch_filteroptions.sys_language_uid IN (-1,0)',
+                'foreign_table_where' => 'AND tx_kesearch_filteroptions.pid=###CURRENT_PID###'
+                    . ' AND tx_kesearch_filteroptions.sys_language_uid IN (-1,0)',
             )
         ),
         'l10n_diffsource' => array(
@@ -119,7 +120,8 @@ return array(
         ),
     ),
     'types' => array(
-        '0' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1;;1-1-1, title;;;;2-2-2, tag;;;;3-3-3, automated_tagging;;;;4-4-4,automated_tagging_exclude;;;;5-5-5')
+        '0' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1;;1-1-1,'
+            . ' title;;;;2-2-2, tag;;;;3-3-3, automated_tagging;;;;4-4-4,automated_tagging_exclude;;;;5-5-5')
     ),
     'palettes' => array(
         '1' => array('showitem' => '')

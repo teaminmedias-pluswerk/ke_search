@@ -31,10 +31,6 @@ class tx_kesearch_filters
      * @var tx_kesearch_lib
      */
     protected $pObj;
-
-    /**
-     * @var tslib_cObj
-     */
     protected $cObj;
 
     /**
@@ -310,4 +306,3 @@ class tx_kesearch_filters
         return $this->tagChar;
     }
 }
-

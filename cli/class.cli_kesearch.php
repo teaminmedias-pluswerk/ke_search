@@ -28,7 +28,7 @@ class tx_kesearch_cli extends \TYPO3\CMS\Core\Controller\CommandLineController
     /**
      * Constructor
      */
-    function tx_kesearch_cli()
+    public function tx_kesearch_cli()
     {
         // Running parent class constructor
         parent::__construct();
@@ -43,10 +43,10 @@ class tx_kesearch_cli extends \TYPO3\CMS\Core\Controller\CommandLineController
 
     /**
      * CLI engine
-     * @param    array        Command line arguments
-     * @return    string
+     * @param array
+     * @return string
      */
-    function cli_main($argv)
+    public function cli_main($argv)
     {
 
         // make instance of indexer
@@ -77,7 +77,6 @@ class tx_kesearch_cli extends \TYPO3\CMS\Core\Controller\CommandLineController
                 break;
         }
     }
-
 }
 
 // Call the functionality

@@ -232,4 +232,3 @@ class tx_kesearch_indexer_types_tt_address extends tx_kesearch_indexer_types
         return $content;
     }
 }
-

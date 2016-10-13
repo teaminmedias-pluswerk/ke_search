@@ -201,7 +201,8 @@ class tx_kesearch_indexer_types_mmforum extends tx_kesearch_indexer_types
 
                     // hook for custom modifications of the indexed data, e. g. the tags
                     if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyMMForumIndexEntry'])) {
-                        foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyMMForumIndexEntry'] as $_classRef) {
+                        foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyMMForumIndexEntry'] as
+                                 $_classRef) {
                             $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
                             $_procObj->modifyMMForumIndexEntry(
                                 $title,

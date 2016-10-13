@@ -148,10 +148,10 @@ return array(
                 'maxitems' => 1,
             )
         ),
-        'sortdate' => Array(
+        'sortdate' => array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_index.sortdate',
-            'config' => Array(
+            'config' => array(
                 'type' => 'input',
                 'size' => '10',
                 'max' => '20',
@@ -185,7 +185,8 @@ return array(
         ),
     ),
     'types' => array(
-        '0' => array('showitem' => 'starttime;;;;1-1-1, endtime, fe_group, targetpid, content, params, type, tags, abstract, title;;;;2-2-2, language;;;;3-3-3')
+        '0' => array('showitem' => 'starttime;;;;1-1-1, endtime, fe_group, targetpid, content,'
+            . ' params, type, tags, abstract, title;;;;2-2-2, language;;;;3-3-3')
     ),
     'palettes' => array(
         '1' => array('showitem' => '')

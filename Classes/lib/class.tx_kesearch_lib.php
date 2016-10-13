@@ -408,7 +408,8 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
 
             // hook for modifying filter options
             if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptionsArray'])) {
-                foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptionsArray'] as $_classRef) {
+                foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptionsArray'] as
+                         $_classRef) {
                     $_procObj = &GeneralUtility::getUserObj($_classRef);
                     $options = $_procObj->modifyFilterOptionsArray($filter['uid'], $options, $this);
                 }
@@ -450,7 +451,8 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                 default:
                     // hook for custom filter renderer
                     if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customFilterRenderer'])) {
-                        foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customFilterRenderer'] as $_classRef) {
+                        foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customFilterRenderer'] as
+                                 $_classRef) {
                             $_procObj = &GeneralUtility::getUserObj($_classRef);
                             $_procObj->customFilterRenderer($filter['uid'], $options, $this, $filterData);
                         }
@@ -513,7 +515,6 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                     ) {
                         $data['selected'] = 1;
                     }
-
                 } else { // if an option was not found in the search results
                     $data['disabled'] = 1;
                 }
@@ -1556,4 +1557,3 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         $arr = $newArray;
     }
 }
-

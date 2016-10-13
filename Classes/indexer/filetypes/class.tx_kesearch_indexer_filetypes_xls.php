@@ -102,5 +102,4 @@ class tx_kesearch_indexer_filetypes_xls extends tx_kesearch_indexer_types_file i
             return false;
         }
     }
-
 }

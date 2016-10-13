@@ -19,7 +19,6 @@
 
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 
-
 /**
  * Plugin 'Faceted search - searchbox and filters' for the 'ke_search' extension.
  * @author    Stefan Froemken

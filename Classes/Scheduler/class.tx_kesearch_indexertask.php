@@ -20,7 +20,8 @@
 
 
 // include indexer class
-require_once(TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_search') . 'Classes/indexer/class.tx_kesearch_indexer.php');
+require_once(TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_search')
+    . 'Classes/indexer/class.tx_kesearch_indexer.php');
 
 class tx_kesearch_indexertask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
 {

@@ -84,8 +84,11 @@ class tx_kesearch_indexer_types_ke_yac extends tx_kesearch_indexer_types
                 $targetPID = $this->indexerConfig['targetpid'];
 
                 // get tags
-                $yacRecordTags = TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',',
-                    $yacRecord['tx_keyacsearchtags_tags'], true);
+                $yacRecordTags = TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(
+                    ',',
+                    $yacRecord['tx_keyacsearchtags_tags'],
+                    true
+                );
 
                 $tags = '';
                 $clearTextTags = '';

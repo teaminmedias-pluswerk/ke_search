@@ -70,5 +70,4 @@ class tx_kesearch_pi1_wizicon
         $LOCAL_LANG = $xmlParser->getParsedData($llFile, $GLOBALS['LANG']->lang);
         return $LOCAL_LANG;
     }
-
 }

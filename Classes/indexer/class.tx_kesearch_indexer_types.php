@@ -18,7 +18,7 @@
  ***************************************************************/
 
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
-
+use \TYPO3\CMS\Backend\Utility\BackendUtility;
 
 /**
  * Plugin 'Faceted search' for the 'ke_search' extension.
@@ -40,7 +40,6 @@ class tx_kesearch_indexer_types
 
     /**
      * needed to get all recursive pids
-     * @var t3lib_queryGenerator
      */
     public $queryGen;
 
@@ -139,8 +138,8 @@ class tx_kesearch_indexer_types
 
         // add complete page record to list of pids in $indexPids
         $where = ' AND ' . $table . '.pid = pages.uid ';
-        $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table);
-        $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table);
+        $where .= BackendUtility::BEenableFields($table);
+        $where .= BackendUtility::deleteClause($table);
         $this->pageRecords = $this->getPageRecords($indexPids, $where, 'pages,' . $table, 'pages.*');
         if (count($this->pageRecords)) {
             // create a new list of allowed pids
@@ -153,8 +152,9 @@ class tx_kesearch_indexer_types
 
     /**
      * Add Tags to records array
-     * @param array Simple array with uids of pages
-     * @param string additional where-clause
+     *
+     * @param array $uids Simple array with uids of pages
+     * @param string $pageWhere additional where-clause
      * @return array extended array with uids and tags for records
      */
     public function addTagsToRecords($uids, $pageWhere = '1=1')
@@ -171,8 +171,8 @@ class tx_kesearch_indexer_types
         $where = 'pages.uid IN (' . implode(',', $uids) . ')';
         $where .= ' AND pages.tx_kesearch_tags <> "" ';
         $where .= ' AND FIND_IN_SET(tx_kesearch_filteroptions.uid, pages.tx_kesearch_tags)';
-        $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('tx_kesearch_filteroptions');
-        $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('tx_kesearch_filteroptions');
+        $where .= BackendUtility::BEenableFields('tx_kesearch_filteroptions');
+        $where .= BackendUtility::deleteClause('tx_kesearch_filteroptions');
 
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where, 'pages.uid', '', '');
         while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
@@ -188,8 +188,8 @@ class tx_kesearch_indexer_types
         $fields = 'automated_tagging, automated_tagging_exclude, tag';
         $table = 'tx_kesearch_filteroptions';
         $where = 'automated_tagging <> "" ';
-        $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields('tx_kesearch_filteroptions');
-        $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause('tx_kesearch_filteroptions');
+        $where .= BackendUtility::BEenableFields('tx_kesearch_filteroptions');
+        $where .= BackendUtility::deleteClause('tx_kesearch_filteroptions');
 
         $rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($fields, $table, $where);
 
@@ -327,8 +327,8 @@ class tx_kesearch_indexer_types
         $fields = 'title,tag';
         $table = 'tx_kesearch_filteroptions';
         $where = 'uid="' . intval($tagUid) . '" ';
-        $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table);
-        $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table);
+        $where .= BackendUtility::BEenableFields($table);
+        $where .= BackendUtility::deleteClause($table);
 
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where, '', '', '1');
         $anz = $GLOBALS['TYPO3_DB']->sql_num_rows($res);

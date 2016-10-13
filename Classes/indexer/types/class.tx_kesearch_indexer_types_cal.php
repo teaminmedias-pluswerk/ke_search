@@ -66,7 +66,8 @@ class tx_kesearch_indexer_types_cal extends tx_kesearch_indexer_types
 
         // index expired events?
         if (!$this->indexerConfig['cal_expired_events']) {
-            $where .= ' AND ((UNIX_TIMESTAMP(start_date) > UNIX_TIMESTAMP()) OR (UNIX_TIMESTAMP(end_date) > UNIX_TIMESTAMP())) ';
+            $where .= ' AND ((UNIX_TIMESTAMP(start_date) > UNIX_TIMESTAMP())'
+                . ' OR (UNIX_TIMESTAMP(end_date) > UNIX_TIMESTAMP())) ';
         }
 
         // add enablefields

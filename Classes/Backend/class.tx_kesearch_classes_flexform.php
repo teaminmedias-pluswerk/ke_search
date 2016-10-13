@@ -2,9 +2,6 @@
 
 class tx_kesearch_classes_flexform
 {
-    /**
-     * @var language
-     */
     public $lang;
     public $notAllowedFields;
 

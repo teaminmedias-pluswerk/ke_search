@@ -105,7 +105,8 @@ class tx_kesearch_indexer_types_a21glossary extends tx_kesearch_indexer_types
 
                 // hook for custom modifications of the indexed data, e.g. the tags
                 if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifya21glossaryIndexEntry'])) {
-                    foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifya21glossaryIndexEntry'] as $_classRef) {
+                    foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifya21glossaryIndexEntry'] as
+                             $_classRef) {
                         $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
                         $_procObj->modifya21glossaryIndexEntry(
                             $title,

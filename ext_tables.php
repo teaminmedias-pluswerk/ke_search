@@ -71,7 +71,9 @@ if (TYPO3_MODE == 'BE') {
         'backend_module',         // Name of the module
         '',             // Position of the module
         array(          // Allowed controller action combinations
-            'BackendModule' => 'startIndexing,indexedContent,indexTableInformation,searchwordStatistics,clearSearchIndex,lastIndexingReport,alert',
+            'BackendModule' =>
+                'startIndexing,indexedContent,indexTableInformation,'
+                . 'searchwordStatistics,clearSearchIndex,lastIndexingReport,alert',
         ),
         array(          // Additional configuration
             'access' => 'user,group',

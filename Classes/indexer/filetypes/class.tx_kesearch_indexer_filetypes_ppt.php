@@ -101,5 +101,4 @@ class tx_kesearch_indexer_filetypes_ppt extends tx_kesearch_indexer_types_file i
             return false;
         }
     }
-
 }

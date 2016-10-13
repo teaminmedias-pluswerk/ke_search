@@ -755,5 +755,4 @@ class BackendModuleController extends AbstractBackendModuleController
     {
         return $GLOBALS['BE_USER'];
     }
-
 }

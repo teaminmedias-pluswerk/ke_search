@@ -38,10 +38,6 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
      * @var tx_kesearch_pi1
      */
     public $pObj;
-
-    /**
-     * @var tslib_cObj
-     */
     public $cObj;
 
     public function __construct($pObj)
@@ -134,7 +130,8 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function getSearchResultBySphinx()
     {
-        require_once(TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_search_premium') . 'class.user_kesearchpremium.php');
+        require_once(TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_search_premium')
+            . 'class.user_kesearchpremium.php');
         $this->user_kesearchpremium = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('user_kesearchpremium');
 
         // set ordering

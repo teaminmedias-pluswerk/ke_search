@@ -104,5 +104,4 @@ class tx_kesearch_indexer_filetypes_doc extends tx_kesearch_indexer_types_file i
             return false;
         }
     }
-
 }

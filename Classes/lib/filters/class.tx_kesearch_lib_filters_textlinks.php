@@ -206,7 +206,8 @@ class tx_kesearch_lib_filters_textlinks
      * get options of given filter and regarding current search result
      * Only options which are also found in result will be returned
      * @param array $filter The current looped filter
-     * @param array $additionalOptionValues This is an array with some additional informations for each filteroption (title, tag, amount of records, selected)
+     * @param array $additionalOptionValues This is an array with some additional
+     * informations for each filteroption (title, tag, amount of records, selected)
      * @return array A merged, sorted and complete Array with all option values we need
      */
     public function getOptionsOfFilter($filter, $additionalOptionValues)

@@ -256,4 +256,3 @@ class tx_kesearch_helper
         return $fileObject;
     }
 }
-

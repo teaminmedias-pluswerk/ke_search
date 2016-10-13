@@ -39,10 +39,6 @@ class tx_kesearch_indexer
     public $indexingErrors = array();
     public $startTime;
     public $currentRow = array(); // current row which have to be inserted/updated to database
-
-    /**
-     * @var t3lib_Registry
-     */
     public $registry;
 
     /**
@@ -278,7 +274,8 @@ class tx_kesearch_indexer
         // Statement to insert a new records to index table
         $GLOBALS['TYPO3_DB']->sql_query('PREPARE insertStmt FROM "
 			INSERT INTO tx_kesearch_index
-			(pid, title, type, targetpid, content, tags, params, abstract, language, starttime, endtime, fe_group, tstamp, crdate' . $addInsertQueryFields . ')
+			(pid, title, type, targetpid, content, tags, params, abstract, language,'
+            . ' starttime, endtime, fe_group, tstamp, crdate' . $addInsertQueryFields . ')
 			VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?' . $addInsertQueryValues . ', ?)
 		"');
 
@@ -414,7 +411,6 @@ class tx_kesearch_indexer
                             $content .= '<div class="error">SPHINX ' . $retRow . '</div>' . "\n";
                         }
                     }
-
                 } else {
                     $content .= '<div class="error">SPHINX ERROR: "exec" call is not allowed. '
                         . 'Check your disable_functions setting in php.ini.</div>';
@@ -853,8 +849,9 @@ class tx_kesearch_indexer
 
     /**
      * Strips control characters
-     * @param string the content to sanitize
-     * @return string the sanitized content
+     *
+     * @param string $content content to sanitize
+     * @return string
      * @see http://forge.typo3.org/issues/34808
      */
     public function stripControlCharacters($content)

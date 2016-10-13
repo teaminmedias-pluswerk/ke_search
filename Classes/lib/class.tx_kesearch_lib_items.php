@@ -30,7 +30,8 @@ class tx_kesearch_lib_items
     {
         // hook for custom registration of further indexerConfigurations
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['registerIndexerConfiguration'])) {
-            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['registerIndexerConfiguration'] as $_classRef) {
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['registerIndexerConfiguration'] as
+                     $_classRef) {
                 $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
                 $_procObj->registerIndexerConfiguration($params, $pObj);
             }

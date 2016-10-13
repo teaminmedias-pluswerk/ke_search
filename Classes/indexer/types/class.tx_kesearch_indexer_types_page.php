@@ -33,6 +33,7 @@ use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use \TYPO3\CMS\Core\Resource\ResourceFactory;
 use \TYPO3\CMS\Core\Resource\FileInterface;
 use \TYPO3\CMS\Core\Resource\Exception\ResourceDoesNotExistException;
+
 define('DONOTINDEX', -3);
 
 
@@ -455,7 +456,6 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
                 ) {
                     $pageContent[$ttContentRow['sys_language_uid']] .= $content;
                 }
-
             }
         } else {
             $this->counterWithoutContent++;
@@ -816,7 +816,8 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
 
         //hook for custom modifications of the indexed data, e. g. the tags
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFileIndexEntryFromContentIndexer'])) {
-            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFileIndexEntryFromContentIndexer'] as $_classRef) {
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFileIndexEntryFromContentIndexer'] as
+                     $_classRef) {
                 $_procObj = &\TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
                 $_procObj->modifyFileIndexEntryFromContentIndexer(
                     $fileObject,
@@ -882,7 +883,8 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
 
         // hook for modifiying a content elements content
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyContentFromContentElement'])) {
-            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyContentFromContentElement'] as $_classRef) {
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyContentFromContentElement'] as
+                     $_classRef) {
                 $_procObj = &\TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
                 $_procObj->modifyContentFromContentElement(
                     $bodytext,
@@ -895,4 +897,3 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
         return $bodytext;
     }
 }
-

@@ -35,9 +35,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class tx_kesearch_indexer_filetypes_pdf extends tx_kesearch_indexer_types_file implements tx_kesearch_indexer_filetypes
 {
 
-    var $extConf = array(); // saves the configuration of extension ke_search_hooks
-    var $app = array(); // saves the path to the executables
-    var $isAppArraySet = false;
+    public $extConf = array(); // saves the configuration of extension ke_search_hooks
+    public $app = array(); // saves the path to the executables
+    public $isAppArraySet = false;
 
     /**
      * class constructor
@@ -142,7 +142,7 @@ class tx_kesearch_indexer_filetypes_pdf extends tx_kesearch_indexer_types_file i
 
     /**
      * Analysing PDF info into a useable format.
-     * @param array Array of PDF content, coming from the pdfinfo tool
+     * @param array $pdfInfoArray Data of PDF content, coming from the pdfinfo tool
      * @return array The pdf informations as array in a useable format
      */
     public function splitPdfInfo($pdfInfoArray)
@@ -169,5 +169,4 @@ class tx_kesearch_indexer_filetypes_pdf extends tx_kesearch_indexer_types_file i
     {
         return trim(preg_replace('/[' . LF . chr(12) . ']*$/', '', $string));
     }
-
 }
