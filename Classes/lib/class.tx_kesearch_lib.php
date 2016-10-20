@@ -588,6 +588,9 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                     );
                 }
             } else {
+				//fill $this->tagsInSearchResult
+				$this->filters->checkIfTagMatchesRecords($option['tag']);
+				
                 // do not process any checks; show all filter options
                 $options[$option['uid']] = array(
                     'title' => $option['title'],
