@@ -1212,15 +1212,17 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
 
             // if index record is of type "file" and contains an orig_uid, this is the reference
             // to a FAL record. Otherwise we use the path directly.
+            /** @var $fileObject \TYPO3\CMS\Core\Resource\File */
             if ($row['orig_uid'] && ($fileObject = tx_kesearch_helper::getFile($row['orig_uid']))) {
                 $metadata = $fileObject->_getMetaData();
-                $imageConf['file'] = $fileObject->getPublicUrl();
+                $imageConf['file'] = $fileObject->getForLocalProcessing(false);
                 $imageConf['altText'] = $metadata['alternative'];
             } else {
                 $imageConf['file'] = $row['directory'] . rawurlencode($row['title']);
             }
             return $this->renderPreviewImage($imageConf);
         }
+        return '';
     }
 
     /**
@@ -1241,9 +1243,8 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         $imageConf = $this->conf['previewImage.'];
         $fileRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
         $fileObjects = $fileRepository->findByRelation($table, $fieldname, $uid);
-        if (count($fileObjects)) {
-            $fileObject = $fileObjects[0];
-        }
+        /** @var $fileObject \TYPO3\CMS\Core\Resource\FileReference */
+        $fileObject = !empty($fileObjects) ? $fileObjects[0] : null;
 
         if ($fileObject) {
             $referenceProperties = $fileObject->getReferenceProperties();
@@ -1251,7 +1252,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             $alternative = $referenceProperties['alternative'] ?
                 $referenceProperties['alternative'] : $originalFileProperties['alternative'];
 
-            $imageConf['file'] = $fileObject->getPublicUrl();
+            $imageConf['file'] = $fileObject->getForLocalProcessing(false);
             $imageConf['altText'] = $alternative;
             $imageHtml = $this->renderPreviewImage($imageConf);
         }
