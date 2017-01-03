@@ -165,6 +165,11 @@ class tx_kesearch_lib_div
                     $piVars[$key] = preg_replace('/[^a-zA-Z0-9]/', '', $piVars[$key]);
                     break;
 
+                // integer value for redirect
+                case 'redirect':
+                    $piVars[$key] = intval($piVars[$key]);
+                    break;
+
                 // "asc" or "desc"
                 case 'sortByDir':
                 case 'orderByDir':

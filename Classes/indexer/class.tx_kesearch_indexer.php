@@ -186,8 +186,8 @@ class tx_kesearch_indexer
             }
         }
 
-        // log report to sys_log
-        $GLOBALS['BE_USER']->simplelog($plaintextReport, 'ke_search');
+        // log report to sys_log and decode urls to prevent errors in backend module
+        $GLOBALS['BE_USER']->simplelog(urldecode($plaintextReport), 'ke_search');
 
         // verbose or quiet output? as set in function call!
         if ($verbose) {
@@ -204,7 +204,7 @@ class tx_kesearch_indexer
      */
     public function createPlaintextReport($content)
     {
-        $report = 'ke_search indexing report' . "\n\n";
+        $report = ' indexing report' . "\n\n";
         $report .= 'Finishing time: ' . date($GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'] . ', H:i') . "\n\n";
         $report .= strip_tags($content);
 
