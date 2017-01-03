@@ -40,9 +40,9 @@ If you find bugs or want to ask for a feature, please use https://github.com/tea
 
 03.01.2017
 This fork fixes/includes the following bugs/features:
-- [BUGFIX] tt_news and TYPO3 7.6 (https://github.com/teaminmedias-pluswerk/ke_search/issues/69, https://forge.typo3.org/issues/72955)
-- [FEATURE] Support for Fluid fallback paths #73 (https://github.com/teaminmedias-pluswerk/ke_search/pull/73, https://forge.typo3.org/issues/72804, https://github.com/teaminmedias-pluswerk/ke_search/issues/18)
-- [BUGFIX] Do not use publicUrl for file manipulation #70 (https://github.com/teaminmedias-pluswerk/ke_search/pull/70)
-- [FEATURE] RealURL path on form submit (https://forge.typo3.org/issues/61564)
-- [BUGFIX] Add urldecode for logging to sys_log #76 (https://github.com/teaminmedias-pluswerk/ke_search/issues/76)
-- [BUGFIX] Wrong parent row pages in class.user_filterlist.php (https://forge.typo3.org/issues/72896)
+  - [BUGFIX] tt_news and TYPO3 7.6 (https://github.com/teaminmedias-pluswerk/ke_search/issues/69, https://forge.typo3.org/issues/72955)
+  - [FEATURE] Support for Fluid fallback paths #73 (https://github.com/teaminmedias-pluswerk/ke_search/pull/73, https://forge.typo3.org/issues/72804, https://github.com/teaminmedias-pluswerk/ke_search/issues/18)
+  - [BUGFIX] Do not use publicUrl for file manipulation #70 (https://github.com/teaminmedias-pluswerk/ke_search/pull/70)
+  - [FEATURE] RealURL path on form submit (https://forge.typo3.org/issues/61564)
+  - [BUGFIX] Add urldecode for logging to sys_log #76 (https://github.com/teaminmedias-pluswerk/ke_search/issues/76)
+  - [BUGFIX] Wrong parent row pages in class.user_filterlist.php (https://forge.typo3.org/issues/72896)
