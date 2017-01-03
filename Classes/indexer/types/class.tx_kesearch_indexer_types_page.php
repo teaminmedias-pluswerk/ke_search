@@ -651,7 +651,6 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
                 // to index defined in the indexer configuration
                 if ($isInList) {
                     // get file path and URI
-                    $fileUri = $fileObject->getStorage()->getPublicUrl($fileObject);
                     $filePath = $fileObject->getForLocalProcessing(false);
 
                     /* @var $fileIndexerObject tx_kesearch_indexer_types_file */

@@ -112,9 +112,9 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
 );
 
 // class for displaying the category tree for tt_news in BE forms.
-if (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('tt_news')) {
-    include_once(TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('tt_news')
-        . 'lib/class.tx_ttnews_TCAform_selectTree.php');
+if (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('tt_news') &&
+		\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(\TYPO3\CMS\Core\Utility\VersionNumberUtility::getNumericTypo3Version()) < 7006000 ) {
+	include_once(TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('tt_news') . 'lib/class.tx_ttnews_TCAform_selectTree.php');
 }
 
 if (TYPO3_MODE == 'BE') {

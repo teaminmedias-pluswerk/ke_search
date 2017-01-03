@@ -5,12 +5,18 @@
 # paths for fluid templating
 plugin.tx_kesearch_pi1 {
 	templateRootPath = EXT:ke_search/Resources/Private/Templates/
+	templateRootPaths.1 < .templateRootPath
 	partialRootPath = EXT:ke_search/Resources/Private/Partials/
+	partialRootPaths.1 < .partialRootPath
 	layoutRootPath = EXT:ke_search/Resources/Private/Layouts/
+	layoutRootPaths.1 < .layoutRootPath
 }
 
 plugin.tx_kesearch_pi2 {
 	templateRootPath = EXT:ke_search/Resources/Private/Templates/
+	templateRootPaths.1 < .templateRootPath
 	partialRootPath = EXT:ke_search/Resources/Private/Partials/
+	partialRootPaths.1 < .partialRootPath
 	layoutRootPath = EXT:ke_search/Resources/Private/Layouts/
+	layoutRootPaths.1 < .layoutRootPath
 }
