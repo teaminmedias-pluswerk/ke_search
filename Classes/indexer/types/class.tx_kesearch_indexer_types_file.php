@@ -235,6 +235,11 @@ class tx_kesearch_indexer_types_file extends tx_kesearch_indexer_types
                         $fileContent = $fileObj->getContent($file);
                         $this->addError($fileObj->getErrors());
                     }
+
+                    // remove line breaks from content in order to identify
+                    // additional content (which will have trailing linebreaks)
+                    $fileContent = str_replace("\n", ' ', $fileContent);
+
                     return $fileContent;
                 } else {
                     return false;
@@ -294,7 +299,6 @@ class tx_kesearch_indexer_types_file extends tx_kesearch_indexer_types
      */
     public function storeToIndex($file, $content)
     {
-
         $tags = '';
         tx_kesearch_helper::makeTags($tags, array('file'));
 
@@ -333,18 +337,29 @@ class tx_kesearch_indexer_types_file extends tx_kesearch_indexer_types
         // add additional content if FAL is used
         if ($this->pObj->indexerConfig['fal_storage'] > 0) {
             // index meta data from FAL: title, description, alternative
+            $additionalContent = '';
+
             if ($metadata['title']) {
-                $indexRecordValues['content'] = $metadata['title'] . "\n" . $indexRecordValues['content'];
+                $additionalContent = $metadata['title'] . "\n" ;
             }
 
             if ($metadata['description']) {
                 $indexRecordValues['abstract'] = $metadata['description'];
-                $content = $metadata['description'] . "\n" . $content;
+                $additionalContent .= $metadata['description'] . "\n";
             }
 
             if ($metadata['alternative']) {
-                $content .= "\n" . $metadata['alternative'];
+                $additionalContent .= $metadata['alternative'] . "\n";
             }
+
+            // remove previously indexed additional content elements (they can be identified by having trailing
+            // linebreaks, the linebreaks in the file content have been removed)
+            if (strpos($content, "\n")) {
+                $content = substr($content, strrpos($content, "\n"));
+            }
+
+            // add additional content
+            $content = $additionalContent . $content;
 
             // make tags from assigned categories
             $categories = tx_kesearch_helper::getCategories($metadata['uid'], 'sys_file_metadata');
