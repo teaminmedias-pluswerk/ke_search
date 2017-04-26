@@ -1,5 +1,8 @@
 ChangeLog
 
+current master
+[TASK]    adaptions to TYPO3 8.7.1.
+
 Version 2.4.2, April 2017
 [!!!] Security bugfix, please update!
 Note: The github version differs slightly from the TER version, since the TER version contains the security bugfix only.
