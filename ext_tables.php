@@ -77,7 +77,7 @@ if (TYPO3_MODE == 'BE') {
         ),
         array(          // Additional configuration
             'access' => 'user,group',
-            'icon' => 'EXT:ke_search/Resources/Public/Icons/moduleicon.gif',
+            'icon' => 'EXT:ke_search/Resources/Public/Icons/moduleicon.svg',
             'labels' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml',
         )
     );
@@ -88,7 +88,7 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
     array(
         'LLL:EXT:ke_search/locallang_db.xml:tt_content.list_type_pi1',
         $_EXTKEY . '_pi1',
-        $extRelPath . 'ext_icon.gif'
+        $extRelPath . 'ext_icon.svg'
     ),
     'list_type'
 );
@@ -97,7 +97,7 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
     array(
         'LLL:EXT:ke_search/locallang_db.xml:tt_content.list_type_pi2',
         $_EXTKEY . '_pi2',
-        $extRelPath . 'ext_icon.gif'
+        $extRelPath . 'ext_icon.svg'
     ),
     'list_type'
 );
@@ -106,7 +106,7 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
     array(
         'LLL:EXT:ke_search/locallang_db.xml:tt_content.list_type_pi3',
         $_EXTKEY . '_pi3',
-        $extRelPath . 'ext_icon.gif'
+        $extRelPath . 'ext_icon.svg'
     ),
     'list_type'
 );
