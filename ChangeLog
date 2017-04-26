@@ -2,6 +2,9 @@ ChangeLog
 
 current master
 [TASK]    adaptions to TYPO3 8.7.1.
+[TASK] Remove line indexing while indexing file content. This makes identifying additional content possible.
+[BUGFIX] Fix indexing of the metadata title.
+[BUGFIX] Fix double indexing of metadata. fixes https://github.com/teaminmedias-pluswerk/ke_search/issues/78.
 
 Version 2.4.2, April 2017
 [!!!] Security bugfix, please update!
