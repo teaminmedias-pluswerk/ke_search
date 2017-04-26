@@ -113,7 +113,9 @@ class tx_kesearch_indexer_types_templavoila extends tx_kesearch_indexer_types
         $this->whereClauseForCType = implode(' OR ', $cTypes);
 
         // get all available sys_language_uid records
-        $this->sysLanguages = BackendUtility::getSystemLanguages();
+        /** @var TranslationConfigurationProvider $translationProvider */
+        $translationProvider = GeneralUtility::makeInstance(TranslationConfigurationProvider::class);
+        $this->sysLanguages = $translationProvider->getSystemLanguages($pageId);
     }
 
 

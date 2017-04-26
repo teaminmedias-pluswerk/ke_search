@@ -33,6 +33,7 @@ use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use \TYPO3\CMS\Core\Resource\ResourceFactory;
 use \TYPO3\CMS\Core\Resource\FileInterface;
 use \TYPO3\CMS\Core\Resource\Exception\ResourceDoesNotExistException;
+use TYPO3\CMS\Backend\Configuration\TranslationConfigurationProvider;
 
 define('DONOTINDEX', -3);
 
@@ -169,7 +170,9 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
         $this->whereClauseForCType = implode(' OR ', $cTypes);
 
         // get all available sys_language_uid records
-        $this->sysLanguages = BackendUtility::getSystemLanguages();
+        /** @var TranslationConfigurationProvider $translationProvider */
+        $translationProvider = GeneralUtility::makeInstance(TranslationConfigurationProvider::class);
+        $this->sysLanguages = $translationProvider->getSystemLanguages($pageId);
 
         // make file repository
         /* @var $this ->fileRepository \TYPO3\CMS\Core\Resource\FileRepository */
