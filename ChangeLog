@@ -3,6 +3,7 @@ ChangeLog
 current master
 [TASK]    Cleanup code according to PSR-2 coding styleguide.
 [TASK]    Fix minor code inspection bugs.
+[BUGFIX]  security bugfix.
 
 Version 2.4.1, October 2016
 [TASK]    Set correct limit for ke_search_premium.
