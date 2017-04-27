@@ -243,7 +243,7 @@ class tx_kesearch_helper
 
     /**
      * @param  integer $uid
-     * @return File|NULL
+     * @return \TYPO3\CMS\Core\Resource\File|NULL
      */
     public static function getFile($uid)
     {
