@@ -47,7 +47,8 @@ class tx_kesearch_pi2 extends tx_kesearch_lib
     public function main($content, $conf)
     {
         $this->ms = GeneralUtility::milliseconds();
-        $this->conf = $conf;
+        $typoScriptService = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService');
+        $this->conf = $typoScriptService->convertTypoScriptArrayToPlainArray($conf);
         $this->pi_setPiVarDefaults();
 
         // use pi1 locallang values, since all the frontend locallang values for
@@ -122,9 +123,10 @@ class tx_kesearch_pi2 extends tx_kesearch_lib
     public function initFluidTemplate()
     {
         $this->resultListView = GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
-        $this->resultListView->setPartialRootPaths([$this->conf['partialRootPath']]);
-        $this->resultListView->setLayoutRootPaths([$this->conf['layoutRootPath']]);
-        $this->resultListView->setTemplatePathAndFilename($this->conf['templateRootPath'] . 'ResultList.html');
+        $this->resultListView->setTemplateRootPaths($this->conf['templateRootPaths']);
+        $this->resultListView->setPartialRootPaths($this->conf['partialRootPaths']);
+        $this->resultListView->setLayoutRootPaths($this->conf['layoutRootPaths']);
+        $this->resultListView->setTemplate('ResultList');
 
         // make settings available in fluid template
         $this->resultListView->assign('conf', $this->conf);

@@ -46,7 +46,8 @@ class tx_kesearch_pi1 extends tx_kesearch_lib
     public function main($content, $conf)
     {
         $this->ms = GeneralUtility::milliseconds();
-        $this->conf = $conf;
+        $typoScriptService = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService');
+        $this->conf = $typoScriptService->convertTypoScriptArrayToPlainArray($conf);
         $this->pi_setPiVarDefaults();
         $this->pi_loadLL();
 
@@ -84,9 +85,10 @@ class tx_kesearch_pi1 extends tx_kesearch_lib
     public function initFluidTemplate()
     {
         $this->searchFormView = GeneralUtility::makeInstance('TYPO3\\CMS\\Fluid\\View\\StandaloneView');
-        $this->searchFormView->setPartialRootPaths([$this->conf['partialRootPath']]);
-        $this->searchFormView->setLayoutRootPaths([$this->conf['layoutRootPath']]);
-        $this->searchFormView->setTemplatePathAndFilename($this->conf['templateRootPath'] . 'SearchForm.html');
+        $this->searchFormView->setTemplateRootPaths($this->conf['templateRootPaths']);
+        $this->searchFormView->setPartialRootPaths($this->conf['partialRootPaths']);
+        $this->searchFormView->setLayoutRootPaths($this->conf['layoutRootPaths']);
+        $this->searchFormView->setTemplate('SearchForm');
 
         // make settings available in fluid template
         $this->searchFormView->assign('conf', $this->conf);
