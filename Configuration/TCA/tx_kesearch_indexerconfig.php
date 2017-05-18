@@ -1,5 +1,12 @@
 <?php
 
+$langGeneralPath = 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:';
+if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
+    \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('8.0')
+) {
+    $langGeneralPath = 'LLL:EXT:lang/locallang_general.xml:';
+}
+
 $configurationArray = array(
     'ctrl' => array(
         'title' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig',
@@ -24,7 +31,7 @@ $configurationArray = array(
     'columns' => array(
         'hidden' => array(
             'exclude' => 1,
-            'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+            'label' => $langGeneralPath . 'LGL.hidden',
             'config' => array(
                 'type' => 'check',
                 'default' => '0'

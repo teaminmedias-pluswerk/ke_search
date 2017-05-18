@@ -170,7 +170,11 @@ class tx_kesearch_indexer_types_news extends tx_kesearch_indexer_types
 
                         // create params for news single view, example:
                         // index.php?id=123&tx_news_pi1[news]=9&tx_news_pi1[controller]=News&tx_news_pi1[action]=detail
-                        $paramsSingleView['tx_news_pi1']['news'] = $newsRecord['uid'];
+                        // NOTE that translated news records are linked by their l10n_parent uid (and overlaid later)
+                        $paramsSingleView['tx_news_pi1']['news'] = $newsRecord['l10n_parent']
+                            ? $newsRecord['l10n_parent']
+                            : $newsRecord['uid']
+                        ;
                         $paramsSingleView['tx_news_pi1']['controller'] = 'News';
                         $paramsSingleView['tx_news_pi1']['action'] = 'detail';
                         $params = '&' . http_build_query($paramsSingleView, null, '&');

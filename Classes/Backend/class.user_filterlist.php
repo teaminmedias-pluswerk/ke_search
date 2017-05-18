@@ -138,7 +138,7 @@ class user_filterlist
             $intString = substr($intString, 0, strpos($intString, '|'));
             $intString = intval($intString);
         } else {
-            $intString = intval($parentRow['pages']);
+            $intString = $parentRow['pages'];
         }
 
         // print message if no startingpoint is set in plugin config

@@ -2,13 +2,20 @@ ChangeLog
 
 current master
 [BUGFIX] Register wizard icon in IconRegistry
-[FEATURE] Support templateRootPaths in Fluid template engine, to be able to overwrite single templates/partials/layouts. https://github.com/teaminmedias-pluswerk/ke_search/pull/96.
+[BUGFIX]  Add switch for core locallang files
+[TASK]    Remove include of old and outdated tt_news libs
+[BUGFIX]  Do not use publicUrl for file manipulation
+[FEATURE] RealURL path on form submit
+[BUGFIX]  Add urldecode for logging to sys_log
+[BUGFIX]  Wrong parent row pages in class.user_filterlist.php
+[FEATURE] Support templateRootPaths in Fluid template engine, to be able to overwrite single templates/partials/layouts. https://github.com/teaminmedias-pluswerk/ke_search/pull/96
 [TASK]    adaptions to TYPO3 8.7.1.
 [TASK]    Remove line indexing while indexing file content. This makes identifying additional content possible.
 [BUGFIX]  Fix indexing of the metadata title.
 [BUGFIX]  Fix double indexing of metadata. fixes https://github.com/teaminmedias-pluswerk/ke_search/issues/78.
 [TASK]    New module and extension icon with .svg format. https://github.com/teaminmedias-pluswerk/ke_search/pull/88.
 [TASK]    Add composer support for 8.7. https://github.com/teaminmedias-pluswerk/ke_search/pull/93.
+[BUGFIX]  Use l10n_parent for links to translated news. https://github.com/teaminmedias-pluswerk/ke_search/pull/92.
 
 Version 2.4.2, April 2017
 [!!!] Security bugfix, please update!

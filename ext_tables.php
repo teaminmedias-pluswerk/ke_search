@@ -111,12 +111,6 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
     'list_type'
 );
 
-// class for displaying the category tree for tt_news in BE forms.
-if (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('tt_news')) {
-    include_once(TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('tt_news')
-        . 'lib/class.tx_ttnews_TCAform_selectTree.php');
-}
-
 if (TYPO3_MODE == 'BE') {
     $TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_kesearch_pi1_wizicon'] =
         $extPath . 'pi1/class.tx_kesearch_pi1_wizicon.php';
