@@ -1,7 +1,7 @@
 ChangeLog
 
 current master
-[BUGFIX] Register wizard icon in IconRegistry
+[BUGFIX]  Register wizard icon in IconRegistry
 [BUGFIX]  Add switch for core locallang files
 [TASK]    Remove include of old and outdated tt_news libs
 [BUGFIX]  Do not use publicUrl for file manipulation
@@ -17,6 +17,7 @@ current master
 [TASK]    Add composer support for 8.7. https://github.com/teaminmedias-pluswerk/ke_search/pull/93.
 [BUGFIX]  Use l10n_parent for links to translated news. https://github.com/teaminmedias-pluswerk/ke_search/pull/92.
 [BUGFIX]  Fix deprecated call of FlashMessage::render()
+[BUGFIX]  Make backend module accessible for non-admin users. https://github.com/teaminmedias-pluswerk/ke_search/pull/105.
 
 Version 2.4.2, April 2017
 [!!!] Security bugfix, please update!
