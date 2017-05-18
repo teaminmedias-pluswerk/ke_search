@@ -1,5 +1,12 @@
 <?php
 
+$langGeneralPath = 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:';
+if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
+    \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('8.0')
+) {
+    $langGeneralPath = 'LLL:EXT:lang/locallang_general.xml:';
+}
+
 return array(
     'ctrl' => array(
         'title' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_index',
@@ -21,7 +28,7 @@ return array(
     'columns' => array(
         'starttime' => array(
             'exclude' => 1,
-            'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.starttime',
+            'label' => $langGeneralPath . 'LGL.starttime',
             'config' => array(
                 'type' => 'input',
                 'size' => '8',
@@ -33,7 +40,7 @@ return array(
         ),
         'endtime' => array(
             'exclude' => 1,
-            'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.endtime',
+            'label' => $langGeneralPath . 'LGL.endtime',
             'config' => array(
                 'type' => 'input',
                 'size' => '8',
@@ -49,15 +56,15 @@ return array(
         ),
         'fe_group' => array(
             'exclude' => 1,
-            'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.fe_group',
+            'label' => $langGeneralPath . 'LGL.fe_group',
             'config' => array(
                 'type' => 'select',
                 'renderType' => 'selectSingleBox',
                 'items' => array(
                     array('', 0),
-                    array('LLL:EXT:lang/locallang_general.xml:LGL.hide_at_login', -1),
-                    array('LLL:EXT:lang/locallang_general.xml:LGL.any_login', -2),
-                    array('LLL:EXT:lang/locallang_general.xml:LGL.usergroups', '--div--')
+                    array($langGeneralPath . 'LGL.hide_at_login', -1),
+                    array($langGeneralPath . 'LGL.any_login', -2),
+                    array($langGeneralPath . 'LGL.usergroups', '--div--')
                 ),
                 'foreign_table' => 'fe_groups',
                 'foreign_table_where' => 'ORDER BY fe_groups.title',
