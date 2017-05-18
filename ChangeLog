@@ -1,6 +1,7 @@
 ChangeLog
 
 current master
+[BUGFIX] Register wizard icon in IconRegistry
 [FEATURE] Support templateRootPaths in Fluid template engine, to be able to overwrite single templates/partials/layouts. https://github.com/teaminmedias-pluswerk/ke_search/pull/96.
 [TASK]    adaptions to TYPO3 8.7.1.
 [TASK]    Remove line indexing while indexing file content. This makes identifying additional content possible.

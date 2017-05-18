@@ -46,10 +46,8 @@ class tx_kesearch_pi1_wizicon
         global $LANG;
 
         $LL = $this->includeLocalLang();
-        $extRelPath = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('ke_search');
-
         $wizardItems['plugins_tx_kesearch_pi1'] = array(
-            'icon' => $extRelPath . 'pi1/ce_wiz.gif',
+            'iconIdentifier' => 'ext-kesearch-wizard-icon',
             'title' => $LANG->getLLL('pi_title', $LL),
             'description' => $LANG->getLLL('pi_plus_wiz_description', $LL),
             'params' => '&defVals[tt_content][CType]=list&defVals[tt_content][list_type]=ke_search_pi1'
