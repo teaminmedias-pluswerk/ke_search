@@ -278,13 +278,43 @@ class tx_kesearch_indexer_types
                     false
                 );
 
-                $messages[] = $message->render();
+                $messages[] = $this->renderFlashMessage($message);
             }
 
             return implode('<br>', $messages);
         } else {
             return '';
         }
+    }
+
+    /**
+     * Renders the flash message.
+     *
+     * @param \TYPO3\CMS\Core\Messaging\FlashMessage $flashMessage
+     * @return string The flash message as HTML.
+     */
+    protected function renderFlashMessage(\TYPO3\CMS\Core\Messaging\FlashMessage $flashMessage)
+    {
+        $title = '';
+        if (!empty($this->title)) {
+            $title = '<h4 class="alert-title">' . $flashMessage->getTitle() . '</h4>';
+        }
+        $message = '
+			<div class="alert ' . $flashMessage->getClass() . '">
+				<div class="media">
+					<div class="media-left">
+						<span class="fa-stack fa-lg">
+							<i class="fa fa-circle fa-stack-2x"></i>
+							<i class="fa fa-' . $flashMessage->getIconName() . ' fa-stack-1x"></i>
+						</span>
+					</div>
+					<div class="media-body">
+						' . $title . '
+						<div class="alert-message">' . $flashMessage->getMessage() . '</div>
+					</div>
+				</div>
+			</div>';
+        return $message;
     }
 
     /**
