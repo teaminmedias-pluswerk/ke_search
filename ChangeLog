@@ -13,6 +13,7 @@ current master
 [BUGFIX]  Fix double indexing of metadata. fixes https://github.com/teaminmedias-pluswerk/ke_search/issues/78.
 [TASK]    New module and extension icon with .svg format. https://github.com/teaminmedias-pluswerk/ke_search/pull/88.
 [TASK]    Add composer support for 8.7. https://github.com/teaminmedias-pluswerk/ke_search/pull/93.
+[BUGFIX]  Use l10n_parent for links to translated news. https://github.com/teaminmedias-pluswerk/ke_search/pull/92.
 
 Version 2.4.2, April 2017
 [!!!] Security bugfix, please update!
