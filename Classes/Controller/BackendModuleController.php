@@ -76,7 +76,7 @@ class BackendModuleController extends AbstractBackendModuleController
 
         $this->do = GeneralUtility::_GET('do');
 
-        $this->perms_clause = $this->getBackendUser()->getPagePermsClause($this->id);
+        $this->perms_clause = $this->getBackendUser()->getPagePermsClause(1);
         $this->pageinfo = BackendUtility::readPageAccess($this->id, $this->perms_clause);
 
         // check access and redirect accordingly
