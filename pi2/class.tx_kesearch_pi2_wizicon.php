@@ -44,9 +44,8 @@ class tx_kesearch_pi2_wizicon
     {
         global $LANG;
         $LL = $this->includeLocalLang();
-        $extRelPath = ExtensionManagementUtility::extRelPath('ke_search');
         $wizardItems['plugins_tx_kesearch_pi2'] = array(
-            'icon' => $extRelPath . 'pi2/ce_wiz.gif',
+            'iconIdentifier' => 'ext-kesearch-wizard-icon',
             'title' => $LANG->getLLL('pi_title', $LL),
             'description' => $LANG->getLLL('pi_plus_wiz_description', $LL),
             'params' => '&defVals[tt_content][CType]=list&defVals[tt_content][list_type]=ke_search_pi2'

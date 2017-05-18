@@ -121,3 +121,11 @@ if (TYPO3_MODE == 'BE') {
     $TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_kesearch_pi3_wizicon'] =
         $extPath . 'pi3/class.tx_kesearch_pi3_wizicon.php';
 }
+
+/** @var \TYPO3\CMS\Core\Imaging\IconRegistry $iconRegistry */
+$iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Core\Imaging\IconRegistry');
+$iconRegistry->registerIcon(
+    'ext-kesearch-wizard-icon',
+    'TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider',
+    ['source' => 'EXT:ke_search/Resources/Public/Icons/ce_wiz.gif']
+);
