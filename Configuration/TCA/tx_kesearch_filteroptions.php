@@ -1,5 +1,12 @@
 <?php
 
+$langGeneralPath = 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:';
+if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
+    \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('8.0')
+) {
+    $langGeneralPath = 'LLL:EXT:lang/locallang_general.xml:';
+}
+
 return array(
     'ctrl' => array(
         'title' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filteroptions',
@@ -24,22 +31,22 @@ return array(
     'columns' => array(
         'sys_language_uid' => array(
             'exclude' => 1,
-            'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.language',
+            'label' => $langGeneralPath . 'LGL.language',
             'config' => array(
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'foreign_table' => 'sys_language',
                 'foreign_table_where' => 'ORDER BY sys_language.title',
                 'items' => array(
-                    array('LLL:EXT:lang/locallang_general.xml:LGL.allLanguages', -1),
-                    array('LLL:EXT:lang/locallang_general.xml:LGL.default_value', 0)
+                    array($langGeneralPath . 'LGL.allLanguages', -1),
+                    array($langGeneralPath . 'LGL.default_value', 0)
                 )
             )
         ),
         'l10n_parent' => array(
             'displayCond' => 'FIELD:sys_language_uid:>:0',
             'exclude' => 1,
-            'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.l18n_parent',
+            'label' => $langGeneralPath . 'LGL.l18n_parent',
             'config' => array(
                 'type' => 'select',
                 'renderType' => 'selectSingle',
@@ -58,7 +65,7 @@ return array(
         ),
         'hidden' => array(
             'exclude' => 1,
-            'label' => 'LLL:EXT:lang/locallang_general.xml:LGL.hidden',
+            'label' => $langGeneralPath . 'LGL.hidden',
             'config' => array(
                 'type' => 'check',
                 'default' => '0'

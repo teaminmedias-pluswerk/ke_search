@@ -1,6 +1,7 @@
 ChangeLog
 
 current master
+[BUGFIX]  Add switch for core locallang files
 [TASK]    Remove include of old and outdated tt_news libs
 [BUGFIX]  Do not use publicUrl for file manipulation
 [FEATURE] RealURL path on form submit
