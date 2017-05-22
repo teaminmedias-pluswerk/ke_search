@@ -1,6 +1,7 @@
 ChangeLog
 
 current master
+[BUGFIX]  Fix missing icon for "list_type" in ke_search plugins
 [BUGFIX]  Register wizard icon in IconRegistry
 [BUGFIX]  Add switch for core locallang files
 [TASK]    Remove include of old and outdated tt_news libs
