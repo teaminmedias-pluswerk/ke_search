@@ -87,8 +87,7 @@ if (TYPO3_MODE == 'BE') {
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
     array(
         'LLL:EXT:ke_search/locallang_db.xml:tt_content.list_type_pi1',
-        $_EXTKEY . '_pi1',
-        $extRelPath . 'ext_icon.svg'
+        $_EXTKEY . '_pi1'
     ),
     'list_type'
 );
@@ -96,8 +95,7 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
     array(
         'LLL:EXT:ke_search/locallang_db.xml:tt_content.list_type_pi2',
-        $_EXTKEY . '_pi2',
-        $extRelPath . 'ext_icon.svg'
+        $_EXTKEY . '_pi2'
     ),
     'list_type'
 );
@@ -105,8 +103,7 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
     array(
         'LLL:EXT:ke_search/locallang_db.xml:tt_content.list_type_pi3',
-        $_EXTKEY . '_pi3',
-        $extRelPath . 'ext_icon.svg'
+        $_EXTKEY . '_pi3'
     ),
     'list_type'
 );
