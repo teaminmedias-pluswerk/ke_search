@@ -1,6 +1,7 @@
 ChangeLog
 
 current master
+[BUGFIX]  Respect visibility of immediate parent gridelements container when indexing content elements
 [BUGFIX]  Make file indexing (from RTE) work with new typolink syntax
 [BUGFIX]  Register wizard icon in IconRegistry
 [BUGFIX]  Add switch for core locallang files

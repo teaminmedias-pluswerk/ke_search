@@ -397,6 +397,8 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
         // add condition for not indexing gridelement columns with colPos = -2 (= invalid)
         if (ExtensionManagementUtility::isLoaded('gridelements')) {
             $where .= ' AND colPos <> -2 ';
+            $fields .= ', (SELECT hidden FROM tt_content as t2 WHERE t2.uid = tt_content.tx_gridelements_container)' .
+                       ' as parentGridHidden';
         }
 
         $where .= BackendUtility::BEenableFields($table);
@@ -422,6 +424,11 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
         $pageContent = array();
         if (count($ttContentRows)) {
             foreach ($ttContentRows as $ttContentRow) {
+                if (ExtensionManagementUtility::isLoaded('gridelements') && $ttContentRow['parentGridHidden'] === '1') {
+                    // If parent grid element is hidden, don't index this content element
+                    continue;
+                }
+
                 $content = '';
 
                 // index header
