@@ -1,6 +1,6 @@
 ChangeLog
 
-current master
+Version 2.5.0, May 2017
 [BUGFIX]  Support several pages when loading filters and options
 [BUGFIX]  Fix missing icon for "list_type" in ke_search plugins
 [BUGFIX]  Respect visibility of immediate parent gridelements container when indexing content elements
