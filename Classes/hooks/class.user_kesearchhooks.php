@@ -33,6 +33,7 @@ class user_kesearch_sortdate
 
     public function registerAdditionalFields(&$additionalFields)
     {
+        $additionalFields = array();
         $additionalFields[] = 'sortdate';
         $additionalFields[] = 'orig_uid';
         $additionalFields[] = 'orig_pid';
