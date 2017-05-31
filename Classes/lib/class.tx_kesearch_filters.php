@@ -16,6 +16,8 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use \TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\ArrayUtility;
 
 /**
  * Plugin 'Faceted search - searchbox and filters' for the 'ke_search' extension.
@@ -55,7 +57,7 @@ class tx_kesearch_filters
     {
         $this->pObj = $pObj;
         $this->cObj = $pObj->cObj;
-        $this->db = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_db');
+        $this->db = GeneralUtility::makeInstance('tx_kesearch_db');
 
         $this->conf = $this->pObj->conf;
         $this->piVars = $this->pObj->piVars;
@@ -70,7 +72,7 @@ class tx_kesearch_filters
         // hook to modify filters
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilters'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilters'] as $_classRef) {
-                $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+                $_procObj = &GeneralUtility::getUserObj($_classRef);
                 $_procObj->modifyFilters($this->filters, $this);
             }
         }
@@ -107,27 +109,28 @@ class tx_kesearch_filters
 
             if ($this->pObj->piVars['filter'][$filter['uid']] == $option['tag']) {
                 $selected = true;
-            } else {
-                if (is_array($this->pObj->piVars['filter'][$filter['uid']])) {
-                    $isInArray = TYPO3\CMS\Core\Utility\GeneralUtility::inArray(
-                        $this->pObj->piVars['filter'][$filter['uid']],
-                        $option['tag']
-                    );
+            } elseif (is_array($this->pObj->piVars['filter'][$filter['uid']])) { // if a this filter is set
+                // test pre selected filter again
+                if (is_array($this->pObj->preselectedFilter)
+                    && $this->pObj->in_multiarray($option['tag'], $this->pObj->preselectedFilter)) {
+                    $selected = true;
+                    // add preselected filter to piVars
+                    $this->pObj->piVars['filter'][$filter['uid']][$option['uid']] = $option['tag'];
+                } else { // else test all other filter
+                    $isInArray = ArrayUtility::inArray($this->pObj->piVars['filter'][$filter['uid']], $option['tag']);
                     if ($isInArray) {
                         $selected = true;
                     }
-                } else {
-                    if (!isset($this->pObj->piVars['filter'][$filter['uid']])
-                        && !is_array($this->pObj->piVars['filter'][$filter['uid']])
-                    ) {
-                        if (is_array($this->pObj->preselectedFilter)
-                            && $this->pObj->in_multiarray($option['tag'], $this->pObj->preselectedFilter)
-                        ) {
-                            $selected = true;
-                            // add preselected filter to piVars
-                            $this->pObj->piVars['filter'][$filter['uid']] = array($option['uid'] => $option['tag']);
-                        }
-                    }
+                }
+            } elseif (!isset($this->pObj->piVars['filter'][$filter['uid']])
+                && !is_array($this->pObj->piVars['filter'][$filter['uid']])
+            ) {
+                if (is_array($this->pObj->preselectedFilter)
+                    && $this->pObj->in_multiarray($option['tag'], $this->pObj->preselectedFilter)
+                ) {
+                    $selected = true;
+                    // add preselected filter to piVars
+                    $this->pObj->piVars['filter'][$filter['uid']] = array($option['uid'] => $option['tag']);
                 }
             }
 
@@ -153,7 +156,7 @@ class tx_kesearch_filters
             $list1 .= ',';
         }
         $list1 .= $list2;
-        $returnValue = TYPO3\CMS\Core\Utility\GeneralUtility::uniqueList($list1);
+        $returnValue = GeneralUtility::uniqueList($list1);
         return $returnValue;
     }
 
