@@ -2,6 +2,8 @@ ChangeLog
 
 current master
 [BUGFIX]  Fix missing icon for "list_type" in ke_search plugins
+[BUGFIX]  Respect visibility of immediate parent gridelements container when indexing content elements
+[BUGFIX]  Make file indexing (from RTE) work with new typolink syntax
 [BUGFIX]  Register wizard icon in IconRegistry
 [BUGFIX]  Add switch for core locallang files
 [TASK]    Remove include of old and outdated tt_news libs
