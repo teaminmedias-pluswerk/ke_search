@@ -397,6 +397,8 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
         // add condition for not indexing gridelement columns with colPos = -2 (= invalid)
         if (ExtensionManagementUtility::isLoaded('gridelements')) {
             $where .= ' AND colPos <> -2 ';
+            $fields .= ', (SELECT hidden FROM tt_content as t2 WHERE t2.uid = tt_content.tx_gridelements_container)' .
+                       ' as parentGridHidden';
         }
 
         $where .= BackendUtility::BEenableFields($table);
@@ -422,6 +424,11 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
         $pageContent = array();
         if (count($ttContentRows)) {
             foreach ($ttContentRows as $ttContentRow) {
+                if (ExtensionManagementUtility::isLoaded('gridelements') && $ttContentRow['parentGridHidden'] === '1') {
+                    // If parent grid element is hidden, don't index this content element
+                    continue;
+                }
+
                 $content = '';
 
                 // index header
@@ -729,31 +736,50 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
         /* @var $rteHtmlParser \TYPO3\CMS\Core\Html\RteHtmlParser */
         $rteHtmlParser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Html\\RteHtmlParser');
 
-        $blockSplit = $rteHtmlParser->splitIntoBlock('link', $ttContentRow['bodytext'], 1);
-        foreach ($blockSplit as $k => $v) {
-            if ($k % 2) {
-                $tagCode = GeneralUtility::unQuoteFilenames(
-                    trim(substr($rteHtmlParser->getFirstTag($v), 0, -1)),
-                    true
-                );
-                $link_param = $tagCode[1];
+        if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
+            \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('8.0')
+        ) {
+            // TYPO3 7.6
+            $blockSplit = $rteHtmlParser->splitIntoBlock('link', $ttContentRow['bodytext'], 1);
+            foreach ($blockSplit as $k => $v) {
+                if ($k % 2) {
+                    $tagCode = GeneralUtility::unQuoteFilenames(
+                        trim(substr($rteHtmlParser->getFirstTag($v), 0, -1)),
+                        true
+                    );
+                    $link_param = $tagCode[1];
 
-                // Check for FAL link-handler keyword
-                list($linkHandlerKeyword, $linkHandlerValue) = explode(':', trim($link_param), 2);
-                if ($linkHandlerKeyword === 'file') {
-                    try {
-                        $fileOrFolderObject = ResourceFactory::getInstance()->retrieveFileOrFolderObject(
-                            rawurldecode($linkHandlerValue)
-                        );
-                        if ($fileOrFolderObject instanceof FileInterface) {
-                            $fileObjects[] = $fileOrFolderObject;
+                    // Check for FAL link-handler keyword
+                    list($linkHandlerKeyword, $linkHandlerValue) = explode(':', trim($link_param), 2);
+                    if ($linkHandlerKeyword === 'file') {
+                        try {
+                            $fileOrFolderObject = ResourceFactory::getInstance()->retrieveFileOrFolderObject(
+                                rawurldecode($linkHandlerValue)
+                            );
+                            if ($fileOrFolderObject instanceof FileInterface) {
+                                $fileObjects[] = $fileOrFolderObject;
+                            }
+                        } catch (ResourceDoesNotExistException $resourceDoesNotExistException) {
+                            $this->addError(
+                                'Could not index file with FAL uid #'
+                                . $linkHandlerValue
+                                . ' (the indentifier inserted in the RTE is already gone).'
+                            );
                         }
-                    } catch (ResourceDoesNotExistException $resourceDoesNotExistException) {
-                        $this->addError(
-                            'Could not index file with FAL uid #'
-                            . $linkHandlerValue
-                            . ' (the indentifier inserted in the RTE is already gone).'
-                        );
+                    }
+                }
+            }
+        } else {
+            // TYPO3 8.7
+            /** @var \TYPO3\CMS\Core\LinkHandling\LinkService $linkService */
+            $linkService = GeneralUtility::makeInstance(\TYPO3\CMS\Core\LinkHandling\LinkService::class);
+            $blockSplit = $rteHtmlParser->splitIntoBlock('A', $ttContentRow['bodytext'], 1);
+            foreach ($blockSplit as $k => $v) {
+                list($attributes) = $rteHtmlParser->get_tag_attributes($rteHtmlParser->getFirstTag($v), true);
+                if (!empty($attributes['href'])) {
+                    $hrefInformation = $linkService->resolve($attributes['href']);
+                    if ($hrefInformation['type'] === \TYPO3\CMS\Core\LinkHandling\LinkService::TYPE_FILE) {
+                        $fileObjects[] = $hrefInformation['file'];
                     }
                 }
             }
