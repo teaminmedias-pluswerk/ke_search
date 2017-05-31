@@ -34,30 +34,22 @@ class user_filterlist
      */
     public function getListOfAvailableFiltersForFlexforms(&$config)
     {
-        $parentRow = $config['flexParentDatabaseRow'];
-
-        // get id from string
-        if (strstr($parentRow['pages'], 'pages_')) {
-            $intString = str_replace('pages_', '', $parentRow['pages']);
-            $intString = substr($intString, 0, strpos($intString, '|'));
-            $intString = intval($intString);
-        } else {
-            $intString = intval($parentRow['pages']);
-        }
+        $pidList = $this->getConfiguredPagesFromPlugin($config);
 
         // print message if no startingpoint is set in plugin config
-        if (empty($intString)) {
+        if (empty($pidList)) {
             $config['items'][] = array('[SET STARTINGPOINT FIRST!]', '');
         }
 
         // get filters
         $fields = '*';
         $table = 'tx_kesearch_filters';
-        $where = 'pid IN(' . $intString . ') ';
+        $where = 'pid IN(' . $pidList . ') ';
         $where .= BackendUtility::BEenableFields($table);
         $where .= BackendUtility::deleteClause($table);
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
         $count = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+
         if ($count) {
             while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
                 if (!$row['l10n_parent']) {
@@ -130,26 +122,17 @@ class user_filterlist
      */
     public function getListOfAvailableFilteroptionsForFlexforms(&$config)
     {
-        $parentRow = $config['flexParentDatabaseRow'];
-
-        // get id from string
-        if (strstr($parentRow['pages'], 'pages_')) {
-            $intString = str_replace('pages_', '', $parentRow['pages']);
-            $intString = substr($intString, 0, strpos($intString, '|'));
-            $intString = intval($intString);
-        } else {
-            $intString = $parentRow['pages'];
-        }
+        $pidList = $this->getConfiguredPagesFromPlugin($config);
 
         // print message if no startingpoint is set in plugin config
-        if (empty($intString)) {
+        if (empty($pidList)) {
             $config['items'][] = array('[SET STARTINGPOINT FIRST!]', '');
         }
 
         // get filters
         $fields = '*';
         $table = 'tx_kesearch_filters';
-        $where = 'pid IN(' . $intString . ') ';
+        $where = 'pid IN(' . $pidList . ') ';
         $where .= BackendUtility::BEenableFields($table);
         $where .= BackendUtility::deleteClause($table);
 
@@ -180,5 +163,40 @@ class user_filterlist
                 }
             }
         }
+    }
+
+
+    /**
+     * Get configured pages from "pages" attribute in plugin's row
+     * TYPO3 7.6 and 8.7 have different types in $config['flexParentDatabaseRow']['pages'].
+     *
+     * This method handles both.
+     *
+     * @param array $config
+     * @return string
+     */
+    protected function getConfiguredPagesFromPlugin(array $config)
+    {
+        $parentRow = $config['flexParentDatabaseRow'];
+        $pages = $parentRow['pages'];
+
+        $pids = [];
+        if (is_string($pages)) {
+            // TYPO3 7.6
+            $pagesParts = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $pages, true);
+            foreach ($pagesParts as $pagePart) {
+                $a = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode('|', $pagePart);
+                $b = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode('_', $a[0]);
+                $uid = end($b);
+                $pids[] = $uid;
+            }
+            return implode(',', $pids);
+        }
+
+        // TYPO3 8.7
+        foreach ($pages as $page) {
+            $pids[] = $page['uid'];
+        }
+        return implode(',', $pids);
     }
 }

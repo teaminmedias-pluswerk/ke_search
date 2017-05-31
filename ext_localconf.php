@@ -11,10 +11,6 @@ if (TYPO3_MODE == 'BE') {
     );
 }
 
-// include filterlist class and pageTSconfig.txt and add plugin
-include_once(TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath($_EXTKEY)
-    . '/Classes/Backend/class.user_filterlist.php');
-
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
     '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:ke_search/pageTSconfig.txt">'
 );
