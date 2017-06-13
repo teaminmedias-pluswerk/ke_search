@@ -95,6 +95,19 @@ CREATE TABLE tx_kesearch_index (
 	KEY parent (pid)
 ) ENGINE=MyISAM;
 
+#
+# Table structure for table 'tx_kesearch_index_filteroptions_mm'
+#
+CREATE TABLE tx_kesearch_index_filteroptions_mm (
+  uid_local int(11) DEFAULT '0' NOT NULL,
+	uid_foreign int(11) DEFAULT '0' NOT NULL,
+	language int(11) DEFAULT '0' NOT NULL,
+	pid int(11) DEFAULT '0' NOT NULL,
+
+	KEY uid_local_uid_foreign (uid_local,uid_foreign),
+	KEY uid_local (uid_local),
+	KEY uid_foreign (uid_foreign)
+) ENGINE=MyISAM;
 
 
 #

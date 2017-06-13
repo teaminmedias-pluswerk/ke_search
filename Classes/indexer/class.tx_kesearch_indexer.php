@@ -41,6 +41,8 @@ class tx_kesearch_indexer
     public $currentRow = array(); // current row which have to be inserted/updated to database
     public $registry;
 
+    protected $_tagCache = array();
+
     /**
      * @var tx_kesearch_lib_div
      */
@@ -595,6 +597,10 @@ class tx_kesearch_indexer
 
         $GLOBALS['TYPO3_DB']->sql_query($queryArray['set']);
         $GLOBALS['TYPO3_DB']->sql_query($queryArray['execute']);
+
+        $fieldValues['uid'] = $GLOBALS['TYPO3_DB']->sql_insert_id();
+
+        $this->createFilterOptionRelations($fieldValues);
     }
 
     /**
@@ -603,6 +609,7 @@ class tx_kesearch_indexer
      */
     public function updateRecordInIndex($fieldValues)
     {
+        // TODO: Update facetts (tags)
         $addQueryPartFor = $this->getQueryPartForAdditionalFields($fieldValues);
 
         $queryArray = array();
@@ -890,5 +897,49 @@ class tx_kesearch_indexer
         $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table);
         $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table);
         return $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($fields, $table, $where);
+    }
+
+    /**
+     * Inserts new relations to tx_kesearch_index_filteroptions_mm based on given index row.
+     *
+     * @param array $indexRow
+     * @return void
+     */
+    public function createFilterOptionRelations(array $indexRow)
+    {
+        $tags = GeneralUtility::trimExplode(',', trim($indexRow['tags'], '\''), true);
+        if (!empty($tags)) {
+            foreach ($tags as $tag) {
+                $tag = trim($tag, '_');
+
+                if (!in_array($tag, $this->_tagCache)) {
+                    $tagRows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+                        '*',
+                        'tx_kesearch_filteroptions',
+                        'tag = "' . $tag . '" AND pid = ' . $indexRow['pid'] . ' AND deleted = 0 AND hidden = 0'
+                    );
+
+                    if (count($tagRows) > 1) {
+                        echo 'Tag "' . $tag . '" has no unique filteroption under pid ' . $indexRow['pid'] . PHP_EOL;
+                        continue;
+                    } else if (count($tagRows) === 0) {
+                        echo 'Tag "' . $tag . '" not found under pid ' . $indexRow['pid'] . PHP_EOL;
+                        continue;
+                    }
+                    $this->_tagCache[$tag] = reset($tagRows);
+                }
+                $tagRow = $this->_tagCache[$tag];
+
+                $GLOBALS['TYPO3_DB']->exec_INSERTquery(
+                    'tx_kesearch_index_filteroptions_mm',
+                    array(
+                        'uid_local' => $indexRow['uid'],
+                        'uid_foreign' => $tagRow['uid'],
+                        'language' => $indexRow['language'],
+                        'pid' => $indexRow['pid'],
+                    )
+                );
+            }
+        }
     }
 }

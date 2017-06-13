@@ -33,6 +33,7 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
     protected $hasSearchResults = true;
     protected $searchResults = array();
     protected $numberOfResults = 0;
+    protected $_tagsUidCache = array();
 
     /**
      * @var tx_kesearch_pi1
@@ -93,7 +94,7 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
         }
 
         $this->searchResults = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-            $queryParts['SELECT'],
+            $queryParts['SELECT'] . ', tx_kesearch_index.uid as uid',
             $queryParts['FROM'],
             $queryParts['WHERE'],
             $queryParts['GROUPBY'],
@@ -101,6 +102,7 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
             $queryParts['LIMIT'],
             'uid'
         );
+
         $result = $GLOBALS['TYPO3_DB']->sql_query('SELECT FOUND_ROWS();');
         if ($result) {
             $data = $GLOBALS['TYPO3_DB']->sql_fetch_row($result);
@@ -208,36 +210,36 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function getQueryParts()
     {
-        $fields = 'SQL_CALC_FOUND_ROWS *';
+        $fields = 'SQL_CALC_FOUND_ROWS ' . $this->table . '.*';
         $table = $this->table . $this->bestIndex;
         $where = '1=1';
 
         // if a searchword was given, calculate percent of score
         if ($this->pObj->sword) {
-            $fields .= ', MATCH (title, content) AGAINST ("'
+            $fields .= ', MATCH (' . $this->table . '.title, ' . $this->table . '.content) AGAINST ("'
                 . $this->pObj->scoreAgainst
                 . '") + ('
                 . $this->pObj->extConf['multiplyValueToTitle']
-                . ' * MATCH (title) AGAINST ("'
+                . ' * MATCH (' . $this->table . '.title) AGAINST ("'
                 . $this->pObj->scoreAgainst
                 . '")) AS score';
             // The percentage calculation is really expensive and forces a full table scan for each
             // search query. If we don't use the percentage we skip this and can make efficient use
             // of the fulltext index.
             if ($this->conf['showPercentalScore']) {
-                $fields .= ', IFNULL(ROUND((MATCH (title, content) AGAINST ("'
+                $fields .= ', IFNULL(ROUND((MATCH (' . $this->table . '.title, ' . $this->table . '.content) AGAINST ("'
                     . $this->pObj->scoreAgainst
                     . '") + ('
                     . $this->pObj->extConf['multiplyValueToTitle']
-                    . ' * MATCH (title) AGAINST ("'
+                    . ' * MATCH (' . $this->table . '.title) AGAINST ("'
                     . $this->pObj->scoreAgainst
                     . '"))) / maxScore * 100), 0) AS percent';
 
-                $table .= ', (SELECT MAX(MATCH (title, content) AGAINST ("'
+                $table .= ', (SELECT MAX(MATCH (' . $this->table . '.title, ' . $this->table . '.content) AGAINST ("'
                     . $this->pObj->scoreAgainst
                     . '") + ('
                     . $this->pObj->extConf['multiplyValueToTitle']
-                    . ' * MATCH (title) AGAINST ("'
+                    . ' * MATCH (' . $this->table . '.title) AGAINST ("'
                     . $this->pObj->scoreAgainst
                     . '"))) AS maxScore FROM '
                     . $this->table
@@ -256,7 +258,7 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
 
         $queryParts = array(
             'SELECT' => $fields,
-            'FROM' => $table,
+            'FROM' => $table . $this->getAdditionalTablesForTags($this->pObj->tagsAgainst),
             'WHERE' => $where,
             'GROUPBY' => '',
             'ORDERBY' => $orderBy,
@@ -305,13 +307,7 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
         } else {
             $tagsForResult = $this->getTagsFromMySQL();
         }
-        foreach ($tagsForResult as $tagSet) {
-            $tagSet = explode($tagDivider, trim($tagSet, $tagChar));
-            foreach ($tagSet as $tag) {
-                $tags[$tag] += 1;
-            }
-        }
-        return $tags;
+        return $tagsForResult;
     }
 
     /**
@@ -343,20 +339,31 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
     {
         $queryParts = $this->getQueryParts();
         $tagRows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-            'tags',
-            $queryParts['FROM'],
-            $queryParts['WHERE'],
-            '',
+            'mm.uid_foreign as taguid, count(mm.uid_local) as amount',
+            $queryParts['FROM'] . ', tx_kesearch_index_filteroptions_mm as mm',
+            $queryParts['WHERE'] . ' AND mm.uid_local = tx_kesearch_index.uid',
+            'mm.uid_foreign',
             '',
             '',
             ''
         );
-        return array_map(
-            function ($row) {
-                return $row['tags'];
-            },
-            $tagRows
+
+        $tagLabelsByUid = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+            'uid, tag',
+            'tx_kesearch_filteroptions',
+            '1=1',
+            '',
+            'uid asc',
+            '',
+            'uid'
         );
+
+        $tags = array();
+        foreach ($tagRows as $tagRow) {
+            $tagLabel = $tagLabelsByUid[$tagRow['taguid']]['tag'];
+            $tags[$tagLabel] = intval($tagRow['amount']);
+        }
+        return $tags;
     }
 
     /**
@@ -385,8 +392,8 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
         // Count results only if it is the first run and a tagstring is given
         if (!$this->countResultsOfTags && count($tags)) {
             $count = $GLOBALS['TYPO3_DB']->exec_SELECTcountRows(
-                'tags',
-                'tx_kesearch_index',
+                '*',
+                'tx_kesearch_index' . $this->getAdditionalTablesForTags($tags),
                 '1=1 ' . $this->createQueryForTags($tags)
             );
             $this->countResultsOfTags = $count;
@@ -421,13 +428,38 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
     {
         $where = '';
         if (count($tags) && is_array($tags)) {
+            $i = 1;
             foreach ($tags as $value) {
-                $value = $GLOBALS['TYPO3_DB']->quoteStr($value, 'tx_kesearch_index');
-                $where .= ' AND MATCH (tags) AGAINST (\'' . $value . '\' IN BOOLEAN MODE) ';
+                $value = trim($value, ' _"+');
+                if (!array_key_exists($value, $this->_tagsUidCache)) {
+                    $row = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow('uid', 'tx_kesearch_filteroptions', 'tag="' . $value . '"');
+                    $this->_tagsUidCache[$value] = $row['uid'];
+                }
+                $uid = $this->_tagsUidCache[$value];
+                $lang = intval($GLOBALS['TSFE']->sys_language_uid) . ',-1';
+
+                $where .= " AND tx_kesearch_index.uid = mm$i.uid_local";
+                $where .= " AND mm$i.uid_foreign = $uid AND mm$i.pid IN (" . $this->pObj->startingPoints . ") AND mm$i.language IN ($lang)";
+                $i++;
             }
             return $where;
         }
         return '';
+    }
+
+    /**
+     * @param array $tags
+     * @return string additional FROM part (with starting comma)
+     */
+    protected function getAdditionalTablesForTags(array $tags)
+    {
+        $from = '';
+        $i = 1;
+        foreach ($tags as $value) {
+            $from .= ", tx_kesearch_index_filteroptions_mm as mm$i";
+            $i++;
+        }
+        return $from;
     }
 
     /**
@@ -441,7 +473,7 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
 
         // add boolean where clause for searchwords
         if ($this->pObj->wordsAgainst != '') {
-            $where .= ' AND MATCH (title, content) AGAINST (\'' . $this->pObj->wordsAgainst . '\' IN BOOLEAN MODE) ';
+            $where .= ' AND MATCH (' . $this->table . '.title, ' . $this->table . '.content) AGAINST (\'' . $this->pObj->wordsAgainst . '\' IN BOOLEAN MODE) ';
         }
 
         // add boolean where clause for tags
@@ -450,15 +482,15 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
         }
 
         // restrict to storage page
-        $where .= ' AND pid in (' . $this->pObj->startingPoints . ') ';
+        $where .= ' AND ' . $this->table . '.pid in (' . $this->pObj->startingPoints . ') ';
 
         // add language
         $lang = intval($GLOBALS['TSFE']->sys_language_uid);
-        $where .= ' AND language IN(' . $lang . ', -1) ';
+        $where .= ' AND ' . $this->table . '.language IN(' . $lang . ', -1) ';
 
         // add "tagged content only" searchphrase
         if ($this->conf['showTaggedContentOnly']) {
-            $where .= ' AND tags <> ""';
+            $where .= ' AND ' . $this->table . '.tags <> ""';
         }
 
         // add enable fields
@@ -506,6 +538,9 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
             }
         }
 
+        if (strpos($orderBy, 'score') !== 0) {
+            $orderBy = $this->table . '.' . $orderBy;
+        }
         return $orderBy;
     }
 
