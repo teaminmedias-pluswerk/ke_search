@@ -38,6 +38,8 @@
 			<label index="ff.resultLinkTarget.I.0">Open in new window</label>
 			<label index="ff.resultLinkTarget.I.1">Open in same window</label>
 			<label index="ff.resultsNumeration">Number results consecutively?</label>
+			<label index="ff.templateLayout">Template Layout</label>
+			<label index="ff.templateLayout.I.0">Default</label>
 			<label index="ff.highlightSword">Highlight search word in result preview</label>
 			<label index="ff.previewMode">Text for used for search result (preview text)</label>
 			<label index="ff.previewMode.I.0">Always show the abstract if set.</label>
