@@ -464,6 +464,11 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
         // add enable fields
         $where .= $this->cObj->enableFields($this->table);
 
+        if ($this->pObj->extConf['disableTimeChecks'] !== '0') {
+            $roundedDate = (new DateTime('today 23:59:59'))->getTimestamp();
+            $where = str_replace($GLOBALS['SIM_ACCESS_TIME'], $roundedDate, $where);
+        }
+
         return $where;
     }
 
