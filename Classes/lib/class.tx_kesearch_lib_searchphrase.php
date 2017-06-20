@@ -170,24 +170,25 @@ class tx_kesearch_lib_searchphrase
      */
     public function buildPreselectedTagsAgainst(array &$tagsAgainst)
     {
-        $tagChar = $this->pObj->extConf['prePostTagChar'];
-        foreach ($this->pObj->preselectedFilter as $key => $filterTags) {
+        $pObj = $this->pObj;
+        $tagChar = $pObj->extConf['prePostTagChar'];
+        foreach ($pObj::$preselectedFilter as $key => $filterTags) {
             // add it only, if no other filter options of this filter has been
             // selected in the frontend
-            if (!isset($this->pObj->piVars['filter'][$key]) && !is_array($this->pObj->piVars['filter'][$key])) {
+            if (!isset($pObj->piVars['filter'][$key]) && !is_array($pObj->piVars['filter'][$key])) {
                 // Quote the tags for use in database query
                 foreach ($filterTags as $k => $v) {
                     $filterTags[$k] = $GLOBALS['TYPO3_DB']->quoteStr($v, 'tx_kesearch_index');
                 }
                 // if we are in checkbox mode
-                if (count($this->pObj->preselectedFilter[$key]) >= 2) {
+                if (count($pObj::$preselectedFilter[$key]) >= 2) {
                     $tagsAgainst[$key] .= ' "'
                         . $tagChar
                         . implode($tagChar . '" "' . $tagChar, $filterTags)
                         . $tagChar
                         . '"';
                     // if we are in select or list mode
-                } elseif (count($this->pObj->preselectedFilter[$key]) == 1) {
+                } elseif (count($pObj::$preselectedFilter[$key]) == 1) {
                     $tagsAgainst[$key] .= ' +"' . $tagChar . array_shift($filterTags) . $tagChar . '"';
                 }
             }

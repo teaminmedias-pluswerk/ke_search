@@ -41,7 +41,7 @@ class tx_kesearch_filters
     protected $db;
 
     protected $tagChar = '#';
-    protected $filters = array();
+    static protected $filters = array();
     protected $conf = array();
     protected $piVars = array();
     protected $extConf = array();
@@ -65,21 +65,23 @@ class tx_kesearch_filters
         $this->tagChar = $this->pObj->extConf['prePostTagChar'];
 
         // get filters and filter options
-        $this->filters = $this->getFiltersFromUidList(
-            $this->combineLists($this->conf['filters'], $this->conf['hiddenfilters'])
-        );
+        if (empty(static::$filters)) {
+            static::$filters = $this->getFiltersFromUidList(
+                $this->combineLists($this->conf['filters'], $this->conf['hiddenfilters'])
+            );
+        }
 
         // hook to modify filters
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilters'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilters'] as $_classRef) {
                 $_procObj = &GeneralUtility::getUserObj($_classRef);
-                $_procObj->modifyFilters($this->filters, $this);
+                $_procObj->modifyFilters(self::$filters, $this);
             }
         }
 
         // get list of selected filter options (via frontend or backend)
-        foreach ($this->filters as $filter) {
-            $this->filters[$filter['uid']]['selectedOptions'] = $this->getSelectedFilterOptions($filter);
+        foreach (static::$filters as $filter) {
+            static::$filters[$filter['uid']]['selectedOptions'] = $this->getSelectedFilterOptions($filter);
         }
     }
 
@@ -99,6 +101,7 @@ class tx_kesearch_filters
     public function getSelectedFilterOptions($filter)
     {
         $selectedOptions = array();
+        $pObj = $this->pObj;
 
         // run through all the filter options and check if one of them
         // has been selected.
@@ -107,30 +110,30 @@ class tx_kesearch_filters
             // or in the backend via flexform configuration ("preselected filters")?
             $selected = false;
 
-            if ($this->pObj->piVars['filter'][$filter['uid']] == $option['tag']) {
+            if ($pObj->piVars['filter'][$filter['uid']] == $option['tag']) {
                 $selected = true;
-            } elseif (is_array($this->pObj->piVars['filter'][$filter['uid']])) { // if a this filter is set
+            } elseif (is_array($pObj->piVars['filter'][$filter['uid']])) { // if a this filter is set
                 // test pre selected filter again
-                if (is_array($this->pObj->preselectedFilter)
-                    && $this->pObj->in_multiarray($option['tag'], $this->pObj->preselectedFilter)) {
+                if (is_array($pObj::$preselectedFilter)
+                    && $pObj->in_multiarray($option['tag'], $pObj::$preselectedFilter)) {
                     $selected = true;
                     // add preselected filter to piVars
-                    $this->pObj->piVars['filter'][$filter['uid']][$option['uid']] = $option['tag'];
+                    $pObj->piVars['filter'][$filter['uid']][$option['uid']] = $option['tag'];
                 } else { // else test all other filter
-                    $isInArray = ArrayUtility::inArray($this->pObj->piVars['filter'][$filter['uid']], $option['tag']);
+                    $isInArray = ArrayUtility::inArray($pObj->piVars['filter'][$filter['uid']], $option['tag']);
                     if ($isInArray) {
                         $selected = true;
                     }
                 }
-            } elseif (!isset($this->pObj->piVars['filter'][$filter['uid']])
-                && !is_array($this->pObj->piVars['filter'][$filter['uid']])
+            } elseif (!isset($pObj->piVars['filter'][$filter['uid']])
+                && !is_array($pObj->piVars['filter'][$filter['uid']])
             ) {
-                if (is_array($this->pObj->preselectedFilter)
-                    && $this->pObj->in_multiarray($option['tag'], $this->pObj->preselectedFilter)
+                if (is_array($pObj::$preselectedFilter)
+                    && $pObj->in_multiarray($option['tag'], $pObj::$preselectedFilter)
                 ) {
                     $selected = true;
                     // add preselected filter to piVars
-                    $this->pObj->piVars['filter'][$filter['uid']] = array($option['uid'] => $option['tag']);
+                    $pObj->piVars['filter'][$filter['uid']] = array($option['uid'] => $option['tag']);
                 }
             }
 
@@ -167,7 +170,7 @@ class tx_kesearch_filters
      */
     public function getFilters()
     {
-        return $this->filters;
+        return static::$filters;
     }
 
     /**

@@ -80,7 +80,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     public $tagsInSearchResult = false;
 
     // preselected filters by flexform
-    public $preselectedFilter = array();
+    static public $preselectedFilter = array();
 
     // array with filter-uids as key and whole data as value
     public $filtersFromFlexform = array();
@@ -521,7 +521,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                     // are no preselected filters given for that filter
                     if ($this->isEmptySearch
                         && $filter['markAllCheckboxes']
-                        && empty($this->preselectedFilter[$filter['uid']])
+                        && empty(static::preselectedFilter[$filter['uid']])
                     ) {
                         $data['selected'] = 1;
                     }
@@ -1400,7 +1400,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         // get definitions from plugin settings
         // and proceed only when preselectedFilter was not set
         // this reduces the amount of sql queries, too
-        if ($this->conf['preselected_filters'] && count($this->preselectedFilter) == 0) {
+        if ($this->conf['preselected_filters'] && count(static::$preselectedFilter) == 0) {
             $preselectedArray = GeneralUtility::trimExplode(',', $this->conf['preselected_filters'], true);
             foreach ($preselectedArray as $option) {
                 $option = intval($option);
@@ -1416,7 +1416,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                 $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
                 while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
                     //$this->preselectedFilter[$row['filteruid']][] = $row['tag'];
-                    $this->preselectedFilter[$row['filteruid']][$row['optionuid']] = $row['tag'];
+                    static::$preselectedFilter[$row['filteruid']][$row['optionuid']] = $row['tag'];
                 }
             }
         }
