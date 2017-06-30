@@ -271,7 +271,15 @@ class tx_kesearch_filters
                         $GLOBALS['TSFE']->sys_language_content,
                         $GLOBALS['TSFE']->sys_language_contentOL
                     );
-                    $rows[$key] = $row;
+
+                    if( is_array($row)) {
+                        if( $table == "tx_kesearch_filters") {
+                            $row['rendertype'] = $rows[$key]['rendertype'] ;
+                        }
+                        $rows[$key] = $row;
+                    } else {
+                        unset( $rows[$key] ) ;
+                    }
                 }
             }
             return $rows;
