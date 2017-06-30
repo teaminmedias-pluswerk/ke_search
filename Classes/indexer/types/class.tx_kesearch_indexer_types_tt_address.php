@@ -176,7 +176,7 @@ class tx_kesearch_indexer_types_tt_address extends tx_kesearch_indexer_types
 
             // add some fields which you may set in your own hook
             $customfields = array(
-                'sys_language_uid' => 0,
+                'sys_language_uid' => -1,
                 'starttime' => 0,
                 'endtime' => 0,
                 'fe_group' => ''
