@@ -264,7 +264,7 @@ class tx_kesearch_filters
     {
         if (is_array($rows) && count($rows)) {
             foreach ($rows as $key => $row) {
-                if (is_array($row) && $GLOBALS['TSFE']->sys_language_contentOL) {
+                if (is_array($row) && $GLOBALS['TSFE']->sys_language_content) {
                     $row = $GLOBALS['TSFE']->sys_page->getRecordOverlay(
                         $table,
                         $row,
