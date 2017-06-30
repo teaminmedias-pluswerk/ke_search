@@ -780,8 +780,8 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         $this->searchResult = GeneralUtility::makeInstance('tx_kesearch_lib_searchresult', $this);
 
         $this->fluidTemplateVariables['resultrows'] = array();
-
-        foreach ($rows as $row) {
+        if( is_array($rows) ) {
+            foreach ($rows as $row) {
             $this->searchResult->setRow($row);
 
             $tempMarkerArray = array(
@@ -851,6 +851,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
 
             // increase result counter
             $resultCount++;
+        }
         }
     }
 
