@@ -177,7 +177,27 @@ class user_filterlist
      */
     protected function getConfiguredPagesFromPlugin(array $config)
     {
-        $parentRow = $config['flexParentDatabaseRow'];
+        // check if the tt_content row is available and if not load it manually
+		// flexParentDatabaseRow not set can be caused by compatibility6 extension
+		if(
+			(!isset($config['flexParentDatabaseRow']) ||
+			(isset($config['flexParentDatabaseRow']) && !is_array($config['flexParentDatabaseRow']))) 
+		)
+		{
+			$parentRow = BackendUtility::getRecord (
+				'tt_content',
+				$config['row']['uid']
+			);
+			if(is_array($parentRow)) {
+				$config['flexParentDatabaseRow'] = $parentRow;
+			}
+			else {
+				// tt_content row not found
+				return array();
+			}
+		}        
+		
+		$parentRow = $config['flexParentDatabaseRow'];
         $pages = $parentRow['pages'];
 
         $pids = [];
