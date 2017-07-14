@@ -1227,13 +1227,13 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			$table = 'tx_kesearch_stat_search';
 			$fields_values = array(
 				'pid' => $this->firstStartingPoint,
-				'searchphrase' => '\'' . $searchPhrase . '\'',
+				'searchphrase' => $searchPhrase,
 				'tstamp' => time(),
 				'hits' => $hits,
 				'tagsagainst' => $tagsAgainst,
 				'language' => $GLOBALS['TSFE']->sys_language_uid,
 			);
-			$GLOBALS['TYPO3_DB']->exec_INSERTquery($table, $fields_values, array('searchphrase'));
+			$GLOBALS['TYPO3_DB']->exec_INSERTquery($table, $fields_values);
 		}
 
 		// count single words
@@ -1248,13 +1248,13 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin {
 			if (!empty($searchWord)) {
 				$fields_values = array(
 					'pid' => $this->firstStartingPoint,
-					'word' => '\'' . $searchWord . '\'',
+					'word' => $searchWord,
 					'tstamp' => $timestamp,
 					'pageid' => $GLOBALS['TSFE']->id,
 					'resultsfound' => $hits ? 1 : 0,
 					'language' => $GLOBALS['TSFE']->sys_language_uid,
 				);
-				$GLOBALS['TYPO3_DB']->exec_INSERTquery($table, $fields_values, array('word'));
+				$GLOBALS['TYPO3_DB']->exec_INSERTquery($table, $fields_values);
 			}
 		}
 	}
