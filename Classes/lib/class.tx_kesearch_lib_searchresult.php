@@ -271,7 +271,7 @@ class tx_kesearch_lib_searchresult
 
                 // crop some words behind searchword
                 $partWithSearchWord = substr($content, $startPos);
-                $temp = $this->cObj->crop($partWithSearchWord, $charsForEachSearchWord . '|...|1');
+                $temp = $this->cObj->crop($partWithSearchWord, $charsForEachSearchWord . '|…|1');
 
                 // crop some words before searchword
                 // after last cropping our text is too short now. So we have to find a new cutting position
@@ -286,7 +286,7 @@ class tx_kesearch_lib_searchresult
             } elseif ($isSearchWordAtTheBeginning === true) {
                 $teaser = implode(' ', $teaserArray);
             } else {
-                $teaser = '...' . implode(' ', $teaserArray);
+                $teaser = '…' . implode(' ', $teaserArray);
             }
 
             // highlight hits?
@@ -295,7 +295,7 @@ class tx_kesearch_lib_searchresult
             }
             return $teaser;
         } else {
-            return $this->cObj->crop($content, $this->conf['resultChars'] . '|...|1');
+            return $this->cObj->crop($content, $this->conf['resultChars'] . '|…|1');
         }
     }
 }
