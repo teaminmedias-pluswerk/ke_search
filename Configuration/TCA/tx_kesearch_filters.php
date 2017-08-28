@@ -82,7 +82,6 @@ return array(
         ),
         'rendertype' => array(
             'exclude' => 0,
-            /* 'l10n_mode' => 'exclude',  // with this option you cannot create a filter in just one language */
             'l10n_display' => 'defaultAsReadonly',
             'displayCond' => 'FIELD:l10n_parent:<:1',
             'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filters.rendertype',
