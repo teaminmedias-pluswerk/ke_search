@@ -172,7 +172,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
         // get all available sys_language_uid records
         /** @var TranslationConfigurationProvider $translationProvider */
         $translationProvider = GeneralUtility::makeInstance(TranslationConfigurationProvider::class);
-        $this->sysLanguages = $translationProvider->getSystemLanguages($pageId);
+        $this->sysLanguages = $translationProvider->getSystemLanguages();
 
         // make file repository
         /* @var $this ->fileRepository \TYPO3\CMS\Core\Resource\FileRepository */
@@ -279,18 +279,15 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
 
         // create entry in cachedPageRecods for additional languages, skip default language 0
         foreach ($this->sysLanguages as $sysLang) {
-            if ($sysLang[1] > 0) {
+            if ($sysLang['uid'] > 0) {
                 list($pageOverlay) = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecordsByField(
                     'pages_language_overlay',
                     'pid',
                     $pageRow['uid'],
-                    'AND sys_language_uid=' . intval($sysLang[1])
+                    'AND sys_language_uid=' . (int) $sysLang['uid']
                 );
                 if ($pageOverlay) {
-                    $this->cachedPageRecords[$sysLang[1]][$pageRow['uid']] = GeneralUtility::array_merge(
-                        $pageRow,
-                        $pageOverlay
-                    );
+                    $this->cachedPageRecords[$sysLang['uid']][$pageRow['uid']] = $pageOverlay + $pageRow;
                 }
             }
         }
