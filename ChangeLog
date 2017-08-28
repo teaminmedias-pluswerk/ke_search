@@ -1,6 +1,7 @@
 ChangeLog
 
 current master
+[BUGFIX]  Escape all PCRE characters when highlighting searchwords
 [BUGFIX]  Allow multple preselected filter options, https://github.com/teaminmedias-pluswerk/ke_search/issues/116.
 
 Version 2.5.0, May 2017
