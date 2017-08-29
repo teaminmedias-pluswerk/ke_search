@@ -117,7 +117,7 @@ class tx_kesearch_filters
                     // add preselected filter to piVars
                     $this->pObj->piVars['filter'][$filter['uid']][$option['uid']] = $option['tag'];
                 } else { // else test all other filter
-                    $isInArray = ArrayUtility::inArray($this->pObj->piVars['filter'][$filter['uid']], $option['tag']);
+                    $isInArray = in_array($this->pObj->piVars['filter'][$filter['uid']], $option['tag']);
                     if ($isInArray) {
                         $selected = true;
                     }
