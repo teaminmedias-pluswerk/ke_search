@@ -215,13 +215,10 @@ class tx_kesearch_indexer_types_templavoila extends tx_kesearch_indexer_types
                 'pages_language_overlay',
                 'pid',
                 $row['uid'],
-                'AND sys_language_uid=' . intval($sysLang[1])
+                'AND sys_language_uid=' . (int)$sysLang['uid']
             );
             if ($pageOverlay) {
-                $this->cachedPageRecords[$sysLang[1]][$row['uid']] = TYPO3\CMS\Core\Utility\GeneralUtility::array_merge(
-                    $row,
-                    $pageOverlay
-                );
+                $this->cachedPageRecords[$sysLang['uid']][$row['uid']] = $pageOverlay + $row;
             }
         }
     }

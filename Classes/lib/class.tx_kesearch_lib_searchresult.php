@@ -220,7 +220,7 @@ class tx_kesearch_lib_searchresult
                 '<span class="hit">\0</span>';
 
             foreach ($wordArray as $word) {
-                $word = str_replace('/', '\/', $word);
+                $word = preg_replace('/([\W])/', '\\\\$1', $word);
                 $word = htmlspecialchars($word);
                 $content = preg_replace('/(' . $word . ')/iu', $highlightedWord, $content);
             }
@@ -283,9 +283,9 @@ class tx_kesearch_lib_searchresult
                         $startPos = 0;
                     }
 
-                    // crop some words behind search word
-                    $partWithSearchWord = substr($content, $startPos);
-                    $temp = $this->cObj->crop($partWithSearchWord, $charsForEachSearchWord . '|...|1');
+                // crop some words behind searchword
+                $partWithSearchWord = substr($content, $startPos);
+                $temp = $this->cObj->crop($partWithSearchWord, $charsForEachSearchWord . '|…|1');
 
                     // crop some words before search word
                     // after last cropping our text is too short now. So we have to find a new cutting position
@@ -303,7 +303,7 @@ class tx_kesearch_lib_searchresult
             } elseif ($isSearchWordAtTheBeginning === true) {
                 $teaser = implode(' ', $teaserArray);
             } else {
-                $teaser = '...' . implode(' ', $teaserArray);
+                $teaser = '…' . implode(' ', $teaserArray);
             }
 
             // highlight hits?
@@ -312,7 +312,7 @@ class tx_kesearch_lib_searchresult
             }
             return $teaser;
         } else {
-            return $this->cObj->crop($content, $this->conf['resultChars'] . '|...|1');
+            return $this->cObj->crop($content, $this->conf['resultChars'] . '|…|1');
         }
     }
 }
