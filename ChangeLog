@@ -1,7 +1,8 @@
 ChangeLog
 
 current master
-[TASK]    Remove deprecated occurrences of ArrayUtility:inArray()
+[TASK]    Remove deprecated occurrences of ArrayUtility:inArray(), https://github.com/teaminmedias-pluswerk/ke_search/pull/138.
+[BUGFIX]  Fix indexing of translated pages, https://github.com/teaminmedias-pluswerk/ke_search/pull/146.
 [BUGFIX]  Allow multple preselected filter options, https://github.com/teaminmedias-pluswerk/ke_search/issues/116.
 
 Version 2.5.0, May 2017
