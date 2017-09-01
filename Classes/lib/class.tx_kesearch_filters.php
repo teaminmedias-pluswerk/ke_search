@@ -261,16 +261,29 @@ class tx_kesearch_filters
      */
     public function languageOverlay(array $rows, $table)
     {
+        // see https://github.com/teaminmedias-pluswerk/ke_search/issues/128
+        $LanguageMode = $GLOBALS['TSFE']->sys_language_content ;
+        if( \TYPO3\CMS\Core\Utility\GeneralUtility::hideIfNotTranslated( $GLOBALS['TSFE']->page['l18n_cfg'] )) {
+            $LanguageMode = 'hideNonTranslated' ;
+        }
         if (is_array($rows) && count($rows)) {
             foreach ($rows as $key => $row) {
-                if (is_array($row) && $GLOBALS['TSFE']->sys_language_contentOL) {
+                if (is_array($row) && $GLOBALS['TSFE']->sys_language_content) {
                     $row = $GLOBALS['TSFE']->sys_page->getRecordOverlay(
                         $table,
                         $row,
                         $GLOBALS['TSFE']->sys_language_content,
-                        $GLOBALS['TSFE']->sys_language_contentOL
+                        $LanguageMode
                     );
-                    $rows[$key] = $row;
+
+                    if( is_array($row)) {
+                        if( $table == "tx_kesearch_filters") {
+                            $row['rendertype'] = $rows[$key]['rendertype'] ;
+                        }
+                        $rows[$key] = $row;
+                    } else {
+                        unset( $rows[$key] ) ;
+                    }
                 }
             }
             return $rows;

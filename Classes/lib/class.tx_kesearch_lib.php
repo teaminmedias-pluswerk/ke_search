@@ -780,77 +780,78 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         $this->searchResult = GeneralUtility::makeInstance('tx_kesearch_lib_searchresult', $this);
 
         $this->fluidTemplateVariables['resultrows'] = array();
+        if( is_array($rows) ) {
+            foreach ($rows as $row) {
+                $this->searchResult->setRow($row);
 
-        foreach ($rows as $row) {
-            $this->searchResult->setRow($row);
+                $tempMarkerArray = array(
+                    'orig_uid' => $row['orig_uid'],
+                    'orig_pid' => $row['orig_pid'],
+                    'title' => $this->searchResult->getTitle(),
+                    'teaser' => $this->searchResult->getTeaser(),
+                );
 
-            $tempMarkerArray = array(
-                'orig_uid' => $row['orig_uid'],
-                'orig_pid' => $row['orig_pid'],
-                'title' => $this->searchResult->getTitle(),
-                'teaser' => $this->searchResult->getTeaser(),
-            );
-
-            // hook for additional markers in result row
-            if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['additionalResultMarker'])) {
-                // make curent row number available to hook
-                $this->currentRowNumber = $resultCount;
-                foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['additionalResultMarker'] as $_classRef) {
-                    $_procObj = &GeneralUtility::getUserObj($_classRef);
-                    $_procObj->additionalResultMarker($tempMarkerArray, $row, $this);
+                // hook for additional markers in result row
+                if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['additionalResultMarker'])) {
+                    // make curent row number available to hook
+                    $this->currentRowNumber = $resultCount;
+                    foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['additionalResultMarker'] as $_classRef) {
+                        $_procObj = &GeneralUtility::getUserObj($_classRef);
+                        $_procObj->additionalResultMarker($tempMarkerArray, $row, $this);
+                    }
+                    unset($this->currentRowNumber);
                 }
-                unset($this->currentRowNumber);
+
+                // add type marker
+                // for file results just use the "file" type, not the file extension (eg. "file:pdf")
+                list($type) = explode(':', $row['type']);
+                $tempMarkerArray['type'] = str_replace(' ', '_', $type);
+
+                // use the markers array as a base for the fluid template values
+                $resultrowTemplateValues = $tempMarkerArray;
+
+                // set result url
+                $resultUrl = $this->searchResult->getResultUrl($this->conf['renderResultUrlAsLink']);
+                $resultrowTemplateValues['url'] = $resultUrl;
+
+                // set result numeration
+                $resultNumber = $resultCount
+                    + ($this->piVars['page'] * $this->conf['resultsPerPage'])
+                    - $this->conf['resultsPerPage'];
+                $resultrowTemplateValues['number'] = $resultNumber;
+
+                // set score (used for plain score output and score scale)
+                $resultScore = number_format($row['score'], 2, ',', '');
+                $resultrowTemplateValues['score'] = $resultScore;
+
+                // set date (formatted and raw as a timestamp)
+                $resultDate = date($GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'], $row['sortdate']);
+                $resultrowTemplateValues['date'] = $resultDate;
+                $resultrowTemplateValues['date_timestamp'] = $row['sortdate'];
+
+                // set percental score
+                $resultrowTemplateValues['percent'] = $row['percent'];
+
+                // show tags?
+                $tags = $row['tags'];
+                $tags = str_replace('#', ' ', $tags);
+                $resultrowTemplateValues['tags'] = $tags;
+
+                // set preview image
+                $renderedImage = $this->renderPreviewImageOrTypeIcon($row);
+                $resultrowTemplateValues['imageHtml'] = $renderedImage;
+
+                // set end date for cal events
+                if ($type == 'cal') {
+                    $resultrowTemplateValues['cal'] = $this->getCalEventEnddate($row['orig_uid']);
+                }
+
+                // add result row to the variables array
+                $this->fluidTemplateVariables['resultrows'][] = $resultrowTemplateValues;
+
+                // increase result counter
+                $resultCount++;
             }
-
-            // add type marker
-            // for file results just use the "file" type, not the file extension (eg. "file:pdf")
-            list($type) = explode(':', $row['type']);
-            $tempMarkerArray['type'] = str_replace(' ', '_', $type);
-
-            // use the markers array as a base for the fluid template values
-            $resultrowTemplateValues = $tempMarkerArray;
-
-            // set result url
-            $resultUrl = $this->searchResult->getResultUrl($this->conf['renderResultUrlAsLink']);
-            $resultrowTemplateValues['url'] = $resultUrl;
-
-            // set result numeration
-            $resultNumber = $resultCount
-                + ($this->piVars['page'] * $this->conf['resultsPerPage'])
-                - $this->conf['resultsPerPage'];
-            $resultrowTemplateValues['number'] = $resultNumber;
-
-            // set score (used for plain score output and score scale)
-            $resultScore = number_format($row['score'], 2, ',', '');
-            $resultrowTemplateValues['score'] = $resultScore;
-
-            // set date (formatted and raw as a timestamp)
-            $resultDate = date($GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'], $row['sortdate']);
-            $resultrowTemplateValues['date'] = $resultDate;
-            $resultrowTemplateValues['date_timestamp'] = $row['sortdate'];
-
-            // set percental score
-            $resultrowTemplateValues['percent'] = $row['percent'];
-
-            // show tags?
-            $tags = $row['tags'];
-            $tags = str_replace('#', ' ', $tags);
-            $resultrowTemplateValues['tags'] = $tags;
-
-            // set preview image
-            $renderedImage = $this->renderPreviewImageOrTypeIcon($row);
-            $resultrowTemplateValues['imageHtml'] = $renderedImage;
-
-            // set end date for cal events
-            if ($type == 'cal') {
-                $resultrowTemplateValues['cal'] = $this->getCalEventEnddate($row['orig_uid']);
-            }
-
-            // add result row to the variables array
-            $this->fluidTemplateVariables['resultrows'][] = $resultrowTemplateValues;
-
-            // increase result counter
-            $resultCount++;
         }
     }
 
