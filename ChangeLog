@@ -1,6 +1,7 @@
 ChangeLog
 
 current master
+[BUGFIX]  Fix for Filter not available in selection with compatibility6 installed, https://github.com/teaminmedias-pluswerk/ke_search/pull/133.
 [BUGFIX]  Fix translation of filter options, https://github.com/teaminmedias-pluswerk/ke_search/pull/126
 [TASK]    Use correct ellipsis punctuation mark, https://github.com/teaminmedias-pluswerk/ke_search/pull/142.
 [TASK]    Remove deprecated occurrences of ArrayUtility:inArray(), thanks to Stephan Salzmann, https://github.com/teaminmedias-pluswerk/ke_search/pull/138.
