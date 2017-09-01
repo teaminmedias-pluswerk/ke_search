@@ -1,7 +1,10 @@
 ChangeLog
 
 current master
-[BUGFIX]  Fix translation of filter options
+[BUGFIX]  Fix translation of filter options, https://github.com/teaminmedias-pluswerk/ke_search/pull/126
+[TASK]    Use correct ellipsis punctuation mark, https://github.com/teaminmedias-pluswerk/ke_search/pull/142.
+[TASK]    Remove deprecated occurrences of ArrayUtility:inArray(), thanks to Stephan Salzmann, https://github.com/teaminmedias-pluswerk/ke_search/pull/138.
+[BUGFIX]  Fix indexing of translated pages, https://github.com/teaminmedias-pluswerk/ke_search/pull/146.
 [BUGFIX]  Allow multple preselected filter options, https://github.com/teaminmedias-pluswerk/ke_search/issues/116.
 
 Version 2.5.0, May 2017
