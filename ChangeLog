@@ -1,7 +1,7 @@
 ChangeLog
 
 current master
-[BUGFIX]  Fix indexing of translated pages
+[BUGFIX]  Fix indexing of translated pages, https://github.com/teaminmedias-pluswerk/ke_search/pull/146.
 [BUGFIX]  Allow multple preselected filter options, https://github.com/teaminmedias-pluswerk/ke_search/issues/116.
 
 Version 2.5.0, May 2017
