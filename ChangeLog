@@ -1,7 +1,12 @@
 ChangeLog
 
 current master
-[BUGFIX]  Escape all PCRE characters when highlighting searchwords
+[BUGFIX]  Escape all PCRE characters when highlighting searchwords, thanks to Felix Jacobi, https://github.com/teaminmedias-pluswerk/ke_search/pull/119/conflicts.
+[BUGFIX]  Fix for Filter not available in selection with compatibility6 installed, https://github.com/teaminmedias-pluswerk/ke_search/pull/133.
+[BUGFIX]  Fix translation of filter options, https://github.com/teaminmedias-pluswerk/ke_search/pull/126
+[TASK]    Use correct ellipsis punctuation mark, https://github.com/teaminmedias-pluswerk/ke_search/pull/142.
+[TASK]    Remove deprecated occurrences of ArrayUtility:inArray(), thanks to Stephan Salzmann, https://github.com/teaminmedias-pluswerk/ke_search/pull/138.
+[BUGFIX]  Fix indexing of translated pages, https://github.com/teaminmedias-pluswerk/ke_search/pull/146.
 [BUGFIX]  Allow multple preselected filter options, https://github.com/teaminmedias-pluswerk/ke_search/issues/116.
 
 Version 2.5.0, May 2017
