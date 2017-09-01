@@ -17,7 +17,7 @@
  ***************************************************************/
 
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\ArrayUtility;
+use \TYPO3\CMS\Core\Utility\ArrayUtility;
 
 /**
  * Plugin 'Faceted search - searchbox and filters' for the 'ke_search' extension.
