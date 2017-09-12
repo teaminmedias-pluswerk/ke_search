@@ -365,7 +365,7 @@ $configurationArray = array(
             'config' => array(
                 'type' => 'input',
                 'size' => '30',
-                'default' => 'pdf,ppt,doc,xls'
+                'default' => 'pdf,ppt,doc,xls,docx,xlsx,pptx'
             )
         ),
         'index_use_page_tags_for_files' => array(
