@@ -1226,10 +1226,18 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             /** @var $fileObject \TYPO3\CMS\Core\Resource\File */
             if ($row['orig_uid'] && ($fileObject = tx_kesearch_helper::getFile($row['orig_uid']))) {
                 $metadata = $fileObject->_getMetaData();
-                $imageConf['file'] = $fileObject->getForLocalProcessing(false);
+				$imageConf['file'] = [
+					'_typoScriptNodeValue' => $fileObject->getForLocalProcessing(false),
+					'maxH' => $imageConf['file']['maxH'],
+					'maxW' => $imageConf['file']['maxW'],			
+				];
                 $imageConf['altText'] = $metadata['alternative'];
             } else {
-                $imageConf['file'] = $row['directory'] . rawurlencode($row['title']);
+				$imageConf['file'] = [
+					'_typoScriptNodeValue' => $row['directory'] . rawurlencode($row['title']),
+					'maxH' => $imageConf['file']['maxH'],
+					'maxW' => $imageConf['file']['maxW'],			
+				];                
             }
             return $this->renderPreviewImage($imageConf);
         }
