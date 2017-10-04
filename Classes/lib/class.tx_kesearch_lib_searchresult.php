@@ -220,7 +220,7 @@ class tx_kesearch_lib_searchresult
                 '<span class="hit">\0</span>';
 
             foreach ($wordArray as $word) {
-                $word = preg_replace('/([\W])/', '\\\\$1', $word);
+                $word = preg_replace('/([?#^&*()$\\/])/', '\\\\$1', $word);
                 $word = htmlspecialchars($word);
                 $content = preg_replace('/(' . $word . ')/iu', $highlightedWord, $content);
             }

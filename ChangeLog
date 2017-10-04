@@ -9,6 +9,7 @@ current master
 [TASK]    Remove deprecated occurrences of ArrayUtility:inArray(), thanks to Stephan Salzmann, https://github.com/teaminmedias-pluswerk/ke_search/pull/138.
 [BUGFIX]  Fix indexing of translated pages, https://github.com/teaminmedias-pluswerk/ke_search/pull/146.
 [BUGFIX]  Allow multple preselected filter options, https://github.com/teaminmedias-pluswerk/ke_search/issues/116.
+[BUGFIX]  Fix regression of searchword highlighting, highlighting did not work with searchwords containing an umlaut. https://github.com/teaminmedias-pluswerk/ke_search/commit/92002beb312ac36b13dfb009f3d8ada9acc3694f#diff-7ea6740aa98f5faef2d72bc72760be71
 
 Version 2.5.0, May 2017
 [BUGFIX]  Support several pages when loading filters and options
