@@ -128,7 +128,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     {
         // get some helper functions
         $this->div = GeneralUtility::makeInstance('tx_kesearch_lib_div', $this);
-
+		$this->typoScriptService = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService');
         // set start of query timer
         if (!$GLOBALS['TSFE']->register['ke_search_queryStartTime']) {
             $GLOBALS['TSFE']->register['ke_search_queryStartTime'] = GeneralUtility::milliseconds();
@@ -1219,17 +1219,25 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     {
         list($type, $filetype) = explode(':', $row['type']);
         if (in_array($filetype, $this->fileTypesWithPreviewPossible)) {
-            $imageConf = $this->conf['previewImage.'];
+            $imageConf = $this->conf['previewImage'];
 
             // if index record is of type "file" and contains an orig_uid, this is the reference
             // to a FAL record. Otherwise we use the path directly.
             /** @var $fileObject \TYPO3\CMS\Core\Resource\File */
             if ($row['orig_uid'] && ($fileObject = tx_kesearch_helper::getFile($row['orig_uid']))) {
                 $metadata = $fileObject->_getMetaData();
-                $imageConf['file'] = $fileObject->getForLocalProcessing(false);
+				$imageConf['file'] = [
+					'_typoScriptNodeValue' => $fileObject->getForLocalProcessing(false),
+					'maxH' => $imageConf['file']['maxH'],
+					'maxW' => $imageConf['file']['maxW'],			
+				];
                 $imageConf['altText'] = $metadata['alternative'];
             } else {
-                $imageConf['file'] = $row['directory'] . rawurlencode($row['title']);
+				$imageConf['file'] = [
+					'_typoScriptNodeValue' => $row['directory'] . rawurlencode($row['title']),
+					'maxH' => $imageConf['file']['maxH'],
+					'maxW' => $imageConf['file']['maxW'],			
+				];                
             }
             return $this->renderPreviewImage($imageConf);
         }
@@ -1251,7 +1259,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     {
         $imageHtml = '';
 
-        $imageConf = $this->conf['previewImage.'];
+        $imageConf = $this->conf['previewImage'];
         $fileRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
         $fileObjects = $fileRepository->findByRelation($table, $fieldname, $uid);
         /** @var $fileObject \TYPO3\CMS\Core\Resource\FileReference */
@@ -1263,7 +1271,11 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             $alternative = $referenceProperties['alternative'] ?
                 $referenceProperties['alternative'] : $originalFileProperties['alternative'];
 
-            $imageConf['file'] = $fileObject->getForLocalProcessing(false);
+           $imageConf['file'] = [
+				'_typoScriptNodeValue' => $fileObject->getForLocalProcessing(false),
+				'maxH' => $imageConf['file']['maxH'],
+				'maxW' => $imageConf['file']['maxW'],			
+			];
             $imageConf['altText'] = $alternative;
             $imageHtml = $this->renderPreviewImage($imageConf);
         }
@@ -1278,14 +1290,11 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
      * @return string
      */
     public function renderPreviewImage($imageConf)
-    {
-        if (empty($imageConf['file.']['maxW'])) {
-            $imageConf['file.']['maxW'] = 150;
-        }
-        if (empty($imageConf['file.']['maxH'])) {
-            $imageConf['file.']['maxH'] = 150;
-        }
-        $rendered = $this->cObj->cObjGetSingle('IMAGE', $imageConf);
+    {	
+		$imageConf['file']['maxW'] = (!empty($imageConf['file']['maxW'])) ? (int)$imageConf['file']['maxW'] : 150;
+		$imageConf['file']['maxH'] = (!empty($imageConf['file']['maxH'])) ? (int)$imageConf['file']['maxH'] : 150;		
+		$imageConf = $this->typoScriptService->convertPlainArrayToTypoScriptArray($imageConf);
+        $rendered = $this->cObj->cObjGetSingle('IMAGE', $imageConf );
         return $rendered;
     }
 
