@@ -193,7 +193,7 @@ class tx_kesearch_lib_sorting
     {
         $allowedDirections = array('asc', 'desc');
         $direction = strtolower($direction);
-        $isInArray = in_array($allowedDirections, $direction, true);
+        $isInArray = in_array($direction, $allowedDirections, true);
         if (!empty($direction) && $isInArray) {
             if ($direction == 'asc') {
                 $direction = 'desc';

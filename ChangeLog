@@ -7,6 +7,7 @@ current master
 [BUGFIX]  Fix translation of filter options, https://github.com/teaminmedias-pluswerk/ke_search/pull/126
 [TASK]    Use correct ellipsis punctuation mark, https://github.com/teaminmedias-pluswerk/ke_search/pull/142.
 [TASK]    Remove deprecated occurrences of ArrayUtility:inArray(), thanks to Stephan Salzmann, https://github.com/teaminmedias-pluswerk/ke_search/pull/138.
+[BUGFIX]  Fix wrong parameter order when using in_array(). Regression was introduced with https://github.com/teaminmedias-pluswerk/ke_search/pull/138.
 [BUGFIX]  Fix indexing of translated pages, https://github.com/teaminmedias-pluswerk/ke_search/pull/146.
 [BUGFIX]  Allow multple preselected filter options, https://github.com/teaminmedias-pluswerk/ke_search/issues/116.
 [BUGFIX]  Fix regression of searchword highlighting, highlighting did not work with searchwords containing an umlaut. https://github.com/teaminmedias-pluswerk/ke_search/commit/92002beb312ac36b13dfb009f3d8ada9acc3694f#diff-7ea6740aa98f5faef2d72bc72760be71
