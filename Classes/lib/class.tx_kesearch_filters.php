@@ -263,7 +263,7 @@ class tx_kesearch_filters
     {
         // see https://github.com/teaminmedias-pluswerk/ke_search/issues/128
         $LanguageMode = $GLOBALS['TSFE']->sys_language_content ;
-        if( \TYPO3\CMS\Core\Utility\GeneralUtility::hideIfNotTranslated( $GLOBALS['TSFE']->page['l18n_cfg'] )) {
+        if (\TYPO3\CMS\Core\Utility\GeneralUtility::hideIfNotTranslated($GLOBALS['TSFE']->page['l18n_cfg'])) {
             $LanguageMode = 'hideNonTranslated' ;
         }
         if (is_array($rows) && count($rows)) {
@@ -276,13 +276,13 @@ class tx_kesearch_filters
                         $LanguageMode
                     );
 
-                    if( is_array($row)) {
-                        if( $table == "tx_kesearch_filters") {
+                    if (is_array($row)) {
+                        if ($table == "tx_kesearch_filters") {
                             $row['rendertype'] = $rows[$key]['rendertype'] ;
                         }
                         $rows[$key] = $row;
                     } else {
-                        unset( $rows[$key] ) ;
+                        unset($rows[$key]);
                     }
                 }
             }
