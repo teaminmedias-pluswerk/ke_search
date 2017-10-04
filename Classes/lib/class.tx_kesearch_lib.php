@@ -18,6 +18,7 @@
  ***************************************************************/
 
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use \TYPO3\CMS\Core\Utility\HttpUtility;
 
@@ -106,6 +107,11 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     public $div;
 
     /**
+     * @var TypoScriptService
+     */
+    public $typoScriptService;
+
+    /**
      * @var user_kesearchpremium
      */
     public $user_kesearchpremium;
@@ -128,6 +134,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     {
         // get some helper functions
         $this->div = GeneralUtility::makeInstance('tx_kesearch_lib_div', $this);
+        $this->typoScriptService = GeneralUtility::makeInstance(TypoScriptService::class);
 
         // set start of query timer
         if (!$GLOBALS['TSFE']->register['ke_search_queryStartTime']) {
@@ -1219,17 +1226,17 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     {
         list($type, $filetype) = explode(':', $row['type']);
         if (in_array($filetype, $this->fileTypesWithPreviewPossible)) {
-            $imageConf = $this->conf['previewImage.'];
+            $imageConf = $this->conf['previewImage'];
 
             // if index record is of type "file" and contains an orig_uid, this is the reference
             // to a FAL record. Otherwise we use the path directly.
             /** @var $fileObject \TYPO3\CMS\Core\Resource\File */
             if ($row['orig_uid'] && ($fileObject = tx_kesearch_helper::getFile($row['orig_uid']))) {
                 $metadata = $fileObject->_getMetaData();
-                $imageConf['file'] = $fileObject->getForLocalProcessing(false);
+                $imageConf['file']['_typoScriptNodeValue'] = $fileObject->getForLocalProcessing(false);
                 $imageConf['altText'] = $metadata['alternative'];
             } else {
-                $imageConf['file'] = $row['directory'] . rawurlencode($row['title']);
+                $imageConf['file']['_typoScriptNodeValue'] = $row['directory'] . rawurlencode($row['title']);
             }
             return $this->renderPreviewImage($imageConf);
         }
@@ -1251,7 +1258,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     {
         $imageHtml = '';
 
-        $imageConf = $this->conf['previewImage.'];
+        $imageConf = $this->conf['previewImage'];
         $fileRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
         $fileObjects = $fileRepository->findByRelation($table, $fieldname, $uid);
         /** @var $fileObject \TYPO3\CMS\Core\Resource\FileReference */
@@ -1263,7 +1270,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             $alternative = $referenceProperties['alternative'] ?
                 $referenceProperties['alternative'] : $originalFileProperties['alternative'];
 
-            $imageConf['file'] = $fileObject->getForLocalProcessing(false);
+            $imageConf['file']['_typoScriptNodeValue'] = $fileObject->getForLocalProcessing(false);
             $imageConf['altText'] = $alternative;
             $imageHtml = $this->renderPreviewImage($imageConf);
         }
@@ -1279,12 +1286,9 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
      */
     public function renderPreviewImage($imageConf)
     {
-        if (empty($imageConf['file.']['maxW'])) {
-            $imageConf['file.']['maxW'] = 150;
-        }
-        if (empty($imageConf['file.']['maxH'])) {
-            $imageConf['file.']['maxH'] = 150;
-        }
+        $imageConf['file']['maxW'] = (!empty($imageConf['file']['maxW'])) ? (int)$imageConf['file']['maxW'] : 150;
+        $imageConf['file']['maxH'] = (!empty($imageConf['file']['maxH'])) ? (int)$imageConf['file']['maxH'] : 150;
+        $imageConf = $this->typoScriptService->convertPlainArrayToTypoScriptArray($imageConf);
         $rendered = $this->cObj->cObjGetSingle('IMAGE', $imageConf);
         return $rendered;
     }
@@ -1299,12 +1303,18 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         list($type) = explode(':', $typeComplete);
         $name = str_replace(':', '_', $typeComplete);
 
-        if ($this->conf['resultListTypeIcon.'][$name . '.']) {
-            $imageConf = $this->conf['resultListTypeIcon.'][$name . '.'];
+        if ($this->conf['resultListTypeIcon'][$name]) {
+            $imageConf = $this->conf['resultListTypeIcon'][$name];
+
+            // make sure imageConf['file'] is an array
+            $imageConf['file'] = is_string($imageConf['file'])
+                ? [ '_typoScriptNodeValue' => $imageConf['file']]
+                : $imageConf['file'];
+
         } else {
             // custom image (old configuration option, only for gif images)
             if ($this->conf['additionalPathForTypeIcons']) {
-                $imageConf['file'] = str_replace(
+                $imageConf['file']['_typoScriptNodeValue'] = str_replace(
                     PATH_site,
                     '',
                     GeneralUtility::getFileAbsFileName($this->conf['additionalPathForTypeIcons'] . $name . '.gif')
@@ -1313,17 +1323,18 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         }
 
         // fallback: default image
-        if (!is_file(PATH_site . $imageConf['file'])) {
-            $imageConf['file'] = ExtensionManagementUtility::siteRelPath($this->extKey)
+        if (!is_file(PATH_site . $imageConf['file']['_typoScriptNodeValue'])) {
+            $imageConf['file']['_typoScriptNodeValue'] = ExtensionManagementUtility::siteRelPath($this->extKey)
                 . 'res/img/types/' . $name . '.gif';
 
             // fallback for file results: use default if no image for this file extension is available
             if ($type == 'file' && !is_file(PATH_site . $imageConf['file'])) {
-                $imageConf['file'] = ExtensionManagementUtility::siteRelPath($this->extKey)
+                $imageConf['file']['_typoScriptNodeValue'] = ExtensionManagementUtility::siteRelPath($this->extKey)
                     . 'res/img/types/file.gif';
             }
         }
 
+        $imageConf = $this->typoScriptService->convertPlainArrayToTypoScriptArray($imageConf);
         $rendered = $this->cObj->cObjGetSingle('IMAGE', $imageConf);
 
         return $rendered;
