@@ -175,7 +175,7 @@ class tx_kesearch_indexer_types_templavoila extends tx_kesearch_indexer_types
      * @param array $uids Array with all page cols
      * @return array|mixed
      */
-    public function getPageRecords($uids)
+    public function getPageRecords(array $uids, $whereClause = '', $table = 'pages', $fields = 'pages.*')
     {
         $fields = '*';
         $table = 'pages';
