@@ -529,7 +529,7 @@ class tx_kesearch_indexer
                     ),
                     1
                 );
-            } else { // process storing of index record and return uid
+            } else { // process storing of index record and return true
                 $this->updateRecordInIndex($fieldValues);
                 return true;
             }
@@ -547,6 +547,7 @@ class tx_kesearch_indexer
                 return $GLOBALS['TYPO3_DB']->sql_insert_id();
             }
         }
+        return 0;
     }
 
     /**

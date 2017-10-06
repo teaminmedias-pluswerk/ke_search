@@ -44,7 +44,7 @@ class tx_kesearch_cli extends \TYPO3\CMS\Core\Controller\CommandLineController
     /**
      * CLI engine
      * @param array
-     * @return string
+     * @return void
      */
     public function cli_main($argv)
     {

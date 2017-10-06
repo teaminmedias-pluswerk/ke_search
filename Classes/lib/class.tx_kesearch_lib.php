@@ -173,13 +173,13 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             $this->piVars['page'] = 1;
         } else {
             // redirect ones after search submit to get nice looking url
-            if( $this->piVars['redirect'] === 0 ){
+            if ($this->piVars['redirect'] === 0) {
                 $this->piVars['redirect'] = 1;
                 $red_url = $this->pi_linkTP_keepPIvars_url();
                 HttpUtility::redirect($red_url);
             }
         }
-        if(!empty($this->conf['additionalPathForTypeIcons'])) {
+        if (!empty($this->conf['additionalPathForTypeIcons'])) {
             $this->conf['additionalPathForTypeIcons'] = rtrim($this->conf['additionalPathForTypeIcons'], '/') . '/';
         }
 
@@ -750,7 +750,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
      * creates the search result list
      * 1. does the actual searching (fetches the results to $rows)
      * 2. fills fluid variables for fluid templates to $this->fluidTemplateVariables
-
+     * @return void
      */
     public function getSearchResults()
     {
@@ -776,7 +776,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
 
         // render "no results" text and stop here
         if ($this->numberOfResults == 0) {
-            return $this->setNoResultsText();
+            $this->setNoResultsText();
         }
 
         // set switch for too short words
@@ -787,7 +787,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         $this->searchResult = GeneralUtility::makeInstance('tx_kesearch_lib_searchresult', $this);
 
         $this->fluidTemplateVariables['resultrows'] = array();
-        if( is_array($rows) ) {
+        if (is_array($rows)) {
             foreach ($rows as $row) {
                 $this->searchResult->setRow($row);
 
@@ -1405,7 +1405,8 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
 
     /**
      * gets all preselected filters from flexform
-     * @return none but fills global var with needed data
+     * returns nothing but fills global var with needed data
+     * @return void
      */
     public function getFilterPreselect()
     {

@@ -155,7 +155,7 @@ class tx_kesearch_indexer_types
      *
      * @param array $uids Simple array with uids of pages
      * @param string $pageWhere additional where-clause
-     * @return array extended array with uids and tags for records
+     * @return void
      */
     public function addTagsToRecords($uids, $pageWhere = '1=1')
     {

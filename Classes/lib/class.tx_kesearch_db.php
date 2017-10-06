@@ -73,7 +73,7 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
 
     /**
      * get a limitted amount of search results for a requested page
-     * @return array Array containing a limitted (one page) amount of search results
+     * @return void
      */
     public function getSearchResultByMySQL()
     {

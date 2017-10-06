@@ -280,7 +280,7 @@ class tx_kesearch_lib_filters_textlinks
      * and save the result to global arrays
      * @param integer $filterUid The filter uid
      * @param array $option An array containing the current option record
-     * @return string The rendered text link
+     * @return void
      */
     public function saveRenderedTextlinkToGlobalArrays($filterUid, $option)
     {
@@ -291,7 +291,7 @@ class tx_kesearch_lib_filters_textlinks
                 $this->contentOfNormalOptions[] = $this->renderTextlinkForNormalOption($filterUid, $option);
             }
         } else {
-            return '';
+            return ;
         }
     }
 
