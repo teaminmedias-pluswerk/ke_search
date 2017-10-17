@@ -1,6 +1,9 @@
 ChangeLog
 
 current master
+[TASK]    Remove storage engine definition in ext_tables.sql (was set to MyISAM) in order to use the default storage engine (InnoDB in MySQL 5.7). https://github.com/teaminmedias-pluswerk/ke_search/issues/159.
+
+Version 2.6.0, October 2017
 [BUGFIX]  Avoid duplicate text in search result teaser, https://github.com/teaminmedias-pluswerk/ke_search/pull/141.
 [BUGFIX]  Escape all PCRE characters when highlighting searchwords, thanks to Felix Jacobi, https://github.com/teaminmedias-pluswerk/ke_search/pull/119.
 [BUGFIX]  Fix for Filter not available in selection with compatibility6 installed, https://github.com/teaminmedias-pluswerk/ke_search/pull/133.

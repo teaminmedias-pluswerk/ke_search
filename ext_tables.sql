@@ -32,7 +32,7 @@ CREATE TABLE tx_kesearch_filters (
 
 	PRIMARY KEY (uid),
 	KEY parent (pid)
-) ENGINE=MyISAM;
+);
 
 
 
@@ -57,7 +57,7 @@ CREATE TABLE tx_kesearch_filteroptions (
 	sorting int(11) DEFAULT '0' NOT NULL,
 	PRIMARY KEY (uid),
 	KEY parent (pid)
-) ENGINE=MyISAM;
+);
 
 
 
@@ -93,7 +93,7 @@ CREATE TABLE tx_kesearch_index (
 
 	PRIMARY KEY (uid),
 	KEY parent (pid)
-) ENGINE=MyISAM;
+);
 
 
 
@@ -137,7 +137,7 @@ CREATE TABLE tx_kesearch_indexerconfig (
 
 	PRIMARY KEY (uid),
 	KEY parent (pid)
-) ENGINE=MyISAM;
+);
 
 #
 # Table structure for table 'tx_kesearch_stat_search'
@@ -151,7 +151,7 @@ CREATE TABLE tx_kesearch_stat_search (
   tagsagainst text,
   language int(11) DEFAULT '0' NOT NULL,
   PRIMARY KEY (uid)
-) ENGINE=MyISAM;
+);
 
 #
 # Table structure for table 'tx_kesearch_stat_word'
@@ -165,4 +165,4 @@ CREATE TABLE tx_kesearch_stat_word (
   resultsfound int(1) DEFAULT '0' NOT NULL,
   language int(11) DEFAULT '0' NOT NULL,
   PRIMARY KEY (uid),
-) ENGINE=MyISAM;
+);
