@@ -258,12 +258,6 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             unset($this->piVars['sortByDir']);
         }
 
-        // chooseBestIndex is only needed for MySQL-Search. Not for Sphinx
-        if (!$this->extConfPremium['enableSphinxSearch']) {
-            // precount results to find the best index
-            $this->db->chooseBestIndex($this->wordsAgainst, $this->tagsAgainst);
-        }
-
         // perform search at this point already if we need to calculate what
         // filters to display.
         if ($this->conf['checkFilterCondition'] != 'none') {
