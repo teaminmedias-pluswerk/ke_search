@@ -3,6 +3,7 @@ ChangeLog
 current master
 [TASK]    Remove storage engine definition in ext_tables.sql (was set to MyISAM) in order to use the default storage engine (InnoDB in MySQL 5.7). https://github.com/teaminmedias-pluswerk/ke_search/issues/159.
 [TASK]    Remove method chooseBestIndex. https://github.com/teaminmedias-pluswerk/ke_search/issues/160.
+[BUGFIX]  load TypoScriptService correctly depending on the TYPO3 version. https://github.com/teaminmedias-pluswerk/ke_search/issues/161.
 
 Version 2.6.0, October 2017
 [BUGFIX]  Avoid duplicate text in search result teaser, https://github.com/teaminmedias-pluswerk/ke_search/pull/141.
