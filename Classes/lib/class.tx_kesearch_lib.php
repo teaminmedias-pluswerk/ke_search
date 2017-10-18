@@ -18,7 +18,6 @@
  ***************************************************************/
 
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use \TYPO3\CMS\Core\Utility\HttpUtility;
 
@@ -134,7 +133,13 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     {
         // get some helper functions
         $this->div = GeneralUtility::makeInstance('tx_kesearch_lib_div', $this);
-        $this->typoScriptService = GeneralUtility::makeInstance(TypoScriptService::class);
+
+        if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) >= 8007000) {
+            $this->typoScriptService = GeneralUtility::makeInstance(TYPO3\CMS\Core\TypoScript\TypoScriptService::class);
+        }
+        else {
+            $this->typoScriptService = GeneralUtility::makeInstance(TYPO3\CMS\Extbase\Service\TypoScriptService::class);
+        }
 
         // set start of query timer
         if (!$GLOBALS['TSFE']->register['ke_search_queryStartTime']) {
