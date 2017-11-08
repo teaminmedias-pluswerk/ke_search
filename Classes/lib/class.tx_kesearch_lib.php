@@ -1062,7 +1062,8 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                 $linkconf['addQueryString'] = 1;
                 $linkconf['addQueryString.']['exclude'] = 'id,cHash';
                 $linkconf['useCacheHash'] = 1;
-                $linkconf['additionalParams'] = '&tx_kesearch_pi1[page]=' . intval($i);
+                $linkconf['additionalParams'] = '&tx_kesearch_pi1[sword]=' . $this->piVars['sword'];
+                $linkconf['additionalParams'] .= '&tx_kesearch_pi1[page]=' . intval($i);
 
                 if (is_array($this->piVars['filter'])) {
                     foreach ($this->piVars['filter'] as $filterId => $data) {
