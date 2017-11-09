@@ -615,7 +615,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
                 $feGroupsContentElement
             );
             $feGroupsPagesArray = GeneralUtility::intExplode(',', $feGroupsPages);
-            $feGroups = implode(',', array_intersect($feGroupsContentElementArray, $feGroupsContentElementArray));
+            $feGroups = implode(',', array_intersect($feGroupsContentElementArray, $feGroupsPagesArray));
         }
 
         if (($feGroupsContentElement
