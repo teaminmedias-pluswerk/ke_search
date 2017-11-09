@@ -339,6 +339,10 @@ class tx_kesearch_indexer_types_file extends tx_kesearch_indexer_types
             // index meta data from FAL: title, description, alternative
             $additionalContent = '';
 
+            if ($metadata['fe_groups']) {
+                $indexRecordValues['fe_group'] = $metadata['fe_groups'];
+            }
+
             if ($metadata['title']) {
                 $additionalContent = $metadata['title'] . "\n" ;
             }

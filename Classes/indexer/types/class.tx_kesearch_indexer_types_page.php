@@ -806,6 +806,16 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
             $metadata = $fileObject->_getMetaData();
         }
 
+        if ($metadata['fe_groups']) {
+            if ($feGroups) {
+                $feGroupsContentArray = GeneralUtility::intExplode(',', $feGroups);
+                $feGroupsFileArray = GeneralUtility::intExplode(',', $metadata['fe_groups']);
+                $feGroups = implode(',', array_intersect($feGroupsContentArray, $feGroupsFileArray));
+            } else {
+                $feGroups = $metadata['fe_groups'];
+            }
+        }
+
         // assign categories as tags (as cleartext, eg. "colorblue")
         $categories = tx_kesearch_helper::getCategories($metadata['uid'], 'sys_file_metadata');
         tx_kesearch_helper::makeTags($tags, $categories['title_list']);
