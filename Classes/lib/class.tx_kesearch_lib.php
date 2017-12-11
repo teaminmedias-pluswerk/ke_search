@@ -1087,9 +1087,12 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
 
                 if ($this->piVars['page'] == $i) {
                     $linkconf['ATagParams'] = 'class="current" ';
+                    $links['pages'][$i]['current'] = true;
                 }
                 $tempContent .= '<li>' . $this->cObj->typoLink($i, $linkconf) . '</li> ';
-                $links[] = $this->cObj->typoLink($i, $linkconf);
+                $links['pages'][$i]['url'] = $this->cObj->typoLink_URL($linkconf);
+                $links['pages'][$i]['pageNumber'] = $i;
+                $links['pages'][$i]['link'] = $this->cObj->typoLink($i, $linkconf);
             }
         }
         // end
@@ -1129,10 +1132,13 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             }
 
             $linkconf['ATagParams'] = 'class="prev" ';
-            $links['previous'] = $this->cObj->typoLink($this->pi_getLL('pagebrowser_prev'), $linkconf);
+            $links['previous']['url'] = $this->cObj->typoLink_URL($linkconf);
+            $links['previous']['text'] = $this->pi_getLL('pagebrowser_prev');
+            $links['previous']['class'] = 'prev';
             $previous = '<li>' . $links['previous'] . '</li>';
         } else {
             $previous = '';
+            $links['previous']['conf'] = '';
         }
 
         // next image with link
@@ -1169,10 +1175,13 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             }
 
             $linkconf['ATagParams'] = 'class="next" ';
-            $links['next'] = $this->cObj->typoLink($this->pi_getLL('pagebrowser_next'), $linkconf);
+            $links['next']['url'] = $this->cObj->typoLink_URL($linkconf);
+            $links['next']['text'] = $this->pi_getLL('pagebrowser_next');
+            $links['next']['class'] = 'next';
             $next = '<li>' . $links['next'] . '</li>';
         } else {
             $next = '';
+            $links['next']['url'] = '';
         }
 
         // compile previous, pages list and next link into one ul element
