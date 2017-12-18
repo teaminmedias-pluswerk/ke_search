@@ -184,7 +184,7 @@ class user_filterlist
         if (!isset($config['flexParentDatabaseRow']) ||
             (isset($config['flexParentDatabaseRow']) && !is_array($config['flexParentDatabaseRow']))
         ) {
-            $parentRow = BackendUtility::getRecord (
+            $parentRow = BackendUtility::getRecord(
                 'tt_content',
                 $config['row']['uid']
             );
