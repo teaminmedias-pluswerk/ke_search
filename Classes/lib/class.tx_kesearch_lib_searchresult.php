@@ -222,7 +222,10 @@ class tx_kesearch_lib_searchresult
             foreach ($wordArray as $word) {
                 $word = preg_quote($word, '/');
                 $word = htmlspecialchars($word);
-                $content = preg_replace('/(' . $word . ')/iu', $highlightedWord, $content);
+                // Todo: Highlight hits within words when using ke_seaarch_premium
+                // Todo: option "in word search" by removing the \b parameter
+                //$content = preg_replace('/(' . $word . ')/iu', $highlightedWord, $content);
+                $content = preg_replace('/\b(' . $word . ')/iu', $highlightedWord, $content);
             }
         }
         return $content;
