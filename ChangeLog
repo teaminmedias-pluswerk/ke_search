@@ -2,6 +2,7 @@ ChangeLog
 
 current master
 [BUGFIX]  Add missing delimiter information to preg_quote usage. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/166.
+[BUGFIX]  Do not query filter table if no startingpoint is set.
 
 Version 2.6.1, October 2017
 [TASK]    Remove storage engine definition in ext_tables.sql (was set to MyISAM) in order to use the default storage engine (InnoDB in MySQL 5.7). https://github.com/teaminmedias-pluswerk/ke_search/issues/159.

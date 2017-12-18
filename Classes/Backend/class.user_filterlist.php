@@ -39,6 +39,7 @@ class user_filterlist
         // print message if no startingpoint is set in plugin config
         if (empty($pidList)) {
             $config['items'][] = array('[SET STARTINGPOINT FIRST!]', '');
+            return ;
         }
 
         // get filters
@@ -127,6 +128,7 @@ class user_filterlist
         // print message if no startingpoint is set in plugin config
         if (empty($pidList)) {
             $config['items'][] = array('[SET STARTINGPOINT FIRST!]', '');
+            return ;
         }
 
         // get filters
