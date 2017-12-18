@@ -1,6 +1,6 @@
 ChangeLog
 
-current master
+Version 2.6.2, October 2017
 [BUGFIX]  Add missing delimiter information to preg_quote usage. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/166.
 [BUGFIX]  Do not query filter table if no startingpoint is set.
 [BUGFIX]  Non-leading search strings should not be marked in the search results in standard edition of ke_search. https://github.com/teaminmedias-pluswerk/ke_search/issues/164.
