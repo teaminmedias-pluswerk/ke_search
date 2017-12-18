@@ -615,7 +615,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
                 $feGroupsContentElement
             );
             $feGroupsPagesArray = GeneralUtility::intExplode(',', $feGroupsPages);
-            $feGroups = implode(',', array_intersect($feGroupsContentElementArray, $feGroupsContentElementArray));
+            $feGroups = implode(',', array_intersect($feGroupsContentElementArray, $feGroupsPagesArray));
         }
 
         if (($feGroupsContentElement
@@ -804,6 +804,16 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
         } else {
             $orig_uid = $fileObject->getUid();
             $metadata = $fileObject->_getMetaData();
+        }
+
+        if ($metadata['fe_groups']) {
+            if ($feGroups) {
+                $feGroupsContentArray = GeneralUtility::intExplode(',', $feGroups);
+                $feGroupsFileArray = GeneralUtility::intExplode(',', $metadata['fe_groups']);
+                $feGroups = implode(',', array_intersect($feGroupsContentArray, $feGroupsFileArray));
+            } else {
+                $feGroups = $metadata['fe_groups'];
+            }
         }
 
         // assign categories as tags (as cleartext, eg. "colorblue")
