@@ -127,7 +127,7 @@ class tx_kesearch_lib_searchphrase
             foreach ($searchParts as $key => $word) {
                 if ($word != '|') {
                     // enable part searching by default. But be careful: Enabling this slows down the search engine
-                    if (!isset($this->pObj->extConf['enablePartSearch']) || $this->pObj->extConf['enablePartSearch']) {
+                    if (!preg_match('/^(\+|\-|\~|<|>)?\"/', $searchParts[$key]) && (!isset($this->pObj->extConf['enablePartSearch']) || $this->pObj->extConf['enablePartSearch'])) {
                         if ($this->pObj->extConfPremium['enableInWordSearch']) {
                             $searchParts[$key] = '*' . trim($searchParts[$key], '*') . '*';
                         } else {
