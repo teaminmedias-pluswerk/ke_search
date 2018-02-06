@@ -32,6 +32,10 @@ class tx_kesearch_filters
      * @var tx_kesearch_lib
      */
     protected $pObj;
+
+    /**
+     * @var \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer
+     */
     protected $cObj;
 
     /**
@@ -46,6 +50,8 @@ class tx_kesearch_filters
     protected $extConf = array();
     protected $extConfPremium = array();
     protected $tagsInSearchResult = array();
+
+    protected $startingPoints = '';
 
     /**
      * Initializes this object
@@ -185,18 +191,19 @@ class tx_kesearch_filters
         $where = 'pid in (' . $GLOBALS['TYPO3_DB']->quoteStr($this->startingPoints, $table) . ')';
         $where .= ' AND find_in_set(uid, "' . $GLOBALS['TYPO3_DB']->quoteStr($filterUids, 'tx_kesearch_filters') . '")';
         $where .= $this->cObj->enableFields($table);
-        $rows = $this->languageOverlay(
-            $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-                $fields,
-                $table,
-                $where,
-                '',
-                'find_in_set(uid, "' . $GLOBALS['TYPO3_DB']->quoteStr($filterUids, 'tx_kesearch_filters') . '")',
-                '',
-                'uid'
-            ),
-            $table
+        $rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
+            $fields,
+            $table,
+            $where,
+            '',
+            'find_in_set(uid, "' . $GLOBALS['TYPO3_DB']->quoteStr($filterUids, 'tx_kesearch_filters') . '")',
+            '',
+            'uid'
         );
+        if (!is_array($rows)) {
+            return [];
+        }
+        $rows = $this->languageOverlay($rows, $table);
         return $this->addOptionsToFilters($rows);
     }
 
