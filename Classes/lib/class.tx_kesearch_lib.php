@@ -793,6 +793,8 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                 $tempMarkerArray = array(
                     'orig_uid' => $row['orig_uid'],
                     'orig_pid' => $row['orig_pid'],
+                    'title_text' => $row['title'],
+                    'content_text' => $row['content'],
                     'title' => $this->searchResult->getTitle(),
                     'teaser' => $this->searchResult->getTeaser(),
                 );
