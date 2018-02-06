@@ -215,8 +215,8 @@ class tx_kesearch_lib_searchresult
     public function highlightArrayOfWordsInContent($wordArray, $content)
     {
         if (is_array($wordArray) && count($wordArray)) {
-            $highlightedWord = (!empty($this->conf['highlightedWord_stdWrap.'])) ?
-                $this->cObj->stdWrap('\0', $this->conf['highlightedWord_stdWrap.']) :
+            $highlightedWord = (!empty($this->conf['highlightedWord_stdWrap'])) ?
+                $this->cObj->stdWrap('\0', $this->conf['highlightedWord_stdWrap']) :
                 '<span class="hit">\0</span>';
 
             foreach ($wordArray as $word) {
