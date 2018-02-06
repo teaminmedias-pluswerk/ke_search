@@ -1010,6 +1010,11 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
      */
     public function renderPagebrowser()
     {
+        /** @var \TYPO3\CMS\Fluid\View\StandaloneView $view */
+        $view = GeneralUtility::makeInstance(\TYPO3\CMS\Fluid\View\StandaloneView::class);
+        $view->setTemplateRootPaths($this->conf['templateRootPaths']);
+        $view->setTemplate('Widget/Pagination');
+        $pagination = [];
 
         $numberOfResults = $this->numberOfResults;
         $resultsPerPage = $this->conf['resultsPerPage'];
@@ -1050,6 +1055,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         // render pages list
         $tempContent = '';
         $links = [];
+        $pages = [];
         $currentPage = intval($startPage / $resultsPerPage) + 1;
         for ($i = 1; $i <= $pagesTotal; $i++) {
             if ($i >= $startPage && $i <= $endPage) {
@@ -1063,6 +1069,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                 $linkconf['addQueryString.']['exclude'] = 'id,cHash';
                 $linkconf['useCacheHash'] = 1;
                 $linkconf['additionalParams'] = '&tx_kesearch_pi1[page]=' . intval($i);
+                $pages[] = $i;
 
                 if (is_array($this->piVars['filter'])) {
                     foreach ($this->piVars['filter'] as $filterId => $data) {
@@ -1092,98 +1099,28 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                 $links[] = $this->cObj->typoLink($i, $linkconf);
             }
         }
+        $pagination['pages'] = $pages;
         // end
         $end = ($start + $resultsPerPage > $numberOfResults) ? $numberOfResults : ($start + $resultsPerPage);
 
         // previous image with link
         if ($this->piVars['page'] > 1) {
-            $previousPage = $this->piVars['page'] - 1;
-
-            // get static version
-            unset($linkconf);
-            $linkconf['parameter'] = $GLOBALS['TSFE']->id;
-            $linkconf['addQueryString'] = 1;
-            $linkconf['addQueryString.']['exclude'] = 'id,cHash';
-            $linkconf['useCacheHash'] = 1;
-            $linkconf['additionalParams'] = '&tx_kesearch_pi1[sword]=' . $this->piVars['sword'];
-            $linkconf['additionalParams'] .= '&tx_kesearch_pi1[page]=' . intval($previousPage);
-
-            if (is_array($this->piVars['filter'])) {
-                foreach ($this->piVars['filter'] as $filterId => $data) {
-                    if (is_array($data)) {
-                        foreach ($data as $tagKey => $tag) {
-                            $linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter]['
-                                . $filterId
-                                . ']['
-                                . $tagKey
-                                . ']='
-                                . $tag;
-                        }
-                    } else {
-                        $linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter]['
-                            . $filterId
-                            . ']='
-                            . $this->piVars['filter'][$filterId];
-                    }
-                }
-            }
-
-            $linkconf['ATagParams'] = 'class="prev" ';
-            $links['previous'] = $this->cObj->typoLink($this->pi_getLL('pagebrowser_prev'), $linkconf);
-            $previous = '<li>' . $links['previous'] . '</li>';
-        } else {
-            $previous = '';
+            $pagination['previous'] = $this->piVars['page'] - 1;
         }
 
         // next image with link
         if ($this->piVars['page'] < $pagesTotal) {
-            $nextPage = $this->piVars['page'] + 1;
-
-            // get static version
-            unset($linkconf);
-            $linkconf['parameter'] = $GLOBALS['TSFE']->id;
-            $linkconf['addQueryString'] = 1;
-            $linkconf['addQueryString.']['exclude'] = 'id,cHash';
-            $linkconf['useCacheHash'] = 1;
-            $linkconf['additionalParams'] = '&tx_kesearch_pi1[sword]=' . $this->piVars['sword'];
-            $linkconf['additionalParams'] .= '&tx_kesearch_pi1[page]=' . intval($nextPage);
-
-            if (is_array($this->piVars['filter'])) {
-                foreach ($this->piVars['filter'] as $filterId => $data) {
-                    if (is_array($data)) {
-                        foreach ($data as $tagKey => $tag) {
-                            $linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter]['
-                                . $filterId
-                                . ']['
-                                . $tagKey
-                                . ']='
-                                . $tag;
-                        }
-                    } else {
-                        $linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter]['
-                            . $filterId
-                            . ']='
-                            . $this->piVars['filter'][$filterId];
-                    }
-                }
-            }
-
-            $linkconf['ATagParams'] = 'class="next" ';
-            $links['next'] = $this->cObj->typoLink($this->pi_getLL('pagebrowser_next'), $linkconf);
-            $next = '<li>' . $links['next'] . '</li>';
-        } else {
-            $next = '';
+            $pagination['next'] = $this->piVars['page'] + 1;
         }
 
-        // compile previous, pages list and next link into one ul element
-        $pagebrowser_links = '<ul>' . $previous . $tempContent . $next . '</ul>';
-
+        $pagination['currentPage'] = $this->piVars['page'];
+        $view->assign('pagination', $pagination);
 
         // render pagebrowser content
         $markerArray = array(
             'current' => $this->piVars['page'],
             'pages_total' => $pagesTotal,
-            'pages_list' => $pagebrowser_links,
+            'pages_list' => $view->render(),
             'links' => $links,
             'start' => $start + 1,
             'end' => $end,
