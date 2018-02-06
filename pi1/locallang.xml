@@ -50,7 +50,7 @@
 			<label index="ff.showPageImages">Show page image preview instead of result icon? (Images is taken from the page "media" field.)</label>
 			<label index="ff.showNewsImages">Show news (ext:news) image preview instead of result icon?</label>
 
-			<label index="ff.page.pagebrowser">Pagebrower</label>
+			<label index="ff.page.pagebrowser">Pagebrowser</label>
 			<label index="ff.pagebrowserOnTop">Show pagebrowser on top of result list</label>
 			<label index="ff.pagebrowserAtBottom">Show pagebrowser at the bottom of the result list</label>
 			<label index="ff.maxPagesInPagebrowser">Number of pages shown in pagebrowser</label>
