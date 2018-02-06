@@ -1006,7 +1006,6 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
 
     /**
      * render parts for the pagebrowser
-     * @todo do the rendering completely in fluid
      */
     public function renderPagebrowser()
     {
@@ -1021,22 +1020,22 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         $maxPages = $this->conf['maxPagesInPagebrowser'];
 
         // get total number of items to show
+        // show pagebrowser only if there are more entries that are shown on one page
         if ($numberOfResults > $resultsPerPage) {
-            // show pagebrowser if there are more entries that are
-            // shown on one page
             $this->limit = $resultsPerPage;
         } else {
-            // do not show pagebrowser
             return;
         }
 
         // set db limit
         $start = ($this->piVars['page'] * $resultsPerPage) - $resultsPerPage;
         $this->dbLimit = $start . ',' . $resultsPerPage;
+        $end = ($start + $resultsPerPage > $numberOfResults) ? $numberOfResults : ($start + $resultsPerPage);
 
         // number of pages
         $pagesTotal = ceil($numberOfResults / $resultsPerPage);
 
+        // calculate start and end page
         $startPage = $this->piVars['page'] - ceil(($maxPages / 2));
         $endPage = $startPage + $maxPages - 1;
         if ($startPage < 1) {
@@ -1052,63 +1051,19 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             $endPage = $pagesTotal;
         }
 
-        // render pages list
-        $tempContent = '';
-        $links = [];
+        // create pages list, previous, current and next for pagination widget
         $pages = [];
-        $currentPage = intval($startPage / $resultsPerPage) + 1;
         for ($i = 1; $i <= $pagesTotal; $i++) {
             if ($i >= $startPage && $i <= $endPage) {
-                // render static version
-                unset($linkconf);
-                if ($i === $currentPage) {
-                    $linkconf['class'] = 'current';
-                }
-                $linkconf['parameter'] = $GLOBALS['TSFE']->id;
-                $linkconf['addQueryString'] = 1;
-                $linkconf['addQueryString.']['exclude'] = 'id,cHash';
-                $linkconf['useCacheHash'] = 1;
-                $linkconf['additionalParams'] = '&tx_kesearch_pi1[page]=' . intval($i);
                 $pages[] = $i;
-
-                if (is_array($this->piVars['filter'])) {
-                    foreach ($this->piVars['filter'] as $filterId => $data) {
-                        if (is_array($data)) {
-                            foreach ($data as $tagKey => $tag) {
-                                $linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter]['
-                                    . $filterId
-                                    . ']['
-                                    . $tagKey
-                                    . ']='
-                                    . $tag;
-                            }
-                        } else {
-                            $linkconf['additionalParams']
-                                .= '&tx_kesearch_pi1[filter]['
-                                . $filterId
-                                . ']='
-                                . $this->piVars['filter'][$filterId];
-                        }
-                    }
-                }
-
-                if ($this->piVars['page'] == $i) {
-                    $linkconf['ATagParams'] = 'class="current" ';
-                }
-                $tempContent .= '<li>' . $this->cObj->typoLink($i, $linkconf) . '</li> ';
-                $links[] = $this->cObj->typoLink($i, $linkconf);
             }
         }
         $pagination['pages'] = $pages;
-        // end
-        $end = ($start + $resultsPerPage > $numberOfResults) ? $numberOfResults : ($start + $resultsPerPage);
 
-        // previous image with link
         if ($this->piVars['page'] > 1) {
             $pagination['previous'] = $this->piVars['page'] - 1;
         }
 
-        // next image with link
         if ($this->piVars['page'] < $pagesTotal) {
             $pagination['next'] = $this->piVars['page'] + 1;
         }
@@ -1116,12 +1071,11 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         $pagination['currentPage'] = $this->piVars['page'];
         $view->assign('pagination', $pagination);
 
-        // render pagebrowser content
+        // render pagebrowser content and pass it together with some variables to fluid template
         $markerArray = array(
             'current' => $this->piVars['page'],
             'pages_total' => $pagesTotal,
             'pages_list' => $view->render(),
-            'links' => $links,
             'start' => $start + 1,
             'end' => $end,
             'total' => $numberOfResults,
@@ -1130,7 +1084,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             'of' => $this->pi_getLL('of'),
         );
 
-        // hook for additional markers in pagebrowse
+        // hook for additional markers in pagebrowser
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['pagebrowseAdditionalMarker'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['pagebrowseAdditionalMarker'] as $_classRef) {
                 $_procObj = &GeneralUtility::getUserObj($_classRef);
