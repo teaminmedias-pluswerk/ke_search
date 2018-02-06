@@ -1,6 +1,6 @@
 ChangeLog
 
-current master
+Version 2.6.3, January 2018
 [BUGFIX]  Fix cli dispatcher script.
 [BUGFIX]  Fix string „searchword_length_error“, show the actual setting of minium character. https://github.com/teaminmedias-pluswerk/ke_search/pull/176.
 [BUGFIX]  Handle missing plugin configuration. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/185.
