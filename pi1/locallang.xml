@@ -76,7 +76,7 @@
 			<label index="of">of</label>
 			<label index="no_results_found">No results found</label>
 			<label index="no_results_refine">This search term is not specific enough. Please choose another.</label>
-			<label index="searchword_length_error">Search words under length of 4 characters are not processed.</label>
+			<label index="searchword_length_error">Search words under length of %d characters are not processed.</label>
 			<label index="error_resultPage">You have defined an results page in your Plugin configuration. So it makes no sense to insert resultlist plugin on to this page, too.</label>
 			<label index="pagebrowser_prev">previous</label>
 			<label index="pagebrowser_next">next</label>
@@ -184,7 +184,7 @@
 			<label index="of">von</label>
 			<label index="no_results_found">Keine Ergebnisse gefunden</label>
 			<label index="no_results_refine">Ihr Suchbegriff ist zu allgemein gehalten und kommt auf mehr als 50 Prozent aller Seiten vor. Bitte waehlen Sie einen anderen Suchbegriff.</label>
-			<label index="searchword_length_error">Bitte beachten Sie: Suchbegriffe unter einer Länge von vier Buchstaben werden ignoriert.</label>
+			<label index="searchword_length_error">Bitte beachten Sie: Suchbegriffe unter einer Länge von %d Buchstaben werden ignoriert.</label>
 			<label index="error_resultPage">Sie haben in der Pluginkonfiguration eine Ergebnisseite angegeben. Es macht also keinen Sinn das Ergebnislistenplugin mit hier auf dieser Liste anzeigen zu lassen.</label>
 			<label index="pagebrowser_prev">vorherige</label>
 			<label index="pagebrowser_next">nächste</label>
@@ -278,7 +278,7 @@
 			<label index="of">van</label>
 			<label index="no_results_found">Geen zoekresultaten gevonden</label>
 			<label index="no_results_refine">Deze zoekterm is niet specifiek genoeg. Kies een andere.</label>
-			<label index="searchword_length_error">Zoek woorden in lengte van minder dan 1 karakter zijn niet verwerkt.</label>
+			<label index="searchword_length_error">Zoek woorden in lengte van minder dan %d karakter zijn niet verwerkt.</label>
 			<label index="error_resultPage">Er is al een pagina met zoekresultaten in de Plugin configuratie. Dus het heeft geen zin om nogmaals de resultatenlijst plug-in te voegen op deze pagina.</label>
 			<label index="label_resulturl">URL</label>
 			<label index="label_sort">Sorteer op:</label>
