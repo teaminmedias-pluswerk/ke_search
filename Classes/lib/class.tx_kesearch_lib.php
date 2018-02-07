@@ -212,9 +212,6 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         // initialize filters
         $this->filters->initialize($this);
 
-        // init templating (marker based or fluid)
-        $this->initTemplate();
-
         // get first startingpoint
         $this->firstStartingPoint = $this->div->getFirstStartingPoint($this->startingPoints);
 
@@ -276,28 +273,6 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             $pageRenderer = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
             $pageRenderer->addCssFile($cssFile);
         }
-    }
-
-    /**
-     * initializes the fluid template
-     */
-    public function initTemplate()
-    {
-        // set default template paths
-        $this->conf['templateRootPath'] =
-            GeneralUtility::getFileAbsFileName($this->conf['templateRootPath']
-                ? $this->conf['templateRootPath']
-                : 'EXT:ke_search/Resources/Private/Templates/');
-
-        $this->conf['partialRootPath'] =
-            GeneralUtility::getFileAbsFileName($this->conf['partialRootPath']
-                ? $this->conf['partialRootPath']
-                : 'EXT:ke_search/Resources/Private/Partials/');
-
-        $this->conf['layoutRootPath']
-            = GeneralUtility::getFileAbsFileName($this->conf['layoutRootPath']
-            ? $this->conf['layoutRootPath']
-            : 'EXT:ke_search/Resources/Private/Layouts/');
     }
 
     /**
