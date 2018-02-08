@@ -133,7 +133,6 @@ return array(
                     )
                 ),
                 'behaviour' => array(
-                    'localizationMode' => 'select',
                     'localizeChildrenAtParentLocalization' => true,
                 )
             ),
@@ -187,18 +186,15 @@ return array(
         ),
     ),
     'types' => array(
-        'select' => array('showitem' => 'sys_language_uid;;;;1-1-1,l10n_parent, l10n_diffsource, hidden;;1;;1-1-1,'
-            . ' title;;;;2-2-2,rendertype;;;;3-3-3, options, shownumberofresults, alphabeticalsorting;;;;4-4-4'),
-        'list' => array('showitem' => 'sys_language_uid;;;;1-1-1,l10n_parent, l10n_diffsource, hidden;;1;;1-1-1,'
-            . ' title;;;;2-2-2,rendertype;;;;3-3-3, options, shownumberofresults, alphabeticalsorting;;;;4-4-4'),
-        'checkbox' => array('showitem' => 'sys_language_uid;;;;1-1-1,l10n_parent, l10n_diffsource, hidden;;1;;1-1-1,'
-            . ' title;;;;2-2-2,rendertype;;;;3-3-3, markAllCheckboxes, options, shownumberofresults,'
-            . ' alphabeticalsorting;;;;4-4-4'),
-        'textlinks' => array('showitem' => 'sys_language_uid;;;;1-1-1,l10n_parent, l10n_diffsource, hidden;;1;;1-1-1,'
-            . ' title;;;;2-2-2,rendertype;;;;3-3-3, target_pid, amount, shownumberofresults,'
-            . ' alphabeticalsorting;;;;4-4-4, options')
-    ),
-    'palettes' => array(
-        '1' => array('showitem' => '')
+        'select' => array('showitem' => 'sys_language_uid,l10n_parent, l10n_diffsource, hidden,'
+            . ' title,rendertype, options, shownumberofresults, alphabeticalsorting'),
+        'list' => array('showitem' => 'sys_language_uid,l10n_parent, l10n_diffsource, hidden,'
+            . ' title,rendertype, options, shownumberofresults, alphabeticalsorting'),
+        'checkbox' => array('showitem' => 'sys_language_uid,l10n_parent, l10n_diffsource, hidden,'
+            . ' title,rendertype, markAllCheckboxes, options, shownumberofresults,'
+            . ' alphabeticalsorting'),
+        'textlinks' => array('showitem' => 'sys_language_uid,l10n_parent, l10n_diffsource, hidden,'
+            . ' title,rendertype, target_pid, amount, shownumberofresults,'
+            . ' alphabeticalsorting, options')
     )
 );

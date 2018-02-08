@@ -5,7 +5,6 @@ if (!defined('TYPO3_MODE')) {
 }
 
 $extPath = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_search');
-$extRelPath = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('ke_search');
 
 if (TYPO3_MODE == 'BE') {
     require_once($extPath . 'Classes/lib/class.tx_kesearch_lib_items.php');
