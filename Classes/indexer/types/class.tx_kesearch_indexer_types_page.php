@@ -649,10 +649,14 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
         if (count($fileObjects) && $feGroups != DONOTINDEX) {
             // loop through files
             foreach ($fileObjects as $fileObject) {
-                $isInList = \TYPO3\CMS\Core\Utility\GeneralUtility::inList(
-                    $this->indexerConfig['fileext'],
-                    $fileObject->getExtension()
-                );
+                if ($fileObject instanceof FileInterface) {
+                    $isInList = \TYPO3\CMS\Core\Utility\GeneralUtility::inList(
+                        $this->indexerConfig['fileext'],
+                        $fileObject->getExtension()
+                    );
+                } else {
+                    $this->addError('Could not index file in content element #' . $ttContentRow['uid'] . ' (no file object).');
+                }
 
                 // check if the file extension fits in the list of extensions
                 // to index defined in the indexer configuration
@@ -678,7 +682,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
                     // write file data to the index as a seperate index entry
                     // count indexed files, add it to the indexer output
                     if (!file_exists($filePath)) {
-                        $this->addError('Could not index file ' . $filePath . ' (file does not exist).');
+                        $this->addError('Could not index file ' . $filePath . ' in content element #' . $ttContentRow['uid'] . ' (file does not exist).');
                     } else {
                         if ($fileIndexerObject->fileInfo->setFile($fileObject)) {
                             if (($content = $fileIndexerObject->getFileContent($filePath))) {
