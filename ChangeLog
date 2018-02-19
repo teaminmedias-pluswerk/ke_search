@@ -5,6 +5,7 @@ current master
 [FEATURE] Move pagination to Fluid to enable modification of pagination. Thanks to Dennis Römmich. https://github.com/teaminmedias-pluswerk/ke_search/pull/183.
 [TASK]    Remove obsolete initTemplate function.
 [FEATURE] Add template layout chooser. Thanks to tritum. https://github.com/teaminmedias-pluswerk/ke_search/pull/123.
+[TASK]    Cleanup deprecated TCA configurations. Thanks to Tim Lochmüller. https://github.com/teaminmedias-pluswerk/ke_search/pull/189.
 
 Version 2.6.3, January 2018
 [BUGFIX]  Fix cli dispatcher script.
