@@ -881,6 +881,14 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                 break;
         }
 
+        // hook to overwrite/extend image handling
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['renderPreviewImageOrTypeIcon'])) {
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['renderPreviewImageOrTypeIcon'] as $_classRef) {
+                $_procObj = &GeneralUtility::getUserObj($_classRef);
+                $_procObj->renderPreviewImageOrTypeIcon($imageHtml, $row, $this);
+            }
+        }
+
         // render type icon if no preview image is available (or preview is disabled)
         if ($this->conf['showTypeIcon'] && empty($imageHtml)) {
             $imageHtml = $this->renderTypeIcon($row['type']);
