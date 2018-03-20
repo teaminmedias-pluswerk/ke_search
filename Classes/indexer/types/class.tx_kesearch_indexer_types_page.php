@@ -279,12 +279,24 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
 
         // create entry in cachedPageRecods for additional languages, skip default language 0
         foreach ($this->sysLanguages as $sysLang) {
-            if ($sysLang['uid'] > 0) {
+            if ($sysLang['uid'] != 0) {
+
+                // create entries for content elements with sys_language_uid = -1
+                if ($sysLang['uid'] == -1) {
+                    $table = 'pages';
+                    $field = 'uid';
+                    $where = '';
+                }else{
+                    $table = 'pages_language_overlay';
+                    $field = 'pid';
+                    $where =  'AND sys_language_uid=' . (int) $sysLang['uid'];
+                }
+
                 list($pageOverlay) = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecordsByField(
-                    'pages_language_overlay',
-                    'pid',
+                    $table,
+                    $field,
                     $pageRow['uid'],
-                    'AND sys_language_uid=' . (int) $sysLang['uid']
+                    $where
                 );
                 if ($pageOverlay) {
                     $this->cachedPageRecords[$sysLang['uid']][$pageRow['uid']] = $pageOverlay + $pageRow;
