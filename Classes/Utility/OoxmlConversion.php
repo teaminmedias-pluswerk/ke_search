@@ -120,7 +120,7 @@ class OoxmlConversion
     public function convertToText()
     {
         $pathInfo = pathinfo($this->filename);
-        switch ($pathInfo['extension']) {
+        switch (strtolower($pathInfo['extension'])) {
             case 'docx':
                 return $this->readDocx();
             case 'xlsx':
