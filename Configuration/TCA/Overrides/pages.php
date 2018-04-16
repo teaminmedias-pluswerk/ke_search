@@ -17,9 +17,9 @@ $tempColumns = [
             'itemsProcFunc' => 'user_filterlist->getListOfAvailableFiltersForTCA',
         ]
     ],
-    'tx_kesearch_description' => [
+    'tx_kesearch_abstract' => [
         'exclude' => 1,
-        'label' => 'LLL:EXT:ke_search/locallang_db.xml:pages.tx_kesearch_description',
+        'label' => 'LLL:EXT:ke_search/locallang_db.xml:pages.tx_kesearch_abstract',
         'config' => [
             'type' => 'text',
             'cols' => 40,
@@ -49,5 +49,5 @@ $tempColumns = [
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('pages', $tempColumns);
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
     'pages',
-    '--div--;LLL:EXT:ke_search/locallang_db.xml:pages.tx_kesearch_label,tx_kesearch_tags,tx_kesearch_description,tx_kesearch_resultimage;;;;1-1-1'
+    '--div--;LLL:EXT:ke_search/locallang_db.xml:pages.tx_kesearch_label,tx_kesearch_tags,tx_kesearch_abstract,tx_kesearch_resultimage;;;;1-1-1'
 );
