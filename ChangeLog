@@ -1,6 +1,6 @@
 ChangeLog
 
-current master
+Version 2.7.0, April 2018
 [TASK]    Make title and and full index content available in text format in the resultrow template (resultrow.title_text and resultrow.content_text).
 [FEATURE] Move pagination to Fluid to enable modification of pagination. Thanks to Dennis Römmich. https://github.com/teaminmedias-pluswerk/ke_search/pull/183.
 [TASK]    Remove obsolete initTemplate function.
