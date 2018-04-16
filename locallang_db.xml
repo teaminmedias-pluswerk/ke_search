@@ -8,6 +8,8 @@
 		<languageKey index="default" type="array">
 			<label index="pages.tx_kesearch_label">Search</label>
 			<label index="pages.tx_kesearch_tags">Tags for faceted search</label>
+			<label index="pages.tx_kesearch_resultimage">Search result image</label>
+			<label index="pages.tx_kesearch_description">Description for search result</label>
 			<label index="tt_content.list_type_pi1">Faceted search - Searchbox and Filters</label>
 			<label index="tt_content.list_type_pi2">Faceted search - Results</label>
 			<label index="tt_content.list_type_pi3">Faceted search - Multiselect for Textlinks</label>
