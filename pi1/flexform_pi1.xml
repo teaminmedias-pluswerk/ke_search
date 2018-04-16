@@ -257,7 +257,7 @@
 									</numIndex>
 								</items>
 								<size>1</size>
-								<default>hit</default>
+								<default>abstract</default>
 							</config>
 						</TCEforms>
 					</previewMode>
