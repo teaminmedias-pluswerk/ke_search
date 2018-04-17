@@ -46,8 +46,12 @@ $tempColumns = [
     ],
 ];
 
+// add new fields to tab "search" and move field "no_search" to "search tab"
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('pages', $tempColumns);
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
     'pages',
-    '--div--;LLL:EXT:ke_search/locallang_db.xml:pages.tx_kesearch_label,tx_kesearch_tags,tx_kesearch_abstract,tx_kesearch_resultimage;;;;1-1-1'
+    '--div--;LLL:EXT:ke_search/locallang_db.xml:pages.tx_kesearch_label,no_search;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.no_search_formlabel, tx_kesearch_tags,tx_kesearch_abstract,tx_kesearch_resultimage;;;;1-1-1'
 );
+
+// remove field "no_search" from "miscellaneous" palette
+$GLOBALS['TCA']['pages']['palettes']['miscellaneous']['showitem'] = 'is_siteroot;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.is_siteroot_formlabel, php_tree_stop;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.php_tree_stop_formlabel';
