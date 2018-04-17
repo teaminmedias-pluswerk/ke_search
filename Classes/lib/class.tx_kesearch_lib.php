@@ -862,7 +862,9 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
 
             case 'page':
                 if ($this->conf['showPageImages']) {
-                    $imageHtml = $this->renderFALPreviewImage($row['orig_uid'], 'pages', 'media');
+                    // use new field "tx_kesearch_resultimage" if set, otherwise field "media"
+                    $imageHtml = $this->renderFALPreviewImage($row['orig_uid'], 'pages', 'tx_kesearch_resultimage');
+                    if (empty($imageHtml)) $imageHtml = $this->renderFALPreviewImage($row['orig_uid'], 'pages', 'media');
                 }
                 break;
 
