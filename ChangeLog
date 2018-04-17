@@ -1,5 +1,8 @@
 ChangeLog
 
+current master
+[FEATURE] Improve search fields for pages. Collect fields relevant for search in one tab in the page properties. Introduce two new dedicated fields for abstract and image (Resources -> Media and Metadata -> Abstract still work as fallback). Set "Show abstract" as default behaviour. https://github.com/teaminmedias-pluswerk/ke_search/pull/205
+
 Version 2.7.0, April 2018
 [TASK]    Make title and and full index content available in text format in the resultrow template (resultrow.title_text and resultrow.content_text).
 [FEATURE] Move pagination to Fluid to enable modification of pagination. Thanks to Dennis Römmich. https://github.com/teaminmedias-pluswerk/ke_search/pull/183.
