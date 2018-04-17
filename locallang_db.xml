@@ -6,7 +6,10 @@
 	</meta>
 	<data type="array">
 		<languageKey index="default" type="array">
+			<label index="pages.tx_kesearch_label">Search</label>
 			<label index="pages.tx_kesearch_tags">Tags for faceted search</label>
+			<label index="pages.tx_kesearch_resultimage">Search result image</label>
+			<label index="pages.tx_kesearch_abstract">Abstract for search result</label>
 			<label index="tt_content.list_type_pi1">Faceted search - Searchbox and Filters</label>
 			<label index="tt_content.list_type_pi2">Faceted search - Results</label>
 			<label index="tt_content.list_type_pi3">Faceted search - Multiselect for Textlinks</label>
@@ -92,7 +95,10 @@
 			<label index="tx_kesearch_indexerconfig.cal_expired_events">Index expired events?</label>
 		</languageKey>
 		<languageKey index="de" type="array">
+			<label index="pages.tx_kesearch_label">Suche</label>
 			<label index="pages.tx_kesearch_tags">Schlagworte für facettierte Suche</label>
+			<label index="pages.tx_kesearch_resultimage">Bild für Suchergebnis</label>
+			<label index="pages.tx_kesearch_abstract">Abstract für Suchergebnis</label>
 			<label index="tt_content.list_type_pi1">Facettierte Suche - Suchbox und Filter</label>
 			<label index="tt_content.list_type_pi2">Facettierte Suche - Ergebnisliste</label>
 			<label index="tt_content.list_type_pi3">Facettierte Suche - Mehrfachauswahl für Textlinks</label>

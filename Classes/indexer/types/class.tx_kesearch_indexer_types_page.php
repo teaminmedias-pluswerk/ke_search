@@ -284,7 +284,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
                     'pages_language_overlay',
                     'pid',
                     $pageRow['uid'],
-                    'AND sys_language_uid=' . (int) $sysLang['uid']
+                    'AND sys_language_uid=' . (int)$sysLang['uid']
                 );
                 if ($pageOverlay) {
                     $this->cachedPageRecords[$sysLang['uid']][$pageRow['uid']] = $pageOverlay + $pageRow;
@@ -395,7 +395,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
         if (ExtensionManagementUtility::isLoaded('gridelements')) {
             $where .= ' AND colPos <> -2 ';
             $fields .= ', (SELECT hidden FROM tt_content as t2 WHERE t2.uid = tt_content.tx_gridelements_container)' .
-                       ' as parentGridHidden';
+                ' as parentGridHidden';
         }
 
         $where .= BackendUtility::BEenableFields($table);
@@ -499,9 +499,11 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
             }
         }
 
+
         // store record in index table
         if (count($pageContent)) {
             foreach ($pageContent as $language_uid => $content) {
+                
                 if (!$pageAccessRestrictions['hidden'] && $this->checkIfpageShouldBeIndexed($uid, $language_uid)) {
                     // overwrite access restrictions with language overlay values
                     $accessRestrictionsLanguageOverlay = $pageAccessRestrictions;
@@ -521,6 +523,11 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
                         }
                     }
 
+                    // use new "tx_kesearch_abstract" field instead of "abstract" if set
+                    $abstract = $this->cachedPageRecords[$language_uid][$uid]['tx_kesearch_abstract'] ?
+                        $this->cachedPageRecords[$language_uid][$uid]['tx_kesearch_abstract'] :
+                        $this->cachedPageRecords[$language_uid][$uid]['abstract'];
+
                     $this->pObj->storeInIndex(
                         $indexerConfig['storagepid'],                               // storage PID
                         $this->cachedPageRecords[$language_uid][$uid]['title'],     // page title
@@ -529,7 +536,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
                         $content,                        // indexed content, includes the title (linebreak after title)
                         $tags,                                                      // tags
                         $indexEntryDefaultValues['params'],                         // typolink params for singleview
-                        $this->cachedPageRecords[$language_uid][$uid]['abstract'],  // abstract
+                        $abstract,                                                  // abstract
                         $language_uid,                                              // language uid
                         $accessRestrictionsLanguageOverlay['starttime'],            // starttime
                         $accessRestrictionsLanguageOverlay['endtime'],              // endtime
