@@ -1116,7 +1116,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
      * renders the preview image of a result which has an attached image,
      * needs FAL and is therefore only available for TYPO3 version 6 or higher.
      * Returns an empty string if no image could be rendered.
-     * @param integer $uid uid of referencing record
+     * @param string $uid uid of referencing record
      * @param string $table table name of the original table
      * @param string $fieldname field which holds the FAL reference
      * @author Christian Bülter <christian.buelter@inmedias.de>
@@ -1336,7 +1336,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     }
 
     /**
-     * @param $eventUid
+     * @param string $eventUid The uid is passed as string, but we know that for Cal this is an integer
      * @return array
      */
     public function getCalEventEnddate($eventUid)
