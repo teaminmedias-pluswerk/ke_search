@@ -4,7 +4,7 @@
 CREATE TABLE pages (
 	tx_kesearch_tags text,
 	tx_kesearch_abstract text,
-	tx_kesearch_resultimage int(11) unsigned DEFAULT '0' NOT NULL,
+	tx_kesearch_resultimage int(11) unsigned DEFAULT '0' NOT NULL
 );
 
 
@@ -82,7 +82,7 @@ CREATE TABLE tx_kesearch_index (
 	tags text,
 	abstract text,
 	sortdate int(11) DEFAULT '0' NOT NULL,
-	orig_uid int(11) DEFAULT '0' NOT NULL,
+	orig_uid varchar(255) DEFAULT '0' NOT NULL,
 	orig_pid int(11) DEFAULT '0' NOT NULL,
 	title tinytext,
 	language int(11) DEFAULT '0' NOT NULL,
@@ -166,5 +166,5 @@ CREATE TABLE tx_kesearch_stat_word (
   pageid int(11) DEFAULT '0' NOT NULL,
   resultsfound int(1) DEFAULT '0' NOT NULL,
   language int(11) DEFAULT '0' NOT NULL,
-  PRIMARY KEY (uid),
+  PRIMARY KEY (uid)
 );

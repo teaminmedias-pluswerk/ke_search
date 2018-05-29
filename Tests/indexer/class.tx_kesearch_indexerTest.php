@@ -32,14 +32,14 @@ class IndexerTest extends Tx_Extbase_BaseTestCase
             'tstamp' => $now,
             'crdate' => $now,
             'title' => 'tolle Überschrift',
-            'orig_uid' => 213,
+            'orig_uid' => '213asdf',
             'orig_pid' => 423,
             'enddate' => $now,
         );
         $fieldValues = $GLOBALS['TYPO3_DB']->fullQuoteArray($fieldValues, 'tx_kesearch_index');
 
         $shouldArray = array(
-            'set' => ', @orig_uid = \'213\', @orig_pid = \'423\', @enddate = \'' . $now . '\'',
+            'set' => ', @orig_uid = \'213asdf\', @orig_pid = \'423\', @enddate = \'' . $now . '\'',
             'execute' => ', @orig_uid, @orig_pid, @enddate'
         );
 

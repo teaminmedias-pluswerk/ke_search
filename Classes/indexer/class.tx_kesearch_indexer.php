@@ -671,7 +671,7 @@ class tx_kesearch_indexer
      * This function also sets $this->currentRow
      * parameters should be already fullQuoted. see storeInIndex
      * TODO: We should create an index to column type
-     * @param integer $uid
+     * @param string $uid
      * @param integer $pid
      * @param string $type
      * @param integer $language
