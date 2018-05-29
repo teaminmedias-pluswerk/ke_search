@@ -29,6 +29,8 @@
 
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Backend\Utility\BackendUtility;
+use \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use \TYPO3\CMS\Frontend\DataProcessing\FilesProcessor;
 use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use \TYPO3\CMS\Core\Resource\ResourceFactory;
 use \TYPO3\CMS\Core\Resource\FileInterface;
@@ -114,6 +116,34 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
     public $fileRepository;
 
     /**
+     * @var ContentObjectRenderer
+     */
+    public $cObj;
+
+    /**
+     * @var FilesProcessor
+     */
+    public $filesProcessor;
+
+    /**
+     * Files Processor configuration
+     * @var array
+     */
+    public $filesProcessorConfiguration = [
+        'references.' => [
+            'fieldName' => 'media',
+            'table' => 'tt_content'
+        ],
+        'collections.' => [
+            'field' => 'file_collections'
+        ],
+        'sorting.' => [
+            'field ' => 'filelink_sorting'
+        ],
+        'as' => 'files'
+    ];
+
+    /**
      * counter for how many pages we have indexed
      * @var integer
      */
@@ -177,6 +207,12 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
         // make file repository
         /* @var $this ->fileRepository \TYPO3\CMS\Core\Resource\FileRepository */
         $this->fileRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
+
+        // make cObj
+        $this->cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
+
+        // make filesProcessor
+        $this->filesProcessor = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\DataProcessing\\FilesProcessor');
     }
 
     /**
@@ -374,7 +410,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
     public function getPageContent($uid)
     {
         // get content elements for this page
-        $fields = 'uid, pid, header, bodytext, CType, sys_language_uid, header_layout, fe_group';
+        $fields = 'uid, pid, header, bodytext, CType, sys_language_uid, header_layout, fe_group, file_collections, filelink_sorting';
 
         // hook to modify the page content fields
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyPageContentFields'])) {
@@ -723,8 +759,14 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
      */
     public function findAttachedFiles($ttContentRow)
     {
-        // get files attached to the content element
-        $fileReferenceObjects = $this->fileRepository->findByRelation('tt_content', 'media', $ttContentRow['uid']);
+        // Set current data
+        $this->cObj->data = $ttContentRow;
+
+        // Get files by filesProcessor
+        $processedData = [];
+        $processedData = $this->filesProcessor->process($this->cObj, [], $this->filesProcessorConfiguration, $processedData);
+        $fileReferenceObjects = $processedData['files'];
+
         return $fileReferenceObjects;
     }
 
