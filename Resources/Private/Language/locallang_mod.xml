@@ -27,6 +27,8 @@
 			<label index="page">page</label>
 			<label index="type">type</label>
 			<label index="configurations_found">Indexer configurations have been found:</label>
+			<label index="tag_too_short">Tag too short</label>
+			<label index="tag_too_short_message">The given tag "%s" is too short. A minimum length of %d is required. See extension setting "searchWordLength" for further info.</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="mlang_tabs_tab">Facettierte Suche</label>
@@ -48,6 +50,8 @@
 			<label index="last_indexing">Die letzte Indexierung fand statt am</label>
 			<label index="records">Einträge</label>
 			<label index="configurations_found">Die folgenden Indexer-Konfigurationen sind angelegt:</label>
+			<label index="tag_too_short">Tag zu kurz</label>
+			<label index="tag_too_short_message">Der Tag "%s" ist zu kurz. Er muss mindestens %d Zeichen lang sein. Siehe die Erweiterungs-Einstellung "searchWordLength" für mehr Infos.</label>
 		</languageKey>
 		<languageKey index="nl" type="array">
 			<label index="mlang_tabs_tab">Facet Zoeken</label>
