@@ -190,7 +190,7 @@ class tx_kesearch_lib_searchresult
     {
         $found = false;
         foreach ($wordArray as $word) {
-            if (stripos($content, $word) === false) {
+            if (mb_stripos($content, $word) === false) {
                 $found = false;
                 if ($checkAll === true) {
                     return false;
@@ -256,7 +256,7 @@ class tx_kesearch_lib_searchresult
                 // Check teaser text array first to avoid duplicate text parts
                 if (count($teaserArray) > 0) {
                     foreach ($teaserArray as $teaserArrayItem) {
-                        $searchWordPositionInTeaserArray = stripos($teaserArrayItem, $word);
+                        $searchWordPositionInTeaserArray = mb_stripos($teaserArrayItem, $word);
                         if (false === $searchWordPositionInTeaserArray) {
                             continue;
                         } else {
@@ -269,7 +269,7 @@ class tx_kesearch_lib_searchresult
 
                 // Only search for current search word in content if it wasn't found in teaser text array already
                 if (false === $aSearchWordWasFound) {
-                    $pos = stripos($content, $word);
+                    $pos = mb_stripos($content, $word);
                     if (false === $pos) {
                         continue;
                     }
@@ -287,7 +287,7 @@ class tx_kesearch_lib_searchresult
                     }
 
                 // crop some words behind searchword
-                $partWithSearchWord = substr($content, $startPos);
+                $partWithSearchWord = mb_substr($content, $startPos);
                 $temp = $this->cObj->crop($partWithSearchWord, $charsForEachSearchWord . '|…|1');
 
                     // crop some words before search word
