@@ -312,9 +312,6 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         $pageValue = 1;
         $this->fluidTemplateVariables['page'] = $pageValue;
 
-        // submit
-        $this->fluidTemplateVariables['submitAltText'] = $this->pi_getLL('submit');
-
         // searchword input value
         $searchString = $this->piVars['sword'];
 
