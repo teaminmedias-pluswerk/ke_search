@@ -8,6 +8,7 @@ current master
 [TASK]    Hook to overwrite/extend image handling. Thanks to Simon Praetorius. https://github.com/teaminmedias-pluswerk/ke_search/pull/196.
 [FEATURE] Add support for file collections. https://github.com/teaminmedias-pluswerk/ke_search/pull/192.
 [TASK]    Remove magnifiying glass icon from search form template in order to make it easier to adapt it to a site layout.
+[TASK]    Remove some CSS styles in order to make the default style more generic.
 
 Version 2.7.0, April 2018
 [TASK]    Make title and and full index content available in text format in the resultrow template (resultrow.title_text and resultrow.content_text).
