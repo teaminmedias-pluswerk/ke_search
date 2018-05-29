@@ -193,7 +193,7 @@ class tx_kesearch_lib_sorting
     {
         $allowedDirections = array('asc', 'desc');
         $direction = strtolower($direction);
-        $isInArray = TYPO3\CMS\Core\Utility\GeneralUtility::inArray($allowedDirections, $direction);
+        $isInArray = in_array($direction, $allowedDirections, true);
         if (!empty($direction) && $isInArray) {
             if ($direction == 'asc') {
                 $direction = 'desc';

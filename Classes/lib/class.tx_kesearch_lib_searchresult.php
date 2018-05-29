@@ -190,7 +190,7 @@ class tx_kesearch_lib_searchresult
     {
         $found = false;
         foreach ($wordArray as $word) {
-            if (stripos($content, $word) === false) {
+            if (mb_stripos($content, $word) === false) {
                 $found = false;
                 if ($checkAll === true) {
                     return false;
@@ -215,14 +215,17 @@ class tx_kesearch_lib_searchresult
     public function highlightArrayOfWordsInContent($wordArray, $content)
     {
         if (is_array($wordArray) && count($wordArray)) {
-            $highlightedWord = (!empty($this->conf['highlightedWord_stdWrap.'])) ?
-                $this->cObj->stdWrap('\0', $this->conf['highlightedWord_stdWrap.']) :
+            $highlightedWord = (!empty($this->conf['highlightedWord_stdWrap'])) ?
+                $this->cObj->stdWrap('\0', $this->conf['highlightedWord_stdWrap']) :
                 '<span class="hit">\0</span>';
 
             foreach ($wordArray as $word) {
-                $word = str_replace('/', '\/', $word);
+                $word = preg_quote($word, '/');
                 $word = htmlspecialchars($word);
-                $content = preg_replace('/(' . $word . ')/iu', $highlightedWord, $content);
+                // Todo: Highlight hits within words when using ke_seaarch_premium
+                // Todo: option "in word search" by removing the \b parameter
+                //$content = preg_replace('/(' . $word . ')/iu', $highlightedWord, $content);
+                $content = preg_replace('/\b(' . $word . ')/iu', $highlightedWord, $content);
             }
         }
         return $content;
@@ -245,38 +248,55 @@ class tx_kesearch_lib_searchresult
             $charsBeforeAfterSearchWord = ceil($charsForEachSearchWord / 2);
             $aSearchWordWasFound = false;
             $isSearchWordAtTheBeginning = false;
+            $teaserArray = [];
             foreach ($this->pObj->swords as $word) {
-                $word = ' ' . $word; // our searchengine searches for wordbeginnings
-                $pos = stripos($content, $word);
-                if ($pos === false) {
-                    // if the word was not found it could be within brakets => (searchWord)
-                    // so give it a second try
-                    $pos = stripos($content, trim($word));
-                    if ($pos === false) {
-                        continue;
+                // Always remove whitespace around searchword first
+                $word = trim($word);
+
+                // Check teaser text array first to avoid duplicate text parts
+                if (count($teaserArray) > 0) {
+                    foreach ($teaserArray as $teaserArrayItem) {
+                        $searchWordPositionInTeaserArray = mb_stripos($teaserArrayItem, $word);
+                        if (false === $searchWordPositionInTeaserArray) {
+                            continue;
+                        } else {
+                            // One finding in teaser text array is sufficient
+                            $aSearchWordWasFound = true;
+                            break;
+                        }
                     }
                 }
-                $aSearchWordWasFound = true;
 
-                // if searchword is the first word
-                if ($pos === 0) {
-                    $isSearchWordAtTheBeginning = true;
-                }
+                // Only search for current search word in content if it wasn't found in teaser text array already
+                if (false === $aSearchWordWasFound) {
+                    $pos = mb_stripos($content, $word);
+                    if (false === $pos) {
+                        continue;
+                    }
+                    $aSearchWordWasFound = true;
 
-                // find search starting point
-                $startPos = $pos - $charsBeforeAfterSearchWord;
-                if ($startPos < 0) {
-                    $startPos = 0;
-                }
+                    // if search word is the first word
+                    if (0 === $pos) {
+                        $isSearchWordAtTheBeginning = true;
+                    }
+
+                    // find search starting point
+                    $startPos = $pos - $charsBeforeAfterSearchWord;
+                    if ($startPos < 0) {
+                        $startPos = 0;
+                    }
 
                 // crop some words behind searchword
-                $partWithSearchWord = substr($content, $startPos);
-                $temp = $this->cObj->crop($partWithSearchWord, $charsForEachSearchWord . '|...|1');
+                $partWithSearchWord = mb_substr($content, $startPos);
+                $temp = $this->cObj->crop($partWithSearchWord, $charsForEachSearchWord . '|…|1');
 
-                // crop some words before searchword
-                // after last cropping our text is too short now. So we have to find a new cutting position
-                ($startPos > 10) ? $length = strlen($temp) - 10 : $length = strlen($temp);
-                $teaserArray[] = $this->cObj->crop($temp, '-' . $length . '||1');
+                    // crop some words before search word
+                    // after last cropping our text is too short now. So we have to find a new cutting position
+                    ($startPos > 10) ? $length = strlen($temp) - 10 : $length = strlen($temp);
+
+                    // Store content part containing the search word in teaser text array
+                    $teaserArray[] = $this->cObj->crop($temp, '-' . $length . '||1');
+                }
             }
 
             // When the searchword was found in title but not in content the teaser is empty
@@ -286,7 +306,7 @@ class tx_kesearch_lib_searchresult
             } elseif ($isSearchWordAtTheBeginning === true) {
                 $teaser = implode(' ', $teaserArray);
             } else {
-                $teaser = '...' . implode(' ', $teaserArray);
+                $teaser = '…' . implode(' ', $teaserArray);
             }
 
             // highlight hits?
@@ -295,7 +315,7 @@ class tx_kesearch_lib_searchresult
             }
             return $teaser;
         } else {
-            return $this->cObj->crop($content, $this->conf['resultChars'] . '|...|1');
+            return $this->cObj->crop($content, $this->conf['resultChars'] . '|…|1');
         }
     }
 }

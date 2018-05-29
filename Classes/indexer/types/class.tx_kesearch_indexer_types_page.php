@@ -29,6 +29,8 @@
 
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Backend\Utility\BackendUtility;
+use \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
+use \TYPO3\CMS\Frontend\DataProcessing\FilesProcessor;
 use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use \TYPO3\CMS\Core\Resource\ResourceFactory;
 use \TYPO3\CMS\Core\Resource\FileInterface;
@@ -114,6 +116,34 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
     public $fileRepository;
 
     /**
+     * @var ContentObjectRenderer
+     */
+    public $cObj;
+
+    /**
+     * @var FilesProcessor
+     */
+    public $filesProcessor;
+
+    /**
+     * Files Processor configuration
+     * @var array
+     */
+    public $filesProcessorConfiguration = [
+        'references.' => [
+            'fieldName' => 'media',
+            'table' => 'tt_content'
+        ],
+        'collections.' => [
+            'field' => 'file_collections'
+        ],
+        'sorting.' => [
+            'field ' => 'filelink_sorting'
+        ],
+        'as' => 'files'
+    ];
+
+    /**
      * counter for how many pages we have indexed
      * @var integer
      */
@@ -172,11 +202,17 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
         // get all available sys_language_uid records
         /** @var TranslationConfigurationProvider $translationProvider */
         $translationProvider = GeneralUtility::makeInstance(TranslationConfigurationProvider::class);
-        $this->sysLanguages = $translationProvider->getSystemLanguages($pageId);
+        $this->sysLanguages = $translationProvider->getSystemLanguages();
 
         // make file repository
         /* @var $this ->fileRepository \TYPO3\CMS\Core\Resource\FileRepository */
         $this->fileRepository = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Resource\\FileRepository');
+
+        // make cObj
+        $this->cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\ContentObject\\ContentObjectRenderer');
+
+        // make filesProcessor
+        $this->filesProcessor = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Frontend\\DataProcessing\\FilesProcessor');
     }
 
     /**
@@ -279,18 +315,15 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
 
         // create entry in cachedPageRecods for additional languages, skip default language 0
         foreach ($this->sysLanguages as $sysLang) {
-            if ($sysLang[1] > 0) {
+            if ($sysLang['uid'] > 0) {
                 list($pageOverlay) = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecordsByField(
                     'pages_language_overlay',
                     'pid',
                     $pageRow['uid'],
-                    'AND sys_language_uid=' . intval($sysLang[1])
+                    'AND sys_language_uid=' . (int)$sysLang['uid']
                 );
                 if ($pageOverlay) {
-                    $this->cachedPageRecords[$sysLang[1]][$pageRow['uid']] = GeneralUtility::array_merge(
-                        $pageRow,
-                        $pageOverlay
-                    );
+                    $this->cachedPageRecords[$sysLang['uid']][$pageRow['uid']] = $pageOverlay + $pageRow;
                 }
             }
         }
@@ -377,7 +410,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
     public function getPageContent($uid)
     {
         // get content elements for this page
-        $fields = 'uid, pid, header, bodytext, CType, sys_language_uid, header_layout, fe_group';
+        $fields = 'uid, pid, header, bodytext, CType, sys_language_uid, header_layout, fe_group, file_collections, filelink_sorting';
 
         // hook to modify the page content fields
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyPageContentFields'])) {
@@ -398,7 +431,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
         if (ExtensionManagementUtility::isLoaded('gridelements')) {
             $where .= ' AND colPos <> -2 ';
             $fields .= ', (SELECT hidden FROM tt_content as t2 WHERE t2.uid = tt_content.tx_gridelements_container)' .
-                       ' as parentGridHidden';
+                ' as parentGridHidden';
         }
 
         $where .= BackendUtility::BEenableFields($table);
@@ -502,9 +535,11 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
             }
         }
 
+
         // store record in index table
         if (count($pageContent)) {
             foreach ($pageContent as $language_uid => $content) {
+                
                 if (!$pageAccessRestrictions['hidden'] && $this->checkIfpageShouldBeIndexed($uid, $language_uid)) {
                     // overwrite access restrictions with language overlay values
                     $accessRestrictionsLanguageOverlay = $pageAccessRestrictions;
@@ -524,6 +559,11 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
                         }
                     }
 
+                    // use new "tx_kesearch_abstract" field instead of "abstract" if set
+                    $abstract = $this->cachedPageRecords[$language_uid][$uid]['tx_kesearch_abstract'] ?
+                        $this->cachedPageRecords[$language_uid][$uid]['tx_kesearch_abstract'] :
+                        $this->cachedPageRecords[$language_uid][$uid]['abstract'];
+
                     $this->pObj->storeInIndex(
                         $indexerConfig['storagepid'],                               // storage PID
                         $this->cachedPageRecords[$language_uid][$uid]['title'],     // page title
@@ -532,7 +572,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
                         $content,                        // indexed content, includes the title (linebreak after title)
                         $tags,                                                      // tags
                         $indexEntryDefaultValues['params'],                         // typolink params for singleview
-                        $this->cachedPageRecords[$language_uid][$uid]['abstract'],  // abstract
+                        $abstract,                                                  // abstract
                         $language_uid,                                              // language uid
                         $accessRestrictionsLanguageOverlay['starttime'],            // starttime
                         $accessRestrictionsLanguageOverlay['endtime'],              // endtime
@@ -618,7 +658,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
                 $feGroupsContentElement
             );
             $feGroupsPagesArray = GeneralUtility::intExplode(',', $feGroupsPages);
-            $feGroups = implode(',', array_intersect($feGroupsContentElementArray, $feGroupsContentElementArray));
+            $feGroups = implode(',', array_intersect($feGroupsContentElementArray, $feGroupsPagesArray));
         }
 
         if (($feGroupsContentElement
@@ -652,10 +692,14 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
         if (count($fileObjects) && $feGroups != DONOTINDEX) {
             // loop through files
             foreach ($fileObjects as $fileObject) {
-                $isInList = \TYPO3\CMS\Core\Utility\GeneralUtility::inList(
-                    $this->indexerConfig['fileext'],
-                    $fileObject->getExtension()
-                );
+                if ($fileObject instanceof FileInterface) {
+                    $isInList = \TYPO3\CMS\Core\Utility\GeneralUtility::inList(
+                        $this->indexerConfig['fileext'],
+                        $fileObject->getExtension()
+                    );
+                } else {
+                    $this->addError('Could not index file in content element #' . $ttContentRow['uid'] . ' (no file object).');
+                }
 
                 // check if the file extension fits in the list of extensions
                 // to index defined in the indexer configuration
@@ -681,7 +725,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
                     // write file data to the index as a seperate index entry
                     // count indexed files, add it to the indexer output
                     if (!file_exists($filePath)) {
-                        $this->addError('Could not index file ' . $filePath . ' (file does not exist).');
+                        $this->addError('Could not index file ' . $filePath . ' in content element #' . $ttContentRow['uid'] . ' (file does not exist).');
                     } else {
                         if ($fileIndexerObject->fileInfo->setFile($fileObject)) {
                             if (($content = $fileIndexerObject->getFileContent($filePath))) {
@@ -715,8 +759,14 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
      */
     public function findAttachedFiles($ttContentRow)
     {
-        // get files attached to the content element
-        $fileReferenceObjects = $this->fileRepository->findByRelation('tt_content', 'media', $ttContentRow['uid']);
+        // Set current data
+        $this->cObj->data = $ttContentRow;
+
+        // Get files by filesProcessor
+        $processedData = [];
+        $processedData = $this->filesProcessor->process($this->cObj, [], $this->filesProcessorConfiguration, $processedData);
+        $fileReferenceObjects = $processedData['files'];
+
         return $fileReferenceObjects;
     }
 
@@ -807,6 +857,16 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
         } else {
             $orig_uid = $fileObject->getUid();
             $metadata = $fileObject->_getMetaData();
+        }
+
+        if ($metadata['fe_groups']) {
+            if ($feGroups) {
+                $feGroupsContentArray = GeneralUtility::intExplode(',', $feGroups);
+                $feGroupsFileArray = GeneralUtility::intExplode(',', $metadata['fe_groups']);
+                $feGroups = implode(',', array_intersect($feGroupsContentArray, $feGroupsFileArray));
+            } else {
+                $feGroups = $metadata['fe_groups'];
+            }
         }
 
         // assign categories as tags (as cleartext, eg. "colorblue")

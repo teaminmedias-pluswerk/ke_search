@@ -18,7 +18,7 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-if (!defined('TYPO3_cliMode')) {
+if (!TYPO3_REQUESTTYPE || !TYPO3_REQUESTTYPE_CLI) {
     die('You cannot run this script directly!');
 }
 
@@ -28,7 +28,7 @@ class tx_kesearch_cli extends \TYPO3\CMS\Core\Controller\CommandLineController
     /**
      * Constructor
      */
-    public function tx_kesearch_cli()
+    public function __construct()
     {
         // Running parent class constructor
         parent::__construct();
@@ -44,7 +44,7 @@ class tx_kesearch_cli extends \TYPO3\CMS\Core\Controller\CommandLineController
     /**
      * CLI engine
      * @param array
-     * @return string
+     * @return void
      */
     public function cli_main($argv)
     {

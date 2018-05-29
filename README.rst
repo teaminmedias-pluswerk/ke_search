@@ -21,16 +21,16 @@ It is very flexible: By writing your own indexer you can put any content you wan
 
 It uses fluid templates (since version 2.0).
 
-ke_search comes with strong defaults, with very little configuration you can have a powerful
+ke_search comes with strong defaults and with very little configuration. You can have a powerful
 search engine in your TYPO3 website, eg. images in the search result list and faceting without
-templting or coding.
+templating or coding.
 
 ke_search does not use frontend crawling but fetches content elements and data records directly from the database.
 For each content type an indexer is needed (eg. pages, news).
 For the most used content types indexers are provided within the extension itself, including pages, news and tt_news.
 
 That means there may not be an indexer already available for the content type you want to index, but it's quite
-easy for a programmer to write it's own indexer for custom data records.
+easy for a programmer to write its own indexer for custom data records.
 
 See https://www.typo3-macher.de/en/facetted-search-ke-search/documentation/introduction/ for further documentation and
 a quickstart tutorial.

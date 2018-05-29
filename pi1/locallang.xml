@@ -38,6 +38,8 @@
 			<label index="ff.resultLinkTarget.I.0">Open in new window</label>
 			<label index="ff.resultLinkTarget.I.1">Open in same window</label>
 			<label index="ff.resultsNumeration">Number results consecutively?</label>
+			<label index="ff.templateLayout">Template Layout</label>
+			<label index="ff.templateLayout.I.0">Default</label>
 			<label index="ff.highlightSword">Highlight search word in result preview</label>
 			<label index="ff.previewMode">Text for used for search result (preview text)</label>
 			<label index="ff.previewMode.I.0">Always show the abstract if set.</label>
@@ -47,10 +49,10 @@
 			<label index="ff.page.images">Images</label>
 			<label index="ff.showTypeIcon">Show result type icon?</label>
 			<label index="ff.showFilePreview">Show file preview instead of result icon if possible?</label>
-			<label index="ff.showPageImages">Show page image preview instead of result icon? (Images is taken from the page "media" field.)</label>
+			<label index="ff.showPageImages">Show page image preview instead of result icon? (Images are taken from the page properties, field "search result image".)</label>
 			<label index="ff.showNewsImages">Show news (ext:news) image preview instead of result icon?</label>
 
-			<label index="ff.page.pagebrowser">Pagebrower</label>
+			<label index="ff.page.pagebrowser">Pagebrowser</label>
 			<label index="ff.pagebrowserOnTop">Show pagebrowser on top of result list</label>
 			<label index="ff.pagebrowserAtBottom">Show pagebrowser at the bottom of the result list</label>
 			<label index="ff.maxPagesInPagebrowser">Number of pages shown in pagebrowser</label>
@@ -76,7 +78,7 @@
 			<label index="of">of</label>
 			<label index="no_results_found">No results found</label>
 			<label index="no_results_refine">This search term is not specific enough. Please choose another.</label>
-			<label index="searchword_length_error">Search words under length of 4 characters are not processed.</label>
+			<label index="searchword_length_error">Search words under length of %d characters are not processed.</label>
 			<label index="error_resultPage">You have defined an results page in your Plugin configuration. So it makes no sense to insert resultlist plugin on to this page, too.</label>
 			<label index="pagebrowser_prev">previous</label>
 			<label index="pagebrowser_next">next</label>
@@ -184,7 +186,7 @@
 			<label index="of">von</label>
 			<label index="no_results_found">Keine Ergebnisse gefunden</label>
 			<label index="no_results_refine">Ihr Suchbegriff ist zu allgemein gehalten und kommt auf mehr als 50 Prozent aller Seiten vor. Bitte waehlen Sie einen anderen Suchbegriff.</label>
-			<label index="searchword_length_error">Bitte beachten Sie: Suchbegriffe unter einer Länge von vier Buchstaben werden ignoriert.</label>
+			<label index="searchword_length_error">Bitte beachten Sie: Suchbegriffe unter einer Länge von %d Buchstaben werden ignoriert.</label>
 			<label index="error_resultPage">Sie haben in der Pluginkonfiguration eine Ergebnisseite angegeben. Es macht also keinen Sinn das Ergebnislistenplugin mit hier auf dieser Liste anzeigen zu lassen.</label>
 			<label index="pagebrowser_prev">vorherige</label>
 			<label index="pagebrowser_next">nächste</label>
@@ -278,7 +280,7 @@
 			<label index="of">van</label>
 			<label index="no_results_found">Geen zoekresultaten gevonden</label>
 			<label index="no_results_refine">Deze zoekterm is niet specifiek genoeg. Kies een andere.</label>
-			<label index="searchword_length_error">Zoek woorden in lengte van minder dan 1 karakter zijn niet verwerkt.</label>
+			<label index="searchword_length_error">Zoek woorden in lengte van minder dan %d karakter zijn niet verwerkt.</label>
 			<label index="error_resultPage">Er is al een pagina met zoekresultaten in de Plugin configuratie. Dus het heeft geen zin om nogmaals de resultatenlijst plug-in te voegen op deze pagina.</label>
 			<label index="label_resulturl">URL</label>
 			<label index="label_sort">Sorteer op:</label>

@@ -5,7 +5,6 @@ if (!defined('TYPO3_MODE')) {
 }
 
 $extPath = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_search');
-$extRelPath = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('ke_search');
 
 if (TYPO3_MODE == 'BE') {
     require_once($extPath . 'Classes/lib/class.tx_kesearch_lib_items.php');
@@ -42,26 +41,6 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
     $_EXTKEY . '_pi3',
     'FILE:EXT:ke_search/pi3/flexform_pi3.xml'
 );
-
-// add tag field to pages
-$tempColumns = array(
-    'tx_kesearch_tags' => array(
-        'exclude' => 1,
-        'label' => 'LLL:EXT:ke_search/locallang_db.xml:pages.tx_kesearch_tags',
-        'config' => array(
-            'type' => 'select',
-            'renderType' => 'selectSingleBox',
-            'size' => 10,
-            'minitems' => 0,
-            'maxitems' => 100,
-            'items' => array(),
-            'allowNonIdValues' => true,
-            'itemsProcFunc' => 'user_filterlist->getListOfAvailableFiltersForTCA',
-        )
-    ),
-);
-TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('pages', $tempColumns);
-TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes('pages', 'tx_kesearch_tags;;;;1-1-1');
 
 // add module
 if (TYPO3_MODE == 'BE') {

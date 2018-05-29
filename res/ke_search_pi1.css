@@ -1,6 +1,5 @@
 .tx-kesearch-pi1 {
-    font-family: arial,sans-serif;
-	font-size:14px;
+    font-family: Sans-Serif;
 }
 
 /* Clearer */
@@ -51,6 +50,8 @@ span.resetbutt a,
 span.submitbutt input,
 input.kesGreyButt,
 span.kesGreyButt{
+    font-size:1em;
+    font-family: Sans-Serif;
     padding: 5px 10px;
     margin: 0 10px 10px 0;
 	display: block;
@@ -64,9 +65,6 @@ span.kesGreyButt{
     border-radius: 2px;
     color: #444;
     cursor: default;
-    font-family: arial,sans-serif;
-    font-size: 13px;
-    font-weight: bold;
     text-align: center;
     text-decoration: none;
 }
@@ -162,8 +160,6 @@ div.kesearchbox{
 	margin:0 0 20px 0;
 }
 #kesearch_filters select {
-    min-width: 180px;
-    max-width: 270px;
     margin: 0 0 10px 0;
 }
 #kesearch_filters .list {
@@ -263,28 +259,9 @@ div.kesearchbox{
     overflow-x: hidden;
 }
 
-/* multiselectPage */
-.tx-kesearch-pi1 .multiselect .multi-option {
-    float: left;
-    width: 200px;
-    margin: 0 0 5px 0;
-}
-.tx-kesearch-pi1 .multiselect .multi-option input[type="checkbox"]{
-    float: left;
-    margin: 0 5px 0 0;
-}
-.tx-kesearch-pi1 .multiselect label {
-    font-weight: normal;
-    padding: 0 10px 0 0;
-    float: left;
-}
-.tx-kesearch-pi1 .multiselect .multiselectButtons{ padding: 10px 0 0 0; }
-.tx-kesearch-pi1 .multiselect .last { /* ???? */ }
-
 /* Results */
 #kesearch_num_results{
 	color:#898989;
-	max-width:150px;
 	float:left;
 }
 
@@ -295,7 +272,7 @@ div.kesearchbox{
 }
 #kesearch_results .result-list-item .result-number,
 #kesearch_results .result-list-item .result-title {
-	font-size:18px;
+	font-size:1.2em;
 }
 #kesearch_results {
 	clear:both;
@@ -397,7 +374,6 @@ div.kesearchbox{
 #kesearch_pagebrowser_bottom {
     text-align: center;
     word-wrap: break-word;
-    font-size: 12px;
     color:#707070;
 }
 #kesearch_pagebrowser_top .pages_total,
@@ -406,8 +382,8 @@ div.kesearchbox{
     background:#fff;
     margin-bottom: 15px;
 }
-#kesearch_pagebrowser_top .pages_total { border-bottom: 1px dashed #707070; }
-#kesearch_pagebrowser_bottom .pages_total { border-top: 1px dashed #707070; }
+#kesearch_pagebrowser_top .pages_total { border-bottom: 1px solid #cccccc; }
+#kesearch_pagebrowser_bottom .pages_total { border-top: 1px solid #cccccc; }
 #kesearch_pagebrowser_top div.result_txt,
 #kesearch_pagebrowser_bottom div.result_txt{
     margin: 0 0 5px 0;
@@ -428,27 +404,6 @@ div.kesearchbox{
 #kesearch_pagebrowser_top .browser,
 #kesearch_pagebrowser_bottom .browser{
     border:1px solid;
-}
-.tx-kesearch-pi1 .next,
-.tx-kesearch-pi1 .prev {
-    display:inline-block;
-    width:24px;
-    height:29px;
-    color:transparent;
-    text-decoration:none;
-	overflow:hidden;
-}
-.tx-kesearch-pi1 .next{background: transparent url('img/arrow-next.gif') no-repeat left 0;}
-.tx-kesearch-pi1 .prev{background: transparent url('img/arrow-prev.gif') no-repeat right 0;}
-.tx-kesearch-pi1 a.next,
-.tx-kesearch-pi1 a.prev{
-    display:inline-block;
-    width:24px;
-    height:29px;
-    color:transparent;
-    text-decoration:none;
-    padding:0 !important;
-    margin:0 0 -10px 0;
 }
 
 /* Ordering */

@@ -34,6 +34,7 @@ return array(
                 'size' => '8',
                 'max' => '20',
                 'eval' => 'date',
+                'renderType' => 'inputDateTime',
                 'default' => '0',
                 'checkbox' => '0'
             )
@@ -46,6 +47,7 @@ return array(
                 'size' => '8',
                 'max' => '20',
                 'eval' => 'date',
+                'renderType' => 'inputDateTime',
                 'checkbox' => '0',
                 'default' => '0',
                 'range' => array(
@@ -160,6 +162,7 @@ return array(
             'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_index.sortdate',
             'config' => array(
                 'type' => 'input',
+                'renderType' => 'inputDateTime',
                 'size' => '10',
                 'max' => '20',
                 'eval' => 'datetime',
@@ -192,8 +195,8 @@ return array(
         ),
     ),
     'types' => array(
-        '0' => array('showitem' => 'starttime;;;;1-1-1, endtime, fe_group, targetpid, content,'
-            . ' params, type, tags, abstract, title;;;;2-2-2, language;;;;3-3-3')
+        '0' => array('showitem' => 'starttime, endtime, fe_group, targetpid, content,'
+            . ' params, type, tags, abstract, title, language')
     ),
     'palettes' => array(
         '1' => array('showitem' => '')

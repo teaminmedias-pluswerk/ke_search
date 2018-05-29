@@ -506,7 +506,8 @@ class tx_kesearch_indexer
         if (substr($type, 0, 4) == 'file') {
             $recordExists = $this->checkIfFileWasIndexed(
                 $fieldValues['type'],
-                $fieldValues['hash']
+                $fieldValues['hash'],
+                $fieldValues['pid']
             );
         } else {
             $recordExists = $this->checkIfRecordWasIndexed(
@@ -529,7 +530,7 @@ class tx_kesearch_indexer
                     ),
                     1
                 );
-            } else { // process storing of index record and return uid
+            } else { // process storing of index record and return true
                 $this->updateRecordInIndex($fieldValues);
                 return true;
             }
@@ -547,6 +548,7 @@ class tx_kesearch_indexer
                 return $GLOBALS['TYPO3_DB']->sql_insert_id();
             }
         }
+        return 0;
     }
 
     /**
@@ -669,7 +671,7 @@ class tx_kesearch_indexer
      * This function also sets $this->currentRow
      * parameters should be already fullQuoted. see storeInIndex
      * TODO: We should create an index to column type
-     * @param integer $uid
+     * @param string $uid
      * @param integer $pid
      * @param string $type
      * @param integer $language
@@ -704,11 +706,11 @@ class tx_kesearch_indexer
      * @param integer $hash
      * @return boolean true if record was found, false if not
      */
-    public function checkIfFileWasIndexed($type, $hash)
+    public function checkIfFileWasIndexed($type, $hash, $pid)
     {
         // Query DB if record already exists
         $res = $GLOBALS['TYPO3_DB']->sql_query(
-            'SELECT * FROM tx_kesearch_index WHERE ' . 'type = ' . $type . ' AND hash = ' . $hash . ' LIMIT 1'
+            'SELECT * FROM tx_kesearch_index WHERE ' . 'type = ' . $type . ' AND hash = ' . $hash . ' AND pid = ' . (int) $pid . ' LIMIT 1'
         );
         if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
             if ($this->currentRow = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {

@@ -47,7 +47,14 @@ class tx_kesearch_pi2 extends tx_kesearch_lib
     public function main($content, $conf)
     {
         $this->ms = GeneralUtility::milliseconds();
-        $typoScriptService = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Service\\TypoScriptService');
+
+        if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_version) >= 8007000) {
+            $typoScriptService = GeneralUtility::makeInstance(TYPO3\CMS\Core\TypoScript\TypoScriptService::class);
+        }
+        else {
+            $typoScriptService = GeneralUtility::makeInstance(TYPO3\CMS\Extbase\Service\TypoScriptService::class);
+        }
+
         $this->conf = $typoScriptService->convertTypoScriptArrayToPlainArray($conf);
         $this->pi_setPiVarDefaults();
 

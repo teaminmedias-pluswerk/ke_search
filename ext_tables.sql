@@ -2,7 +2,9 @@
 # Table structure for table 'pages'
 #
 CREATE TABLE pages (
-	tx_kesearch_tags text
+	tx_kesearch_tags text,
+	tx_kesearch_abstract text,
+	tx_kesearch_resultimage int(11) unsigned DEFAULT '0' NOT NULL
 );
 
 
@@ -32,7 +34,7 @@ CREATE TABLE tx_kesearch_filters (
 
 	PRIMARY KEY (uid),
 	KEY parent (pid)
-) ENGINE=MyISAM;
+);
 
 
 
@@ -57,7 +59,7 @@ CREATE TABLE tx_kesearch_filteroptions (
 	sorting int(11) DEFAULT '0' NOT NULL,
 	PRIMARY KEY (uid),
 	KEY parent (pid)
-) ENGINE=MyISAM;
+);
 
 
 
@@ -80,7 +82,7 @@ CREATE TABLE tx_kesearch_index (
 	tags text,
 	abstract text,
 	sortdate int(11) DEFAULT '0' NOT NULL,
-	orig_uid int(11) DEFAULT '0' NOT NULL,
+	orig_uid varchar(255) DEFAULT '0' NOT NULL,
 	orig_pid int(11) DEFAULT '0' NOT NULL,
 	title tinytext,
 	language int(11) DEFAULT '0' NOT NULL,
@@ -93,7 +95,7 @@ CREATE TABLE tx_kesearch_index (
 
 	PRIMARY KEY (uid),
 	KEY parent (pid)
-) ENGINE=MyISAM;
+);
 
 
 
@@ -137,7 +139,7 @@ CREATE TABLE tx_kesearch_indexerconfig (
 
 	PRIMARY KEY (uid),
 	KEY parent (pid)
-) ENGINE=MyISAM;
+);
 
 #
 # Table structure for table 'tx_kesearch_stat_search'
@@ -151,7 +153,7 @@ CREATE TABLE tx_kesearch_stat_search (
   tagsagainst text,
   language int(11) DEFAULT '0' NOT NULL,
   PRIMARY KEY (uid)
-) ENGINE=MyISAM;
+);
 
 #
 # Table structure for table 'tx_kesearch_stat_word'
@@ -164,5 +166,5 @@ CREATE TABLE tx_kesearch_stat_word (
   pageid int(11) DEFAULT '0' NOT NULL,
   resultsfound int(1) DEFAULT '0' NOT NULL,
   language int(11) DEFAULT '0' NOT NULL,
-  PRIMARY KEY (uid),
-) ENGINE=MyISAM;
+  PRIMARY KEY (uid)
+);

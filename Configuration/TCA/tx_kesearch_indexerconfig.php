@@ -365,7 +365,7 @@ $configurationArray = array(
             'config' => array(
                 'type' => 'input',
                 'size' => '30',
-                'default' => 'pdf,ppt,doc,xls'
+                'default' => 'pdf,ppt,doc,xls,docx,xlsx,pptx'
             )
         ),
         'index_use_page_tags_for_files' => array(
@@ -462,15 +462,12 @@ $configurationArray = array(
         )
     ),
     'types' => array(
-        '0' => array('showitem' => 'hidden;;1;;1-1-1, title;;;;2-2-2, storagepid,targetpid;;;;3-3-3,type,'
+        '0' => array('showitem' => 'hidden, title, storagepid,targetpid,type,'
             . 'startingpoints_recursive,single_pages,sysfolder,index_content_with_restrictions,index_passed_events,'
             . 'index_news_archived,index_news_category_mode,index_news_category_selection,'
             . 'index_extnews_category_selection,index_news_useHRDatesSingle,index_news_useHRDatesSingleWithoutDay,'
             . 'index_use_page_tags,fal_storage,directories,fileext,index_page_doctypes,contenttypes,commenttypes,'
             . 'filteroption,tvpath,index_use_page_tags_for_files,cal_expired_events')
-    ),
-    'palettes' => array(
-        '1' => array('showitem' => '')
     )
 );
 
@@ -501,7 +498,6 @@ if (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')) {
         'foreign_table_where' => ' AND (tx_news_domain_model_category.sys_language_uid = 0'
             . ' OR tx_news_domain_model_category.l10n_parent = 0) ORDER BY tx_news_domain_model_category.sorting',
         'size' => 10,
-        'autoSizeMax' => 20,
         'minitems' => 0,
         'maxitems' => 20,
     );

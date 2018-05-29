@@ -128,10 +128,7 @@ return array(
         ),
     ),
     'types' => array(
-        '0' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1;;1-1-1,'
-            . ' title;;;;2-2-2, tag;;;;3-3-3, automated_tagging;;;;4-4-4,automated_tagging_exclude;;;;5-5-5')
-    ),
-    'palettes' => array(
-        '1' => array('showitem' => '')
+        '0' => array('showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden,'
+            . ' title, tag, automated_tagging,automated_tagging_exclude')
     )
 );

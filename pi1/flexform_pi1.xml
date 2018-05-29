@@ -173,6 +173,22 @@
 				<type>array</type>
 				<el>
 
+					<templateLayout>
+						<TCEforms>
+							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.templateLayout</label>
+							<config>
+								<type>select</type>
+								<items>
+									<numIndex index="0">
+										<numIndex index="0">LLL:EXT:ke_search/pi1/locallang.xml:ff.templateLayout.I.0</numIndex>
+										<numIndex index="1">10</numIndex>
+									</numIndex>
+								</items>
+								<size>1</size>
+							</config>
+						</TCEforms>
+					</templateLayout>
+
 					<highlightSword>
 						<TCEforms>
 							<label>LLL:EXT:ke_search/pi1/locallang.xml:ff.highlightSword</label>
@@ -241,7 +257,7 @@
 									</numIndex>
 								</items>
 								<size>1</size>
-								<default>hit</default>
+								<default>abstract</default>
 							</config>
 						</TCEforms>
 					</previewMode>

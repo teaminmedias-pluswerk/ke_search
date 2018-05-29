@@ -341,5 +341,6 @@ class tx_kesearch_indexer_types_ttnews extends tx_kesearch_indexer_types
         } elseif ($row['parent_category'] > 0) {
             return $this->getRecursiveCategorySinglePid($row['parent_category']);
         }
+        return 0;
     }
 }

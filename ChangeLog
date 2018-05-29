@@ -1,8 +1,55 @@
 ChangeLog
 
 current master
+[TASK]    Use mb_substr and mb_stripos instead of substr() and stripos() in order to crop content in multibyte charsets correctly. Fixes https://github.com/teaminmedias-pluswerk/ke_search/issues/212.
+[FEATURE] Improve search fields for pages. Collect fields relevant for search in one tab in the page properties. Introduce two new dedicated fields for abstract and image (Resources -> Media and Metadata -> Abstract still work as fallback). Set "Show abstract" as default behaviour. https://github.com/teaminmedias-pluswerk/ke_search/pull/205
+[TASK]    Change orig_uid field to varchar. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/213.
+[BUGFIX]  Support files with uppercase extension. Thanks to Dennis Römmich. https://github.com/teaminmedias-pluswerk/ke_search/pull/201.
+[TASK]    Hook to overwrite/extend image handling. Thanks to Simon Praetorius. https://github.com/teaminmedias-pluswerk/ke_search/pull/196.
+[FEATURE] Add support for file collections. https://github.com/teaminmedias-pluswerk/ke_search/pull/192.
+[TASK]    Remove magnifiying glass icon from search form template in order to make it easier to adapt it to a site layout.
+[TASK]    Remove some CSS styles in order to make the default style more generic.
 [TASK]    Check length of filter option tag name. It must be as long as given option "searchWordLength" indicates.
+
+Version 2.7.0, April 2018
+[TASK]    Make title and and full index content available in text format in the resultrow template (resultrow.title_text and resultrow.content_text).
+[FEATURE] Move pagination to Fluid to enable modification of pagination. Thanks to Dennis Römmich. https://github.com/teaminmedias-pluswerk/ke_search/pull/183.
+[TASK]    Remove obsolete initTemplate function.
+[FEATURE] Add template layout chooser. Thanks to tritum. https://github.com/teaminmedias-pluswerk/ke_search/pull/123.
+[TASK]    Cleanup deprecated TCA configurations. Thanks to Tim Lochmüller. https://github.com/teaminmedias-pluswerk/ke_search/pull/189.
+[TASK]    Check if file still exists before indexing. https://github.com/teaminmedias-pluswerk/ke_search/issues/158.
+
+Version 2.6.3, January 2018
+[BUGFIX]  Fix cli dispatcher script.
+[BUGFIX]  Fix string „searchword_length_error“, show the actual setting of minium character. https://github.com/teaminmedias-pluswerk/ke_search/pull/176.
+[BUGFIX]  Handle missing plugin configuration. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/185.
+[BUGFIX]  Typo when reading conf for highlightedWord_stdWrap. Thanks to Dennis Römmich. https://github.com/teaminmedias-pluswerk/ke_search/pull/186.
+
+Version 2.6.2, December 2017
+[BUGFIX]  Add missing delimiter information to preg_quote usage. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/166.
+[BUGFIX]  Do not query filter table if no startingpoint is set.
+[BUGFIX]  Non-leading search strings should not be marked in the search results in standard edition of ke_search. https://github.com/teaminmedias-pluswerk/ke_search/issues/164.
+[BUGFIX] [FEATURE] Improve permission handling, allow multiple file indexes. Thanks to Simon Praetorius. https://github.com/teaminmedias-pluswerk/ke_search/pull/173.
+
+Version 2.6.1, October 2017
+[TASK]    Remove storage engine definition in ext_tables.sql (was set to MyISAM) in order to use the default storage engine (InnoDB in MySQL 5.7). https://github.com/teaminmedias-pluswerk/ke_search/issues/159.
+[TASK]    Remove method chooseBestIndex. https://github.com/teaminmedias-pluswerk/ke_search/issues/160.
+[BUGFIX]  load TypoScriptService correctly depending on the TYPO3 version. https://github.com/teaminmedias-pluswerk/ke_search/issues/161.
+
+Version 2.6.0, October 2017
+[BUGFIX]  Avoid duplicate text in search result teaser, https://github.com/teaminmedias-pluswerk/ke_search/pull/141.
+[BUGFIX]  Escape all PCRE characters when highlighting searchwords, thanks to Felix Jacobi, https://github.com/teaminmedias-pluswerk/ke_search/pull/119.
+[BUGFIX]  Fix for Filter not available in selection with compatibility6 installed, https://github.com/teaminmedias-pluswerk/ke_search/pull/133.
+[BUGFIX]  Fix translation of filter options, https://github.com/teaminmedias-pluswerk/ke_search/pull/126
+[TASK]    Use correct ellipsis punctuation mark, https://github.com/teaminmedias-pluswerk/ke_search/pull/142.
+[TASK]    Remove deprecated occurrences of ArrayUtility:inArray(), thanks to Stephan Salzmann, https://github.com/teaminmedias-pluswerk/ke_search/pull/138.
+[BUGFIX]  Fix wrong parameter order when using in_array(). Regression was introduced with https://github.com/teaminmedias-pluswerk/ke_search/pull/138.
+[BUGFIX]  Fix indexing of translated pages, https://github.com/teaminmedias-pluswerk/ke_search/pull/146.
 [BUGFIX]  Allow multple preselected filter options, https://github.com/teaminmedias-pluswerk/ke_search/issues/116.
+[BUGFIX]  Fix regression of searchword highlighting, highlighting did not work with searchwords containing an umlaut. https://github.com/teaminmedias-pluswerk/ke_search/commit/92002beb312ac36b13dfb009f3d8ada9acc3694f#diff-7ea6740aa98f5faef2d72bc72760be71
+[FEATURE] Allow indexing of DOCX, PPTX and XLSX files. Thanks to Armin Vieweg. https://github.com/teaminmedias-pluswerk/ke_search/pull/151.
+[TASK]    Use preg_quote() for regex quoting. https://github.com/teaminmedias-pluswerk/ke_search/issues/140.
+[BUGFIX]  Fix size of preview image. Thanks to Arne Uplegger. https://github.com/teaminmedias-pluswerk/ke_search/pull/150.
 
 Version 2.5.0, May 2017
 [BUGFIX]  Support several pages when loading filters and options

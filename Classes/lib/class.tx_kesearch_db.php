@@ -26,7 +26,6 @@
 class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
 {
     public $conf = array();
-    public $bestIndex = '';
     public $countResultsOfTags = 0;
     public $countResultsOfContent = 0;
     public $table = 'tx_kesearch_index';
@@ -73,7 +72,7 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
 
     /**
      * get a limitted amount of search results for a requested page
-     * @return array Array containing a limitted (one page) amount of search results
+     * @return void
      */
     public function getSearchResultByMySQL()
     {
@@ -209,7 +208,7 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
     public function getQueryParts()
     {
         $fields = 'SQL_CALC_FOUND_ROWS *';
-        $table = $this->table . $this->bestIndex;
+        $table = $this->table;
         $where = '1=1';
 
         // if a searchword was given, calculate percent of score
@@ -359,56 +358,6 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
         );
     }
 
-    /**
-     * This function is useful to decide which index to use
-     * In case of the individual amount of results (content and tags) another index can be much faster
-     * Never add ORDER BY, LIMIT or some additional MATCH-parts to this queries, because this slows down the query time.
-     *
-     * @param string $searchString
-     * @param string $tags
-     */
-    public function chooseBestIndex($searchString = '', $tags = '')
-    {
-        $countQueries = 0;
-
-        // Count results only if it is the first run and a searchword is given
-        if (!$this->countResultsOfContent && $searchString != '') {
-            $count = $GLOBALS['TYPO3_DB']->exec_SELECTcountRows(
-                'uid',
-                'tx_kesearch_index',
-                'MATCH (title, content) AGAINST ("' . $searchString . '" IN BOOLEAN MODE)'
-            );
-            $this->countResultsOfContent = $count;
-            $countQueries++;
-        }
-
-        // Count results only if it is the first run and a tagstring is given
-        if (!$this->countResultsOfTags && count($tags)) {
-            $count = $GLOBALS['TYPO3_DB']->exec_SELECTcountRows(
-                'tags',
-                'tx_kesearch_index',
-                '1=1 ' . $this->createQueryForTags($tags)
-            );
-            $this->countResultsOfTags = $count;
-            $countQueries++;
-        }
-
-        //decide which index to use
-        if ($countQueries == 2) {
-            // if there are more results in content than in tags, another index is
-            // much faster than the index choosed by MySQL
-            // With this configuration we speed up our results from 47 sec. to 7 sec. with over 50.000 records
-            if ($this->countContentResult > $this->countTagsResult) {
-                $this->bestIndex = ' USE INDEX (tag)';
-            } else {
-                $this->bestIndex = ' USE INDEX (titlecontent)';
-            }
-        } else {
-            // MySQL chooses the best index for you, if only one part (content OR tags) are given
-            // With this configuration we speed up our results from 7 sec. to 2 sec. with over 50.000 records
-            $this->bestIndex = '';
-        }
-    }
 
     /**
      * In checkbox mode we have to create for each checkbox one MATCH-AGAINST-Construct
@@ -466,7 +415,6 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
 
         return $where;
     }
-
 
     /**
      * get ordering for where query
