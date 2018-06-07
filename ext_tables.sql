@@ -119,6 +119,7 @@ CREATE TABLE tx_kesearch_indexerconfig (
 	index_content_with_restrictions text,
 	index_passed_events text,
 	type varchar(90) DEFAULT '' NOT NULL,
+	index_news_skip_controller_action tinyint(4) DEFAULT '0' NOT NULL,
 	index_news_category_mode tinyint(4) DEFAULT '0' NOT NULL,
 	index_news_category_selection text,
 	index_extnews_category_selection text,
