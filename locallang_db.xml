@@ -76,6 +76,7 @@
 			<label index="tx_kesearch_indexerconfig.index_news_archived.I.0">Index all news</label>
 			<label index="tx_kesearch_indexerconfig.index_news_archived.I.1">Index only active news</label>
 			<label index="tx_kesearch_indexerconfig.index_news_archived.I.2">Index only archived news</label>
+			<label index="tx_kesearch_indexerconfig.index_news_skip_controller_action">Removing controller and action arguments from URL</label>
 			<label index="tx_kesearch_indexerconfig.index_news_category_selection">Categories:</label>
 			<label index="tx_kesearch_indexerconfig.index_news_useHRDatesSingleWithoutDay">Use dates without day for single-view-URLs:</label>
 			<label index="tx_kesearch_indexerconfig.index_use_page_tags">Add tags of parent pages/sys-folders?</label>
@@ -161,6 +162,7 @@
 			<label index="tx_kesearch_indexerconfig.index_news_category_mode">News der folgenden Kategorien indexieren:</label>
 			<label index="tx_kesearch_indexerconfig.index_news_category_mode.I.1">Alle</label>
 			<label index="tx_kesearch_indexerconfig.index_news_category_mode.I.2">Nur die folgenden Kategorien:</label>
+			<label index="tx_kesearch_indexerconfig.index_news_skip_controller_action">Controller- und Aktionsargumente aus der URL entfernen</label>
 			<label index="tx_kesearch_indexerconfig.index_news_category_selection">Kategorien:</label>
 			<label index="tx_kesearch_indexerconfig.index_extnews_category_selection">Kategorien:</label>
 			<label index="tx_kesearch_indexerconfig.index_news_useHRDatesSingle">Datum in Single-View-URLs:</label>
