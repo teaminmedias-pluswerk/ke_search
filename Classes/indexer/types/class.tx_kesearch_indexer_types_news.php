@@ -175,8 +175,11 @@ class tx_kesearch_indexer_types_news extends tx_kesearch_indexer_types
                             ? $newsRecord['l10n_parent']
                             : $newsRecord['uid']
                         ;
-                        $paramsSingleView['tx_news_pi1']['controller'] = 'News';
-                        $paramsSingleView['tx_news_pi1']['action'] = 'detail';
+						// skips controller and action
+						if($indexerConfig['index_news_skip_controller_action'] == 0) {
+							$paramsSingleView['tx_news_pi1']['controller'] = 'News';
+							$paramsSingleView['tx_news_pi1']['action'] = 'detail';
+						}
                         $params = '&' . http_build_query($paramsSingleView, null, '&');
                         $params = rawurldecode($params);
                     }
