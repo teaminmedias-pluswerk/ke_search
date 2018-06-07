@@ -302,6 +302,15 @@ $configurationArray = array(
                 'maxitems' => 1,
             )
         ),
+        'index_news_skip_controller_action' => array(
+            'exclude' => 0,
+            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_skip_controller_action',
+            'displayCond' => 'FIELD:type:IN:news',
+            'config' => array(
+                'type' => 'check',
+                'default' => '0'
+            )
+        ),
         'index_news_category_selection' => array(
             'exclude' => 1,
             'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_category_selection',
@@ -464,7 +473,7 @@ $configurationArray = array(
     'types' => array(
         '0' => array('showitem' => 'hidden, title, storagepid,targetpid,type,'
             . 'startingpoints_recursive,single_pages,sysfolder,index_content_with_restrictions,index_passed_events,'
-            . 'index_news_archived,index_news_category_mode,index_news_category_selection,'
+            . 'index_news_archived,index_news_skip_controller_action,index_news_category_mode,index_news_category_selection,'
             . 'index_extnews_category_selection,index_news_useHRDatesSingle,index_news_useHRDatesSingleWithoutDay,'
             . 'index_use_page_tags,fal_storage,directories,fileext,index_page_doctypes,contenttypes,commenttypes,'
             . 'filteroption,tvpath,index_use_page_tags_for_files,cal_expired_events')
