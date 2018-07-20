@@ -1,6 +1,9 @@
 ChangeLog
 
 current master
+
+Version 2.8.0, April 2018
+[!!!]     This version changes the database structure!
 [TASK]    Use mb_substr and mb_stripos instead of substr() and stripos() in order to crop content in multibyte charsets correctly. Fixes https://github.com/teaminmedias-pluswerk/ke_search/issues/212.
 [FEATURE] Improve search fields for pages. Collect fields relevant for search in one tab in the page properties. Introduce two new dedicated fields for abstract and image (Resources -> Media and Metadata -> Abstract still work as fallback). Set "Show abstract" as default behaviour. https://github.com/teaminmedias-pluswerk/ke_search/pull/205
 [TASK]    Change orig_uid field to varchar. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/213.
