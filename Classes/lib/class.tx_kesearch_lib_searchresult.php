@@ -100,6 +100,9 @@ class tx_kesearch_lib_searchresult
                 } else {
                     $linktext = $this->row['title'];
                 }
+                // $linkconf['fileTarget'] is ignored so add it to the parameter if set
+                if (isset ($linkconf['fileTarget']))
+                	$linkconf['parameter'] .= ' ' . $linkconf['fileTarget'];
                 break;
             default:
                 $linktext = $this->row['title'];
