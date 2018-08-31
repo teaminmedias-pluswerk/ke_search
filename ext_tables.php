@@ -68,7 +68,8 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
         'LLL:EXT:ke_search/locallang_db.xml:tt_content.list_type_pi1',
         $_EXTKEY . '_pi1'
     ),
-    'list_type'
+    'list_type',
+    $_EXTKEY
 );
 
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
@@ -76,7 +77,8 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
         'LLL:EXT:ke_search/locallang_db.xml:tt_content.list_type_pi2',
         $_EXTKEY . '_pi2'
     ),
-    'list_type'
+    'list_type',
+    $_EXTKEY
 );
 
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
@@ -84,7 +86,8 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
         'LLL:EXT:ke_search/locallang_db.xml:tt_content.list_type_pi3',
         $_EXTKEY . '_pi3'
     ),
-    'list_type'
+    'list_type',
+    $_EXTKEY
 );
 
 if (TYPO3_MODE == 'BE') {
