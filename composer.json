@@ -16,7 +16,8 @@
     "issues": "https://github.com/teaminmedias-pluswerk/ke_search/issues"
   },
   "require": {
-    "typo3/cms-core": "^7.6 || ^8.7 || ^9.3"
+    "typo3/cms-core": "^9.3",
+    "friendsoftypo3/typo3db-legacy": "^1.0.0"
   },
   "autoload": {
     "psr-4": {
