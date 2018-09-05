@@ -778,9 +778,10 @@ class tx_kesearch_indexer
         );
 
         // add all registered additional fields to field value
-        // TODO: for no default is string. but in future it should select type automatically (string/int)
+        // TODO: default is empty string. if fieldName ends with 'id', we assume it is of type INT
+        // but in future it should select type automatically (string/int) on a more profound basis
         foreach ($this->additionalFields as $fieldName) {
-            $fieldsValues[$fieldName] = '';
+            $fieldsValues[$fieldName] = \TYPO3\CMS\Core\Utility\StringUtility::endsWith($fieldName, 'id') ? 0 : '';
         }
 
         // merge filled additionalFields with ke_search fields
