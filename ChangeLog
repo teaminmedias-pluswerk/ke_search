@@ -4,6 +4,11 @@ current master
 [TASK]    Set compatibility to TYPO3 9.3 in composer.json.
 [TASK]    Add third parameter (extension key) to addPlugin call.
 [TASK]    Add dependency to typo3db-legacy and TYPO3 v9.
+[TASK]    use namespaces for hooks class.
+[TASK]    replace deprecated getUserObj with makeInstance.
+[TASK]    Move flexform hook class to namespaces.
+[TASK]    Remove wizard in flexform configuration.
+[TASK]    Remove obsolete calls to marker bases functions.
 
 Version 2.8.0, July 2018
 [!!!]     This version changes the database structure!

@@ -74,16 +74,6 @@ class tx_kesearch_lib_sorting
         $this->cObj = $this->pObj->cObj;
         $this->conf = $this->pObj->conf;
 
-        // get subparts
-        $this->subpartArray['###ORDERNAVIGATION###'] = $this->cObj->getSubpart(
-            $this->pObj->templateCode,
-            '###ORDERNAVIGATION###'
-        );
-        $this->subpartArray['###SORT_LINK###'] = $this->cObj->getSubpart(
-            $this->subpartArray['###ORDERNAVIGATION###'],
-            '###SORT_LINK###'
-        );
-
         // get sorting values (sortdate, title, what ever...)
         $this->sortBy = TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $this->conf['sortByVisitor'], true);
     }
@@ -91,8 +81,8 @@ class tx_kesearch_lib_sorting
 
     /**
      * The main entry point of this class
-     * It will return the complete sorting HTML
-     * @return string HTML
+     *
+     * @return void
      */
     public function renderSorting(&$fluidTemplateVariables)
     {
@@ -121,12 +111,6 @@ class tx_kesearch_lib_sorting
                         $sortByDir = $this->changeOrdering($sortByDir);
                     }
 
-                    $markerArray['###FIELDNAME###'] = $field;
-                    $markerArray['###URL###'] = $url = $this->generateSortingLink($field, $sortByDir);
-                    $markerArray['###CLASS###'] = $classname = $this->getClassNameForUpDownArrow($field, $dbOrdering);
-
-                    $links .= $this->cObj->substituteMarkerArray($this->subpartArray['###SORT_LINK###'], $markerArray);
-
                     $fluidTemplateVariables['sortingLinks'][] = array(
                         'field' => $field,
                         'url' => $url,
@@ -134,22 +118,6 @@ class tx_kesearch_lib_sorting
                     );
                 }
             }
-
-            $content = $this->cObj->substituteSubpart(
-                $this->subpartArray['###ORDERNAVIGATION###'],
-                '###SORT_LINK###',
-                $links
-            );
-
-            $content = $this->cObj->substituteMarker(
-                $content,
-                '###LABEL_SORT###',
-                $this->pObj->pi_getLL('label_sort')
-            );
-
-            return $content;
-        } else {
-            return '';
         }
     }
 
