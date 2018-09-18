@@ -11,6 +11,7 @@ current master
 [TASK]    Remove obsolete calls to marker bases functions.
 [TASK]    Remove deprected call of removeXSS.
 [TASK]    Remove deprected call of utf8_strlen.
+[BUGFIX]  Fix wrong default values for additional fields. https://github.com/teaminmedias-pluswerk/ke_search/pull/225.
 
 Version 2.8.0, July 2018
 [!!!]     This version changes the database structure!
