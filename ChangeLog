@@ -9,6 +9,7 @@ current master
 [TASK]    Move flexform hook class to namespaces.
 [TASK]    Remove wizard in flexform configuration.
 [TASK]    Remove obsolete calls to marker bases functions.
+[TASK]    Remove deprected call of removeXSS.
 
 Version 2.8.0, July 2018
 [!!!]     This version changes the database structure!

@@ -87,24 +87,9 @@ class tx_kesearch_lib_div
     }
 
     /**
-     * Use removeXSS function from t3lib_div / GeneralUtility
-     * that function exists in the TYPO3 Core at least since version 4.5,
-     * which is the minimum system requirement for ke_search currentliy (07 / 2015)
-     *
-     * @param string value
-     * @return string XSS safe value
-     */
-    public function removeXSS($value)
-    {
-        $returnValue = TYPO3\CMS\Core\Utility\GeneralUtility::removeXSS($value);
-        return $returnValue;
-    }
-
-
-    /**
      * function cleanPiVars
      * cleans all piVars used in this EXT
-     * uses removeXSS(...), htmlspecialchars(...) and / or intval(...)
+     * uses  htmlspecialchars(...) and / or intval(...)
      *
      * @param $piVars array        array containing all piVars
      * @return mixed
@@ -113,10 +98,6 @@ class tx_kesearch_lib_div
     {
         // run through all piVars
         foreach ($piVars as $key => $value) {
-            // process removeXSS(...) for all piVars
-            if (!is_array($piVars[$key])) {
-                $piVars[$key] = $this->removeXSS($value);
-            }
 
             // process further cleaning regarding to param type
             switch ($key) {
@@ -153,8 +134,8 @@ class tx_kesearch_lib_div
                     }
                     break;
 
-                // string, no further XSS cleaning here (except removeXSS,
-                // see above), cleaning is done on output
+                // string, no further cleaning here
+                // cleaning is done on output
                 case 'sword':
                     $piVars[$key] = trim($piVars[$key]);
                     break;
