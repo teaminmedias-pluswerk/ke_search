@@ -41,19 +41,19 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPItoST43(
 
 // use hooks for generation of sortdate values
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['registerAdditionalFields'][] =
-    'EXT:ke_search/Classes/hooks/class.user_kesearchhooks.php:user_kesearch_sortdate';
+    TeaminmediasPluswerk\KeSearch\Hooks\AdditionalFields::class;
 
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyPagesIndexEntry'][] =
-    'EXT:ke_search/Classes/hooks/class.user_kesearchhooks.php:user_kesearch_sortdate';
+    TeaminmediasPluswerk\KeSearch\Hooks\AdditionalFields::class;
 
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyYACIndexEntry'][] =
-    'EXT:ke_search/Classes/hooks/class.user_kesearchhooks.php:user_kesearch_sortdate';
+    TeaminmediasPluswerk\KeSearch\Hooks\AdditionalFields::class;
 
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyContentIndexEntry'][] =
-    'EXT:ke_search/Classes/hooks/class.user_kesearchhooks.php:user_kesearch_sortdate';
+    TeaminmediasPluswerk\KeSearch\Hooks\AdditionalFields::class;
 
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyTemplaVoilaIndexEntry'][] =
-    'EXT:ke_search/Classes/hooks/class.user_kesearchhooks.php:user_kesearch_sortdate';
+    TeaminmediasPluswerk\KeSearch\Hooks\AdditionalFields::class;
 
 // add scheduler task
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_kesearch_indexertask'] = array(
