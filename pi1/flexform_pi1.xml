@@ -22,11 +22,6 @@
 								<size>1</size>
 								<maxitems>1</maxitems>
 								<minitems>0</minitems>
-								<wizards>
-									<suggest>
-										<type>suggest</type>
-									</suggest>
-								</wizards>
 							</config>
 						</TCEforms>
 					</resultPage>
@@ -119,7 +114,7 @@
 								<type>select</type>
 								<maxitems>1</maxitems>
 								<size>5</size>
-								<itemsProcFunc>EXT:ke_search/Classes/Backend/class.tx_kesearch_classes_flexform.php:tx_kesearch_classes_flexform->listAvailableOrderingsForAdmin</itemsProcFunc>
+								<itemsProcFunc>TeaminmediasPluswerk\KeSearch\Backend\Flexform->listAvailableOrderingsForAdmin</itemsProcFunc>
 								<default>score desc</default>
 							</config>
 						</TCEforms>
@@ -134,7 +129,7 @@
 								<size>5</size>
 								<relevanceNotAllowed>1</relevanceNotAllowed>
 								<default>sortdate desc</default>
-								<itemsProcFunc>EXT:ke_search/Classes/Backend/class.tx_kesearch_classes_flexform.php:tx_kesearch_classes_flexform->listAvailableOrderingsForAdmin</itemsProcFunc>
+								<itemsProcFunc>TeaminmediasPluswerk\KeSearch\Backend\Flexform->listAvailableOrderingsForAdmin</itemsProcFunc>
 							</config>
 						</TCEforms>
 					</sortWithoutSearchword>
@@ -158,7 +153,7 @@
 								<type>select</type>
 								<maxitems>100</maxitems>
 								<size>5</size>
-								<itemsProcFunc>EXT:ke_search/Classes/Backend/class.tx_kesearch_classes_flexform.php:tx_kesearch_classes_flexform->listAvailableOrderingsForFrontend</itemsProcFunc>
+								<itemsProcFunc>TeaminmediasPluswerk\KeSearch\Backend\Flexform->listAvailableOrderingsForFrontend</itemsProcFunc>
 							</config>
 						</TCEforms>
 					</sortByVisitor>
