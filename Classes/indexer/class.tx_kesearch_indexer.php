@@ -777,10 +777,13 @@ class tx_kesearch_indexer
             'crdate' => $now,
         );
 
-        // add all registered additional fields to field value
-        // TODO: for no default is string. but in future it should select type automatically (string/int)
+        // add all registered additional fields to field value and set default values
         foreach ($this->additionalFields as $fieldName) {
-            $fieldsValues[$fieldName] = '';
+            if ($fieldName == 'orig_pid' || $fieldName == 'sortdate') {
+                $fieldsValues[$fieldName] = 0;
+            } else {
+                $fieldsValues[$fieldName] = '';
+            }
         }
 
         // merge filled additionalFields with ke_search fields

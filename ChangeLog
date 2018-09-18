@@ -1,6 +1,7 @@
 ChangeLog
 
 current master
+[BUGFIX]  Fix wrong default values for additional fields. https://github.com/teaminmedias-pluswerk/ke_search/pull/225.
 
 Version 2.8.0, July 2018
 [!!!]     This version changes the database structure!
