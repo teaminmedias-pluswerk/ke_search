@@ -57,7 +57,7 @@ class tx_kesearch_pi3 extends tx_kesearch_lib
         // hook for initials
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['initials'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['initials'] as $_classRef) {
-                $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+                $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($_classRef);
                 $_procObj->addInitials($this);
             }
         }
@@ -88,7 +88,7 @@ class tx_kesearch_pi3 extends tx_kesearch_lib
         // hook for modifying content
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyMultiselectContent'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyMultiselectContent'] as $_classRef) {
-                $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+                $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($_classRef);
                 $content = $_procObj->modifyMultiselectContent($template['multiselect'], $filter, $this);
             }
         }

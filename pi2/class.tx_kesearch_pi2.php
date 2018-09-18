@@ -80,7 +80,7 @@ class tx_kesearch_pi2 extends tx_kesearch_lib
         // hook for initials
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['initials'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['initials'] as $_classRef) {
-                $_procObj = &GeneralUtility::getUserObj($_classRef);
+                $_procObj = &GeneralUtility::makeInstance($_classRef);
                 $_procObj->addInitials($this);
             }
         }
@@ -112,7 +112,7 @@ class tx_kesearch_pi2 extends tx_kesearch_lib
         // hook: modifyResultList
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyResultList'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyResultList'] as $_classRef) {
-                $_procObj = &GeneralUtility::getUserObj($_classRef);
+                $_procObj = &GeneralUtility::makeInstance($_classRef);
                 $_procObj->modifyResultList($this->fluidTemplateVariables, $this);
             }
         }

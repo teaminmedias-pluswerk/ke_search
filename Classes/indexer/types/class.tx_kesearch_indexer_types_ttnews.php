@@ -218,7 +218,7 @@ class tx_kesearch_indexer_types_ttnews extends tx_kesearch_indexer_types
                 if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyNewsIndexEntry'])) {
                     foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyNewsIndexEntry'] as
                              $_classRef) {
-                        $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+                        $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($_classRef);
                         $_procObj->modifyNewsIndexEntry(
                             $title,
                             $abstract,

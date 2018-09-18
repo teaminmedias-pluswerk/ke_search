@@ -111,7 +111,7 @@ class tx_kesearch_indexer_types_comments extends tx_kesearch_indexer_types
                 if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyCommentsIndexEntry'])) {
                     foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyCommentsIndexEntry'] as
                              $_classRef) {
-                        $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+                        $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($_classRef);
                         $_procObj->modifyCommentsIndexEntry(
                             $title,
                             $abstract,

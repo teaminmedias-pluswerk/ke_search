@@ -151,7 +151,7 @@ class tx_kesearch_indexer_types_tt_content extends tx_kesearch_indexer_types_pag
                 if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyContentIndexEntry'])) {
                     foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyContentIndexEntry'] as
                              $_classRef) {
-                        $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+                        $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($_classRef);
                         $_procObj->modifyContentIndexEntry(
                             $row['header'],
                             $row,

@@ -159,7 +159,7 @@ class user_filterlist
                 if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilteroptionsForFlexforms'])) {
                     foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilteroptionsForFlexforms'] as
                              $_classRef) {
-                        $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+                        $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($_classRef);
                         $_procObj->modifyFilteroptionsForFlexforms($config, $rowFilter, $this);
                     }
                 }

@@ -115,7 +115,7 @@ class tx_kesearch_indexer_types_ke_yac extends tx_kesearch_indexer_types
                 // hook for custom modifications of the indexed data, e. g. the tags
                 if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyYACIndexEntry'])) {
                     foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyYACIndexEntry'] as $_classRef) {
-                        $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+                        $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($_classRef);
                         $_procObj->modifyYACIndexEntry(
                             $title,
                             $abstract,

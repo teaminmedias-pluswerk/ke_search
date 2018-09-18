@@ -415,7 +415,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
         // hook to modify the page content fields
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyPageContentFields'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyPageContentFields'] as $_classRef) {
-                $_procObj = &\TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+                $_procObj = &\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($_classRef);
                 $_procObj->modifyPageContentFields(
                     $fields,
                     $this
@@ -521,7 +521,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
         // hook for custom modifications of the indexed data, e. g. the tags
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyPagesIndexEntry'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyPagesIndexEntry'] as $_classRef) {
-                $_procObj = &\TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+                $_procObj = &\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($_classRef);
                 $_procObj->modifyPagesIndexEntry(
                     $uid,
                     $pageContent,
@@ -906,7 +906,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFileIndexEntryFromContentIndexer'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFileIndexEntryFromContentIndexer'] as
                      $_classRef) {
-                $_procObj = &\TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+                $_procObj = &\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($_classRef);
                 $_procObj->modifyFileIndexEntryFromContentIndexer(
                     $fileObject,
                     $content,
@@ -973,7 +973,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyContentFromContentElement'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyContentFromContentElement'] as
                      $_classRef) {
-                $_procObj = &\TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+                $_procObj = &\TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($_classRef);
                 $_procObj->modifyContentFromContentElement(
                     $bodytext,
                     $ttContentRow,

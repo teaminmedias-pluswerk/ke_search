@@ -189,7 +189,7 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
         // hook for appending additional where clause to sphinx query
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['appendWhereToSphinx'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['appendWhereToSphinx'] as $_classRef) {
-                $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+                $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($_classRef);
                 $queryForSphinx = $_procObj->appendWhereToSphinx($queryForSphinx, $this->user_kesearchpremium, $this);
             }
         }
@@ -265,7 +265,7 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
         // hook for third party applications to manipulate last part of query building
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['getQueryParts'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['getQueryParts'] as $_classRef) {
-                $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+                $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($_classRef);
                 $queryParts = $_procObj->getQueryParts($queryParts, $this);
             }
         }
@@ -473,7 +473,7 @@ class tx_kesearch_db implements \TYPO3\CMS\Core\SingletonInterface
         // hook for third party pagebrowsers or for modification $this->pObj->piVars['page'] parameter
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['getLimit'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['getLimit'] as $_classRef) {
-                $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+                $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($_classRef);
                 $_procObj->getLimit($startLimit, $this);
             }
         }

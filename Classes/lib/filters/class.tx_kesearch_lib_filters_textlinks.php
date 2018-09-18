@@ -137,7 +137,7 @@ class tx_kesearch_lib_filters_textlinks
         // modify filter options by hook
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptions'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptions'] as $_classRef) {
-                $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+                $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($_classRef);
                 $contentOptions .= $_procObj->modifyFilterOptions(
                     $filterUid,
                     $contentOptions,
@@ -353,7 +353,7 @@ class tx_kesearch_lib_filters_textlinks
         // This is useful if you want to define special sortings for each textlink
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyParamsForTextlinks'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyParamsForTextlinks'] as $_classRef) {
-                $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+                $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($_classRef);
                 $_procObj->modifyParamsForTextlinks($params, $excludes, $option, $this->conf, $this->pObj);
             }
         }

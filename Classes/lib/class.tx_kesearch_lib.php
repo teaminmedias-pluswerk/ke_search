@@ -191,7 +191,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         // hook: modifyFlexFormData
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFlexFormData'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFlexFormData'] as $_classRef) {
-                $_procObj = &GeneralUtility::getUserObj($_classRef);
+                $_procObj = &GeneralUtility::makeInstance($_classRef);
                 $_procObj->modifyFlexFormData($this->conf, $this->cObj, $this->piVars);
             }
         }
@@ -223,7 +223,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         // Hook: modifySearchWords
         if (isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifySearchWords'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifySearchWords'] as $classRef) {
-                $hookObj = GeneralUtility::getUserObj($classRef);
+                $hookObj = GeneralUtility::makeInstance($classRef);
                 if (method_exists($hookObj, 'modifySearchWords')) {
                     $hookObj->modifySearchWords($searchWordInformation, $this);
                 }
@@ -398,7 +398,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptionsArray'])) {
                 foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptionsArray'] as
                          $_classRef) {
-                    $_procObj = &GeneralUtility::getUserObj($_classRef);
+                    $_procObj = &GeneralUtility::makeInstance($_classRef);
                     $options = $_procObj->modifyFilterOptionsArray($filter['uid'], $options, $this);
                 }
             }
@@ -441,7 +441,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                     if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customFilterRenderer'])) {
                         foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customFilterRenderer'] as
                                  $_classRef) {
-                            $_procObj = &GeneralUtility::getUserObj($_classRef);
+                            $_procObj = &GeneralUtility::makeInstance($_classRef);
                             $_procObj->customFilterRenderer($filter['uid'], $options, $this, $filterData);
                         }
                     }
@@ -515,7 +515,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         // modify filter options by hook
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptions'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptions'] as $_classRef) {
-                $_procObj = &GeneralUtility::getUserObj($_classRef);
+                $_procObj = &GeneralUtility::makeInstance($_classRef);
                 $_procObj->modifyFilterOptions($filter, $checkboxOptions, $this);
             }
         }
@@ -708,7 +708,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         // hook to implement your own idea of a no result message
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['noResultsHandler'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['noResultsHandler'] as $_classRef) {
-                $_procObj = &GeneralUtility::getUserObj($_classRef);
+                $_procObj = &GeneralUtility::makeInstance($_classRef);
                 $_procObj->noResultsHandler($noResultsText, $this);
             }
         }
@@ -776,7 +776,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                     // make curent row number available to hook
                     $this->currentRowNumber = $resultCount;
                     foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['additionalResultMarker'] as $_classRef) {
-                        $_procObj = &GeneralUtility::getUserObj($_classRef);
+                        $_procObj = &GeneralUtility::makeInstance($_classRef);
                         $_procObj->additionalResultMarker($tempMarkerArray, $row, $this);
                     }
                     unset($this->currentRowNumber);
@@ -883,7 +883,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         // hook to overwrite/extend image handling
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['renderPreviewImageOrTypeIcon'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['renderPreviewImageOrTypeIcon'] as $_classRef) {
-                $_procObj = &GeneralUtility::getUserObj($_classRef);
+                $_procObj = &GeneralUtility::makeInstance($_classRef);
                 $_procObj->renderPreviewImageOrTypeIcon($imageHtml, $row, $this);
             }
         }
@@ -908,7 +908,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         $searchphrase = trim($searchphrase);
         $keStatsIsLoaded = ExtensionManagementUtility::isLoaded('ke_stats');
         if ($keStatsIsLoaded && !empty($searchphrase)) {
-            $keStatsObj = GeneralUtility::getUserObj('EXT:ke_stats/pi1/class.tx_kestats_pi1.php:tx_kestats_pi1');
+            $keStatsObj = GeneralUtility::makeInstance('EXT:ke_stats/pi1/class.tx_kestats_pi1.php:tx_kestats_pi1');
             $keStatsObj->initApi();
 
             // count words
@@ -1071,7 +1071,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         // hook for additional markers in pagebrowser
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['pagebrowseAdditionalMarker'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['pagebrowseAdditionalMarker'] as $_classRef) {
-                $_procObj = &GeneralUtility::getUserObj($_classRef);
+                $_procObj = &GeneralUtility::makeInstance($_classRef);
                 $_procObj->pagebrowseAdditionalMarker(
                     $markerArray,
                     $this

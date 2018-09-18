@@ -317,7 +317,7 @@ class tx_kesearch_indexer_types_templavoila extends tx_kesearch_indexer_types
         // hook for custom modifications of the indexed data, e. g. the tags
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyTemplaVoilaIndexEntry'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyTemplaVoilaIndexEntry'] as $_classRef) {
-                $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
+                $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($_classRef);
                 $_procObj->modifyPagesIndexEntry(
                     $uid,
                     $pageContent,
