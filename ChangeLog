@@ -10,6 +10,7 @@ current master
 [TASK]    Remove wizard in flexform configuration.
 [TASK]    Remove obsolete calls to marker bases functions.
 [TASK]    Remove deprected call of removeXSS.
+[TASK]    Remove deprected call of utf8_strlen.
 
 Version 2.8.0, July 2018
 [!!!]     This version changes the database structure!

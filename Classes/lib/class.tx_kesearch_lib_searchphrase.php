@@ -116,8 +116,7 @@ class tx_kesearch_lib_searchphrase
                 $word = trim($word, '+-~<>');
 
                 // check for word length
-                $csconv = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Charset\\CharsetConverter');
-                $searchWordLength = $csconv->utf8_strlen($word);
+                $searchWordLength = mb_strlen($word);
                 if ($searchWordLength < $this->pObj->extConf['searchWordLength']) {
                     $this->pObj->hasTooShortWords = true;
                     $this->showShortMessage = true;
