@@ -14,7 +14,7 @@ $tempColumns = [
             'maxitems' => 100,
             'items' => [],
             'allowNonIdValues' => true,
-            'itemsProcFunc' => 'user_filterlist->getListOfAvailableFiltersForTCA',
+            'itemsProcFunc' => 'TeaminmediasPluswerk\KeSearch\Backend\Filterlist->getListOfAvailableFiltersForTCA',
         ]
     ],
     'tx_kesearch_abstract' => [

@@ -358,7 +358,7 @@ $configurationArray = array(
                 'items' => array(
                     array('', 0),
                 ),
-                'itemsProcFunc' => 'user_filterlist->getListOfAvailableFiltersForTCA',
+                'itemsProcFunc' => 'TeaminmediasPluswerk\KeSearch\Backend\Filterlist->getListOfAvailableFiltersForTCA',
                 'size' => 1,
                 'minitems' => 0,
                 'maxitems' => 1,
