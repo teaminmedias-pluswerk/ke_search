@@ -21,7 +21,9 @@ namespace TeaminmediasPluswerk\KeSearch\Plugins;
 
 use TeaminmediasPluswerk\KeSearch\Lib\Pluginbase;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
+use TYPO3\CMS\Core\Utility\DebugUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Plugin 'Faceted search - resultlist plugin' for the 'ke_search' extension.

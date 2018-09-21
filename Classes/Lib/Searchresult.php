@@ -112,8 +112,7 @@ class Searchresult
         }
 
         // clean title
-        $linktext = strip_tags($linktext);
-        $linktext = $this->pObj->div->removeXSS($linktext);
+        $linktext = htmlspecialchars(strip_tags($linktext));
 
         // highlight hits in result title?
         if ($this->conf['highlightSword'] && count($this->pObj->swords)) {

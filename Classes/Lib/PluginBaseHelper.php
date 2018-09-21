@@ -93,21 +93,11 @@ class PluginBaseHelper
     }
 
     /**
-     * removeXSS is not included in the Core anymore, so use quoteJSvalue
-     *
-     * @param string value
-     * @return string XSS safe value
-     */
-    public function removeXSS($value)
-    {
-        $returnValue = GeneralUtility::quoteJSvalue($value);
-        return $returnValue;
-    }
-
-    /**
      * function cleanPiVars
-     * cleans all piVars used in this EXT
-     * uses removeXSS(...), htmlspecialchars(...) and / or intval(...)
+     * cleans piVars
+     * sword is not cleaned at this point.
+     * This is done when outputting and querying the database.
+     * htmlspecialchars(...) and / or intval(...)
      *
      * @param $piVars array        array containing all piVars
      * @return mixed
@@ -116,11 +106,6 @@ class PluginBaseHelper
     {
         // run through all piVars
         foreach ($piVars as $key => $value) {
-            // process removeXSS(...) for all piVars
-            if (!is_array($piVars[$key])) {
-                $piVars[$key] = $this->removeXSS($value);
-            }
-
             // process further cleaning regarding to param type
             switch ($key) {
                 // integer - default 1
@@ -156,8 +141,8 @@ class PluginBaseHelper
                     }
                     break;
 
-                // string, no further XSS cleaning here (except removeXSS,
-                // see above), cleaning is done on output
+                // string, no further XSS cleaning here
+                // cleaning is done on output
                 case 'sword':
                     $piVars[$key] = trim($piVars[$key]);
                     break;

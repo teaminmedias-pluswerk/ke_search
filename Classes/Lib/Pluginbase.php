@@ -37,7 +37,7 @@ use \TYPO3\CMS\Core\Utility\HttpUtility;
 class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
 {
     // Same as class name
-    public $prefixId = 'SearchboxPlugin';
+    public $prefixId = 'tx_kesearch_pi1';
 
     // The extension key.
     public $extKey = 'ke_search';
@@ -55,7 +55,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     public $wordsAgainst = '';
 
     // tagsphrase for boolean mode (+#category_213# +#city_42#)
-    public $tagsAgainst = '';
+    public $tagsAgainst = array();
 
     // searchphrase for score/non boolean mode (karl heinz)
     public $scoreAgainst = '';
@@ -232,8 +232,8 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         $this->sword = $searchWordInformation['sword'];
         $this->swords = $searchWordInformation['swords'];
         $this->wordsAgainst = $searchWordInformation['wordsAgainst'];
-        $this->tagsAgainst = $searchWordInformation['tagsAgainst'];
         $this->scoreAgainst = $searchWordInformation['scoreAgainst'];
+        $this->tagsAgainst = $searchWordInformation['tagsAgainst'];
 
         $this->isEmptySearch = $this->isEmptySearch();
 

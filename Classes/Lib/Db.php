@@ -1,6 +1,7 @@
 <?php
 namespace TeaminmediasPluswerk\KeSearch\Lib;
 
+use TeaminmediasPluswerk\KeSearch\Plugins\SearchboxPlugin;
 use TeaminmediasPluswerk\KeSearch\Plugins\txkesearchpi1;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -41,7 +42,7 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
     protected $numberOfResults = 0;
 
     /**
-     * @var txkesearchpi1
+     * @var SearchboxPlugin
      */
     public $pObj;
     public $cObj;
