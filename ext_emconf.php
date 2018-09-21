@@ -32,6 +32,6 @@ $EM_CONF[$_EXTKEY] = array(
     'suggests' => array(),
     'autoload' => array(
         'psr-4' => array('TeaminmediasPluswerk\\KeSearch\\' => 'Classes'),
-        'classmap' => array('Classes', 'cli', 'pi1', 'pi2', 'pi3'),
+        'classmap' => array('Classes', 'cli', 'pi1', 'pi2'),
     ),
 );

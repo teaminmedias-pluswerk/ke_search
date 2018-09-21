@@ -53,7 +53,7 @@ class ResultlistPlugin extends Pluginbase
         $this->pi_setPiVarDefaults();
 
         // use pi1 locallang values, since all the frontend locallang values for
-        // pi1, pi2 and pi3 are set in pi1 language file
+        // pi1, pi2 are set in pi1 language file
         $this->pi_loadLL('EXT:ke_search/pi1/locallang.xml');
 
         // Configuring so caching is not expected. This value means that no cHash params are ever set.

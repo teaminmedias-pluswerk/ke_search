@@ -23,11 +23,6 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
     'FILE:EXT:ke_search/pi2/flexform_pi2.xml'
 );
 
-TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
-    $_EXTKEY . '_pi3',
-    'FILE:EXT:ke_search/pi3/flexform_pi3.xml'
-);
-
 // add module
 if (TYPO3_MODE == 'BE') {
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
@@ -54,9 +49,6 @@ if (TYPO3_MODE == 'BE') {
 
     $TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_kesearch_pi2_wizicon'] =
         $extPath . 'pi2/class.tx_kesearch_pi2_wizicon.php';
-
-    $TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_kesearch_pi3_wizicon'] =
-        $extPath . 'pi3/class.tx_kesearch_pi3_wizicon.php';
 }
 
 /** @var \TYPO3\CMS\Core\Imaging\IconRegistry $iconRegistry */

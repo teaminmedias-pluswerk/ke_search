@@ -12,7 +12,6 @@
 			<label index="pages.tx_kesearch_abstract">Abstract for search result</label>
 			<label index="tt_content.list_type_pi1">Faceted search - Searchbox and Filters</label>
 			<label index="tt_content.list_type_pi2">Faceted search - Results</label>
-			<label index="tt_content.list_type_pi3">Faceted search - Multiselect for Textlinks</label>
 			<label index="tx_kesearch_filters">Filters</label>
 			<label index="tx_kesearch_filters.title">Title</label>
 			<label index="tx_kesearch_filters.rendertype">Rendering type</label>
@@ -93,7 +92,6 @@
 			<label index="pages.tx_kesearch_abstract">Abstract für Suchergebnis</label>
 			<label index="tt_content.list_type_pi1">Facettierte Suche - Suchbox und Filter</label>
 			<label index="tt_content.list_type_pi2">Facettierte Suche - Ergebnisliste</label>
-			<label index="tt_content.list_type_pi3">Facettierte Suche - Mehrfachauswahl für Textlinks</label>
 			<label index="tx_kesearch_filters">Filter</label>
 			<label index="tx_kesearch_filters.title">Titel</label>
 			<label index="tx_kesearch_filters.rendertype">Rendering Typ</label>
@@ -165,7 +163,6 @@
 			<label index="pages.tx_kesearch_tags">Labels voor Facet Zoeken</label>
 			<label index="tt_content.list_type_pi1">Facet Zoeken - Zoekvak en Filters</label>
 			<label index="tt_content.list_type_pi2">Facet Zoeken - Resultaten</label>
-			<label index="tt_content.list_type_pi3">Facet zoeken - Multiselect voor tekstlinks</label>
 			<label index="tx_kesearch_filters">Filters</label>
 			<label index="tx_kesearch_filters.title">Titel</label>
 			<label index="tx_kesearch_filters.rendertype">Rendering soort</label>
