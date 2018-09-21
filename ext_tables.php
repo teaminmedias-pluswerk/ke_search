@@ -56,5 +56,5 @@ $iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\
 $iconRegistry->registerIcon(
     'ext-kesearch-wizard-icon',
     'TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider',
-    ['source' => 'EXT:ke_search/Resources/Public/Icons/ce_wiz.gif']
+    ['source' => 'EXT:ke_search/Resources/Public/Icons/moduleicon.svg']
 );
