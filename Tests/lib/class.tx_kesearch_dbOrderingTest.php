@@ -6,7 +6,7 @@ class DatabaseOrderingTest extends Tx_Extbase_BaseTestCase
     public $conf = array();
 
     /**
-     * @var tx_kesearch_pi1
+     * @var SearchboxPlugin
      */
     public $pObj;
 
@@ -18,7 +18,7 @@ class DatabaseOrderingTest extends Tx_Extbase_BaseTestCase
 
     public function setUp()
     {
-        $this->pObj = $this->getMock('tx_kesearch_pi1');
+        $this->pObj = $this->getMock('SearchboxPlugin');
         $this->pObj->expects($this->any())->method('pi_getLL')->will($this->returnValue('Suchbegriff'));
 
         $this->div = new tx_kesearch_lib_div;

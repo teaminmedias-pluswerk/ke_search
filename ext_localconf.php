@@ -15,29 +15,14 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
     '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:ke_search/pageTSconfig.txt">'
 );
 
-TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPItoST43(
-    $_EXTKEY,
-    'pi1/class.tx_kesearch_pi1.php',
-    '_pi1',
-    'list_type',
-    0
-);
+// add Searchbox Plugin, override class name with namespace
+TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPItoST43($_EXTKEY, '', '_pi1');
+$overrideSetup = 'plugin.tx_kesearch_pi1.userFunc = TeaminmediasPluswerk\KeSearch\Plugins\SearchboxPlugin->main';
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript('tx_kesearch', 'setup', $overrideSetup);
 
-TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPItoST43(
-    $_EXTKEY,
-    'pi2/class.tx_kesearch_pi2.php',
-    '_pi2',
-    'list_type',
-    0
-);
-
-TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPItoST43(
-    $_EXTKEY,
-    'pi3/class.tx_kesearch_pi3.php',
-    '_pi3',
-    'list_type',
-    0
-);
+TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPItoST43($_EXTKEY, '', '_pi2');
+$overrideSetup = 'plugin.tx_kesearch_pi2.userFunc = TeaminmediasPluswerk\KeSearch\Plugins\ResultlistPlugin->main';
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript('tx_kesearch', 'setup', $overrideSetup);
 
 // use hooks for generation of sortdate values
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['registerAdditionalFields'][] =
@@ -56,7 +41,7 @@ $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyTemplaVoilaIndexEntry
     TeaminmediasPluswerk\KeSearch\Hooks\AdditionalFields::class;
 
 // add scheduler task
-$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks']['tx_kesearch_indexertask'] = array(
+$GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][\TeaminmediasPluswerk\KeSearch\Scheduler\IndexerTask::class] = array(
     'extension' => $_EXTKEY,
     'title' => 'Indexing process for ke_search',
     'description' => 'This task updates the ke_search index'

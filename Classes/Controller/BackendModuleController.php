@@ -21,7 +21,7 @@
 
 namespace TeaminmediasPluswerk\KeSearch\Controller;
 
-use tx_kesearch_indexer;
+use TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -105,8 +105,8 @@ class BackendModuleController extends AbstractBackendModuleController
     public function startIndexingAction()
     {
         // make indexer instance and init
-        /* @var $indexer tx_kesearch_indexer */
-        $indexer = GeneralUtility::makeInstance('tx_kesearch_indexer');
+        /* @var $indexer IndexerRunner */
+        $indexer = GeneralUtility::makeInstance(IndexerRunner::class);
 
         // get indexer configurations
         $indexerConfigurations = $indexer->getConfigurations();

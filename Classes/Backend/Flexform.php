@@ -1,6 +1,8 @@
 <?php
 namespace TeaminmediasPluswerk\KeSearch\Backend;
 
+use TYPO3\CMS\Lang\LanguageService;
+
 class Flexform
 {
     public $lang;
@@ -8,7 +10,7 @@ class Flexform
 
     public function init()
     {
-        $this->lang = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Lang\\LanguageService');
+        $this->lang = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(LanguageService::class);
         $this->notAllowedFields = 'uid,pid,tstamp,crdate,cruser_id,starttime,endtime'
             . ',fe_group,targetpid,content,params,type,tags,abstract,language'
             . ',orig_uid,orig_pid,hash,lat,lon,externalurl,lastremotetransfer';

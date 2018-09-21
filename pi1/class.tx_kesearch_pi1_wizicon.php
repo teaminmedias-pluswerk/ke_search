@@ -64,7 +64,7 @@ class tx_kesearch_pi1_wizicon
     public function includeLocalLang()
     {
         $llFile = ExtensionManagementUtility::extPath('ke_search') . 'pi1/locallang.xml';
-        $xmlParser = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Localization\\Parser\\LocallangXmlParser');
+        $xmlParser = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Localization\Parser\LocallangXmlParser::class);
         $LOCAL_LANG = $xmlParser->getParsedData($llFile, $GLOBALS['LANG']->lang);
         return $LOCAL_LANG;
     }

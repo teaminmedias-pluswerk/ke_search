@@ -65,7 +65,7 @@ class tx_kesearch_cli extends \TYPO3\CMS\Core\Controller\CommandLineController
                 break;
 
             case 'startIndexing':
-                $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_indexer');
+                $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner::class);
                 $this->cli_echo(chr(10));
                 $verboseMode = true;
                 $cleanup = $this->extConf['cleanupInterval'];

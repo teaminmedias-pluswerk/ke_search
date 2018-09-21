@@ -11,7 +11,7 @@ class IndexerTest extends Tx_Extbase_BaseTestCase
 
     public function setUp()
     {
-        $this->indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_indexer');
+        $this->indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner::class);
         $this->indexer->additionalFields = array('orig_uid', 'orig_pid', 'enddate');
     }
 

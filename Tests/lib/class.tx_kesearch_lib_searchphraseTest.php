@@ -17,7 +17,7 @@ class SearchPhraseTest extends Tx_Extbase_BaseTestCase
             ->method('pi_getLL')
             ->will($this->returnValue('Bitte geben Sie einen Suchbegriff ein'));
 
-        $this->searchPhrase = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('tx_kesearch_lib_searchphrase');
+        $this->searchPhrase = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TeaminmediasPluswerk\KeSearch\Lib\Searchphrase::class);
 
         $this->searchPhrase->initialize($searchLib);
     }

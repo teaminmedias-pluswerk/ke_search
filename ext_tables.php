@@ -6,25 +6,11 @@ if (!defined('TYPO3_MODE')) {
 
 $extPath = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_search');
 
-if (TYPO3_MODE == 'BE') {
-    require_once($extPath . 'Classes/lib/class.tx_kesearch_lib_items.php');
-}
-
 // add help file
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
     'tx_kesearch_filters',
     'EXT:ke_search/locallang_csh.xml'
 );
-
-// show FlexForm field in plugin configuration
-$TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY . '_pi1'] = 'pi_flexform';
-$TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY . '_pi2'] = 'pi_flexform';
-$TCA['tt_content']['types']['list']['subtypes_addlist'][$_EXTKEY . '_pi3'] = 'pi_flexform';
-
-// remove the old "plugin mode" configuration field
-$TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY . '_pi1'] = 'select_key';
-$TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY . '_pi2'] = 'select_key';
-$TCA['tt_content']['types']['list']['subtypes_excludelist'][$_EXTKEY . '_pi3'] = 'select_key';
 
 // Configure FlexForm field
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
@@ -62,34 +48,6 @@ if (TYPO3_MODE == 'BE') {
     );
 }
 
-// add plugins
-TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
-    array(
-        'LLL:EXT:ke_search/locallang_db.xml:tt_content.list_type_pi1',
-        $_EXTKEY . '_pi1'
-    ),
-    'list_type',
-    $_EXTKEY
-);
-
-TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
-    array(
-        'LLL:EXT:ke_search/locallang_db.xml:tt_content.list_type_pi2',
-        $_EXTKEY . '_pi2'
-    ),
-    'list_type',
-    $_EXTKEY
-);
-
-TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
-    array(
-        'LLL:EXT:ke_search/locallang_db.xml:tt_content.list_type_pi3',
-        $_EXTKEY . '_pi3'
-    ),
-    'list_type',
-    $_EXTKEY
-);
-
 if (TYPO3_MODE == 'BE') {
     $TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_kesearch_pi1_wizicon'] =
         $extPath . 'pi1/class.tx_kesearch_pi1_wizicon.php';
@@ -102,7 +60,7 @@ if (TYPO3_MODE == 'BE') {
 }
 
 /** @var \TYPO3\CMS\Core\Imaging\IconRegistry $iconRegistry */
-$iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Core\Imaging\IconRegistry');
+$iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
 $iconRegistry->registerIcon(
     'ext-kesearch-wizard-icon',
     'TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider',

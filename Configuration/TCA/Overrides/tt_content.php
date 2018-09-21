@@ -4,3 +4,30 @@
     'Configuration/TypoScript',
     'Faceted Search'
 );
+
+// show FlexForm field in plugin configuration
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['ke_search_pi1'] = 'pi_flexform';
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['ke_search_pi2'] = 'pi_flexform';
+
+// remove the old "plugin mode" configuration field
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['ke_search_pi1'] = 'select_key,recursive';
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['ke_search_pi2'] = 'select_key,recursive,pages';
+
+// add plugins
+TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
+    array(
+        'LLL:EXT:ke_search/locallang_db.xml:tt_content.list_type_pi1',
+        'ke_search_pi1'
+    ),
+    'list_type',
+    'ke_search'
+);
+
+TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
+    array(
+        'LLL:EXT:ke_search/locallang_db.xml:tt_content.list_type_pi2',
+        'ke_search_pi2'
+    ),
+    'list_type',
+    'ke_search'
+);
