@@ -25,7 +25,7 @@ $configurationArray = array(
     ),
     'interface' => array(
         'showRecordFieldList' => 'hidden,title,storagepid,startingpoints_recursive,single_pages,sysfolder,'
-            . 'type,index_content_with_restrictions,index_passed_events,index_news_category_mode,'
+            . 'type,index_content_with_restrictions,index_news_category_mode,'
             . 'index_news_category_selection,directories,fileext,filteroption,index_page_doctypes'
     ),
     'columns' => array(
@@ -63,7 +63,7 @@ $configurationArray = array(
             )
         ),
         'targetpid' => array(
-            'displayCond' => 'FIELD:type:!IN:page,tt_content,file,templavoila,comments,remote',
+            'displayCond' => 'FIELD:type:!IN:page,tt_content,file,templavoila,remote',
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.targetpid',
             'config' => array(
@@ -93,11 +93,6 @@ $configurationArray = array(
                         'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_0.gif'
                     ),
                     array(
-                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.1',
-                        'ke_yac',
-                        'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_1.gif'
-                    ),
-                    array(
                         'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.2',
                         'ttnews',
                         'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_2.gif'
@@ -118,24 +113,9 @@ $configurationArray = array(
                         'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_7.gif'
                     ),
                     array(
-                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.8',
-                        't3s_content',
-                        'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_8.gif'
-                    ),
-                    array(
                         'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.9',
                         'templavoila',
                         'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_9.gif'
-                    ),
-                    array(
-                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.10',
-                        'mmforum',
-                        'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_10.gif'
-                    ),
-                    array(
-                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.11',
-                        'comments',
-                        'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_11.gif'
                     ),
                     array(
                         'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.12',
@@ -163,7 +143,7 @@ $configurationArray = array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.startingpoints_recursive',
             'displayCond' => 'FIELD:type:IN:page,tt_content,ttnews,tt_address,templavoila,'
-                . 'comments,news,a21glossary,cal',
+                . 'news,a21glossary,cal',
             'config' => array(
                 'type' => 'group',
                 'internal_type' => 'db',
@@ -199,7 +179,7 @@ $configurationArray = array(
         'sysfolder' => array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.sysfolder',
-            'displayCond' => 'FIELD:type:IN:ke_yac,ttnews,tt_address,mmforum,comments,news,a21glossary,cal',
+            'displayCond' => 'FIELD:type:IN:ttnews,tt_address,news,a21glossary,cal',
             'config' => array(
                 'type' => 'group',
                 'internal_type' => 'db',
@@ -236,24 +216,6 @@ $configurationArray = array(
                 'size' => 1,
                 'maxitems' => 1,
                 'default' => 'no'
-            )
-        ),
-        'index_passed_events' => array(
-            'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_passed_events',
-            'displayCond' => 'FIELD:type:=:ke_yac',
-            'config' => array(
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'items' => array(
-                    array(
-                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_passed_events.I.0',
-                        'yes'
-                    ),
-                    array('LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_passed_events.I.1', 'no'),
-                ),
-                'size' => 1,
-                'maxitems' => 1,
             )
         ),
         'index_news_category_mode' => array(
@@ -341,7 +303,7 @@ $configurationArray = array(
         'index_use_page_tags' => array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_use_page_tags',
-            'displayCond' => 'FIELD:type:IN:ttnews,tt_address,mmforum,comments,news',
+            'displayCond' => 'FIELD:type:IN:ttnews,tt_address,news',
             'config' => array(
                 'type' => 'check',
                 'default' => '0'
@@ -385,16 +347,6 @@ $configurationArray = array(
                 'type' => 'input',
                 'size' => '30',
                 'default' => '1,2,5'
-            )
-        ),
-        'commenttypes' => array(
-            'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.commenttypes',
-            'displayCond' => 'FIELD:type:=:comments',
-            'config' => array(
-                'type' => 'input',
-                'size' => '30',
-                'default' => 'pages'
             )
         ),
         'filteroption' => array(
@@ -463,10 +415,10 @@ $configurationArray = array(
     ),
     'types' => array(
         '0' => array('showitem' => 'hidden, title, storagepid,targetpid,type,'
-            . 'startingpoints_recursive,single_pages,sysfolder,index_content_with_restrictions,index_passed_events,'
+            . 'startingpoints_recursive,single_pages,sysfolder,index_content_with_restrictions,'
             . 'index_news_archived,index_news_category_mode,index_news_category_selection,'
             . 'index_extnews_category_selection,index_news_useHRDatesSingle,index_news_useHRDatesSingleWithoutDay,'
-            . 'index_use_page_tags,fal_storage,directories,fileext,index_page_doctypes,contenttypes,commenttypes,'
+            . 'index_use_page_tags,fal_storage,directories,fileext,index_page_doctypes,contenttypes,'
             . 'filteroption,tvpath,index_use_page_tags_for_files,cal_expired_events')
     )
 );

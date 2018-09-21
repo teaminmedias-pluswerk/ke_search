@@ -12,6 +12,7 @@ current master
 [TASK]    Remove deprected call of removeXSS.
 [TASK]    Remove deprected call of utf8_strlen.
 [BUGFIX]  Fix wrong default values for additional fields. https://github.com/teaminmedias-pluswerk/ke_search/pull/225.
+[TASK]    Remove support for outdated extensions comments, mmforum, t3s_content, ke_yac.
 
 Version 2.8.0, July 2018
 [!!!]     This version changes the database structure!
