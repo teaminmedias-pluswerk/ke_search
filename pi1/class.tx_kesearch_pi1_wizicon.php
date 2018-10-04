@@ -57,13 +57,13 @@ class tx_kesearch_pi1_wizicon
     }
 
     /**
-     * Reads the [extDir]/locallang.xml and returns the \$LOCAL_LANG array found in that file.
+     * Reads the [extDir]/Resources/Private/Language/locallang_searchbox.xml and returns the \$LOCAL_LANG array found in that file.
      *
      * @return    The array with language labels
      */
     public function includeLocalLang()
     {
-        $llFile = ExtensionManagementUtility::extPath('ke_search') . 'pi1/locallang.xml';
+        $llFile = ExtensionManagementUtility::extPath('ke_search') . 'Resources/Private/Language/locallang_searchbox.xml';
         $xmlParser = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Localization\Parser\LocallangXmlParser::class);
         $LOCAL_LANG = $xmlParser->getParsedData($llFile, $GLOBALS['LANG']->lang);
         return $LOCAL_LANG;

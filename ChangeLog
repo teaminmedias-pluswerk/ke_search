@@ -19,6 +19,7 @@ current master
 [TASK]    Remove obsolete pi3.
 [TASK]    Use nicer svg image as wizard icon.
 [TASK]    Move plugin flexform configuration files to Configuration/FlexForms.
+[TASK]    Move plugin locallang.xml files to Resources/Private/Language/.
 
 Version 2.8.0, July 2018
 [!!!]     This version changes the database structure!
