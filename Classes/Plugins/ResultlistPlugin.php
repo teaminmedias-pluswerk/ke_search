@@ -90,7 +90,7 @@ class ResultlistPlugin extends Pluginbase
         // number of results
         $this->fluidTemplateVariables['numberofresults'] = $this->numberOfResults;
 
-        // render links for sorting, fluid template variables are filled in class tx_kesearch_lib_sorting
+        // render links for sorting, fluid template variables are filled in class Sorting
         $this->renderOrdering();
 
         // process query time

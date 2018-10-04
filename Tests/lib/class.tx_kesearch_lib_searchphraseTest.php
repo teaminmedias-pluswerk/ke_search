@@ -4,14 +4,14 @@ class SearchPhraseTest extends Tx_Extbase_BaseTestCase
 {
 
     /**
-     * @var tx_kesearch_lib_searchphrase
+     * @var \TeaminmediasPluswerk\KeSearch\Lib\Searchphrase
      */
     protected $searchPhrase;
 
 
     public function setUp()
     {
-        $searchLib = $this->getMock('tx_kesearch_lib');
+        $searchLib = $this->getMock('TeaminmediasPluswerk\KeSearch\Lib\Items');
         $searchLib->extConf['searchWordLength'] = 4;
         $searchLib->expects($this->any())
             ->method('pi_getLL')

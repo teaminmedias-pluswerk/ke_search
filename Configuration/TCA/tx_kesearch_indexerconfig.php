@@ -133,7 +133,7 @@ $configurationArray = array(
                         'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_14.gif'
                     ),
                 ),
-                'itemsProcFunc' => 'tx_kesearch_lib_items->fillIndexerConfig',
+                'itemsProcFunc' => 'TeaminmediasPluswerk\KeSearch\Lib\Items->fillIndexerConfig',
                 'size' => 1,
                 'maxitems' => 1,
                 'default' => 'page',
