@@ -19,7 +19,6 @@ namespace TeaminmediasPluswerk\KeSearch\Lib;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Utility\DebugUtility;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -146,7 +145,6 @@ class Searchphrase
                 // make the words save for the database
                 $searchParts[$key] = $GLOBALS['TYPO3_DB']->quoteStr($searchParts[$key], 'tx_kesearch_index');
             }
-            DebugUtility::debug($searchParts);
             return array_values($searchParts);
         }
         return array();
