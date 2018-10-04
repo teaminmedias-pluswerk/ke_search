@@ -18,6 +18,7 @@ current master
 [TASK]    use namespaces for all classes.
 [TASK]    Remove obsolete pi3.
 [TASK]    Use nicer svg image as wizard icon.
+[TASK]    Move plugin flexform configuration files to Configuration/FlexForms.
 
 Version 2.8.0, July 2018
 [!!!]     This version changes the database structure!

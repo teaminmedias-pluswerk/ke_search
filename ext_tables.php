@@ -15,12 +15,12 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
 // Configure FlexForm field
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
     $_EXTKEY . '_pi1',
-    'FILE:EXT:ke_search/pi1/flexform_pi1.xml'
+    'FILE:EXT:ke_search/Configuration/Flexforms/flexform_searchbox.xml'
 );
 
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
     $_EXTKEY . '_pi2',
-    'FILE:EXT:ke_search/pi2/flexform_pi2.xml'
+    'FILE:EXT:ke_search/Configuration/Flexforms/flexform_resultlist.xml'
 );
 
 // add module
