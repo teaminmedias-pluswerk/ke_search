@@ -21,6 +21,7 @@ current master
 [TASK]    Move plugin flexform configuration files to Configuration/FlexForms.
 [TASK]    Move plugin locallang.xml files to Resources/Private/Language/.
 [BUGFIX]  Show score when option is enabled even if showPercentalScore is not enabled.
+[TASK]    Remove obsolete option showScoreScale and re-order the fields to show showScore and showPercentalScore next to each other in the flexform.
 
 Version 2.8.0, July 2018
 [!!!]     This version changes the database structure!

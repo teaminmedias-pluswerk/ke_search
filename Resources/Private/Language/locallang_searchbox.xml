@@ -32,7 +32,6 @@
 			<label index="ff.showScore">Show score?</label>
 			<label index="ff.showDate">Show date?</label>
 			<label index="ff.showPercentalScore">Show percental score?</label>
-			<label index="ff.showScoreScale">Show score scale?</label>
 			<label index="ff.resultLinkTarget">Target for result link</label>
 			<label index="ff.resultLinkTargetFiles">Target for result link for files</label>
 			<label index="ff.resultLinkTarget.I.0">Open in new window</label>

@@ -313,16 +313,6 @@
 						</TCEforms>
 					</renderResultUrlAsLink>
 
-					<showScore>
-						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.showScore</label>
-							<config>
-								<type>check</type>
-								<default>0</default>
-							</config>
-						</TCEforms>
-					</showScore>
-
 					<showDate>
 						<TCEforms>
 							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.showDate</label>
@@ -333,6 +323,16 @@
 						</TCEforms>
 					</showDate>
 
+					<showScore>
+						<TCEforms>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.showScore</label>
+							<config>
+								<type>check</type>
+								<default>0</default>
+							</config>
+						</TCEforms>
+					</showScore>
+
 					<showPercentalScore>
 						<TCEforms>
 							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.showPercentalScore</label>
@@ -342,16 +342,6 @@
 							</config>
 						</TCEforms>
 					</showPercentalScore>
-
-					<showScoreScale>
-						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.showScoreScale</label>
-							<config>
-								<type>check</type>
-								<default>0</default>
-							</config>
-						</TCEforms>
-					</showScoreScale>
 
 				</el>
 			</ROOT>
