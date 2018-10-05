@@ -9,7 +9,7 @@ if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(
 
 return array(
     'ctrl' => array(
-        'title' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filteroptions',
+        'title' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_filteroptions',
         'label' => 'title',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
@@ -73,7 +73,7 @@ return array(
         ),
         'title' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filteroptions.title',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_filteroptions.title',
             'config' => array(
                 'type' => 'input',
                 'size' => '30',
@@ -83,7 +83,7 @@ return array(
             'exclude' => 0,
             'l10n_mode' => 'exclude',
             'l10n_display' => 'defaultAsReadonly',
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filteroptions.tag',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_filteroptions.tag',
             'config' => array(
                 'type' => 'input',
                 'size' => '30',
@@ -93,7 +93,7 @@ return array(
         'automated_tagging' => array(
             'exclude' => 1,
             'l10n_mode' => 'exclude',
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filteroptions.automated_tagging',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_filteroptions.automated_tagging',
             'config' => array(
                 'type' => 'group',
                 'internal_type' => 'db',
@@ -111,7 +111,7 @@ return array(
         'automated_tagging_exclude' => array(
             'exclude' => 1,
             'l10n_mode' => 'exclude',
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_filteroptions.automated_tagging_exclude',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_filteroptions.automated_tagging_exclude',
             'config' => array(
                 'type' => 'group',
                 'internal_type' => 'db',

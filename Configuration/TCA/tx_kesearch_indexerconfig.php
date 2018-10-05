@@ -9,7 +9,7 @@ if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(
 
 $configurationArray = array(
     'ctrl' => array(
-        'title' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig',
+        'title' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig',
         'label' => 'title',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
@@ -39,7 +39,7 @@ $configurationArray = array(
         ),
         'title' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.title',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.title',
             'config' => array(
                 'type' => 'input',
                 'size' => '30',
@@ -47,7 +47,7 @@ $configurationArray = array(
         ),
         'storagepid' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.storagepid',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.storagepid',
             'config' => array(
                 'type' => 'group',
                 'internal_type' => 'db',
@@ -65,7 +65,7 @@ $configurationArray = array(
         'targetpid' => array(
             'displayCond' => 'FIELD:type:!IN:page,tt_content,file,templavoila,remote',
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.targetpid',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.targetpid',
             'config' => array(
                 'type' => 'group',
                 'internal_type' => 'db',
@@ -82,53 +82,53 @@ $configurationArray = array(
         ),
         'type' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type',
             'config' => array(
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => array(
                     array(
-                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.0',
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.0',
                         'page',
                         'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_0.gif'
                     ),
                     array(
-                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.2',
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.2',
                         'ttnews',
                         'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_2.gif'
                     ),
                     array(
-                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.5',
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.5',
                         'tt_address',
                         'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_5.gif'
                     ),
                     array(
-                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.6',
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.6',
                         'tt_content',
                         'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_6.gif'
                     ),
                     array(
-                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.7',
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.7',
                         'file',
                         'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_7.gif'
                     ),
                     array(
-                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.9',
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.9',
                         'templavoila',
                         'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_9.gif'
                     ),
                     array(
-                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.12',
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.12',
                         'news',
                         'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_12.gif'
                     ),
                     array(
-                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.13',
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.13',
                         'a21glossary',
                         'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_13.gif'
                     ),
                     array(
-                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.type.I.14',
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.14',
                         'cal',
                         'EXT:ke_search/res/img/types_backend/selicon_tx_kesearch_indexerconfig_type_14.gif'
                     ),
@@ -141,7 +141,7 @@ $configurationArray = array(
         ),
         'startingpoints_recursive' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.startingpoints_recursive',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.startingpoints_recursive',
             'displayCond' => 'FIELD:type:IN:page,tt_content,ttnews,tt_address,templavoila,'
                 . 'news,a21glossary,cal',
             'config' => array(
@@ -160,7 +160,7 @@ $configurationArray = array(
         ),
         'single_pages' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.single_pages',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.single_pages',
             'displayCond' => 'FIELD:type:IN:page,tt_content,templavoila',
             'config' => array(
                 'type' => 'group',
@@ -178,7 +178,7 @@ $configurationArray = array(
         ),
         'sysfolder' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.sysfolder',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.sysfolder',
             'displayCond' => 'FIELD:type:IN:ttnews,tt_address,news,a21glossary,cal',
             'config' => array(
                 'type' => 'group',
@@ -196,19 +196,19 @@ $configurationArray = array(
         ),
         'index_content_with_restrictions' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_content_with_restrictions',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_content_with_restrictions',
             'displayCond' => 'FIELD:type:=:page',
             'config' => array(
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => array(
                     array(
-                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.'
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.'
                         . 'index_content_with_restrictions.I.0',
                         'yes'
                     ),
                     array(
-                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.'
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.'
                         . 'index_content_with_restrictions.I.1',
                         'no'
                     ),
@@ -220,18 +220,18 @@ $configurationArray = array(
         ),
         'index_news_category_mode' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_category_mode',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_news_category_mode',
             'displayCond' => 'FIELD:type:IN:ttnews,news',
             'config' => array(
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => array(
                     array(
-                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_category_mode.I.1',
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_news_category_mode.I.1',
                         '1'
                     ),
                     array(
-                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_category_mode.I.2',
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_news_category_mode.I.2',
                         '2'
                     ),
                 ),
@@ -241,22 +241,22 @@ $configurationArray = array(
         ),
         'index_news_archived' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_archived',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_news_archived',
             'displayCond' => 'FIELD:type:IN:news',
             'config' => array(
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => array(
                     array(
-                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_archived.I.0',
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_news_archived.I.0',
                         '0'
                     ),
                     array(
-                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_archived.I.1',
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_news_archived.I.1',
                         '1'
                     ),
                     array(
-                        'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_archived.I.2',
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_news_archived.I.2',
                         '2'
                     ),
                 ),
@@ -266,7 +266,7 @@ $configurationArray = array(
         ),
         'index_news_category_selection' => array(
             'exclude' => 1,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_category_selection',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_news_category_selection',
             'displayCond' => 'FIELD:type:=:ttnews',
             'config' => array(
                 'type' => 'none',
@@ -275,7 +275,7 @@ $configurationArray = array(
         'index_extnews_category_selection' => array(
             'exclude' => 1,
             'l10n_mode' => 'mergeIfNotBlank',
-            'label' => 'LLL:EXT:news/Resources/Private/Language/locallang_db.xml:tx_news_domain_model_news.categories',
+            'label' => 'LLL:EXT:news/Resources/Private/Language/Resources/Private/Language/locallang_db.xml:tx_news_domain_model_news.categories',
             'displayCond' => 'FIELD:type:=:news',
             'config' => array(
                 'type' => 'none',
@@ -283,7 +283,7 @@ $configurationArray = array(
         ),
         'index_news_useHRDatesSingle' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_news_useHRDatesSingle',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_news_useHRDatesSingle',
             'displayCond' => 'FIELD:type:=:ttnews',
             'config' => array(
                 'type' => 'check',
@@ -292,7 +292,7 @@ $configurationArray = array(
         ),
         'index_news_useHRDatesSingleWithoutDay' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.'
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.'
                 . 'index_news_useHRDatesSingleWithoutDay',
             'displayCond' => 'FIELD:type:=:ttnews',
             'config' => array(
@@ -302,7 +302,7 @@ $configurationArray = array(
         ),
         'index_use_page_tags' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_use_page_tags',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_use_page_tags',
             'displayCond' => 'FIELD:type:IN:ttnews,tt_address,news',
             'config' => array(
                 'type' => 'check',
@@ -311,7 +311,7 @@ $configurationArray = array(
         ),
         'directories' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.directories',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.directories',
             'displayCond' => 'FIELD:type:IN:file',
             'config' => array(
                 'type' => 'text',
@@ -322,7 +322,7 @@ $configurationArray = array(
         ),
         'fileext' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.fileext',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.fileext',
             'displayCond' => 'FIELD:type:IN:file,page,tt_content',
             'config' => array(
                 'type' => 'input',
@@ -332,7 +332,7 @@ $configurationArray = array(
         ),
         'index_use_page_tags_for_files' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_use_page_tags_for_files',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_use_page_tags_for_files',
             'displayCond' => 'FIELD:type:IN:page,tt_content',
             'config' => array(
                 'type' => 'check',
@@ -341,7 +341,7 @@ $configurationArray = array(
         ),
         'index_page_doctypes' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.index_page_doctypes',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_page_doctypes',
             'displayCond' => 'FIELD:type:=:page',
             'config' => array(
                 'type' => 'input',
@@ -351,7 +351,7 @@ $configurationArray = array(
         ),
         'filteroption' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.filteroption',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.filteroption',
             'config' => array(
                 'type' => 'select',
                 'renderType' => 'selectSingle',
@@ -366,7 +366,7 @@ $configurationArray = array(
         ),
         'tvpath' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.tvpath',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.tvpath',
             'displayCond' => 'FIELD:type:=:templavoila',
             'config' => array(
                 'type' => 'input',
@@ -376,13 +376,13 @@ $configurationArray = array(
         ),
         'fal_storage' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.fal_storage',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.fal_storage',
             'displayCond' => 'FIELD:type:=:file',
             'config' => array(
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => array(
-                    array('LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.fal_storage.dont_use_fal', -1),
+                    array('LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.fal_storage.dont_use_fal', -1),
                 ),
                 'size' => 1,
                 'maxitems' => 1,
@@ -393,7 +393,7 @@ $configurationArray = array(
         ),
         'contenttypes' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.contenttypes',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.contenttypes',
             'displayCond' => 'FIELD:type:IN:page,tt_content',
             'config' => array(
                 'type' => 'text',
@@ -405,7 +405,7 @@ $configurationArray = array(
         ),
         'cal_expired_events' => array(
             'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/locallang_db.xml:tx_kesearch_indexerconfig.cal_expired_events',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.cal_expired_events',
             'displayCond' => 'FIELD:type:IN:cal',
             'config' => array(
                 'type' => 'check',
