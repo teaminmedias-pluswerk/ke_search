@@ -27,6 +27,7 @@ current master
 [TASK]    Move locallang_db.xml to Resources/Private/Language/.
 [TASK]    Move ke_search_pi1.css to Resources/Public/Css/.
 [TASK]    Delete obsolete file res/backendModule.css.
+[TASK]    Delete obsolete file res/scripts/SVG.php.
 
 Version 2.8.0, July 2018
 [!!!]     This version changes the database structure!
