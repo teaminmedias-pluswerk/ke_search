@@ -29,6 +29,7 @@ current master
 [TASK]    Delete obsolete file res/backendModule.css.
 [TASK]    Delete obsolete file res/scripts/SVG.php.
 [TASK]    Delete obsolete file res/img/kesearch_submit.png.
+[TASK]    Delete obsolete file res/img/default-indexer.gif.
 
 Version 2.8.0, July 2018
 [!!!]     This version changes the database structure!
