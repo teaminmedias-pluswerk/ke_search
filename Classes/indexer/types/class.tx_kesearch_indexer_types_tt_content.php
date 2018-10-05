@@ -17,6 +17,8 @@
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * Plugin 'Faceted search' for the 'ke_search' extension.
  * @author    Andreas Kiefer (kennziffer.com) <kiefer@kennziffer.com>
@@ -28,35 +30,30 @@ class tx_kesearch_indexer_types_tt_content extends tx_kesearch_indexer_types_pag
 {
     public $indexedElementsName = 'content elements';
 
+    private $table = 'tt_content';
+
     /**
      * get content of current page and save data to db
      * @param $uid page-UID that has to be indexed
      */
     public function getPageContent($uid)
     {
-        // get content elements for this page
-        $fields = '*';
-        $table = 'tt_content';
-        $where = 'pid = ' . intval($uid);
-        $where .= ' AND (' . $this->whereClauseForCType . ')';
+        $uid = (int)$uid;
 
-        // add condition for not indexing gridelement columns with colPos = -2 (= invalid)
-        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('gridelements')) {
-            $where .= ' AND colPos <> -2 ';
+        if (strpos($this->whereClauseForCType, '"shortcut"')) {
+            // get shortcut elements and normal elements on this page
+            $shortCutIds = $this->loadShortcutContent($uid);
+            $rows = $this->fetchContentFromPage($uid, $this->whereClauseForCType, $shortCutIds);
         }
-
-        // don't index elements which are hidden or deleted, but do index
-        // those with time restrictons, the time restrictens will be
-        // copied to the index
-        //$where .= t3lib_BEfunc::BEenableFields($table);
-        $where .= ' AND hidden=0';
-        $where .= TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table);
+        else {
+            // get content elements for this page
+            $rows = $this->fetchContentFromPage($uid, $this->whereClauseForCType);
+        }
 
         // Get access restrictions for this page
         $pageAccessRestrictions = $this->getInheritedAccessRestrictions($uid);
 
-        $rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($fields, $table, $where);
-        if (count($rows)) {
+        if ($rows) {
             foreach ($rows as $row) {
                 // skip this content element if the page itself is hidden or a
                 // parent page with "extendToSubpages" set is hidden
@@ -65,6 +62,11 @@ class tx_kesearch_indexer_types_tt_content extends tx_kesearch_indexer_types_pag
                 }
                 if ($row['sys_language_uid'] > 0
                     && $this->cachedPageRecords[$row['sys_language_uid']][$row['pid']]['hidden']) {
+                    continue;
+                }
+
+                // shortcut items are included already, the shortcut itself must not be indexed
+                if ($row['CType'] === 'shortcut') {
                     continue;
                 }
 
@@ -88,11 +90,11 @@ class tx_kesearch_indexer_types_tt_content extends tx_kesearch_indexer_types_pag
                 $tags = $this->pageRecords[$uid]['tags'];
 
                 // assign categories as tags (as cleartext, eg. "colorblue")
-                $categories = tx_kesearch_helper::getCategories($row['uid'], $table);
+                $categories = tx_kesearch_helper::getCategories($row['uid'], $this->table);
                 tx_kesearch_helper::makeTags($tags, $categories['title_list']);
 
                 // assign categories as generic tags (eg. "syscat123")
-                tx_kesearch_helper::makeSystemCategoryTags($tags, $row['uid'], $table);
+                tx_kesearch_helper::makeSystemCategoryTags($tags, $row['uid'], $this->table);
 
                 // index header
                 // add header only if not set to "hidden"
@@ -175,7 +177,7 @@ class tx_kesearch_indexer_types_tt_content extends tx_kesearch_indexer_types_pag
                     $indexerConfig['storagepid'],        // storage PID
                     $title,                              // page title inkl. tt_content-title
                     'content',                           // content type
-                    $row['pid'] . '#c' . $row['uid'],    // target PID: where is the single view?
+                    $uid . '#c' . $row['uid'],    // target PID: where is the single view?
                     $content,                            // indexed content, includes the title (linebreak after title)
                     $tags,                               // tags
                     '',                                  // typolink params for singleview
@@ -196,5 +198,105 @@ class tx_kesearch_indexer_types_tt_content extends tx_kesearch_indexer_types_pag
         }
 
         return;
+    }
+
+    private function addContentWhereConditions()
+    {
+        $where = '';
+        // add condition for not indexing gridelement columns with colPos = -2 (= invalid)
+        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('gridelements')) {
+            $where .= ' AND colPos <> -2 ';
+        }
+
+        // don't index elements which are hidden or deleted, but do index
+        // those with time restrictions, the time restrictions will be
+        // copied to the index
+        $where .= ' AND hidden=0';
+        $where .= TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($this->table);
+
+        return $where;
+    }
+
+    private function fetchContentFromPage(int $uid, string $whereClauseForCType, string $uidList = '')
+    {
+        $fields = '*';
+        if ($uidList === '') {
+            $where = 'pid = ' . $uid;
+        }
+        else {
+            $where = '(pid = ' . $uid . ' or uid in (' . $uidList . '))';
+        }
+
+        $where .= ' AND (' . $whereClauseForCType . ')';
+        $where .= $this->addContentWhereConditions();
+        $rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($fields, $this->table, $where);
+        return $rows;
+    }
+
+    private function fetchContent(int $uid)
+    {
+        $fields = '*';
+        $where = 'uid = ' . $uid;
+        $where .= ' AND (' . $this->whereClauseForCType . ')';
+        $where .= $this->addContentWhereConditions();
+        return $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow($fields, $this->table, $where);
+    }
+
+    private function fetchContentTranslations(int $uid)
+    {
+        $fields = 'uid, CType';
+        $where = 'l18n_parent = ' . $uid;
+        $where .= ' AND (' . $this->whereClauseForCType . ')';
+        $where .= $this->addContentWhereConditions();
+        return $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($fields, $this->table, $where);
+    }
+
+    private function recursiveShortcut(array $row)
+    {
+        $records = explode(',', $row['records']);
+        $idList = [];
+        foreach ($records as $record) {
+            list($table, $uid) = GeneralUtility::revExplode('_', $record, 2);
+
+            if ($table !== 'tt_content' || !$uid) {
+                continue;
+            }
+
+            $content = $this->fetchContent($uid);
+            if (!$content) {
+                continue;
+            }
+
+            $translations = $this->fetchContentTranslations($uid);
+            foreach ($translations as $translation) {
+                if ($translation['CType'] === 'shortcut') {
+                    $idList = array_merge($idList, $this->recursiveShortcut($translation));
+                }
+                else {
+                    $idList[] = (int)$translation['uid'];
+                }
+            }
+
+            if ($content['CType'] === 'shortcut') {
+                $idList = array_merge($idList, $this->recursiveShortcut($content));
+            }
+            else {
+                $idList[] = (int)$uid;
+            }
+        }
+        return $idList;
+    }
+
+    private function loadShortcutContent(int $uid)
+    {
+        $rows = $this->fetchContentFromPage($uid, 'CType="shortcut"');
+        $idList = [];
+        if ($rows) {
+            foreach ($rows as $row) {
+                $idList = array_merge($idList,$this->recursiveShortcut($row));
+            }
+        }
+
+        return implode(',', array_unique($idList));
     }
 }
