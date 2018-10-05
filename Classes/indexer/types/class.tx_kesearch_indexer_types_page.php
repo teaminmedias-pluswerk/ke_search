@@ -292,7 +292,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
     {
         $fields = '*';
         $table = 'pages';
-        $where = 'uid IN (' . implode(',', $uids) . ')';
+        $where = 'uid IN (' . implode(',', $uids) . ') AND no_search <> 1';
 
         $pages = array();
         $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
