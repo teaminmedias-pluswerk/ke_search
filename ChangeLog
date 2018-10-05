@@ -28,6 +28,7 @@ current master
 [TASK]    Move ke_search_pi1.css to Resources/Public/Css/.
 [TASK]    Delete obsolete file res/backendModule.css.
 [TASK]    Delete obsolete file res/scripts/SVG.php.
+[TASK]    Delete obsolete file res/img/kesearch_submit.png.
 
 Version 2.8.0, July 2018
 [!!!]     This version changes the database structure!
