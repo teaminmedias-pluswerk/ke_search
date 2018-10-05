@@ -26,6 +26,7 @@ current master
 [TASK]    Move pageTSconfig to Configuration/Page/.
 [TASK]    Move locallang_db.xml to Resources/Private/Language/.
 [TASK]    Move ke_search_pi1.css to Resources/Public/Css/.
+[TASK]    Delete obsolete file res/backendModule.css.
 
 Version 2.8.0, July 2018
 [!!!]     This version changes the database structure!
