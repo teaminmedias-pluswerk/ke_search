@@ -11,10 +11,6 @@ if (TYPO3_MODE == 'BE') {
     );
 }
 
-TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
-    '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:ke_search/pageTSconfig.txt">'
-);
-
 // add Searchbox Plugin, override class name with namespace
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPItoST43($_EXTKEY, '', '_pi1');
 $overrideSetup = 'plugin.tx_kesearch_pi1.userFunc = TeaminmediasPluswerk\KeSearch\Plugins\SearchboxPlugin->main';
@@ -23,6 +19,11 @@ $overrideSetup = 'plugin.tx_kesearch_pi1.userFunc = TeaminmediasPluswerk\KeSearc
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPItoST43($_EXTKEY, '', '_pi2');
 $overrideSetup = 'plugin.tx_kesearch_pi2.userFunc = TeaminmediasPluswerk\KeSearch\Plugins\ResultlistPlugin->main';
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript('tx_kesearch', 'setup', $overrideSetup);
+
+// add page TSconfig (Content element wizard icons, hide index table)
+TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
+    '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:ke_search/pageTSconfig.txt">'
+);
 
 // use hooks for generation of sortdate values
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['registerAdditionalFields'][] =

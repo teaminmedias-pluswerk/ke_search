@@ -4,8 +4,6 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
-$extPath = TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('ke_search');
-
 // add help file
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
     'tx_kesearch_filters',
@@ -41,14 +39,6 @@ if (TYPO3_MODE == 'BE') {
             'labels' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml',
         )
     );
-}
-
-if (TYPO3_MODE == 'BE') {
-    $TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_kesearch_pi1_wizicon'] =
-        $extPath . 'pi1/class.tx_kesearch_pi1_wizicon.php';
-
-    $TBE_MODULES_EXT['xMOD_db_new_content_el']['addElClasses']['tx_kesearch_pi2_wizicon'] =
-        $extPath . 'pi2/class.tx_kesearch_pi2_wizicon.php';
 }
 
 /** @var \TYPO3\CMS\Core\Imaging\IconRegistry $iconRegistry */
