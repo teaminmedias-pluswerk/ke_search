@@ -23,6 +23,7 @@ current master
 [BUGFIX]  Show score when option is enabled even if showPercentalScore is not enabled.
 [TASK]    Remove obsolete option showScoreScale and re-order the fields to show showScore and showPercentalScore next to each other in the flexform.
 [TASK]    Move wizard icon registration to page TSconfig instead of PHP classes.
+[TASK]    Move pageTSconfig to Configuration/Page/.
 
 Version 2.8.0, July 2018
 [!!!]     This version changes the database structure!

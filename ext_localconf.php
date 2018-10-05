@@ -22,7 +22,7 @@ $overrideSetup = 'plugin.tx_kesearch_pi2.userFunc = TeaminmediasPluswerk\KeSearc
 
 // add page TSconfig (Content element wizard icons, hide index table)
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
-    '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:ke_search/pageTSconfig.txt">'
+    '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:ke_search/Configuration/TSconfig/Page/pageTSconfig.txt">'
 );
 
 // use hooks for generation of sortdate values
