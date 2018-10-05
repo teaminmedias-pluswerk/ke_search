@@ -1197,12 +1197,12 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         // fallback: default image
         if (!is_file(PATH_site . $imageConf['file']['_typoScriptNodeValue'])) {
             $imageConf['file']['_typoScriptNodeValue'] = ExtensionManagementUtility::siteRelPath($this->extKey)
-                . 'res/img/types/' . $name . '.gif';
+                . 'Resources/Public/Icons/types/' . $name . '.gif';
 
             // fallback for file results: use default if no image for this file extension is available
             if ($type == 'file' && !is_file(PATH_site . $imageConf['file'])) {
                 $imageConf['file']['_typoScriptNodeValue'] = ExtensionManagementUtility::siteRelPath($this->extKey)
-                    . 'res/img/types/file.gif';
+                    . 'Resources/Public/Icons/types/file.gif';
             }
         }
 
