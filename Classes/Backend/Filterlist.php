@@ -1,6 +1,7 @@
 <?php
 namespace TeaminmediasPluswerk\KeSearch\Backend;
 use \TYPO3\CMS\Backend\Utility\BackendUtility;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /***************************************************************
@@ -31,6 +32,17 @@ class Filterlist
 {
 
     /**
+     * Returns the query builder for the database connection.
+     *
+     * @return \TYPO3\CMS\Core\Database\Query\QueryBuilder
+     */
+    protected static function getQueryBuilder()
+    {
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_kesearch_index');
+        return $queryBuilder;
+    }
+
+    /**
      * compiles a list of filters in order to display them to in the backend plugin configuration (pi1)
      * @param $config
      */
@@ -45,16 +57,19 @@ class Filterlist
         }
 
         // get filters
+        $queryBuilder = self::getQueryBuilder();
         $fields = '*';
         $table = 'tx_kesearch_filters';
-        $where = 'pid IN(' . $pidList . ') ';
-        $where .= BackendUtility::BEenableFields($table);
-        $where .= BackendUtility::deleteClause($table);
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
-        $count = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+        $where = $queryBuilder->expr()->in('pid', $pidList);
+        $res = $queryBuilder
+            ->select($fields)
+            ->from($table)
+            ->where($where)
+            ->execute();
+        $count = $res->rowCount();
 
         if ($count) {
-            while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+            while ($row = $res->fetch()) {
                 if (!$row['l10n_parent']) {
                     $config['items'][] = array($row['title'], $row['uid']);
                 }
@@ -86,32 +101,40 @@ class Filterlist
         $fields = '*';
         $table = 'tx_kesearch_filters';
 
+        $queryBuilder = self::getQueryBuilder();
+
         // storage pid for filter options
         if (!empty($modTSconfig['filterStorage'])) {
             // storage pid is set in page ts config
-            $where = 'pid IN (' . $modTSconfig['filterStorage'] . ') ';
+            $where = $queryBuilder->expr()->in('pid', $modTSconfig['filterStorage']);
         } else {
             // no storage pid set in page ts config
-            $where = '1=1 ';
+            $where = null;
         }
 
-        $where .= BackendUtility::BEenableFields($table);
-        $where .= BackendUtility::deleteClause($table);
+        $res = $queryBuilder
+            ->select($fields)
+            ->from($table)
+            ->where($where)
+            ->execute();
 
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
-        $count = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+        $count = $res->rowCount();
         if ($count) {
-            while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+            while ($row = $res->fetch()) {
                 if (!empty($row['options'])) {
-                    $fields2 = '*';
-                    $table2 = 'tx_kesearch_filteroptions';
-                    $where2 = 'uid in (' . $row['options'] . ')';
-                    $where2 .= BackendUtility::BEenableFields($table2);
-                    $where2 .= BackendUtility::deleteClause($table2);
+                    $queryBuilder = self::getQueryBuilder();
+                    $optionsFields = '*';
+                    $optionsTable = 'tx_kesearch_filteroptions';
+                    $optionsWhere = $queryBuilder->expr()->in('uid', $row['options']);
 
-                    $res2 = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields2, $table2, $where2);
-                    while ($row2 = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res2)) {
-                        $config['items'][] = array($row['title'] . ': ' . $row2['title'], $row2['uid']);
+                    $options = $queryBuilder
+                        ->select($optionsFields)
+                        ->from($optionsTable)
+                        ->where($optionsWhere)
+                        ->execute();
+
+                    while ($optionRow = $options->fetch()) {
+                        $config['items'][] = array($row['title'] . ': ' . $optionRow['title'], $optionRow['uid']);
                     }
                 }
             }
@@ -136,24 +159,31 @@ class Filterlist
         // get filters
         $fields = '*';
         $table = 'tx_kesearch_filters';
-        $where = 'pid IN(' . $pidList . ') ';
-        $where .= BackendUtility::BEenableFields($table);
-        $where .= BackendUtility::deleteClause($table);
 
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
-        $count = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+        $queryBuilder = self::getQueryBuilder();
+        $where = $queryBuilder->expr()->in('pid', $pidList);
+
+        $res = $queryBuilder
+            ->select($fields)
+            ->from($table)
+            ->where($where)
+            ->execute();
+
+        $count = $res->rowCount();
         if ($count) {
-            while ($rowFilter = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+            while ($rowFilter = $res->fetch()) {
                 if (!empty($rowFilter['options'])) {
                     // get filteroptions
                     $fieldsOpts = '*';
                     $tableOpts = 'tx_kesearch_filteroptions';
-                    $whereOpts = 'uid in (' . $rowFilter['options'] . ')';
-                    $whereOpts .= BackendUtility::BEenableFields($tableOpts);
-                    $whereOpts .= BackendUtility::deleteClause($tableOpts);
+                    $whereOpts = $queryBuilder->expr()->in('uid', $rowFilter['options']);
 
-                    $resOpts = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fieldsOpts, $tableOpts, $whereOpts);
-                    while ($rowOpts = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resOpts)) {
+                    $resOpts = $queryBuilder
+                        ->select($fieldsOpts)
+                        ->from($tableOpts)
+                        ->where($whereOpts)
+                        ->execute();
+                    while ($rowOpts = $resOpts->fetch()) {
                         $config['items'][] = array($rowFilter['title'] . ': ' . $rowOpts['title'], $rowOpts['uid']);
                     }
                 }
@@ -204,10 +234,10 @@ class Filterlist
         $pids = [];
         if (is_string($pages)) {
             // TYPO3 7.6
-            $pagesParts = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $pages, true);
+            $pagesParts = GeneralUtility::trimExplode(',', $pages, true);
             foreach ($pagesParts as $pagePart) {
-                $a = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode('|', $pagePart);
-                $b = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode('_', $a[0]);
+                $a = GeneralUtility::trimExplode('|', $pagePart);
+                $b = GeneralUtility::trimExplode('_', $a[0]);
                 $uid = end($b);
                 $pids[] = $uid;
             }
