@@ -34,11 +34,12 @@ class Filterlist
     /**
      * Returns the query builder for the database connection.
      *
+     * @param $table string
      * @return \TYPO3\CMS\Core\Database\Query\QueryBuilder
      */
-    protected static function getQueryBuilder()
+    protected static function getQueryBuilder(string $table)
     {
-        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_kesearch_index');
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($table);
         return $queryBuilder;
     }
 
@@ -57,7 +58,7 @@ class Filterlist
         }
 
         // get filters
-        $queryBuilder = self::getQueryBuilder();
+        $queryBuilder = self::getQueryBuilder('tx_kesearch_filters');
         $fields = '*';
         $table = 'tx_kesearch_filters';
         $where = $queryBuilder->expr()->in('pid', $pidList);
@@ -101,7 +102,7 @@ class Filterlist
         $fields = '*';
         $table = 'tx_kesearch_filters';
 
-        $queryBuilder = self::getQueryBuilder();
+        $queryBuilder = self::getQueryBuilder('tx_kesearch_filters');
 
         // storage pid for filter options
         if (!empty($modTSconfig['filterStorage'])) {
@@ -122,7 +123,7 @@ class Filterlist
         if ($count) {
             while ($row = $res->fetch()) {
                 if (!empty($row['options'])) {
-                    $queryBuilder = self::getQueryBuilder();
+                    $queryBuilder = self::getQueryBuilder('tx_kesearch_filteroptions');
                     $optionsFields = '*';
                     $optionsTable = 'tx_kesearch_filteroptions';
                     $optionsWhere = $queryBuilder->expr()->in('uid', $row['options']);
@@ -160,7 +161,7 @@ class Filterlist
         $fields = '*';
         $table = 'tx_kesearch_filters';
 
-        $queryBuilder = self::getQueryBuilder();
+        $queryBuilder = self::getQueryBuilder('tx_kesearch_filters');
         $where = $queryBuilder->expr()->in('pid', $pidList);
 
         $res = $queryBuilder
@@ -174,6 +175,7 @@ class Filterlist
             while ($rowFilter = $res->fetch()) {
                 if (!empty($rowFilter['options'])) {
                     // get filteroptions
+                    $queryBuilder = self::getQueryBuilder('tx_kesearch_filteroptions');
                     $fieldsOpts = '*';
                     $tableOpts = 'tx_kesearch_filteroptions';
                     $whereOpts = $queryBuilder->expr()->in('uid', $rowFilter['options']);
@@ -202,6 +204,7 @@ class Filterlist
 
     /**
      * Get configured pages from "pages" attribute in plugin's row
+     * TYPO3 7.6 and 8.7 have different types in $config['flexParentDatabaseRow']['pages'].
      *
      * This method handles both.
      *
@@ -231,6 +234,19 @@ class Filterlist
         $pages = $parentRow['pages'];
 
         $pids = [];
+        if (is_string($pages)) {
+            // TYPO3 7.6
+            $pagesParts = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode(',', $pages, true);
+            foreach ($pagesParts as $pagePart) {
+                $a = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode('|', $pagePart);
+                $b = \TYPO3\CMS\Core\Utility\GeneralUtility::trimExplode('_', $a[0]);
+                $uid = end($b);
+                $pids[] = $uid;
+            }
+            return implode(',', $pids);
+        }
+
+        // TYPO3 8.7
         foreach ($pages as $page) {
             $pids[] = $page['uid'];
         }
