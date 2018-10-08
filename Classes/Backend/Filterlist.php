@@ -202,7 +202,6 @@ class Filterlist
 
     /**
      * Get configured pages from "pages" attribute in plugin's row
-     * TYPO3 7.6 and 8.7 have different types in $config['flexParentDatabaseRow']['pages'].
      *
      * This method handles both.
      *
@@ -232,19 +231,6 @@ class Filterlist
         $pages = $parentRow['pages'];
 
         $pids = [];
-        if (is_string($pages)) {
-            // TYPO3 7.6
-            $pagesParts = GeneralUtility::trimExplode(',', $pages, true);
-            foreach ($pagesParts as $pagePart) {
-                $a = GeneralUtility::trimExplode('|', $pagePart);
-                $b = GeneralUtility::trimExplode('_', $a[0]);
-                $uid = end($b);
-                $pids[] = $uid;
-            }
-            return implode(',', $pids);
-        }
-
-        // TYPO3 8.7
         foreach ($pages as $page) {
             $pids[] = $page['uid'];
         }
