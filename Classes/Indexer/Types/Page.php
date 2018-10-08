@@ -323,12 +323,30 @@ class Page extends IndexerBase
         // create entry in cachedPageRecods for additional languages, skip default language 0
         foreach ($this->sysLanguages as $sysLang) {
             if ($sysLang['uid'] > 0) {
-                list($pageOverlay) = \TYPO3\CMS\Backend\Utility\BackendUtility::getRecordsByField(
-                    'pages_language_overlay',
-                    'pid',
-                    $pageRow['uid'],
-                    'AND sys_language_uid=' . (int)$sysLang['uid']
-                );
+
+                // check for unified page translation handling feature
+                if ($GLOBALS['TYPO3_CONF_VARS']['SYS']['features']['unifiedPageTranslationHandling'] == true) {
+                    list($pageOverlay) = $this->queryBuilder
+                        ->select('*')
+                        ->from('pages')
+                        ->where(
+                            $this->queryBuilder->expr()->eq('l10n_parent', $pageRow['uid']),
+                            $this->queryBuilder->expr()->eq('sys_language_uid', (int) $sysLang['uid'])
+                        )
+                        ->execute()
+                        ->fetchAll();
+                } else {
+                    list($pageOverlay) = $this->queryBuilder
+                        ->select('*')
+                        ->from('pages_language_overlay')
+                        ->where(
+                            $this->queryBuilder->expr()->eq('pid', $pageRow['uid']),
+                            $this->queryBuilder->expr()->eq('sys_language_uid', (int) $sysLang['uid'])
+                        )
+                        ->execute()
+                        ->fetchAll();
+                }
+
                 if ($pageOverlay) {
                     $this->cachedPageRecords[$sysLang['uid']][$pageRow['uid']] = $pageOverlay + $pageRow;
                 }
