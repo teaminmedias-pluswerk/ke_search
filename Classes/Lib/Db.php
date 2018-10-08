@@ -2,6 +2,7 @@
 namespace TeaminmediasPluswerk\KeSearch\Lib;
 
 use TeaminmediasPluswerk\KeSearch\Plugins\SearchboxPlugin;
+use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
@@ -496,5 +497,17 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
     protected function sphinxSearchEnabled()
     {
         return $this->pObj->extConfPremium['enableSphinxSearch'] && !$this->pObj->isEmptySearch;
+    }
+
+    /**
+     * Returns the query builder for the database connection.
+     *
+     * @param string $table
+     * @return \TYPO3\CMS\Core\Database\Query\QueryBuilder
+     */
+    public static function getQueryBuilder($table)
+    {
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($table);
+        return $queryBuilder;
     }
 }

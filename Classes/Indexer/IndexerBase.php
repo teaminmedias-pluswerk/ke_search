@@ -20,8 +20,6 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer;
  ***************************************************************/
 
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
-use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Database\QueryGenerator;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -56,16 +54,10 @@ class IndexerBase
      */
     protected $errors = array();
 
-
     /**
      * @var array
      */
     public $pageRecords;
-
-    /**
-     * @var \TYPO3\CMS\Core\Database\Query\QueryBuilder;
-     */
-    public $queryBuilder;
 
     /**
      * Constructor of this object
@@ -77,19 +69,8 @@ class IndexerBase
         $this->pObj = $pObj;
         $this->indexerConfig = $this->pObj->indexerConfig;
         $this->queryGen = GeneralUtility::makeInstance(QueryGenerator::class);
-        $this->queryBuilder = self::getQueryBuilder();
     }
 
-    /**
-     * Returns the query builder for the database connection.
-     *
-     * @return \TYPO3\CMS\Core\Database\Query\QueryBuilder
-     */
-    protected static function getQueryBuilder()
-    {
-        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_kesearch_index');
-        return $queryBuilder;
-    }
 
     /**
      * get all recursive contained pids of given Page-UID

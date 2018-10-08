@@ -1,8 +1,9 @@
 <?php
 namespace TeaminmediasPluswerk\KeSearch\Backend;
-use \TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Core\Database\ConnectionPool;
+
+use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TeaminmediasPluswerk\KeSearch\Lib\Db;
 
 /***************************************************************
  *  Copyright notice
@@ -32,18 +33,6 @@ class Filterlist
 {
 
     /**
-     * Returns the query builder for the database connection.
-     *
-     * @param $table string
-     * @return \TYPO3\CMS\Core\Database\Query\QueryBuilder
-     */
-    protected static function getQueryBuilder(string $table)
-    {
-        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($table);
-        return $queryBuilder;
-    }
-
-    /**
      * compiles a list of filters in order to display them to in the backend plugin configuration (pi1)
      * @param $config
      */
@@ -58,7 +47,7 @@ class Filterlist
         }
 
         // get filters
-        $queryBuilder = self::getQueryBuilder('tx_kesearch_filters');
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_filters');
         $fields = '*';
         $table = 'tx_kesearch_filters';
         $where = $queryBuilder->expr()->in('pid', $pidList);
@@ -102,7 +91,7 @@ class Filterlist
         $fields = '*';
         $table = 'tx_kesearch_filters';
 
-        $queryBuilder = self::getQueryBuilder('tx_kesearch_filters');
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_filters');
 
         // storage pid for filter options
         if (!empty($modTSconfig['filterStorage'])) {
@@ -123,7 +112,7 @@ class Filterlist
         if ($count) {
             while ($row = $res->fetch()) {
                 if (!empty($row['options'])) {
-                    $queryBuilder = self::getQueryBuilder('tx_kesearch_filteroptions');
+                    $queryBuilder = Db::getQueryBuilder('tx_kesearch_filteroptions');
                     $optionsFields = '*';
                     $optionsTable = 'tx_kesearch_filteroptions';
                     $optionsWhere = $queryBuilder->expr()->in('uid', $row['options']);
@@ -161,7 +150,7 @@ class Filterlist
         $fields = '*';
         $table = 'tx_kesearch_filters';
 
-        $queryBuilder = self::getQueryBuilder('tx_kesearch_filters');
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_filters');
         $where = $queryBuilder->expr()->in('pid', $pidList);
 
         $res = $queryBuilder
@@ -175,7 +164,7 @@ class Filterlist
             while ($rowFilter = $res->fetch()) {
                 if (!empty($rowFilter['options'])) {
                     // get filteroptions
-                    $queryBuilder = self::getQueryBuilder('tx_kesearch_filteroptions');
+                    $queryBuilder = Db::getQueryBuilder('tx_kesearch_filteroptions');
                     $fieldsOpts = '*';
                     $tableOpts = 'tx_kesearch_filteroptions';
                     $whereOpts = $queryBuilder->expr()->in('uid', $rowFilter['options']);

@@ -30,12 +30,12 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer\Types;
 
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
+use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TYPO3\CMS\Core\Html\RteHtmlParser;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Resource\FileRepository;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Extensionmanager\Utility\Repository\Helper;
 use \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use \TYPO3\CMS\Frontend\DataProcessing\FilesProcessor;
 use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -325,23 +325,26 @@ class Page extends IndexerBase
             if ($sysLang['uid'] > 0) {
 
                 // check for unified page translation handling feature
+
                 if ($GLOBALS['TYPO3_CONF_VARS']['SYS']['features']['unifiedPageTranslationHandling'] == true) {
-                    list($pageOverlay) = $this->queryBuilder
+                    $queryBuilder = Db::getQueryBuilder('pages');
+                    list($pageOverlay) = $queryBuilder
                         ->select('*')
                         ->from('pages')
                         ->where(
-                            $this->queryBuilder->expr()->eq('l10n_parent', $pageRow['uid']),
-                            $this->queryBuilder->expr()->eq('sys_language_uid', (int) $sysLang['uid'])
+                            $queryBuilder->expr()->eq('l10n_parent', $pageRow['uid']),
+                            $queryBuilder->expr()->eq('sys_language_uid', (int) $sysLang['uid'])
                         )
                         ->execute()
                         ->fetchAll();
                 } else {
-                    list($pageOverlay) = $this->queryBuilder
+                    $queryBuilder = Db::getQueryBuilder('pages_language_overlay');
+                    list($pageOverlay) = $queryBuilder
                         ->select('*')
                         ->from('pages_language_overlay')
                         ->where(
-                            $this->queryBuilder->expr()->eq('pid', $pageRow['uid']),
-                            $this->queryBuilder->expr()->eq('sys_language_uid', (int) $sysLang['uid'])
+                            $queryBuilder->expr()->eq('pid', $pageRow['uid']),
+                            $queryBuilder->expr()->eq('sys_language_uid', (int) $sysLang['uid'])
                         )
                         ->execute()
                         ->fetchAll();
