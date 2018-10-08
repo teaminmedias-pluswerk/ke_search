@@ -421,7 +421,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             $filterData['id'] = 'filter_' . $filter['uid'];
             $filterData['options'] = $options;
             $filterData['checkboxOptions'] = $this->compileCheckboxOptions($filter, $options);
-            $filterData['optionCount'] = count($options);
+            $filterData['optionCount'] = is_array($options) ? count($options) : 0;
             $filterData['resetLink'] = $resetLink;
 
             // special classes / custom code
