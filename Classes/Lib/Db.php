@@ -510,4 +510,17 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable($table);
         return $queryBuilder;
     }
+
+    /**
+     * Returns the database connection.
+     *
+     * @param string $table
+     * @return \TYPO3\CMS\Core\Database\Connection
+     */
+    public static function getDatabaseConnection($table)
+    {
+        $databaseConnection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($table);
+        return $databaseConnection;
+    }
+
 }
