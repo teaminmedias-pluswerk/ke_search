@@ -54,7 +54,7 @@ class TtContent extends Page
         }
 
         // don't index elements which are hidden or deleted, but do index
-        // those with time restrictons, the time restrictens will be
+        // those with time restrictions, the time restrictions will be
         // copied to the index
         //$where .= t3lib_BEfunc::BEenableFields($table);
         $where .= ' AND hidden=0';
