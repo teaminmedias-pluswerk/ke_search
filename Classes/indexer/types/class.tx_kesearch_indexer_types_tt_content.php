@@ -63,8 +63,9 @@ class tx_kesearch_indexer_types_tt_content extends tx_kesearch_indexer_types_pag
                 if ($pageAccessRestrictions['hidden']) {
                     continue;
                 }
-                if ($row['sys_language_uid'] > 0
-                    && $this->cachedPageRecords[$row['sys_language_uid']][$row['pid']]['hidden']) {
+
+                // skip this content element if the page is hidden or set to "no_search"
+                if (!$this->checkIfpageShouldBeIndexed($uid, $row['sys_language_uid'])) {
                     continue;
                 }
 
