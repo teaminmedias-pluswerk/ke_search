@@ -188,25 +188,25 @@ class Filters
         if (empty($filterUids)) {
             return array();
         }
-        $fields = '*';
+
         $table = 'tx_kesearch_filters';
         $where = 'pid in (' . $GLOBALS['TYPO3_DB']->quoteStr($this->startingPoints, $table) . ')';
         $where .= ' AND find_in_set(uid, "' . $GLOBALS['TYPO3_DB']->quoteStr($filterUids, 'tx_kesearch_filters') . '")';
-        $where .= $this->cObj->enableFields($table);
-        $rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-            $fields,
-            $table,
-            $where,
-            '',
-            'find_in_set(uid, "' . $GLOBALS['TYPO3_DB']->quoteStr($filterUids, 'tx_kesearch_filters') . '")',
-            '',
-            'uid'
-        );
-        if (!is_array($rows)) {
+
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_filters');
+        $filterRows = $queryBuilder
+            ->select('*')
+            ->from($table)
+            ->add('where', $where)
+            ->add('orderBy', 'find_in_set(uid, "' . $GLOBALS['TYPO3_DB']->quoteStr($filterUids, 'tx_kesearch_filters') . '")')
+            ->execute()
+            ->fetchAll();
+
+        if (!is_array($filterRows)) {
             return [];
         }
-        $rows = $this->languageOverlay($rows, $table);
-        return $this->addOptionsToFilters($rows);
+        $rows = $this->languageOverlay($filterRows, $table);
+        return $this->addOptionsToFilters($filterRows);
     }
 
 
@@ -220,21 +220,22 @@ class Filters
         if (empty($optionUids)) {
             return array();
         }
-        $fields = '*';
+
         $table = 'tx_kesearch_filteroptions';
         $where = 'FIND_IN_SET(uid, "' . $GLOBALS['TYPO3_DB']->quoteStr($optionUids, $table) . '")';
         $where .= ' AND pid in (' . $GLOBALS['TYPO3_DB']->quoteStr($this->startingPoints, $table) . ')';
-        $where .= $this->cObj->enableFields($table);
+
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_filteroptions');
+        $optionsRows = $queryBuilder
+            ->select('*')
+            ->from($table)
+            ->add('where', $where)
+            ->add('orderBy', 'FIND_IN_SET(uid, "' . $optionUids . '")')
+            ->execute()
+            ->fetchAll();
+
         return $this->languageOverlay(
-            $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-                $fields,
-                $table,
-                $where,
-                '',
-                'FIND_IN_SET(uid, "' . $GLOBALS['TYPO3_DB']->quoteStr($optionUids, $table) . '")',
-                '',
-                'uid'
-            ),
+            $optionsRows,
             $table
         );
     }
@@ -270,6 +271,7 @@ class Filters
      */
     public function languageOverlay(array $rows, $table)
     {
+
         // see https://github.com/teaminmedias-pluswerk/ke_search/issues/128
         $LanguageMode = $GLOBALS['TSFE']->sys_language_content ;
         if (\TYPO3\CMS\Core\Utility\GeneralUtility::hideIfNotTranslated($GLOBALS['TSFE']->page['l18n_cfg'])) {
