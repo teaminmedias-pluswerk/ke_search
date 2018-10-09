@@ -1,7 +1,9 @@
 <?php
 namespace TeaminmediasPluswerk\KeSearch\Backend;
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Lang\LanguageService;
+use TeaminmediasPluswerk\KeSearch\Lib\Db;
 
 class Flexform
 {
@@ -10,7 +12,7 @@ class Flexform
 
     public function init()
     {
-        $this->lang = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(LanguageService::class);
+        $this->lang = GeneralUtility::makeInstance(LanguageService::class);
         $this->notAllowedFields = 'uid,pid,tstamp,crdate,cruser_id,starttime,endtime'
             . ',fe_group,targetpid,content,params,type,tags,abstract,language'
             . ',orig_uid,orig_pid,hash,lat,lon,externalurl,lastremotetransfer';
@@ -24,10 +26,10 @@ class Flexform
         // get orderings
         $fieldLabel = $this->lang->sL('LLL:EXT:ke_search/locallang_db.php:tx_kesearch_index.relevance');
         $config['items'][] = array($fieldLabel, 'score');
-        $res = $GLOBALS['TYPO3_DB']->sql_query('SHOW COLUMNS FROM tx_kesearch_index');
+        $res = Db::getDatabaseConnection('tx_kesearch_index')->fetchAll('SHOW COLUMNS FROM tx_kesearch_index');
 
-        while ($col = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-            $isInList = \TYPO3\CMS\Core\Utility\GeneralUtility::inList($this->notAllowedFields, $col['Field']);
+        foreach($res as $col) {
+            $isInList = GeneralUtility::inList($this->notAllowedFields, $col['Field']);
             if (!$isInList) {
                 $file = $GLOBALS['TCA']['tx_kesearch_index']['columns'][$col['Field']]['label'];
                 $fieldLabel = $this->lang->sL($file);
@@ -47,10 +49,10 @@ class Flexform
             $config['items'][] = array($fieldLabel . ' UP', 'score asc');
             $config['items'][] = array($fieldLabel . ' DOWN', 'score desc');
         }
-        $res = $GLOBALS['TYPO3_DB']->sql_query('SHOW COLUMNS FROM tx_kesearch_index');
+        $res = Db::getDatabaseConnection('tx_kesearch_index')->fetchAll('SHOW COLUMNS FROM tx_kesearch_index');
 
-        while ($col = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-            $isInList = \TYPO3\CMS\Core\Utility\GeneralUtility::inList($this->notAllowedFields, $col['Field']);
+        foreach($res as $col) {
+            $isInList = GeneralUtility::inList($this->notAllowedFields, $col['Field']);
             if (!$isInList) {
                 $file = $GLOBALS['TCA']['tx_kesearch_index']['columns'][$col['Field']]['label'];
                 $fieldLabel = $this->lang->sL($file);
