@@ -6,6 +6,7 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
+use TYPO3\CMS\Frontend\Page\PageRepository;
 
 /***************************************************************
  *  Copyright notice
@@ -86,34 +87,49 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
     {
         $queryParts = $this->getQueryParts();
 
-        // log query
-        if ($this->conf['logQuery']) {
-            $query = $GLOBALS['TYPO3_DB']->SELECTquery(
-                $queryParts['SELECT'],
-                $queryParts['FROM'],
-                $queryParts['WHERE'],
-                $queryParts['GROUPBY'],
-                $queryParts['ORDERBY'],
-                $queryParts['LIMIT']
-            );
-            GeneralUtility::devLog('Search result query', $this->pObj->extKey, 0, array($query));
+        // build query
+        $queryBuilder = self::getQueryBuilder('tx_kesearch_index');
+        $queryBuilder->getRestrictions()->removeAll();
+        $resultQuery = $queryBuilder
+            ->add('select', $queryParts['SELECT'])
+            ->from($queryParts['FROM'])
+            ->add('where', $queryParts['WHERE']);
+        if (!empty($queryParts['GROUPBY'])) {
+            $resultQuery->add('groupBy', $queryParts['GROUPBY']);
+        }
+        if (!empty($queryParts['ORDERBY'])) {
+            $resultQuery->add('orderBy', $queryParts['ORDERBY']);
         }
 
-        $this->searchResults = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-            $queryParts['SELECT'],
-            $queryParts['FROM'],
-            $queryParts['WHERE'],
-            $queryParts['GROUPBY'],
-            $queryParts['ORDERBY'],
-            $queryParts['LIMIT'],
-            'uid'
-        );
-        $result = $GLOBALS['TYPO3_DB']->sql_query('SELECT FOUND_ROWS();');
-        if ($result) {
-            $data = $GLOBALS['TYPO3_DB']->sql_fetch_row($result);
-            $GLOBALS['TYPO3_DB']->sql_free_result($result);
-            $this->numberOfResults = $data[0];
+        $limit = $this->getLimit();
+        if (is_array($limit)) {
+            $resultQuery->setMaxResults(10);
+            $resultQuery->setFirstResult($limit[0]);
         }
+
+        // execute query
+        $this->searchResults = $resultQuery->execute()->fetchAll();
+
+        // log query
+        if ($this->conf['logQuery']) {
+            // @TODO use logging api https://docs.typo3.org/typo3cms/CoreApiReference/ApiOverview/Logging/Writers/Index.html
+            GeneralUtility::devLog(
+                'Search result query',
+                $this->pObj->extKey,
+                0,
+                array($resultQuery->getSQL())
+            );
+        }
+
+        $queryBuilder = self::getQueryBuilder('tx_kesearch_index');
+        $queryBuilder->getRestrictions()->removeAll();
+        $numRows = $queryBuilder
+            ->add('select', 'FOUND_ROWS()')
+            ->execute()
+            ->fetchColumn(0);
+
+        $this->numberOfResults = $numRows;
+
     }
 
     /**
@@ -349,15 +365,17 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
     protected function getTagsFromMySQL()
     {
         $queryParts = $this->getQueryParts();
-        $tagRows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-            'tags',
-            $queryParts['FROM'],
-            $queryParts['WHERE'],
-            '',
-            '',
-            '',
-            ''
-        );
+
+        $queryBuilder = self::getQueryBuilder('tx_kesearch_index');
+        $queryBuilder->getRestrictions()->removeAll();
+
+        $tagRows = $queryBuilder
+            ->select('tags')
+            ->from($queryParts['FROM'])
+            ->add('where', $queryParts['WHERE'])
+            ->execute()
+            ->fetchAll();
+
         return array_map(
             function ($row) {
                 return $row['tags'];
@@ -376,10 +394,14 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
      */
     protected function createQueryForTags(array $tags)
     {
+        $databaseConnection = self::getDatabaseConnection('tx_kesearch_index');
         $where = '';
         if (count($tags) && is_array($tags)) {
             foreach ($tags as $value) {
-                $value = $GLOBALS['TYPO3_DB']->quoteStr($value, 'tx_kesearch_index');
+                // @TODO: check if this works as intended / search for better way
+                $value = $databaseConnection->quote($value);
+                $value = rtrim($value, "'");
+                $value = ltrim($value, "'");
                 $where .= ' AND MATCH (tags) AGAINST (\'' . $value . '\' IN BOOLEAN MODE) ';
             }
             return $where;
@@ -419,7 +441,8 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
         }
 
         // add enable fields
-        $where .= $this->cObj->enableFields($this->table);
+        $pageRepository = GeneralUtility::makeInstance(PageRepository::class);
+        $where .= $pageRepository->enableFields($this->table);
 
         return $where;
     }
