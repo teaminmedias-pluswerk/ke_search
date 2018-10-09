@@ -1234,8 +1234,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                     )
                     ->execute()
                     ->fetchAll();
-
-                // while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+                
                 foreach ($filterRows as $row) {
                     $this->preselectedFilter[$row['filteruid']][$row['optionuid']] = $row['tag'];
                 }
