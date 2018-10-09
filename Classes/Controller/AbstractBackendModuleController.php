@@ -32,21 +32,20 @@ use TYPO3\CMS\Extbase\Mvc\RequestInterface;
 use TYPO3\CMS\Extbase\Mvc\ResponseInterface;
 
 /**
- * This class provides a controller for the Backend module of RealURL.
- *
- * @author Dmitry Dulepov <dmitry.dulepov@gmail.com>
- * @author Bernhard Berger <bernhard.berger@gmail.com>
+ * Class AbstractBackendModuleController
+ * @package TeaminmediasPluswerk\KeSearch\Controller
  */
 abstract class AbstractBackendModuleController extends ActionController
 {
 
-    /** @var int */
+    /**
+     * @var int
+     */
     protected $id = 0;
 
-    /** @var \TYPO3\CMS\Core\Database\DatabaseConnection */
-    protected $databaseConnection;
-
-    /** @var string[] */
+    /**
+     * @var array
+     */
     protected $excludedArguments = array();
 
     protected $argumentsKey = 'tx_kesearch_web_kesearchbackendmodule';
@@ -125,7 +124,6 @@ abstract class AbstractBackendModuleController extends ActionController
     protected function initializeAction()
     {
         $this->id = (int)GeneralUtility::_GET('id');
-        $this->databaseConnection = $GLOBALS['TYPO3_DB'];
 
         // Fix pagers
         $arguments = GeneralUtility::_GPmerged($this->argumentsKey);
