@@ -22,6 +22,7 @@
 namespace TeaminmediasPluswerk\KeSearch\Controller;
 
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner;
+use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -261,8 +262,8 @@ class BackendModuleController extends AbstractBackendModuleController
         // admin only access
         if ($this->getBackendUser()->user['admin']) {
             if ($this->do == 'clear') {
-                $query = 'TRUNCATE TABLE tx_kesearch_index';
-                $res = $this->databaseConnection->sql_query($query);
+                $databaseConnection = Db::getDatabaseConnection('tx_kesearch_index');
+                $databaseConnection->truncate('tx_kesearch_index');
             }
 
             $content .= '<p>'
@@ -310,16 +311,21 @@ class BackendModuleController extends AbstractBackendModuleController
      */
     public function showLastIndexingReport()
     {
-        $logrow = $this->databaseConnection->exec_SELECTgetSingleRow(
-            '*',
-            'sys_log',
-            'details LIKE "[ke_search]%"',
-            '',
-            'tstamp DESC'
-        );
 
-        if ($logrow !== false) {
-            $content = '<div class="summary"><pre>' . $logrow['details'] . '</pre></div>';
+        $queryBuilder = Db::getQueryBuilder('sys_log');
+        $logResults = $queryBuilder
+            ->select('*')
+            ->from('sys_log')
+            ->where(
+                $queryBuilder->expr()->like('details',  '"[ke_search]%"')
+            )
+            ->orderBy('tstamp',  'DESC')
+            ->setMaxResults(1)
+            ->execute()
+            ->fetchAll();
+
+        if (count($logResults)) {
+            $content = '<div class="summary"><pre>' . $logResults[0]['details'] . '</pre></div>';
         } else {
             $content = 'No report found.';
         }
@@ -335,11 +341,12 @@ class BackendModuleController extends AbstractBackendModuleController
      */
     public function getNumberOfRecordsInIndex()
     {
-        $query = 'SELECT COUNT(*) AS number_of_records FROM tx_kesearch_index';
-        $res = $this->databaseConnection->sql_query($query);
-        $row = $this->databaseConnection->sql_fetch_assoc($res);
-
-        return $row['number_of_records'];
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
+        return $queryBuilder
+            ->count('*')
+            ->from('tx_kesearch_index')
+            ->execute()
+            ->fetchColumn(0);
     }
 
     /**
@@ -436,14 +443,22 @@ class BackendModuleController extends AbstractBackendModuleController
      */
     public function getNumberOfRecordsInIndexPerType()
     {
-        $query = 'SELECT type,COUNT(*) AS number_of_records FROM tx_kesearch_index GROUP BY type';
-        $res = $this->databaseConnection->sql_query($query);
-        $results_per_type = array();
-        while ($row = $this->databaseConnection->sql_fetch_assoc($res)) {
-            $results_per_type[$row['type']] = $row['number_of_records'];
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
+        $typeCount = $queryBuilder
+            ->select('type')
+            ->addSelectLiteral(
+                $queryBuilder->expr()->count('tx_kesearch_index.uid', 'count')
+            )
+            ->from('tx_kesearch_index')
+            ->groupBy('tx_kesearch_index.type')
+            ->execute();
+
+        $resultsPerType = [];
+        while ($row = $typeCount->fetch()) {
+            $resultsPerType[$row['type']] = $row['count'];
         }
 
-        return $results_per_type;
+        return $resultsPerType;
     }
 
     /**
@@ -454,11 +469,18 @@ class BackendModuleController extends AbstractBackendModuleController
      */
     public function getLatestRecordDate()
     {
-        $query = 'SELECT tstamp FROM tx_kesearch_index ORDER BY tstamp DESC LIMIT 1';
-        $res = $this->databaseConnection->sql_query($query);
-        $row = $this->databaseConnection->sql_fetch_assoc($res);
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
+        $latestDate = $queryBuilder
+            ->select('tstamp')
+            ->from('tx_kesearch_index')
+            ->orderBy('tstamp', 'desc')
+            ->setMaxResults(1)
+            ->execute();
 
-        return date($GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'], $row['tstamp']) . ' ' . date('H:i', $row['tstamp']);
+        while ($row = $latestDate->fetch()) {
+            return date($GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'], $row['tstamp']) . ' ' . date('H:i', $row['tstamp']);
+        }
+
     }
 
     /*
@@ -466,14 +488,15 @@ class BackendModuleController extends AbstractBackendModuleController
      */
     public function renderIndexTableInformation()
     {
-
         $table = 'tx_kesearch_index';
 
         // get table status
-        $query = 'SHOW TABLE STATUS';
-        $res = $this->databaseConnection->sql_query($query);
+        $databaseConnection = Db::getDatabaseConnection($table);
+        $tableStatusQuery = 'SHOW TABLE STATUS';
+        $tableStatusRows = $databaseConnection->fetchAll($tableStatusQuery);
         $content = '';
-        while ($row = $this->databaseConnection->sql_fetch_assoc($res)) {
+
+        foreach ($tableStatusRows as $row) {
             if ($row['Name'] == $table) {
                 $dataLength = $this->formatFilesize($row['Data_length']);
                 $indexLength = $this->formatFilesize($row['Index_length']);
@@ -530,17 +553,21 @@ class BackendModuleController extends AbstractBackendModuleController
      */
     public function getIndexedContent($pageUid)
     {
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
+        $contentRows = $queryBuilder
+            ->select('*')
+            ->from('tx_kesearch_index')
+            ->where(
+                $queryBuilder->expr()->eq('type', $queryBuilder->createNamedParameter('page')),
+                $queryBuilder->expr()->eq('targetpid', intval($pageUid))
+            )
+            ->orWhere(
+                $queryBuilder->expr()->neq('type', $queryBuilder->createNamedParameter('page')),
+                $queryBuilder->expr()->eq('pid', intval($pageUid))
+            )
+            ->execute();
 
-        $fields = '*';
-        $table = 'tx_kesearch_index';
-        $where = '(type="page" AND targetpid="' . intval($pageUid) . '")  ';
-        $where .= 'OR (type<>"page" AND pid="' . intval($pageUid) . '")  ';
-        $where .= BackendUtility::BEenableFields($table, $inv = 0);
-        $where .= BackendUtility::deleteClause($table, $inv = 0);
-        $res = $this->databaseConnection->exec_SELECTquery($fields, $table, $where);
-        $content = '';
-
-        while ($row = $this->databaseConnection->sql_fetch_assoc($res)) {
+        while ($row = $contentRows->fetch()) {
             // build tag table
             $tagTable = '<div class="tags" >';
             $tags = GeneralUtility::trimExplode(',', $row['tags'], true);
@@ -629,17 +656,23 @@ class BackendModuleController extends AbstractBackendModuleController
 
         // get data from sysfolder or from single page?
         $isSysFolder = $this->checkSysfolder();
-        $pidWhere = $isSysFolder ? ' AND pid=' . intval($pageUid) . ' ' : ' AND pageid=' . intval($pageUid) . ' ';
 
         // get languages
-        $fields = 'language';
-        $table = 'tx_kesearch_stat_word';
-        $where = 'tstamp > ' . $timestampStart . ' ' . $pidWhere;
-        $groupBy = 'language';
-        $languageResult = $this->databaseConnection->exec_SELECTquery($fields, $table, $where, $groupBy);
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_stat_word');
+        $queryBuilder->getRestrictions()->removeAll();
+        $languageResult = $queryBuilder
+            ->select('language')
+            ->from('tx_kesearch_stat_word')
+            ->where(
+                $queryBuilder->expr()->gt('tstamp', $timestampStart),
+                $queryBuilder->expr()->eq($isSysFolder ? 'pid' : 'pageid', intval($pageUid))
+            )
+            ->groupBy('language')
+            ->execute()
+            ->fetchAll();
 
         $content = '';
-        if (!$this->databaseConnection->sql_num_rows($languageResult)) {
+        if (!count($languageResult)) {
             $content .=
                 '<div class="alert alert-info">'
                 . 'No statistic data found! Please select the sysfolder where your index is stored or the page '
@@ -648,7 +681,7 @@ class BackendModuleController extends AbstractBackendModuleController
             return $content;
         }
 
-        while (($languageRow = $this->databaseConnection->sql_fetch_assoc($languageResult))) {
+        foreach($languageResult as $languageRow) {
             $content .= '<h1 style="clear:left; padding-top:1em;">Language ' . $languageRow['language'] . '</h1>';
             if ($isSysFolder) {
                 $content .= $this->getAndRenderStatisticTable(
@@ -688,21 +721,25 @@ class BackendModuleController extends AbstractBackendModuleController
         $content = '<div style="width=50%; float:left; margin-right:1em;">';
         $content .= '<h2 style="margin:0em;">' . $tableCol . 's</h2>';
 
-        $rows = '';
-
         // get statistic data from db
-        $fields = 'count(' . $tableCol . ') as num, ' . $tableCol;
-        $where = 'tstamp > ' . $timestampStart . ' AND language=' . $language . ' ' . $pidWhere;
-        $groupBy = $tableCol . ' HAVING count(' . $tableCol . ')>0';
-        $orderBy = 'num desc';
-        $limit = '';
-        $res = $this->databaseConnection->exec_SELECTquery($fields, $table, $where, $groupBy, $orderBy, $limit);
-        $numResults = $this->databaseConnection->sql_num_rows($res);
+        $queryBuilder = Db::getQueryBuilder($table);
+        $queryBuilder->getRestrictions()->removeAll();
+        $statisticData = $queryBuilder
+            ->add('select', 'count(' . $tableCol . ') as num, ' . $tableCol)
+            ->from($table)
+            ->add('where', 'tstamp > ' . $timestampStart . ' AND language=' . $language . ' ' . $pidWhere)
+            ->add('groupBy', $tableCol . ' HAVING count(' . $tableCol . ')>0')
+            ->add('orderBy', 'num desc')
+            ->execute()
+            ->fetchAll();
+
+        $numResults = count($statisticData);
 
         // get statistic
         $i = 1;
+        $rows = '';
         if ($numResults) {
-            while ($row = $this->databaseConnection->sql_fetch_assoc($res)) {
+            foreach ($statisticData as $row) {
                 $cssClass = ($i % 2 == 0) ? 'even' : 'odd';
                 $rows .= '<tr>';
                 $rows .= '	<td class="' . $cssClass . '">' . $row[$tableCol] . '</td>';
@@ -733,18 +770,18 @@ class BackendModuleController extends AbstractBackendModuleController
      */
     public function checkSysfolder()
     {
-        $fields = 'doktype';
-        $table = 'pages';
-        $where = 'uid="' . $this->id . '" ';
-        $where .= BackendUtility::BEenableFields($table);
-        $where .= BackendUtility::deleteClause($table);
-        $res = $this->databaseConnection->exec_SELECTquery($fields, $table, $where, '', '', '1');
-        $row = $this->databaseConnection->sql_fetch_assoc($res);
-        if ($row['doktype'] == 254) {
-            return true;
-        } else {
-            return false;
-        }
+        $queryBuilder = Db::getQueryBuilder('pages');
+        $page = $queryBuilder
+            ->select('doktype')
+            ->from('pages')
+            ->where(
+                $queryBuilder->expr()->eq('uid', intval($this->id))
+            )
+            ->setMaxResults(1)
+            ->execute()
+            ->fetch(0);
+
+        return $page['doktype'] == 254 ? true : false;
     }
 
     /**
