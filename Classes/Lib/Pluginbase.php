@@ -25,6 +25,7 @@ use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use \TYPO3\CMS\Core\Utility\HttpUtility;
+use TYPO3\CMS\Frontend\Page\PageRepository;
 
 /**
  * Parent class for plugins pi1 and pi2
@@ -541,8 +542,8 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                 // Once one filter option has been selected, don't display the
                 // others anymore since this leads to a strange behaviour (options are
                 // only displayed if they have BOTH tags: the selected and the other filter option.
-                if ((!count($filter['selectedOptions'])
-                        || in_array($option['uid'], $filter['selectedOptions'])
+                if (($filter['selectedOptions'] === null
+                    || in_array($option['uid'], $filter['selectedOptions'])
                     ) && $this->filters->checkIfTagMatchesRecords($option['tag'])
                 ) {
                     // build link which selects this option and keeps all the other selected filters
@@ -609,7 +610,10 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
 
     /**
      * get all filters configured in FlexForm
+     *
      * @return array Array with filter UIDs
+     *
+     * @Todo remove - no usage
      */
     public function getFiltersFromFlexform()
     {
@@ -622,6 +626,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                 . ')';
             $where .= $this->cObj->enableFields($table);
             $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
+
             while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
                 // Perform overlay on each record
                 if (is_array($row) && $GLOBALS['TSFE']->sys_language_contentOL) {
@@ -644,6 +649,8 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
      * @param boolean $returnSortedByTitle Default: Sort by the exact order as they appear in
      * optionlist. This is usefull if the customer want's the same ordering as in the filterRecord (inline)
      * @return array Filteroptions
+     *
+     * @Todo remove, no usage
      */
     public function getFilterOptions($optionList, $returnSortedByTitle = false)
     {
@@ -1248,7 +1255,11 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                 'tagsagainst' => $tagsAgainst,
                 'language' => $GLOBALS['TSFE']->sys_language_uid,
             );
-            $GLOBALS['TYPO3_DB']->exec_INSERTquery($table, $fields_values);
+            $queryBuilder = Db::getQueryBuilder($table);
+            $queryBuilder
+                ->insert($table)
+                ->values($fields_values)
+                ->execute();
         }
 
         // count single words
@@ -1259,17 +1270,20 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                 $searchWord = strtolower($searchWord);
             }
             $table = 'tx_kesearch_stat_word';
-            $timestamp = time();
             if (!empty($searchWord)) {
+                $queryBuilder = Db::getQueryBuilder($table);
                 $fields_values = array(
                     'pid' => $this->firstStartingPoint,
                     'word' => $searchWord,
-                    'tstamp' => $timestamp,
+                    'tstamp' => time(),
                     'pageid' => $GLOBALS['TSFE']->id,
                     'resultsfound' => $hits ? 1 : 0,
                     'language' => $GLOBALS['TSFE']->sys_language_uid,
                 );
-                $GLOBALS['TYPO3_DB']->exec_INSERTquery($table, $fields_values);
+                $queryBuilder
+                    ->insert($table)
+                    ->values($fields_values)
+                    ->execute();
             }
         }
     }
@@ -1289,18 +1303,27 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             $preselectedArray = GeneralUtility::trimExplode(',', $this->conf['preselected_filters'], true);
             foreach ($preselectedArray as $option) {
                 $option = intval($option);
-                $fields = '
-					tx_kesearch_filters.uid as filteruid,
-					tx_kesearch_filteroptions.uid as optionuid,
-					tx_kesearch_filteroptions.tag
-				';
-                $table = 'tx_kesearch_filters, tx_kesearch_filteroptions';
-                $where = $GLOBALS['TYPO3_DB']->listQuery('tx_kesearch_filters.options', $option, 'tx_kesearch_filters');
-                $where .= ' AND tx_kesearch_filteroptions.uid = ' . $option;
-                $where .= $this->cObj->enableFields('tx_kesearch_filters');
-                $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
-                while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-                    //$this->preselectedFilter[$row['filteruid']][] = $row['tag'];
+                $queryBuilder = Db::getQueryBuilder('tx_kesearch_filters');
+                $pageRepository = GeneralUtility::makeInstance(PageRepository::class);
+                $filterRows = $queryBuilder
+                    ->add(
+                        'select',
+                        '`tx_kesearch_filters`.`uid` AS filteruid, `tx_kesearch_filteroptions`.`uid` AS optionuid, `tx_kesearch_filteroptions`.`tag`'
+                    )
+                    ->from('tx_kesearch_filters')
+                    ->from('tx_kesearch_filteroptions')
+                    ->add(
+                        'where',
+                        'FIND_IN_SET("' . $option . '",tx_kesearch_filters.options)'
+                        . ' AND `tx_kesearch_filteroptions`.`uid` = ' . $option
+                        . $pageRepository->enableFields('tx_kesearch_filters')
+                        . $pageRepository->enableFields('tx_kesearch_filteroptions')
+                    )
+                    ->execute()
+                    ->fetchAll();
+
+                // while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+                foreach ($filterRows as $row) {
                     $this->preselectedFilter[$row['filteruid']][$row['optionuid']] = $row['tag'];
                 }
             }
@@ -1344,12 +1367,17 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
      */
     public function getCalEventEnddate($eventUid)
     {
-        $fields = 'end_date, end_time, allday, start_date';
-        $table = 'tx_cal_event';
-        $where = 'uid = ' . intval($eventUid);
-        $where .= $this->cObj->enableFields($table);
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
-        $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+        $queryBuilder = Db::getQueryBuilder($table);
+        $row = $queryBuilder
+            ->select('end_date, end_time, allday, start_date')
+            ->from($table)
+            ->where(
+                $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter(intval($eventUid), \PDO::PARAM_INT))
+            )
+            ->setMaxResults(1)
+            ->execute()
+            ->fetch(0);
+
         return array(
             'end_timestamp' => strtotime($row['end_date']) + $row['end_time'],
             'end_date' => strtotime($row['end_date']),
