@@ -107,7 +107,6 @@ class File extends IndexerBase
      */
     public function getFilesFromFal(&$files, $directoryArray)
     {
-
         foreach ($directoryArray as $directory) {
             $folder = $this->storage->getFolder($directory);
 
@@ -220,7 +219,7 @@ class File extends IndexerBase
     {
         // we can continue only when given file is really file and not a directory
         if ($this->fileInfo->getIsFile()) {
-            $className = 'tx_kesearch_indexer_filetypes_' . $this->fileInfo->getExtension();
+            $className = 'TeaminmediasPluswerk\KeSearch\Indexer\Filetypes\\' . ucfirst($this->fileInfo->getExtension());
 
             // check if class exists
             if (class_exists($className)) {
