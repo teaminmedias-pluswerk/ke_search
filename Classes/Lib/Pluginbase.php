@@ -542,7 +542,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                 // Once one filter option has been selected, don't display the
                 // others anymore since this leads to a strange behaviour (options are
                 // only displayed if they have BOTH tags: the selected and the other filter option.
-                if (($filter['selectedOptions'] === null
+                if ((!count($filter['selectedOptions'])
                     || in_array($option['uid'], $filter['selectedOptions'])
                     ) && $this->filters->checkIfTagMatchesRecords($option['tag'])
                 ) {
