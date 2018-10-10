@@ -22,6 +22,7 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
 use TYPO3\CMS\Core\Database\QueryGenerator;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Core\Messaging\FlashMessageRendererResolver;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Backend\Utility\BackendUtility;
 
@@ -278,22 +279,18 @@ class IndexerBase
     public function showErrors()
     {
         if (count($this->errors)) {
-            $messages = array();
-
+            $messages = [];
             foreach ($this->errors as $errorMessage) {
                 /** @var \TYPO3\CMS\Core\Messaging\FlashMessage $message */
-                $message = GeneralUtility::makeInstance(
+                $messages[] = GeneralUtility::makeInstance(
                     FlashMessage::class,
                     $errorMessage,
                     '',
                     \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR,
                     false
                 );
-
-                $messages[] = $this->renderFlashMessage($message);
             }
-
-            return implode('<br>', $messages);
+            return $this->renderFlashMessages($messages);
         } else {
             return '';
         }
@@ -302,31 +299,14 @@ class IndexerBase
     /**
      * Renders the flash message.
      *
-     * @param \TYPO3\CMS\Core\Messaging\FlashMessage $flashMessage
+     * @param array $flashMessages
      * @return string The flash message as HTML.
      */
-    protected function renderFlashMessage(\TYPO3\CMS\Core\Messaging\FlashMessage $flashMessage)
+    protected function renderFlashMessages($flashMessages)
     {
-        $title = '';
-        if (!empty($this->title)) {
-            $title = '<h4 class="alert-title">' . $flashMessage->getTitle() . '</h4>';
-        }
-        $message = '
-			<div class="alert ' . $flashMessage->getClass() . '">
-				<div class="media">
-					<div class="media-left">
-						<span class="fa-stack fa-lg">
-							<i class="fa fa-circle fa-stack-2x"></i>
-							<i class="fa fa-' . $flashMessage->getIconName() . ' fa-stack-1x"></i>
-						</span>
-					</div>
-					<div class="media-body">
-						' . $title . '
-						<div class="alert-message">' . $flashMessage->getMessage() . '</div>
-					</div>
-				</div>
-			</div>';
-        return $message;
+        return GeneralUtility::makeInstance(FlashMessageRendererResolver::class)
+            ->resolve()
+            ->render($flashMessages);
     }
 
     /**
