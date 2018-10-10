@@ -20,7 +20,6 @@ namespace TeaminmediasPluswerk\KeSearch\Lib;
  ***************************************************************/
 
 use TYPO3\CMS\Core\Resource\ResourceFactory;
-use \TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 /**
@@ -115,22 +114,25 @@ class SearchHelper
         );
 
         if ($uid && $table) {
-            $enableFields = BackendUtility::BEenableFields('sys_category')
-                . BackendUtility::deleteClause('sys_category');
-            $resCat = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
-                'sys_category.uid, sys_category.title',
-                'sys_category',
-                'sys_category_record_mm',
-                $table,
-                ' AND ' . $table . '.uid = ' . $uid .
-                ' AND sys_category_record_mm.tablenames = "' . $table . '"' .
-                $enableFields,
-                '',
-                'sys_category_record_mm.sorting'
-            );
+            $queryBuilder = Db::getQueryBuilder($table);
+            $categoryRecords = $queryBuilder
+                ->add('select', '`sys_category`.`uid`, `sys_category`.`title`')
+                ->from('sys_category')
+                ->from('sys_category_record_mm')
+                ->from($table)
+                ->add(
+                    'where',
+                    '`sys_category`.`uid` = `sys_category_record_mm`.`uid_local`'
+                    . ' AND `' . $table . '`.`uid` = `sys_category_record_mm`.`uid_foreign`'
+                    . ' AND `' . $table . '`.`uid` = ' . $uid
+                    . ' AND `sys_category_record_mm`.`tablenames` ="' . $table . '"'
+                )
+                ->add('orderBy', '`sys_category_record_mm`.`sorting`')
+                ->execute()
+                ->fetchAll();
 
-            if ($GLOBALS['TYPO3_DB']->sql_num_rows($resCat)) {
-                while (($cat = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resCat))) {
+            if (!empty($categoryRecords)) {
+                foreach($categoryRecords as $cat) {
                     $categoryData['uid_list'][] = $cat['uid'];
                     $categoryData['title_list'][] = $cat['title'];
                 }
