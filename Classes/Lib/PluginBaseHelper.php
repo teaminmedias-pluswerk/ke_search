@@ -2,7 +2,6 @@
 namespace TeaminmediasPluswerk\KeSearch\Lib;
 
 use TeaminmediasPluswerk\KeSearch\Plugins\txkesearchpi1;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /***************************************************************
  *  Copyright notice
@@ -52,13 +51,17 @@ class PluginBaseHelper
         // if loadFlexformsFromOtherCE is set
         // try to get startingPoint of given page
         if ($uid = intval($this->pObj->conf['loadFlexformsFromOtherCE'])) {
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                'pages, recursive',
-                'tt_content',
-                'uid = ' . $uid
-            );
-            if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
-                $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
+            $queryBuilder = Db::getQueryBuilder('tt_content');
+            $queryBuilder->getRestrictions()->removeAll();
+            $pageResult = $queryBuilder
+                ->select('pages', 'recursive')
+                ->from('tt_content')
+                ->where(
+                    $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($uid, \PDO::PARAM_INT))
+                )
+                ->execute()
+                ->fetch(0);
+            if (is_array($pageResult) && count($pageResult)) {
                 $startingpoint['pages'] = $row['pages'];
                 $startingpoint['recursive'] = $row['recursive'];
             }
