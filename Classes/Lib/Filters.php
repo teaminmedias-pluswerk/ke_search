@@ -194,18 +194,19 @@ class Filters
         $where .= ' AND find_in_set(uid, "' . $GLOBALS['TYPO3_DB']->quoteStr($filterUids, 'tx_kesearch_filters') . '")';
 
         $queryBuilder = Db::getQueryBuilder('tx_kesearch_filters');
-        $filterRows = $queryBuilder
+        $filterQuery = $queryBuilder
             ->select('*')
             ->from($table)
             ->add('where', $where)
             ->add('orderBy', 'find_in_set(uid, "' . $GLOBALS['TYPO3_DB']->quoteStr($filterUids, 'tx_kesearch_filters') . '")')
-            ->execute()
-            ->fetchAll();
+            ->execute();
 
-        if (!is_array($filterRows)) {
-            return [];
+        $filterRows = [];
+        while ($row = $filterQuery->fetch()) {
+            $filterRows[$row['uid']] = $row;
         }
-        $rows = $this->languageOverlay($filterRows, $table);
+
+        $filterRows = $this->languageOverlay($filterRows, $table);
         return $this->addOptionsToFilters($filterRows);
     }
 
@@ -226,13 +227,17 @@ class Filters
         $where .= ' AND pid in (' . $GLOBALS['TYPO3_DB']->quoteStr($this->startingPoints, $table) . ')';
 
         $queryBuilder = Db::getQueryBuilder('tx_kesearch_filteroptions');
-        $optionsRows = $queryBuilder
+        $optionsQuery = $queryBuilder
             ->select('*')
             ->from($table)
             ->add('where', $where)
             ->add('orderBy', 'FIND_IN_SET(uid, "' . $optionUids . '")')
-            ->execute()
-            ->fetchAll();
+            ->execute();
+
+        $optionsRows = [];
+        while ($row = $optionsQuery->fetch()) {
+            $optionsRows[$row['uid']] = $row;
+        }
 
         return $this->languageOverlay(
             $optionsRows,
@@ -273,9 +278,9 @@ class Filters
     {
 
         // see https://github.com/teaminmedias-pluswerk/ke_search/issues/128
-        $LanguageMode = $GLOBALS['TSFE']->sys_language_content ;
+        $LanguageMode = $GLOBALS['TSFE']->sys_language_content;
         if (\TYPO3\CMS\Core\Utility\GeneralUtility::hideIfNotTranslated($GLOBALS['TSFE']->page['l18n_cfg'])) {
-            $LanguageMode = 'hideNonTranslated' ;
+            $LanguageMode = 'hideNonTranslated';
         }
         if (is_array($rows) && count($rows)) {
             foreach ($rows as $key => $row) {
@@ -289,7 +294,7 @@ class Filters
 
                     if (is_array($row)) {
                         if ($table == "tx_kesearch_filters") {
-                            $row['rendertype'] = $rows[$key]['rendertype'] ;
+                            $row['rendertype'] = $rows[$key]['rendertype'];
                         }
                         $rows[$key] = $row;
                     } else {
