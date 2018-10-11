@@ -189,16 +189,17 @@ class Filters
             return array();
         }
 
+        // @Todo quotes ($this->startingPoints, filterUids)
         $table = 'tx_kesearch_filters';
-        $where = 'pid in (' . $GLOBALS['TYPO3_DB']->quoteStr($this->startingPoints, $table) . ')';
-        $where .= ' AND find_in_set(uid, "' . $GLOBALS['TYPO3_DB']->quoteStr($filterUids, 'tx_kesearch_filters') . '")';
+        $where = 'pid in (' . $this->startingPoints . ')';
+        $where .= ' AND find_in_set(uid, "' . $filterUids . '")';
 
         $queryBuilder = Db::getQueryBuilder('tx_kesearch_filters');
         $filterQuery = $queryBuilder
             ->select('*')
             ->from($table)
             ->add('where', $where)
-            ->add('orderBy', 'find_in_set(uid, "' . $GLOBALS['TYPO3_DB']->quoteStr($filterUids, 'tx_kesearch_filters') . '")')
+            ->add('orderBy', 'find_in_set(uid, "' . $filterUids . '")')
             ->execute();
 
         $filterRows = [];
@@ -222,9 +223,10 @@ class Filters
             return array();
         }
 
+        // @Todo quotes ($optionsUids, $this->startingPoints)
         $table = 'tx_kesearch_filteroptions';
-        $where = 'FIND_IN_SET(uid, "' . $GLOBALS['TYPO3_DB']->quoteStr($optionUids, $table) . '")';
-        $where .= ' AND pid in (' . $GLOBALS['TYPO3_DB']->quoteStr($this->startingPoints, $table) . ')';
+        $where = 'FIND_IN_SET(uid, "' . $optionUids . '")';
+        $where .= ' AND pid in (' . $this->startingPoints . ')';
 
         $queryBuilder = Db::getQueryBuilder('tx_kesearch_filteroptions');
         $optionsQuery = $queryBuilder
