@@ -2,6 +2,7 @@
 namespace TeaminmediasPluswerk\KeSearch\Lib;
 
 use TeaminmediasPluswerk\KeSearch\Plugins\SearchboxPlugin;
+use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -181,8 +182,10 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
 
         // add fe_groups to query
         $queryForSphinx .= ' @fe_group _group_NULL | _group_0';
-        if (!empty($GLOBALS['TSFE']->gr_list)) {
-            $feGroups = GeneralUtility::trimExplode(',', $GLOBALS['TSFE']->gr_list, 1);
+
+        $context = GeneralUtility::makeInstance(Context::class);
+        $feGroups = $context->getPropertyFromAspect('frontend.user', 'groupIds');
+        if (count($feGroups)) {
             foreach ($feGroups as $key => $group) {
                 $intval_positive_group = MathUtility::convertToPositiveInteger($group);
                 if ($intval_positive_group) {
