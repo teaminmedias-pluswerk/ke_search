@@ -142,8 +142,11 @@ class Searchphrase
                     }
                 }
 
-                // make the words save for the database
-                $searchParts[$key] = $GLOBALS['TYPO3_DB']->quoteStr($searchParts[$key], 'tx_kesearch_index');
+                // make the words safe for the database
+                // Todo quotes
+//                $searchParts[$key] = Db::getQueryBuilder('tx_kesearch_index')
+//                    ->quote($searchParts[$key], \PDO::PARAM_STR);
+
             }
             return array_values($searchParts);
         }
@@ -175,8 +178,9 @@ class Searchphrase
             // selected in the frontend
             if (!isset($this->pObj->piVars['filter'][$key]) && !is_array($this->pObj->piVars['filter'][$key])) {
                 // Quote the tags for use in database query
+                $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
                 foreach ($filterTags as $k => $v) {
-                    $filterTags[$k] = $GLOBALS['TYPO3_DB']->quoteStr($v, 'tx_kesearch_index');
+                    $filterTags[$k] = $queryBuilder->quote($v);
                 }
                 // if we are in checkbox mode
                 if (count($this->pObj->preselectedFilter[$key]) >= 2) {
@@ -203,6 +207,7 @@ class Searchphrase
         // add filter options selected in the frontend
         $tagChar = $this->pObj->extConf['prePostTagChar'];
         if (is_array($this->pObj->piVars['filter'])) {
+            $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
             foreach ($this->pObj->piVars['filter'] as $key => $tag) {
                 if (is_array($this->pObj->piVars['filter'][$key])) {
                     foreach ($this->pObj->piVars['filter'][$key] as $subkey => $subtag) {
@@ -211,7 +216,7 @@ class Searchphrase
                             // Don't add a "+", because we are here in checkbox mode. It's a OR.
                             $tagsAgainst[$key] .= ' "'
                                 . $tagChar
-                                . $GLOBALS['TYPO3_DB']->quoteStr($subtag, 'tx_kesearch_index')
+                                . $queryBuilder->quote($subtag)
                                 . $tagChar
                                 . '"';
                         }
@@ -221,7 +226,7 @@ class Searchphrase
                     if (!empty($tag) && strstr($tagsAgainst[$key], $subtag) === false) {
                         $tagsAgainst[$key] .= ' +"'
                             . $tagChar
-                            . $GLOBALS['TYPO3_DB']->quoteStr($tag, 'tx_kesearch_index')
+                            . $queryBuilder->quote($tag)
                             . $tagChar
                             . '"';
                     }
