@@ -25,6 +25,7 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer\Filetypes;
  * ************************************************************* */
 
 use TeaminmediasPluswerk\KeSearch\Indexer\Types\File;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\CommandUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -47,13 +48,13 @@ class Ppt extends File implements FileIndexerInterface
     public function __construct()
     {
         // get extension configuration of ke_search
-        $this->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ke_search']);
+        $this->extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ke_search'];
 
         // check if path to catppt is correct
         if ($this->extConf['pathCatdoc']) {
             $pathCatdoc = rtrim($this->extConf['pathCatdoc'], '/') . '/';
 
-            $exe = (TYPO3_OS == 'WIN') ? '.exe' : '';
+            $exe = Environment::isWindows() ? '.exe' : '';
             if (is_executable($pathCatdoc . 'catppt' . $exe)) {
                 $this->app['catppt'] = $pathCatdoc . 'catppt' . $exe;
                 $this->isAppArraySet = true;
