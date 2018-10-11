@@ -19,7 +19,10 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
+use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
+use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
 use TYPO3\CMS\Core\Database\QueryGenerator;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageRendererResolver;
@@ -115,23 +118,40 @@ class IndexerBase
      */
     public function getPageRecords(array $uids, $whereClause = '', $table = 'pages', $fields = 'pages.*')
     {
-        $where = 'pages.uid IN (' . implode(',', $uids) . ') ';
+
+        $queryBuilder = Db::getQueryBuilder();
+        $where = [];
+        $where[] = $queryBuilder->expr()->in('pages.uid', implode(',', $uids));
         // index only pages which are searchable
         // index only page which are not hidden
-        $where .= ' AND pages.no_search <> 1 AND pages.hidden=0 AND pages.deleted=0';
-
-        // additional where clause
-        $where .= $whereClause;
-
-        $pages = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows(
-            $fields,
-            $table,
-            $where,
-            '',
-            '',
-            '',
-            'uid'
+        $where[] = $queryBuilder->expr()->neq(
+            'pages.no_search',
+            $queryBuilder->createNamedParameter(1,\PDO::PARAM_INT)
         );
+        $where[] = $queryBuilder->expr()->eq(
+            'pages.hidden',
+            $queryBuilder->createNamedParameter(0,\PDO::PARAM_INT)
+        );
+        $where[] = $queryBuilder->expr()->eq(
+            'pages.deleted',
+            $queryBuilder->createNamedParameter(0,\PDO::PARAM_INT)
+        );
+
+        $tables = GeneralUtility::trimExplode(',',$table);
+        $query = $queryBuilder
+            ->select($fields);
+        foreach ($tables as $table) {
+            $query->from($table);
+        }
+        $query->where(...$where);
+
+        // add additional where clause
+        if ($whereClause) {
+            $query->add('where', $whereClause);
+        }
+
+        $pages = $query->execute()
+            ->fetchAll();
 
         return $pages;
     }
@@ -143,6 +163,7 @@ class IndexerBase
      * @param string $singlePages
      * @param string $table
      * @return array Array containing uids of pageRecords
+     * Todo enable fields
      */
     public function getPidList($startingPointsRecursive = '', $singlePages = '', $table = 'pages')
     {
@@ -172,23 +193,35 @@ class IndexerBase
      */
     public function addTagsToRecords($uids, $pageWhere = '1=1')
     {
+
         $tagChar = $this->pObj->extConf['prePostTagChar'];
 
         // add tags which are defined by page properties
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_filteroptions');
+        $queryBuilder
+            ->getRestrictions()
+            ->removeAll()
+            ->add(GeneralUtility::makeInstance(DeletedRestriction::class))
+            ->add(GeneralUtility::makeInstance(HiddenRestriction::class));
         $fields = 'pages.*, GROUP_CONCAT(CONCAT("'
             . $tagChar
             . '", tx_kesearch_filteroptions.tag, "'
             . $tagChar
             . '")) as tags';
-        $table = 'pages, tx_kesearch_filteroptions';
+
         $where = 'pages.uid IN (' . implode(',', $uids) . ')';
         $where .= ' AND pages.tx_kesearch_tags <> "" ';
         $where .= ' AND FIND_IN_SET(tx_kesearch_filteroptions.uid, pages.tx_kesearch_tags)';
-        $where .= BackendUtility::BEenableFields('tx_kesearch_filteroptions');
-        $where .= BackendUtility::deleteClause('tx_kesearch_filteroptions');
 
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where, 'pages.uid', '', '');
-        while ($row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+        $tagQuery = $queryBuilder
+            ->add('select', $fields)
+            ->from('pages')
+            ->from('tx_kesearch_filteroptions')
+            ->add('where', $where)
+            ->groupBy('pages.uid')
+            ->execute();
+
+        while ($row = $tagQuery->fetch()) {
             $this->pageRecords[$row['uid']]['tags'] = $row['tags'];
         }
 
@@ -198,17 +231,23 @@ class IndexerBase
         }
 
         // add tags which are defined by filteroption records
-        $fields = 'automated_tagging, automated_tagging_exclude, tag';
         $table = 'tx_kesearch_filteroptions';
-        $where = 'automated_tagging <> "" ';
-        $where .= BackendUtility::BEenableFields('tx_kesearch_filteroptions');
-        $where .= BackendUtility::deleteClause('tx_kesearch_filteroptions');
-
-        $rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($fields, $table, $where);
+        $queryBuilder = Db::getQueryBuilder($table);
+        $filterOptionsRows = $queryBuilder
+            ->select('automated_tagging', 'automated_tagging_exclude', 'tag')
+            ->from($table)
+            ->where(
+                $queryBuilder->expr()->neq(
+                    'automated_tagging',
+                    $queryBuilder->quote("", \PDO::PARAM_STR)
+                )
+            )
+            ->execute()
+            ->fetchAll();
 
         $where = $pageWhere . ' AND no_search <> 1 ';
 
-        foreach ($rows as $row) {
+        foreach ($filterOptionsRows as $row) {
             $tempTags = array();
 
             if ($row['automated_tagging_exclude'] > '') {
