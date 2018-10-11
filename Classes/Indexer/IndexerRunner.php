@@ -19,10 +19,11 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Registry;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\DebugUtility;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -143,7 +144,14 @@ class IndexerRunner
         $content .= $this->cleanUpIndex();
 
         // count index records
-        $count = $GLOBALS['TYPO3_DB']->exec_SELECTcountRows('*', 'tx_kesearch_index');
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
+        $queryBuilder->getRestrictions()->removeAll();
+        $count = $queryBuilder
+            ->count('*')
+            ->from('tx_kesearch_index')
+            ->execute()
+            ->fetchColumn(0);
+
         $content .= '<p><b>Index contains ' . $count . ' entries.</b></p>';
 
         // clean up process after indezing to free memory
@@ -240,7 +248,8 @@ class IndexerRunner
         }
 
         // Statement to check if record already exists in db
-        $GLOBALS['TYPO3_DB']->sql_query('PREPARE searchStmt FROM "
+        $databaseConnection = Db::getDatabaseConnection('tx_kesearch_index');
+        $databaseConnection->exec('PREPARE searchStmt FROM "
 			SELECT *
 			FROM tx_kesearch_index
 			WHERE orig_uid = ?
@@ -251,7 +260,8 @@ class IndexerRunner
 		"');
 
         // Statement to update an existing record in indexer table
-        $GLOBALS['TYPO3_DB']->sql_query('PREPARE updateStmt FROM "
+        $databaseConnection = Db::getDatabaseConnection('tx_kesearch_index');
+        $databaseConnection->exec('PREPARE updateStmt FROM "
 			UPDATE tx_kesearch_index
 			SET pid=?,
 			title=?,
@@ -270,7 +280,8 @@ class IndexerRunner
 		"');
 
         // Statement to insert a new records to index table
-        $GLOBALS['TYPO3_DB']->sql_query('PREPARE insertStmt FROM "
+        $databaseConnection = Db::getDatabaseConnection('tx_kesearch_index');
+        $databaseConnection->exec('PREPARE insertStmt FROM "
 			INSERT INTO tx_kesearch_index
 			(pid, title, type, targetpid, content, tags, params, abstract, language,'
             . ' starttime, endtime, fe_group, tstamp, crdate' . $addInsertQueryFields . ')
@@ -281,9 +292,14 @@ class IndexerRunner
         // this speeds up the first indexing process
         // don't use this for updating index table
         // if you activate this for updating 40.000 existing records, indexing process needs 1 hour longer
-        $countIndex = $GLOBALS['TYPO3_DB']->exec_SELECTcountRows('*', 'tx_kesearch_index', '');
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
+        $countIndex = $queryBuilder
+            ->count('*')
+            ->from('tx_kesearch_index')
+            ->execute()
+            ->fetchColumn(0);
         if ($countIndex == 0) {
-            $GLOBALS['TYPO3_DB']->sql_query('ALTER TABLE tx_kesearch_index DISABLE KEYS');
+            Db::getDatabaseConnection('tx_kesearch_index')->exec('ALTER TABLE tx_kesearch_index DISABLE KEYS');
         }
     }
 
@@ -295,11 +311,17 @@ class IndexerRunner
     public function cleanUpProcessAfterIndexing()
     {
         // enable keys (may have been disabled because it was the first indexing)
-        $GLOBALS['TYPO3_DB']->sql_query('ALTER TABLE tx_kesearch_index ENABLE KEYS');
+        Db::getDatabaseConnection('tx_kesearch_index')
+            ->exec('ALTER TABLE tx_kesearch_index ENABLE KEYS');
 
-        $GLOBALS['TYPO3_DB']->sql_query('DEALLOCATE PREPARE searchStmt');
-        $GLOBALS['TYPO3_DB']->sql_query('DEALLOCATE PREPARE updateStmt');
-        $GLOBALS['TYPO3_DB']->sql_query('DEALLOCATE PREPARE insertStmt');
+        Db::getDatabaseConnection('tx_kesearch_index')
+            ->exec('DEALLOCATE PREPARE searchStmt');
+
+        Db::getDatabaseConnection('tx_kesearch_index')
+            ->exec('DEALLOCATE PREPARE updateStmt');
+
+        Db::getDatabaseConnection('tx_kesearch_index')
+            ->exec('DEALLOCATE PREPARE insertStmt');
 
         // remove all entries from ke_search registry
         $this->registry->removeAllByNamespace('tx_kesearch');
@@ -317,7 +339,14 @@ class IndexerRunner
         $table = 'tx_kesearch_index';
 
         // select all index records older than the beginning of the indexing process
-        $where = 'tstamp < ' . $this->registry->get('tx_kesearch', 'startTimeOfIndexer');
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
+        $where = $queryBuilder->expr()->lt(
+            'tstamp',
+            $queryBuilder->quote(
+                $this->registry->get('tx_kesearch','startTimeOfIndexer'),
+                \PDO::PARAM_INT
+            )
+        );
 
         // hook for cleanup
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['cleanup'])) {
@@ -328,8 +357,17 @@ class IndexerRunner
         }
 
         // count and delete old index records
-        $count = $GLOBALS['TYPO3_DB']->exec_SELECTcountRows('*', $table, $where);
-        $GLOBALS['TYPO3_DB']->exec_DELETEquery($table, $where);
+        $count = $queryBuilder
+            ->count('*')
+            ->from($table)
+            ->where($where)
+            ->execute()
+            ->fetchColumn(0);
+
+        $queryBuilder
+            ->delete($table)
+            ->where($where)
+            ->execute();
 
         $content .= '<p><b>Index cleanup:</b><br />' . "\n";
         $content .= $count . ' entries deleted.<br />' . "\n";
@@ -514,12 +552,14 @@ class IndexerRunner
             $where = 'uid=' . intval($this->currentRow['uid']);
             unset($fieldValues['crdate']);
             if ($debugOnly) { // do not process - just debug query
-                \TYPO3\CMS\Core\Utility\DebugUtility::debug(
-                    $GLOBALS['TYPO3_DB']->UPDATEquery(
-                        $table,
-                        $where,
-                        $fieldValues
-                    ),
+                DebugUtility::debug(
+                    Db::getDatabaseConnection($table)
+                        ->update(
+                            $table,
+                            $fieldValues,
+                            ['uid' => intval($this->currentRow['uid'])]
+                        ),
+                    1,
                     1
                 );
             } else { // process storing of index record and return true
@@ -528,16 +568,16 @@ class IndexerRunner
             }
         } else { // insert new record
             if ($debugOnly) { // do not process - just debug query
-                \TYPO3\CMS\Core\Utility\DebugUtility::debug(
-                    $GLOBALS['TYPO3_DB']->INSERTquery(
-                        $table,
-                        $fieldValues,
-                        false
-                    )
+                DebugUtility::debug(
+                    Db::getDatabaseConnection()
+                        ->insert(
+                            $table,
+                            $fieldValues
+                        )
                 );
             } else { // process storing of index record and return uid
                 $this->insertRecordIntoIndex($fieldValues);
-                return $GLOBALS['TYPO3_DB']->sql_insert_id();
+                return (int)Db::getDatabaseConnection('tx_kesearch_index')->lastInsertId($table);
             }
         }
         return 0;
@@ -549,24 +589,25 @@ class IndexerRunner
      */
     public function insertRecordIntoIndex($fieldValues)
     {
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
         $addQueryPartFor = $this->getQueryPartForAdditionalFields($fieldValues);
 
         $queryArray = array();
         $queryArray['set'] = 'SET
-			@pid = ' . $fieldValues['pid'] . ',
-			@title = ' . $fieldValues['title'] . ',
-			@type = ' . $fieldValues['type'] . ',
-			@targetpid = ' . $fieldValues['targetpid'] . ',
-			@content = ' . $fieldValues['content'] . ',
-			@tags = ' . $fieldValues['tags'] . ',
-			@params = ' . $fieldValues['params'] . ',
-			@abstract = ' . $fieldValues['abstract'] . ',
-			@language = ' . $fieldValues['language'] . ',
-			@starttime = ' . $fieldValues['starttime'] . ',
-			@endtime = ' . $fieldValues['endtime'] . ',
-			@fe_group = ' . $fieldValues['fe_group'] . ',
-			@tstamp = ' . $fieldValues['tstamp'] . ',
-			@crdate = ' . $fieldValues['crdate']
+			@pid = ' . $queryBuilder->quote($fieldValues['pid'], \PDO::PARAM_INT) . ',
+			@title = ' . $queryBuilder->quote($fieldValues['title'], \PDO::PARAM_STR) . ',
+			@type = ' . $queryBuilder->quote($fieldValues['type'], \PDO::PARAM_STR) . ',
+			@targetpid = ' . $queryBuilder->quote($fieldValues['targetpid'], \PDO::PARAM_INT) . ',
+			@content = ' . $queryBuilder->quote($fieldValues['content'], \PDO::PARAM_STR) . ',
+			@tags = ' . $queryBuilder->quote($fieldValues['tags'], \PDO::PARAM_STR) . ',
+			@params = ' . $queryBuilder->quote($fieldValues['params'], \PDO::PARAM_STR) . ',
+			@abstract = ' . $queryBuilder->quote($fieldValues['abstract'], \PDO::PARAM_STR) . ',
+			@language = ' . $queryBuilder->quote($fieldValues['language'], \PDO::PARAM_INT) . ',
+			@starttime = ' . $queryBuilder->quote($fieldValues['starttime'], \PDO::PARAM_INT) . ',
+			@endtime = ' . $queryBuilder->quote($fieldValues['endtime'], \PDO::PARAM_INT) . ',
+			@fe_group = ' . $queryBuilder->quote($fieldValues['fe_group'], \PDO::PARAM_INT) . ',
+			@tstamp = ' . $queryBuilder->quote($fieldValues['tstamp'], \PDO::PARAM_INT) . ',
+			@crdate = ' . $queryBuilder->quote($fieldValues['crdate'], \PDO::PARAM_INT)
             . $addQueryPartFor['set'] . '
 		;';
 
@@ -587,8 +628,8 @@ class IndexerRunner
             . '@crdate'
             . $addQueryPartFor['execute'] . ';';
 
-        $GLOBALS['TYPO3_DB']->sql_query($queryArray['set']);
-        $GLOBALS['TYPO3_DB']->sql_query($queryArray['execute']);
+        Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['set']);
+        Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['execute']);
     }
 
     /**
@@ -597,23 +638,24 @@ class IndexerRunner
      */
     public function updateRecordInIndex($fieldValues)
     {
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
         $addQueryPartFor = $this->getQueryPartForAdditionalFields($fieldValues);
 
         $queryArray = array();
         $queryArray['set'] = 'SET
-			@pid = ' . $fieldValues['pid'] . ',
-			@title = ' . $fieldValues['title'] . ',
-			@type = ' . $fieldValues['type'] . ',
-			@targetpid = ' . $fieldValues['targetpid'] . ',
-			@content = ' . $fieldValues['content'] . ',
-			@tags = ' . $fieldValues['tags'] . ',
-			@params = ' . $fieldValues['params'] . ',
-			@abstract = ' . $fieldValues['abstract'] . ',
-			@language = ' . $fieldValues['language'] . ',
-			@starttime = ' . $fieldValues['starttime'] . ',
-			@endtime = ' . $fieldValues['endtime'] . ',
-			@fe_group = ' . $fieldValues['fe_group'] . ',
-			@tstamp = ' . $fieldValues['tstamp'] .
+			@pid = ' . $queryBuilder->quote($fieldValues['pid'], \PDO::PARAM_INT) . ',
+			@title = ' . $queryBuilder->quote($fieldValues['title'], \PDO::PARAM_STR) . ',
+			@type = ' . $queryBuilder->quote($fieldValues['type'], \PDO::PARAM_STR) . ',
+			@targetpid = ' . $queryBuilder->quote($fieldValues['targetpid'], \PDO::PARAM_INT) . ',
+			@content = ' . $queryBuilder->quote($fieldValues['content'], \PDO::PARAM_STR) . ',
+			@tags = ' . $queryBuilder->quote($fieldValues['tags'], \PDO::PARAM_STR) . ',
+			@params = ' . $queryBuilder->quote($fieldValues['params'], \PDO::PARAM_STR) . ',
+			@abstract = ' . $queryBuilder->quote($fieldValues['abstract'], \PDO::PARAM_STR) . ',
+			@language = ' . $queryBuilder->quote($fieldValues['language'], \PDO::PARAM_INT) . ',
+			@starttime = ' . $queryBuilder->quote($fieldValues['starttime'], \PDO::PARAM_INT) . ',
+			@endtime = ' . $queryBuilder->quote($fieldValues['endtime'], \PDO::PARAM_INT) . ',
+			@fe_group = ' . $queryBuilder->quote($fieldValues['fe_group'], \PDO::PARAM_INT) . ',
+			@tstamp = ' . $queryBuilder->quote($fieldValues['tstamp'], \PDO::PARAM_INT) .
             $addQueryPartFor['set'] . ',
 			@uid = ' . $this->currentRow['uid'] . '
 		';
@@ -635,8 +677,8 @@ class IndexerRunner
             . $addQueryPartFor['execute']
             . ', @uid;';
 
-        $GLOBALS['TYPO3_DB']->sql_query($queryArray['set']);
-        $GLOBALS['TYPO3_DB']->sql_query($queryArray['execute']);
+        Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['set']);
+        Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['execute']);
     }
 
 
@@ -650,8 +692,10 @@ class IndexerRunner
         $queryForSet = '';
         $queryForExecute = '';
 
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
+
         foreach ($this->additionalFields as $value) {
-            $queryForSet .= ', @' . $value . ' = ' . $fieldValues[$value];
+            $queryForSet .= ', @' . $value . ' = ' . $queryBuilder->quote($fieldValues[$value], \PDO::PARAM_STR);
             $queryForExecute .= ', @' . $value;
         }
         return array('set' => $queryForSet, 'execute' => $queryForExecute);
@@ -671,12 +715,22 @@ class IndexerRunner
      */
     public function checkIfRecordWasIndexed($uid, $pid, $type, $language)
     {
-        $GLOBALS['TYPO3_DB']->sql_query(
-            'SET @orig_uid = ' . $uid . ', @pid = ' . $pid . ', @type = ' . $type . ', @language = ' . $language
-        );
-        $res = $GLOBALS['TYPO3_DB']->sql_query('EXECUTE searchStmt USING @orig_uid, @pid, @type, @language;');
-        if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
-            if ($this->currentRow = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
+        $res = $queryBuilder
+            ->select('*')
+            ->from('tx_kesearch_index')
+            ->where(
+                $queryBuilder->expr()->eq('orig_uid', $queryBuilder->quote($uid, \PDO::PARAM_INT)),
+                $queryBuilder->expr()->eq('pid', $queryBuilder->quote($pid, \PDO::PARAM_INT)),
+                $queryBuilder->expr()->eq('type', $queryBuilder->quote($type, \PDO::PARAM_STR)),
+                $queryBuilder->expr()->eq('language', $queryBuilder->quote($language, \PDO::PARAM_INT))
+            )
+            ->setMaxResults(1)
+            ->execute()
+            ->fetchAll();
+
+        if (count($res)) {
+            if ($this->currentRow = reset($res)) {
                 return true;
             } else {
                 $this->currentRow = array();
@@ -687,7 +741,6 @@ class IndexerRunner
             return false;
         }
     }
-
 
     /**
      * try to find an already indexed record
@@ -701,11 +754,28 @@ class IndexerRunner
     public function checkIfFileWasIndexed($type, $hash, $pid)
     {
         // Query DB if record already exists
-        $res = $GLOBALS['TYPO3_DB']->sql_query(
-            'SELECT * FROM tx_kesearch_index WHERE ' . 'type = ' . $type . ' AND hash = ' . $hash . ' AND pid = ' . (int) $pid . ' LIMIT 1'
-        );
-        if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
-            if ($this->currentRow = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
+        $res = $queryBuilder
+            ->select('*')
+            ->from('tx_kesearch_index')
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'type',
+                    $queryBuilder->quote($type, \PDO::PARAM_STR)
+                ),
+                $queryBuilder->expr()->eq(
+                    'hash',
+                    $queryBuilder->quote($hash, \PDO::PARAM_STR)
+                ),
+                $queryBuilder->expr()->eq(
+                    'pid',
+                    $queryBuilder->quote($pid, \PDO::PARAM_INT)
+                )
+            )
+            ->execute();
+
+        if ($res->rowCount()) {
+            if ($this->currentRow = $res->fetch()) {
                 return true;
             } else {
                 $this->currentRow = array();
@@ -783,8 +853,9 @@ class IndexerRunner
             $fieldsValues = array_merge($fieldsValues, $additionalFields);
         }
 
-        // full quoting record. Average speed: 0-1ms
-        $fieldsValues = $GLOBALS['TYPO3_DB']->fullQuoteArray($fieldsValues, 'tx_kesearch_index');
+        // full quoting record
+        // Todo quoting
+//      $fieldsValues = Db::getQueryBuilder('tx_kesearch_index')->quoteColumnValuePairs($fieldsValues);
 
         return $fieldsValues;
     }
@@ -841,17 +912,21 @@ class IndexerRunner
      */
     public function getTag($tagUid, $clearText = false)
     {
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
+
         $fields = 'title, tag';
         $table = 'tx_kesearch_filteroptions';
-        $where = 'uid = "' . intval($tagUid) . '" ';
-        $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table, 0);
-        $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table, 0);
-
-        $row = $GLOBALS['TYPO3_DB']->exec_SELECTgetSingleRow(
-            $fields,
-            $table,
-            $where
+        $where = $queryBuilder->expr()->eq(
+            'uid',
+            $queryBuilder->quote($tagUid, \PDO::PARAM_INT)
         );
+
+        $row = $queryBuilder
+            ->select($fields)
+            ->from($table)
+            ->where($where)
+            ->execute()
+            ->fetch();
 
         if ($clearText) {
             return $row['title'];
@@ -883,9 +958,11 @@ class IndexerRunner
     {
         $fields = '*';
         $table = 'tx_kesearch_indexerconfig';
-        $where = '1=1 ';
-        $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::BEenableFields($table);
-        $where .= \TYPO3\CMS\Backend\Utility\BackendUtility::deleteClause($table);
-        return $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($fields, $table, $where);
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
+        return $queryBuilder
+            ->select($fields)
+            ->from($table)
+            ->execute()
+            ->fetchAll();
     }
 }
