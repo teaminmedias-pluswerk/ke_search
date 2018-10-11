@@ -23,6 +23,7 @@ namespace TeaminmediasPluswerk\KeSearch\Controller;
 
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -112,6 +113,9 @@ class BackendModuleController extends AbstractBackendModuleController
         // get indexer configurations
         $indexerConfigurations = $indexer->getConfigurations();
 
+        // get uri builder
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+
         $content = '';
 
         // action: start indexer or remove lock
@@ -165,22 +169,25 @@ class BackendModuleController extends AbstractBackendModuleController
                 $content .= '<br /><p>The indexer is already running and can not be started twice.</p>';
                 $content .= '<p>The indexing process was started at ' . strftime('%c', $lockTime) . '.</p>';
                 $content .= '<p>You can remove the lock by clicking the following button.</p>';
-                $moduleUrl =
-                    BackendUtility::getModuleUrl(
-                        'web_KeSearchBackendModule',
-                        array('id' => $this->id, 'do' => 'rmLock')
-                    );
+                $moduleUrl = $uriBuilder->buildUriFromRoute(
+                    'web_KeSearchBackendModule',
+                    [
+                        'id' => $this->id,
+                        'do' => 'rmLock'
+                    ]
+                );
                 $content .= '<br /><a class="lock-button" href="' . $moduleUrl . '">RemoveLock</a>';
             }
         } else {
             // no lock set - show "start indexer" link if indexer configurations have been found
             if ($indexerConfigurations) {
-                $moduleUrl =
-                    BackendUtility::getModuleUrl(
-                        'web_KeSearchBackendModule',
-                        array('id' => $this->id, 'do' => 'startindexer')
-                    );
-
+                $moduleUrl = $uriBuilder->buildUriFromRoute(
+                    'web_KeSearchBackendModule',
+                    [
+                        'id' => $this->id,
+                        'do' => 'startindexer'
+                    ]
+                );
                 $content .= '<br /><a class="index-button" href="' . $moduleUrl . '">'
                     .
                     LocalizationUtility::translate(
@@ -257,6 +264,9 @@ class BackendModuleController extends AbstractBackendModuleController
      */
     public function clearSearchIndexAction()
     {
+        // get uri builder
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+
         $content = '';
 
         // admin only access
@@ -282,9 +292,12 @@ class BackendModuleController extends AbstractBackendModuleController
                 . '.</p>';
 
             // show "clear index" link
-            $moduleUrl = BackendUtility::getModuleUrl(
+            $moduleUrl = $uriBuilder->buildUriFromRoute(
                 'web_KeSearchBackendModule',
-                array('id' => $this->id, 'do' => 'clear')
+                [
+                    'id' => $this->id,
+                    'do' => 'clear'
+                ]
             );
             $content .= '<br /><a class="index-button" href="' . $moduleUrl . '">Clear whole search index!</a>';
         } else {
