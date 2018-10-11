@@ -187,7 +187,14 @@ class IndexerRunner
         }
 
         // log report to sys_log and decode urls to prevent errors in backend module
-        $GLOBALS['BE_USER']->simplelog(urldecode($plaintextReport), 'ke_search');
+        $GLOBALS['BE_USER']->writelog(
+            4,
+            0,
+            0,
+            -1,
+            "[ke_search] %s",
+            [urldecode(html_entity_decode($plaintextReport))]
+        );
 
         // verbose or quiet output? as set in function call!
         if ($verbose) {
