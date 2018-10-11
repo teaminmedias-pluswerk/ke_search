@@ -192,8 +192,8 @@ class IndexerRunner
             0,
             0,
             -1,
-            "[ke_search] %s",
-            [urldecode(html_entity_decode($plaintextReport))]
+            '[ke_search] ' . urldecode(html_entity_decode($plaintextReport)),
+            []
         );
 
         // verbose or quiet output? as set in function call!
