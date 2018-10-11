@@ -27,6 +27,7 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer\Types;
 use TeaminmediasPluswerk\KeSearch\Indexer\Filetypes\FileIndexerInterface;
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase;
 use TeaminmediasPluswerk\KeSearch\Indexer\Lib\Fileinfo;
+use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\StorageRepository;
@@ -272,12 +273,26 @@ class File extends IndexerBase
     public function getFileContentFromIndex($hash = "")
     {
         $fileContent = false;
-        $res = $GLOBALS['TYPO3_DB']->sql_query('SELECT * FROM tx_kesearch_index WHERE hash = "' . $hash . '" LIMIT 1');
-        if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
-            if ($indexRow = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-                $fileContent = $indexRow['content'];
-            }
+
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
+        $queryBuilder->getRestrictions()->removeAll();
+        $hashRow = $queryBuilder
+            ->select('*')
+            ->from('tx_kesearch_index')
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'hash',
+                    $queryBuilder->quote($hash, \PDO::PARAM_STR)
+                )
+            )
+            ->setMaxResults(1)
+            ->execute()
+            ->fetch();
+
+        if (is_array($hashRow)) {
+            $fileContent = $hashRow['content'];
         }
+
         return $fileContent;
     }
 
