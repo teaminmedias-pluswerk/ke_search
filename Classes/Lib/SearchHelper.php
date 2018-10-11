@@ -40,7 +40,7 @@ class SearchHelper
      */
     public static function getExtConf()
     {
-        $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ke_search']);
+        $extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['kesearch'];
 
         // Set the "tagChar"
         // sphinx has problems with # in query string.
@@ -79,7 +79,7 @@ class SearchHelper
     {
         $keSearchPremiumIsLoaded = ExtensionManagementUtility::isLoaded('ke_search_premium');
         if ($keSearchPremiumIsLoaded) {
-            $extConfPremium = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ke_search_premium']);
+            $extConfPremium = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ke_search_premium'];
             if (!$extConfPremium['prePostTagChar']) {
                 $extConfPremium['prePostTagChar'] = '_';
             }

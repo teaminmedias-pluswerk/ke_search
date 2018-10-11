@@ -1,6 +1,8 @@
 <?php
 namespace TeaminmediasPluswerk\KeSearch\Scheduler;
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /***************************************************************
  *  Copyright notice
  *  (c) 2011 Andreas Kiefer <kiefer@kennziffer.com>
@@ -27,10 +29,10 @@ class IndexerTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
     {
 
         // get extension configuration
-        $this->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ke_search']);
+        $this->extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ke_search'];
 
         // make indexer instance
-        $indexer = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner::class);
+        $indexer = GeneralUtility::makeInstance(\TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner::class);
 
         // process
         $indexer->startIndexing(true, $this->extConf, 'CLI');

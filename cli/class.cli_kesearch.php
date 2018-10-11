@@ -55,7 +55,7 @@ class tx_kesearch_cli extends \TYPO3\CMS\Core\Controller\CommandLineController
         $task = (string)$this->cli_args['_DEFAULT'][1];
 
         // get extension configuration
-        $this->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ke_search']);
+        $this->extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ke_search'];
 
         // switch between tasks
         switch ($task) {

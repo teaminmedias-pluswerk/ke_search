@@ -44,7 +44,7 @@ class FilterOptionTagValidator
      */
     public function evaluateFieldValue($value)
     {
-        $extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ke_search']);
+        $extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ke_search'];
         $minLength = isset($extConf['searchWordLength']) ? (int) $extConf['searchWordLength'] : 4;
 
         if (strlen($value) < $minLength) {

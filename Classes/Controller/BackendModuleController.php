@@ -73,7 +73,7 @@ class BackendModuleController extends AbstractBackendModuleController
     {
         parent::initializeAction();
 
-        $this->extConf = unserialize($GLOBALS['TYPO3_CONF_VARS']['EXT']['extConf']['ke_search']);
+        $this->extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ke_search'];
 
         $this->do = GeneralUtility::_GET('do');
 
