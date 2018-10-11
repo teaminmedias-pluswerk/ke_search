@@ -710,7 +710,7 @@ class tx_kesearch_indexer
     {
         // Query DB if record already exists
         $res = $GLOBALS['TYPO3_DB']->sql_query(
-            'SELECT * FROM tx_kesearch_index WHERE ' . 'type = ' . $type . ' AND hash = ' . $hash . ' AND pid = ' . (int) $pid . ' LIMIT 1'
+            'SELECT * FROM tx_kesearch_index WHERE ' . 'type = ' . $type . ' AND hash = ' . $hash . ' AND pid = ' . $pid . ' LIMIT 1'
         );
         if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
             if ($this->currentRow = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
