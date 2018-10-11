@@ -35,7 +35,6 @@ use TYPO3\CMS\Core\Html\RteHtmlParser;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Resource\FileRepository;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
-use \TYPO3\CMS\Backend\Utility\BackendUtility;
 use \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use \TYPO3\CMS\Frontend\DataProcessing\FilesProcessor;
 use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -297,16 +296,26 @@ class Page extends IndexerBase
      */
     public function getPageRecords(array $uids, $whereClause = '', $table = 'pages', $fields = 'pages.*')
     {
-        $fields = '*';
-        $table = 'pages';
-        $where = 'uid IN (' . implode(',', $uids) . ')';
+        $queryBuilder = Db::getQueryBuilder($table);
+        $queryBuilder->getRestrictions()->removeAll();
+        $pageQuery = $queryBuilder
+            ->select('*')
+            ->from($table)
+            ->where(
+                $queryBuilder->expr()->in(
+                    'uid',
+                    implode(',', $uids)
+                )
+            )
+        ->execute();
 
-        $pages = array();
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
-        while ($pageRow = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res)) {
-            $pages[$pageRow['uid']] = $pageRow;
+
+        $pageRows = [];
+        while ($row = $pageQuery->fetch()) {
+            $pageRows[$row['uid']] = $row;
         }
-        return $pages;
+
+        return $pageRows;
     }
 
     /**
@@ -452,18 +461,18 @@ class Page extends IndexerBase
         }
 
         $table = 'tt_content';
-        $where = 'pid = ' . intval($uid);
-        $where .= ' AND (' . $this->whereClauseForCType . ')';
+        $queryBuilder = Db::getQueryBuilder($table);
+        $where = [];
+        $where[] = $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter(intval($uid),\PDO::PARAM_INT));
+        $where[] = $this->whereClauseForCType;
 
         // add condition for not indexing gridelement columns with colPos = -2 (= invalid)
         if (ExtensionManagementUtility::isLoaded('gridelements')) {
-            $where .= ' AND colPos <> -2 ';
             $fields .= ', (SELECT hidden FROM tt_content as t2 WHERE t2.uid = tt_content.tx_gridelements_container)' .
                 ' as parentGridHidden';
-        }
+            $where[] = $queryBuilder->expr()->neq('colPos', intval(-2));
 
-        $where .= BackendUtility::BEenableFields($table);
-        $where .= BackendUtility::deleteClause($table);
+        }
 
         // Get access restrictions for this page, this access restrictions apply to all
         // content elements of this pages. Individual access restrictions
@@ -481,7 +490,14 @@ class Page extends IndexerBase
         // respect to the language.
         // While doing so, fetch also content from attached files and write
         // their content directly to the index.
-        $ttContentRows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($fields, $table, $where);
+        $fieldArray = GeneralUtility::trimExplode(',',$fields);
+        $ttContentRows = $queryBuilder
+            ->select(...$fieldArray)
+            ->from($table)
+            ->where(...$where)
+            ->execute()
+            ->fetchAll();
+
         $pageContent = array();
         if (count($ttContentRows)) {
             foreach ($ttContentRows as $ttContentRow) {
