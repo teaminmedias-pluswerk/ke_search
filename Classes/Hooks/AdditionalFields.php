@@ -69,35 +69,6 @@ class AdditionalFields
         }
     }
 
-    public function modifyYACIndexEntry(
-        &$title,
-        &$abstract,
-        &$fullContent,
-        &$params,
-        &$tags,
-        $yacRecord,
-        $targetPID,
-        &$additionalFields
-    ) {
-        // crdate is always given, but can be overwritten
-        if (isset($yacRecord['crdate']) && $yacRecord['crdate'] > 0) {
-            $additionalFields['sortdate'] = $yacRecord['crdate'];
-        }
-        // if TYPO3 sets last changed
-        if (isset($yacRecord['starttime']) && $yacRecord['starttime'] > 0) {
-            $additionalFields['sortdate'] = $yacRecord['starttime'];
-        }
-
-        // fill orig_uid
-        if (isset($yacRecord['uid']) && $yacRecord['uid'] > 0) {
-            $additionalFields['orig_uid'] = $yacRecord['uid'];
-        }
-        // fill orig_pid
-        if (isset($yacRecord['pid']) && $yacRecord['pid'] > 0) {
-            $additionalFields['orig_pid'] = $yacRecord['pid'];
-        }
-    }
-
     public function modifyContentIndexEntry(&$title, &$contentRecord, &$tags, $contentUid, &$additionalFields)
     {
         // crdate is always given, but can be overwritten

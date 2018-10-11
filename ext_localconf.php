@@ -32,9 +32,6 @@ $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['registerAdditionalFields'][
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyPagesIndexEntry'][] =
     TeaminmediasPluswerk\KeSearch\Hooks\AdditionalFields::class;
 
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyYACIndexEntry'][] =
-    TeaminmediasPluswerk\KeSearch\Hooks\AdditionalFields::class;
-
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyContentIndexEntry'][] =
     TeaminmediasPluswerk\KeSearch\Hooks\AdditionalFields::class;
 
