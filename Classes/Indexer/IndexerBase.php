@@ -338,28 +338,4 @@ class IndexerBase
         return $this->errors;
     }
 
-
-    /**
-     * @param $tagUid
-     * @param bool $clearText
-     * @return mixed
-     */
-    public function getTag($tagUid, $clearText = false)
-    {
-        $fields = 'title,tag';
-        $table = 'tx_kesearch_filteroptions';
-        $where = 'uid="' . intval($tagUid) . '" ';
-        $where .= BackendUtility::BEenableFields($table);
-        $where .= BackendUtility::deleteClause($table);
-
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where, '', '', '1');
-        $anz = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
-        $row = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res);
-
-        if ($clearText) {
-            return $row['title'];
-        } else {
-            return $row['tag'];
-        }
-    }
 }
