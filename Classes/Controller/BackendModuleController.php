@@ -51,13 +51,13 @@ class BackendModuleController extends AbstractBackendModuleController
 
     /**
      * @var \TYPO3\CMS\Core\Page\PageRenderer
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $pageRenderer;
 
     /**
      * @var \TYPO3\CMS\Core\Registry
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $registry;
 
