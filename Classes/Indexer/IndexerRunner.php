@@ -921,7 +921,6 @@ class IndexerRunner
     {
         $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
 
-        $fields = 'title, tag';
         $table = 'tx_kesearch_filteroptions';
         $where = $queryBuilder->expr()->eq(
             'uid',
@@ -929,7 +928,7 @@ class IndexerRunner
         );
 
         $row = $queryBuilder
-            ->select($fields)
+            ->select('title', 'tag')
             ->from($table)
             ->where($where)
             ->execute()
