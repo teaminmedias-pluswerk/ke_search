@@ -20,9 +20,8 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer\Types;
  ***************************************************************/
 
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase;
+use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
-use \TYPO3\CMS\Backend\Utility\BackendUtility;
-use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -71,25 +70,49 @@ class News extends IndexerBase
         // access restrictions or time (start / stop) restrictions.
         // Copy those restrictions to the index.
         $fields = '*';
-        $where = 'pid IN (' . implode(',', $indexPids) . ') ';
+        $fields = '*';
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
+        $where = [];
+        $where[] = $queryBuilder->expr()->in('pid', implode(',', $indexPids));
 
         // index archived news
         // 0: index all news
         // 1: index only active (not archived) news
         // 2: index only archived news
         if ($this->indexerConfig['index_news_archived'] == 1) {
-            $where .= 'AND ( archive = 0 OR archive > ' . time() . ') ';
+            $where[] = $queryBuilder->expr()->orX(
+                $queryBuilder->expr()->eq(
+                    'archive',
+                    $queryBuilder->quote(0, \PDO::PARAM_INT)
+                ),
+                $queryBuilder->expr()->gt(
+                    'archive',
+                    $queryBuilder->quote(time(), \PDO::PARAM_INT)
+                )
+            );
         } elseif ($this->indexerConfig['index_news_archived'] == 2) {
-            $where .= 'AND ( archive > 0 AND archive < ' . time() . ') ';
+            $where[] = $queryBuilder->expr()->andX(
+                $queryBuilder->expr()->gt(
+                    'archive',
+                    $queryBuilder->quote(0, \PDO::PARAM_INT)
+                ),
+                $queryBuilder->expr()->lt(
+                    'archive',
+                    $queryBuilder->quote(time(), \PDO::PARAM_INT)
+                )
+            );
         }
 
-        $where .= BackendUtility::BEenableFields($table);
-        $where .= BackendUtility::deleteClause($table);
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
+        $res = $queryBuilder
+            ->select($fields)
+            ->from($table)
+            ->where(...$where)
+            ->execute();
+
         $indexedNewsCounter = 0;
-        $resCount = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+        $resCount = $res->rowCount();
         if ($resCount) {
-            while (($newsRecord = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))) {
+            while (($newsRecord = $res->fetch())) {
                 // get category data for this news record (list of
                 // assigned categories and single view from category, if it exists)
                 $categoryData = $this->getCategoryData($newsRecord);
@@ -285,41 +308,36 @@ class News extends IndexerBase
             'title_list' => array()
         );
 
-        // news version 3 features system categories instead of it's own
-        // category system used in previous versions
-        $ttnewsVersion = ExtensionManagementUtility::getExtensionVersion('news');
-        if (version_compare($ttnewsVersion, '3.0.0') >= 0) {
-            $where = ' AND tx_news_domain_model_news.uid = ' . $newsRecord['uid'] .
-                ' AND sys_category_record_mm.tablenames = "tx_news_domain_model_news"';
-            $where .= BackendUtility::BEenableFields('sys_category') . BackendUtility::deleteClause('sys_category');
+        $queryBuilder = Db::getQueryBuilder('sys_category');
 
-            $resCat = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
-                'sys_category.uid, sys_category.single_pid, sys_category.title',
-                'sys_category',
-                'sys_category_record_mm',
-                'tx_news_domain_model_news',
-                $where,
-                '', // groupBy
-                'sys_category_record_mm.sorting' // orderBy
-            );
-        } else {
-            $where = ' AND tx_news_domain_model_news.uid = ' . $newsRecord['uid'];
-            $where .= BackendUtility::BEenableFields('tx_news_domain_model_category')
-                . BackendUtility::deleteClause('tx_news_domain_model_category');
+        $where = [];
+        $where[] = $queryBuilder->expr()->eq(
+            'sys_category.uid',
+            $queryBuilder->quoteIdentifier('sys_category_record_mm.uid_local')
+        );
+        $where[] = $queryBuilder->expr()->eq(
+            'tx_news_domain_model_news.uid',
+            $queryBuilder->quoteIdentifier('sys_category_record_mm.uid_foreign')
+        );
+        $where[] = $queryBuilder->expr()->eq(
+            'tx_news_domain_model_news.uid',
+            $queryBuilder->createNamedParameter($newsRecord['uid'], \PDO::PARAM_INT)
+        );
 
-            $resCat = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
-                'tx_news_domain_model_category.uid, tx_news_domain_model_category.single_pid, '
-                . 'tx_news_domain_model_category.title',
-                'tx_news_domain_model_news',
-                'tx_news_domain_model_news_category_mm',
-                'tx_news_domain_model_category',
-                $where,
-                '', // groupBy
-                'tx_news_domain_model_news_category_mm.sorting' // orderBy
-            );
-        }
+        $catRes = $queryBuilder
+            ->select(
+                'sys_category.uid',
+                'sys_category.single_pid',
+                'sys_category.title'
+            )
+            ->from('sys_category')
+            ->from('sys_category_record_mm')
+            ->from('tx_news_domain_model_news')
+            ->orderBy('sys_category_record_mm.sorting')
+            ->where(...$where)
+            ->execute();
 
-        while (($newsCat = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resCat))) {
+        while (($newsCat = $catRes->fetch())) {
             $categoryData['uid_list'][] = $newsCat['uid'];
             $categoryData['title_list'][] = $newsCat['title'];
             if ($newsCat['single_pid'] && !$categoryData['single_pid']) {
@@ -362,18 +380,29 @@ class News extends IndexerBase
      */
     private function addTagsFromNewsTags($tags, $newsRecord)
     {
-        $addWhere = BackendUtility::BEenableFields('tx_news_domain_model_tag')
-            . BackendUtility::deleteClause('tx_news_domain_model_tag');
-        $resTag = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
-            'tx_news_domain_model_tag.title',
-            'tx_news_domain_model_news',
-            'tx_news_domain_model_news_tag_mm',
-            'tx_news_domain_model_tag',
-            ' AND tx_news_domain_model_news.uid = ' . $newsRecord['uid'] .
-            $addWhere
-        );
+        $queryBuilder = Db::getQueryBuilder('tx_news_domain_model_news');
+        $resTag = $queryBuilder
+            ->select('tag.title')
+            ->from('tx_news_domain_model_news', 'news')
+            ->from('tx_news_domain_model_news_tag_mm', 'mm')
+            ->from('tx_news_domain_model_tag', 'tag')
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'news.uid',
+                    $queryBuilder->quoteIdentifier('mm.uid_local')
+                ),
+                $queryBuilder->expr()->eq(
+                    'tag.uid',
+                    $queryBuilder->quoteIdentifier('mm.uid_foreign')
+                ),
+                $queryBuilder->expr()->eq(
+                    'news.uid',
+                    $queryBuilder->createNamedParameter($newsRecord['uid'], \PDO::PARAM_INT)
+                )
+            )
+            ->execute();
 
-        while (($newsTag = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($resTag))) {
+        while (($newsTag = $resTag->fetch())) {
             SearchHelper::makeTags($tags, array($newsTag['title']));
         }
 
@@ -405,37 +434,21 @@ class News extends IndexerBase
      */
     public function getAttachedContentElements($newsRecord)
     {
-
-        // since version 3.2.0 news does not use a mm-table anymore for attached
-        // content elements
-        if (version_compare(
-            ExtensionManagementUtility::getExtensionVersion('news'),
-            '3.2.0'
-        )
-            >= 0
-        ) {
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery(
-                '*',
-                'tt_content',
-                'tx_news_related_news=' . $newsRecord['uid']
-                . BackendUtility::BEenableFields('tt_content')
-                . BackendUtility::deleteClause('tt_content')
-            );
-        } else {
-            $res = $GLOBALS['TYPO3_DB']->exec_SELECT_mm_query(
-                '*',
-                'tx_news_domain_model_news',
-                'tx_news_domain_model_news_ttcontent_mm',
-                'tt_content',
-                ' AND tx_news_domain_model_news.uid = ' . $newsRecord['uid']
-                . BackendUtility::BEenableFields('tt_content')
-                . BackendUtility::deleteClause('tt_content')
-            );
-        }
+        $queryBuilder = Db::getQueryBuilder('tt_content');
+        $res = $queryBuilder
+            ->select('*')
+            ->from('tt_content')
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'tx_news_related_news',
+                    $queryBuilder->createNamedParameter($newsRecord['uid'], \PDO::PARAM_INT)
+                )
+            )
+            ->execute();
 
         $contentElements = array();
-        if ($GLOBALS['TYPO3_DB']->sql_num_rows($res)) {
-            while (($contentElement = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))) {
+        if ($res->rowCount()) {
+            while (($contentElement = $res->fetch())) {
                 $contentElements[] = $contentElement;
             }
         }
