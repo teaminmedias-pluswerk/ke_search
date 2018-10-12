@@ -27,7 +27,6 @@ use TYPO3\CMS\Core\Database\QueryGenerator;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessageRendererResolver;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
-use \TYPO3\CMS\Backend\Utility\BackendUtility;
 
 /**
  * Base class for indexer classes.
@@ -119,7 +118,7 @@ class IndexerBase
     public function getPageRecords(array $uids, $whereClause = '', $table = 'pages', $fields = 'pages.*')
     {
 
-        $queryBuilder = Db::getQueryBuilder();
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
         $where = [];
         $where[] = $queryBuilder->expr()->in('pages.uid', implode(',', $uids));
         // index only pages which are searchable
@@ -150,8 +149,12 @@ class IndexerBase
             $query->add('where', $whereClause);
         }
 
-        $pages = $query->execute()
-            ->fetchAll();
+        $pageRows = $query->execute()->fetchAll();
+
+        $pages = [];
+        foreach ($pageRows as $row) {
+            $pages[$row['uid']] = $row;
+        }
 
         return $pages;
     }
@@ -171,9 +174,11 @@ class IndexerBase
         $indexPids = $this->getPagelist($startingPointsRecursive, $singlePages);
 
         // add complete page record to list of pids in $indexPids
-        $where = ' AND ' . $table . '.pid = pages.uid ';
-        $where .= BackendUtility::BEenableFields($table);
-        $where .= BackendUtility::deleteClause($table);
+        $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
+        $where = $queryBuilder->quoteIdentifier($table)
+            . '.' . $queryBuilder->quoteIdentifier('pid')
+            . ' = ' . $queryBuilder->quoteIdentifier('pages')
+            . '.' . $queryBuilder->quoteIdentifier('uid');
         $this->pageRecords = $this->getPageRecords($indexPids, $where, 'pages,' . $table, 'pages.*');
         if (count($this->pageRecords)) {
             // create a new list of allowed pids
