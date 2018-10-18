@@ -26,6 +26,7 @@ use \TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use \TYPO3\CMS\Core\Utility\HttpUtility;
 use TYPO3\CMS\Frontend\Page\PageRepository;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Parent class for plugins pi1 and pi2
@@ -314,7 +315,12 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         // searchword input value
         $searchString = $this->piVars['sword'];
 
-        if (!empty($searchString) && $searchString != $this->pi_getLL('searchbox_default_value')) {
+        $searchboxDefaultValue = LocalizationUtility::translate(
+            'LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:searchbox_default_value',
+            'KeSearch'
+        );
+
+        if (!empty($searchString) && $searchString != $searchboxDefaultValue) {
             $this->swordValue = $searchString;
         } else {
             $this->swordValue = '';
