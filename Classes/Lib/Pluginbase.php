@@ -327,9 +327,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         }
 
         $this->fluidTemplateVariables['searchword'] = htmlspecialchars($this->swordValue);
-        $this->fluidTemplateVariables['searchwordDefault'] = htmlspecialchars(
-            $this->pi_getLL('searchbox_default_value')
-        );
+        $this->fluidTemplateVariables['searchwordDefault'] = $searchboxDefaultValue;
         $this->fluidTemplateVariables['sortByField'] = $this->piVars['sortByField'];
         $this->fluidTemplateVariables['sortByDir'] = $this->piVars['sortByDir'];
 
