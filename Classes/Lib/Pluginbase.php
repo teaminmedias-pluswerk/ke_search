@@ -1,4 +1,5 @@
 <?php
+
 namespace TeaminmediasPluswerk\KeSearch\Lib;
 
 /***************************************************************
@@ -20,7 +21,6 @@ namespace TeaminmediasPluswerk\KeSearch\Lib;
  ***************************************************************/
 
 use TeaminmediasPluswerk\KeSearch\Lib\Filters\Textlinks;
-use TYPO3\CMS\Core\Resource\FileRepository;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -61,13 +61,13 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     // searchphrase for score/non boolean mode (karl heinz)
     public $scoreAgainst = '';
 
-     // true if no searchparams given; otherwise false
+    // true if no searchparams given; otherwise false
     public $isEmptySearch = true;
 
-     // comma seperated list of startingPoints
+    // comma seperated list of startingPoints
     public $startingPoints = 0;
 
-     // first entry in list of startingpoints
+    // first entry in list of startingpoints
     public $firstStartingPoint = 0;
 
     // FlexForm-Configuration
@@ -370,7 +370,6 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
 
     /**
      * loop through all available filters and compile the values for the fluid template rendering
-
      */
     public function renderFilters()
     {
@@ -543,7 +542,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                 // others anymore since this leads to a strange behaviour (options are
                 // only displayed if they have BOTH tags: the selected and the other filter option.
                 if ((!count($filter['selectedOptions'])
-                    || in_array($option['uid'], $filter['selectedOptions'])
+                        || in_array($option['uid'], $filter['selectedOptions'])
                     ) && $this->filters->checkIfTagMatchesRecords($option['tag'])
                 ) {
                     // build link which selects this option and keeps all the other selected filters
@@ -610,7 +609,6 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
 
     /**
      * set the text for "no results"
-
      */
     public function setNoResultsText()
     {
@@ -735,9 +733,9 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                 $tags = str_replace('#', ' ', $tags);
                 $resultrowTemplateValues['tags'] = $tags;
 
-                // set preview image
-                $renderedImage = $this->renderPreviewImageOrTypeIcon($row);
-                $resultrowTemplateValues['imageHtml'] = $renderedImage;
+                // set preview image and/or type icons
+                $resultrowTemplateValues['previewReferenceUid'] = $this->getFileReference($row);
+                $resultrowTemplateValues['typeIconPath'] = $this->getTypeIconPath($row['type']);
 
                 // set end date for cal events
                 if ($type == 'cal') {
@@ -754,64 +752,109 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     }
 
     /**
-     * renders a preview image in the result list or a icon which indicates
-     * the type of the result (page, news, ...)
-     * returns an array with
-     * index 0: pure HTML code for the image for the use in fluid templating
-     * index 1: fully rendered subpart for marker based templating
-     * TODO: Move the image rendering itself to fluid
-     * @author Christian Bülter <buelter@kennziffer.com>
-     * @since 19.03.15
-     * @return array
+     * get file reference for image rendering in fluid
+     *
+     * @param $row
+     * @return int uid of preview image file reference
+     * @author Andreas Kiefer <andreas.kiefer@pluswerk.ag>
      */
-    public function renderPreviewImageOrTypeIcon($row)
+    public function getFileReference($row)
     {
-        // preview image (instead of type icon)
         list($type, $filetype) = explode(':', $row['type']);
         switch ($type) {
             case 'file':
                 if ($this->conf['showFilePreview']) {
-                    $imageHtml = $this->renderFilePreview($row);
+                    return $this->getFirstFalRelationUid(
+                        'tt_content', 'media', $row['orig_uid']);
                 }
                 break;
 
             case 'page':
                 if ($this->conf['showPageImages']) {
-                    // use new field "tx_kesearch_resultimage" if set, otherwise field "media"
-                    $imageHtml = $this->renderFALPreviewImage($row['orig_uid'], 'pages', 'tx_kesearch_resultimage');
-                    if (empty($imageHtml)) $imageHtml = $this->renderFALPreviewImage($row['orig_uid'], 'pages', 'media');
+                    $result = $this->getFirstFalRelationUid(
+                        'pages', 'tx_kesearch_resultimage', $row['orig_uid']
+                    );
+
+                    if (empty($result)) {
+                        $result = $this->getFirstFalRelationUid(
+                            'pages', 'media', $row['orig_uid']
+                        );
+                    }
+                    return $result;
                 }
                 break;
 
             case 'news':
                 if ($this->conf['showNewsImages']) {
-                    $imageHtml = $this->renderFALPreviewImage(
-                        $row['orig_uid'],
-                        'tx_news_domain_model_news',
-                        'fal_media'
+                    return $this->getFirstFalRelationUid(
+                        'tx_news_domain_model_news', 'fal_media', $row['orig_uid']
                     );
                 }
                 break;
-
-            default:
-                $imageHtml = '';
-                break;
         }
+    }
 
-        // hook to overwrite/extend image handling
-        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['renderPreviewImageOrTypeIcon'])) {
-            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['renderPreviewImageOrTypeIcon'] as $_classRef) {
-                $_procObj = &GeneralUtility::makeInstance($_classRef);
-                $_procObj->renderPreviewImageOrTypeIcon($imageHtml, $row, $this);
+    /**
+     * get path for type icon used for rendering in fluid
+     *
+     * @param $type
+     * @return string the path to the type icon file
+     */
+    public function getTypeIconPath($typeComplete)
+    {
+        list($type) = explode(':', $typeComplete);
+        $name = str_replace(':', '_', $typeComplete);
+
+        if ($this->conf['resultListTypeIcon'][$name]) {
+            // custom icons defined by typoscript
+            return $this->conf['resultListTypeIcon'][$name]['file'];
+        } else {
+            // default icons from ext:ke_search
+            $extensionIconPath = 'EXT:ke_search/Resources/Public/Icons/types/' . $name . '.gif';
+            if (is_file(GeneralUtility::getFileAbsFileName($extensionIconPath))) {
+                return $extensionIconPath;
+            } else if ($type == 'file') {
+                // fallback for file results: use default if no image for this file extension is available
+                return 'EXT:ke_search/Resources/Public/Icons/types/file.gif';
             }
         }
+    }
 
-        // render type icon if no preview image is available (or preview is disabled)
-        if ($this->conf['showTypeIcon'] && empty($imageHtml)) {
-            $imageHtml = $this->renderTypeIcon($row['type']);
+    /**
+     * @param $table
+     * @param $field
+     * @param $uid
+     * @return mixed
+     */
+    public function getFirstFalRelationUid($table, $field, $uid)
+    {
+        $queryBuilder = Db::getQueryBuilder($table);
+        $row = $queryBuilder
+            ->select('*')
+            ->from('sys_file_reference')
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'tablenames',
+                    $queryBuilder->quote($table, \PDO::PARAM_STR)
+                ),
+                $queryBuilder->expr()->eq(
+                    'fieldname',
+                    $queryBuilder->quote($field, \PDO::PARAM_STR)
+                ),
+                $queryBuilder->expr()->eq(
+                    'uid_foreign',
+                    $queryBuilder->quote($uid, \PDO::PARAM_INT)
+                )
+            )
+            ->orderBy('sorting_foreign', 'desc')
+            ->setMaxResults(1)
+            ->execute()
+            ->fetch();
+
+        if ($row !== NULL) {
+            return $row['uid'];
         }
 
-        return $imageHtml;
     }
 
     /**
@@ -1007,131 +1050,6 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         return $sortObj->renderSorting($this->fluidTemplateVariables);
     }
 
-    /**
-     * renders the preview image of a file result
-     * @param array $row result row
-     * @author Christian Bülter <buelter@kennziffer.com>
-     * @since 17.10.14
-     * @return string
-     */
-    public function renderFilePreview($row)
-    {
-        list($type, $filetype) = explode(':', $row['type']);
-        if (in_array($filetype, $this->fileTypesWithPreviewPossible)) {
-            $imageConf = $this->conf['previewImage'];
-
-            // if index record is of type "file" and contains an orig_uid, this is the reference
-            // to a FAL record. Otherwise we use the path directly.
-            /** @var $fileObject \TYPO3\CMS\Core\Resource\File */
-            if ($row['orig_uid'] && ($fileObject = SearchHelper::getFile($row['orig_uid']))) {
-                $metadata = $fileObject->_getMetaData();
-                $imageConf['file']['_typoScriptNodeValue'] = $fileObject->getForLocalProcessing(false);
-                $imageConf['altText'] = $metadata['alternative'];
-            } else {
-                $imageConf['file']['_typoScriptNodeValue'] = $row['directory'] . rawurlencode($row['title']);
-            }
-            return $this->renderPreviewImage($imageConf);
-        }
-        return '';
-    }
-
-    /**
-     * renders the preview image of a result which has an attached image,
-     * needs FAL and is therefore only available for TYPO3 version 6 or higher.
-     * Returns an empty string if no image could be rendered.
-     * @param string $uid uid of referencing record
-     * @param string $table table name of the original table
-     * @param string $fieldname field which holds the FAL reference
-     * @author Christian Bülter <christian.buelter@inmedias.de>
-     * @since 5.11.14
-     * @return string
-     */
-    public function renderFALPreviewImage($uid, $table = 'pages', $fieldname = 'media')
-    {
-        $imageHtml = '';
-
-        $imageConf = $this->conf['previewImage'];
-        $fileRepository = GeneralUtility::makeInstance(FileRepository::class);
-        $fileObjects = $fileRepository->findByRelation($table, $fieldname, $uid);
-        /** @var $fileObject \TYPO3\CMS\Core\Resource\FileReference */
-        $fileObject = !empty($fileObjects) ? $fileObjects[0] : null;
-
-        if ($fileObject) {
-            $referenceProperties = $fileObject->getReferenceProperties();
-            $originalFileProperties = $fileObject->getOriginalFile()->getProperties();
-            $alternative = $referenceProperties['alternative'] ?
-                $referenceProperties['alternative'] : $originalFileProperties['alternative'];
-
-            $imageConf['file']['_typoScriptNodeValue'] = $fileObject->getForLocalProcessing(false);
-            $imageConf['altText'] = $alternative;
-            $imageHtml = $this->renderPreviewImage($imageConf);
-        }
-
-        return $imageHtml;
-    }
-
-    /**
-     * renders a review image and sets the max. width and max. height if not
-     * defined yet.
-     * @param array $imageConf
-     * @return string
-     */
-    public function renderPreviewImage($imageConf)
-    {
-        $imageConf['file']['maxW'] = (!empty($imageConf['file']['maxW'])) ? (int)$imageConf['file']['maxW'] : 150;
-        $imageConf['file']['maxH'] = (!empty($imageConf['file']['maxH'])) ? (int)$imageConf['file']['maxH'] : 150;
-        $imageConf = $this->typoScriptService->convertPlainArrayToTypoScriptArray($imageConf);
-        $rendered = $this->cObj->cObjGetSingle('IMAGE', $imageConf);
-        return $rendered;
-    }
-
-    /**
-     * renders an image tag which will prepend the teaser if activated by user.
-     * @param $typeComplete string A value like page, tt_address, for files eg. "file:pdf"
-     * @return string
-     */
-    public function renderTypeIcon($typeComplete)
-    {
-        list($type) = explode(':', $typeComplete);
-        $name = str_replace(':', '_', $typeComplete);
-
-        if ($this->conf['resultListTypeIcon'][$name]) {
-            $imageConf = $this->conf['resultListTypeIcon'][$name];
-
-            // make sure imageConf['file'] is an array
-            $imageConf['file'] = is_string($imageConf['file'])
-                ? [ '_typoScriptNodeValue' => $imageConf['file']]
-                : $imageConf['file'];
-
-        } else {
-            // custom image (old configuration option, only for gif images)
-            if ($this->conf['additionalPathForTypeIcons']) {
-                $imageConf['file']['_typoScriptNodeValue'] = str_replace(
-                    PATH_site,
-                    '',
-                    GeneralUtility::getFileAbsFileName($this->conf['additionalPathForTypeIcons'] . $name . '.gif')
-                );
-            }
-        }
-
-        // fallback: default image
-        if (!is_file(PATH_site . $imageConf['file']['_typoScriptNodeValue'])) {
-            $imageConf['file']['_typoScriptNodeValue'] = ExtensionManagementUtility::siteRelPath($this->extKey)
-                . 'Resources/Public/Icons/types/' . $name . '.gif';
-
-            // fallback for file results: use default if no image for this file extension is available
-            if ($type == 'file' && !is_file(PATH_site . $imageConf['file'])) {
-                $imageConf['file']['_typoScriptNodeValue'] = ExtensionManagementUtility::siteRelPath($this->extKey)
-                    . 'Resources/Public/Icons/types/file.gif';
-            }
-        }
-
-        $imageConf = $this->typoScriptService->convertPlainArrayToTypoScriptArray($imageConf);
-        $rendered = $this->cObj->cObjGetSingle('IMAGE', $imageConf);
-
-        return $rendered;
-    }
-
     /*
      * count searchwords and phrases in statistic tables
      * assumes that charset ist UTF-8 and uses mb_strtolower
@@ -1234,7 +1152,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                     )
                     ->execute()
                     ->fetchAll();
-                
+
                 foreach ($filterRows as $row) {
                     $this->preselectedFilter[$row['filteruid']][$row['optionuid']] = $row['tag'];
                 }
