@@ -21,6 +21,7 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer;
 
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
+use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\Utility\DebugUtility;
@@ -48,6 +49,11 @@ class IndexerRunner
     public $registry;
 
     /**
+     * @var \TYPO3\CMS\Core\Log\Logger
+     */
+    protected $logger;
+
+    /**
      * @var array
      */
     public $defaultIndexerTypes = array();
@@ -66,7 +72,18 @@ class IndexerRunner
         foreach ($GLOBALS['TCA']['tx_kesearch_indexerconfig']['columns']['type']['config']['items'] as $indexerType) {
             $this->defaultIndexerTypes[] = $indexerType[1];
         }
+
+        // init logger
+        /** @var \TYPO3\CMS\Core\Log\Logger */
+        $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
+        /** @var \TYPO3\CMS\Core\Log\Writer\FileWriter $writer */
+        foreach($this->logger->getWriters() as $writer) {
+            $writers[] = $writer;
+        }
+        $timedLogFilePath = $writers[0][0]->getLogFile() . '_' . time();
+        $writers[0][0]->setLogFile($timedLogFilePath);
     }
+
 
 
     /**
@@ -85,6 +102,7 @@ class IndexerRunner
         // this also prevents starting the indexer twice
         if ($this->registry->get('tx_kesearch', 'startTimeOfIndexer') === null) {
             $this->registry->set('tx_kesearch', 'startTimeOfIndexer', time());
+            $this->logger->info('indexing process started at '. strftime('%c', time()));
         } else {
             // check lock time
             $lockTime = $this->registry->get('tx_kesearch', 'startTimeOfIndexer');
@@ -93,7 +111,9 @@ class IndexerRunner
                 // lock is older than 12 hours - remove
                 $this->registry->removeAllByNamespace('tx_kesearch');
                 $this->registry->set('tx_kesearch', 'startTimeOfIndexer', time());
+                $this->logger->info('lock has been removed because it is older than 12 hours'. time());
             } else {
+                $this->logger->info('lock is set, you can\'t start indexer twice.');
                 return 'You can\'t start the indexer twice. Please wait '
                 . 'while first indexer process is currently running';
             }
@@ -117,6 +137,7 @@ class IndexerRunner
         $this->prepareStatements();
 
         foreach ($configurations as $indexerConfig) {
+
             $this->indexerConfig = $indexerConfig;
 
             // run default indexers shipped with ke_search
@@ -124,6 +145,10 @@ class IndexerRunner
                 $className = __NAMESPACE__ . '\\Types\\';
                 $className .= GeneralUtility::underscoredToUpperCamelCase($this->indexerConfig['type']);
                 if (class_exists($className)) {
+                    $this->logger->info(
+                        'indexer "' . $this->indexerConfig['title'] . '" started ',
+                        $this->indexerConfig
+                    );
                     $searchObj = GeneralUtility::makeInstance($className,$this);
                     $content .= $searchObj->startIndexing();
                 } else {
@@ -135,12 +160,17 @@ class IndexerRunner
             if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customIndexer'])) {
                 foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customIndexer'] as $_classRef) {
                     $_procObj = &GeneralUtility::makeInstance($_classRef);
+                    $this->logger->info(
+                        'custom indexer "' . $this->indexerConfig['title'] . '" started ',
+                        $this->indexerConfig
+                    );
                     $content .= $_procObj->customIndexer($indexerConfig, $this);
                 }
             }
         }
 
         // process index cleanup
+        $this->logger->info('cleanup started');
         $content .= $this->cleanUpIndex();
 
         // count index records
@@ -153,6 +183,8 @@ class IndexerRunner
             ->fetchColumn(0);
 
         $content .= '<p><b>Index contains ' . $count . ' entries.</b></p>';
+        $this->logger->info('Index contains ' . $count . ' entries');
+
 
         // clean up process after indezing to free memory
         $this->cleanUpProcessAfterIndexing();
@@ -170,6 +202,7 @@ class IndexerRunner
 
         // create plaintext report
         $plaintextReport = $this->createPlaintextReport($content);
+        $this->logger->info($plaintextReport);
 
         // send notification in CLI mode
         if ($mode == 'CLI') {
@@ -499,6 +532,15 @@ class IndexerRunner
         $debugOnly = false,
         $additionalFields = array()
     ) {
+
+        $this->logger->info('indexing record "' . $title .'"', [
+            'storagePid' => $storagePid,
+            'title' => $title,
+            'type' => $type,
+            'targetPid' => $targetPid,
+            'additionalFields' => $additionalFields
+        ]);
+
         // if there are errors found in current record return false and break processing
         if (!$this->checkIfRecordHasErrorsBeforeIndexing($storagePid, $title, $type, $targetPid)) {
             return false;
