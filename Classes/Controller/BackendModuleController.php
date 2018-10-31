@@ -125,7 +125,7 @@ class BackendModuleController extends AbstractBackendModuleController
         } else {
             if ($this->do == 'rmLock') {
                 // remove lock from registry - admin only!
-                if ($this->getBackendUser()->user['admin']) {
+                if ($this->getBackendUser()->isAdmin()) {
                     $this->registry->removeAllByNamespace('tx_kesearch');
                 } else {
                     $content .=
@@ -160,7 +160,7 @@ class BackendModuleController extends AbstractBackendModuleController
 
         // show "start indexing" or "remove lock" button
         if ($lockTime !== null) {
-            if (!$this->getBackendUser()->user['admin']) {
+            if (!$this->getBackendUser()->isAdmin()) {
                 // print warning message for non-admins
                 $content .= '<br /><p style="color: red; font-weight: bold;">WARNING!</p>';
                 $content .= '<p>The indexer is already running and can not be started twice.</p>';
@@ -277,7 +277,7 @@ class BackendModuleController extends AbstractBackendModuleController
         $content = '';
 
         // admin only access
-        if ($this->getBackendUser()->user['admin']) {
+        if ($this->getBackendUser()->isAdmin()) {
             if ($this->do == 'clear') {
                 $databaseConnection = Db::getDatabaseConnection('tx_kesearch_index');
                 $databaseConnection->truncate('tx_kesearch_index');
