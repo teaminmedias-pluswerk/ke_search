@@ -68,7 +68,7 @@ class BackendModuleController extends AbstractBackendModuleController
     protected $perms_clause;
 
     /**
-     *
+     * initialize action
      */
     public function initializeAction()
     {
@@ -94,7 +94,7 @@ class BackendModuleController extends AbstractBackendModuleController
     }
 
     /**
-     *
+     * alert action
      */
     public function alertAction()
     {
@@ -102,7 +102,7 @@ class BackendModuleController extends AbstractBackendModuleController
     }
 
     /**
-     *
+     * start indexing action
      */
     public function startIndexingAction()
     {
@@ -211,7 +211,7 @@ class BackendModuleController extends AbstractBackendModuleController
     }
 
     /**
-     *
+     * indexed content action
      */
     public function indexedContentAction()
     {
@@ -237,7 +237,7 @@ class BackendModuleController extends AbstractBackendModuleController
     }
 
     /**
-     *
+     * index table information action
      */
     public function indexTableInformationAction()
     {
@@ -247,7 +247,7 @@ class BackendModuleController extends AbstractBackendModuleController
     }
 
     /**
-     *
+     * searchword statistics action
      */
     public function searchwordStatisticsAction()
     {
@@ -263,10 +263,11 @@ class BackendModuleController extends AbstractBackendModuleController
         $this->view->assign('days', $days);
         $this->view->assign('data', $data);
         $this->view->assign('error', $error);
+        $this->view->assign('languages', $this->getLanguages());
     }
 
     /**
-     *
+     * clear search index action
      */
     public function clearSearchIndexAction()
     {
@@ -314,7 +315,7 @@ class BackendModuleController extends AbstractBackendModuleController
     }
 
     /**
-     *
+     * last indexing report action
      */
     public function lastIndexingReportAction()
     {
@@ -792,4 +793,27 @@ class BackendModuleController extends AbstractBackendModuleController
     {
         return $GLOBALS['BE_USER'];
     }
+
+    /**
+     * @return array
+     */
+    protected function getLanguages()
+    {
+        $languages = [];
+        $languages[0] = 'Default';
+
+        $queryBuilder = Db::getQueryBuilder('sys_language');
+        $languageRows = $queryBuilder
+            ->select('uid', 'title')
+            ->from('sys_language')
+            ->execute()
+            ->fetchAll();
+
+        foreach ($languageRows as $row) {
+            $languages[$row['uid']] = $row['title'];
+        }
+
+        return $languages;
+    }
+
 }

@@ -14,7 +14,7 @@ current master
 [TASK]    Remove deprecated call of utf8_strlen.
 [BUGFIX]  Fix wrong default values for additional fields. https://github.com/teaminmedias-pluswerk/ke_search/pull/225.
 [TASK]    Remove support for outdated extensions comments, mmforum, t3s_content, ke_yac.
-[TASK]    Set compatibility to TYPO3 9.4 in composer.json.
+[TASK]    Set compatibility to TYPO3 9.5 in composer.json and ext_emconf.
 [TASK]    use namespaces for all classes.
 [TASK]    Remove obsolete pi3.
 [TASK]    Use nicer svg image as wizard icon.
@@ -35,6 +35,7 @@ current master
 [BUGFIX]  Do not index content elements on pages set to "no_search" in tt_content-Indexer. https://github.com/teaminmedias-pluswerk/ke_search/pull/228. This fix only is relevant for the tt_content-Indexer, the pages-Indexer respects the no_index-Flag.
 [TASK]    Use queryBuilder for database queries
 [FEATURE] Preview image or type icon is rendered by fluid
+[TASK]    Render statistics in fluid (instead of php) and resolve language titles
 
 
 Version 2.8.0, July 2018
