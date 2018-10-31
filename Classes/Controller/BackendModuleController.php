@@ -330,7 +330,10 @@ class BackendModuleController extends AbstractBackendModuleController
             ->select('*')
             ->from('sys_log')
             ->where(
-                $queryBuilder->expr()->like('details',  '"[ke_search]%"')
+                $queryBuilder->expr()->like(
+                    'details',
+                    $queryBuilder->quote('[ke_search]%', \PDO::PARAM_STR)
+                )
             )
             ->orderBy('tstamp',  'DESC')
             ->setMaxResults(1)
@@ -677,8 +680,14 @@ class BackendModuleController extends AbstractBackendModuleController
             ->select('language')
             ->from('tx_kesearch_stat_word')
             ->where(
-                $queryBuilder->expr()->gt('tstamp', $timestampStart),
-                $queryBuilder->expr()->eq($isSysFolder ? 'pid' : 'pageid', intval($pageUid))
+                $queryBuilder->expr()->gt(
+                    'tstamp',
+                    $queryBuilder->quote($timestampStart, \PDO::PARAM_INT)
+                ),
+                $queryBuilder->expr()->eq(
+                    $isSysFolder ? 'pid' : 'pageid',
+                    $queryBuilder->quote($pageUid, \PDO::PARAM_INT)
+                )
             )
             ->groupBy('language')
             ->execute()
@@ -740,7 +749,12 @@ class BackendModuleController extends AbstractBackendModuleController
         $statisticData = $queryBuilder
             ->add('select', 'count(' . $tableCol . ') as num, ' . $tableCol)
             ->from($table)
-            ->add('where', 'tstamp > ' . $timestampStart . ' AND language=' . $language . ' ' . $pidWhere)
+            ->add(
+                'where',
+                'tstamp > ' . $queryBuilder->quote($timestampStart, \PDO::PARAM_INT) .
+                ' AND language=' . $queryBuilder->quote($language, \PDO::PARAM_INT) . ' ' .
+                $pidWhere
+            )
             ->add('groupBy', $tableCol . ' HAVING count(' . $tableCol . ')>0')
             ->add('orderBy', 'num desc')
             ->execute()
@@ -748,6 +762,7 @@ class BackendModuleController extends AbstractBackendModuleController
 
         $numResults = count($statisticData);
 
+        // Todo: render statistics in fluid
         // get statistic
         $i = 1;
         $rows = '';
@@ -788,7 +803,10 @@ class BackendModuleController extends AbstractBackendModuleController
             ->select('doktype')
             ->from('pages')
             ->where(
-                $queryBuilder->expr()->eq('uid', intval($this->id))
+                $queryBuilder->expr()->eq(
+                    'uid',
+                    $queryBuilder->quote($this->id, \PDO::PARAM_INT)
+                )
             )
             ->setMaxResults(1)
             ->execute()

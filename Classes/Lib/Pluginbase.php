@@ -1206,7 +1206,10 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             ->select('end_date, end_time, allday, start_date')
             ->from($table)
             ->where(
-                $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter(intval($eventUid), \PDO::PARAM_INT))
+                $queryBuilder->expr()->eq(
+                    'uid',
+                    $queryBuilder->createNamedParameter($eventUid, \PDO::PARAM_INT)
+                )
             )
             ->setMaxResults(1)
             ->execute()

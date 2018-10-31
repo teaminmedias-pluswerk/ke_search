@@ -296,6 +296,7 @@ class Page extends IndexerBase
      */
     public function getPageRecords(array $uids, $whereClause = '', $table = 'pages', $fields = 'pages.*')
     {
+        $databaseConnection = Db::getDatabaseConnection('tx_kesearch_index');
         $queryBuilder = Db::getQueryBuilder($table);
         $queryBuilder->getRestrictions()->removeAll();
         $pageQuery = $queryBuilder
@@ -303,12 +304,10 @@ class Page extends IndexerBase
             ->from($table)
             ->where(
                 $queryBuilder->expr()->in(
-                    'uid',
-                    implode(',', $uids)
+                    'uid', implode(',', $uids)
                 )
             )
         ->execute();
-
 
         $pageRows = [];
         while ($row = $pageQuery->fetch()) {
@@ -334,15 +333,20 @@ class Page extends IndexerBase
             if ($sysLang['uid'] > 0) {
 
                 // check for unified page translation handling feature
-
                 if ($GLOBALS['TYPO3_CONF_VARS']['SYS']['features']['unifiedPageTranslationHandling'] == true) {
                     $queryBuilder = Db::getQueryBuilder('pages');
                     list($pageOverlay) = $queryBuilder
                         ->select('*')
                         ->from('pages')
                         ->where(
-                            $queryBuilder->expr()->eq('l10n_parent', $pageRow['uid']),
-                            $queryBuilder->expr()->eq('sys_language_uid', (int) $sysLang['uid'])
+                            $queryBuilder->expr()->eq(
+                                'l10n_parent',
+                                $queryBuilder->quote($pageRow['uid'], \PDO::PARAM_INT)
+                            ),
+                            $queryBuilder->expr()->eq(
+                                'sys_language_uid',
+                                $queryBuilder->quote($sysLang['uid'], \PDO::PARAM_INT)
+                            )
                         )
                         ->execute()
                         ->fetchAll();
@@ -352,8 +356,14 @@ class Page extends IndexerBase
                         ->select('*')
                         ->from('pages_language_overlay')
                         ->where(
-                            $queryBuilder->expr()->eq('pid', $pageRow['uid']),
-                            $queryBuilder->expr()->eq('sys_language_uid', (int) $sysLang['uid'])
+                            $queryBuilder->expr()->eq(
+                                'pid',
+                                $queryBuilder->quote($pageRow['uid'], \PDO::PARAM_INT)
+                            ),
+                            $queryBuilder->expr()->eq(
+                                'sys_language_uid',
+                                $queryBuilder->quote($sysLang['uid'], \PDO::PARAM_INT)
+                            )
                         )
                         ->execute()
                         ->fetchAll();
@@ -463,15 +473,21 @@ class Page extends IndexerBase
         $table = 'tt_content';
         $queryBuilder = Db::getQueryBuilder($table);
         $where = [];
-        $where[] = $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter(intval($uid),\PDO::PARAM_INT));
+        $where[] = $queryBuilder->expr()->eq(
+            'pid',
+            $queryBuilder->createNamedParameter(
+                $uid,
+                \PDO::PARAM_INT
+            )
+        );
         $where[] = $this->whereClauseForCType;
 
         // add condition for not indexing gridelement columns with colPos = -2 (= invalid)
+        // TODO check gridelements
         if (ExtensionManagementUtility::isLoaded('gridelements')) {
             $fields .= ', (SELECT hidden FROM tt_content as t2 WHERE t2.uid = tt_content.tx_gridelements_container)' .
                 ' as parentGridHidden';
             $where[] = $queryBuilder->expr()->neq('colPos', intval(-2));
-
         }
 
         // Get access restrictions for this page, this access restrictions apply to all

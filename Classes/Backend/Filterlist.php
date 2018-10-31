@@ -96,7 +96,10 @@ class Filterlist
         // storage pid for filter options
         if (!empty($modTSconfig['filterStorage'])) {
             // storage pid is set in page ts config
-            $where = $queryBuilder->expr()->in('pid', $modTSconfig['filterStorage']);
+            $where = $queryBuilder->expr()->in(
+                'pid',
+                $modTSconfig['filterStorage']
+            );
         } else {
             // no storage pid set in page ts config
             $where = null;
@@ -116,7 +119,6 @@ class Filterlist
                     $optionsFields = '*';
                     $optionsTable = 'tx_kesearch_filteroptions';
                     $optionsWhere = $queryBuilder->expr()->in('uid', $row['options']);
-
                     $options = $queryBuilder
                         ->select($optionsFields)
                         ->from($optionsTable)
@@ -167,7 +169,7 @@ class Filterlist
                     $queryBuilder = Db::getQueryBuilder('tx_kesearch_filteroptions');
                     $fieldsOpts = '*';
                     $tableOpts = 'tx_kesearch_filteroptions';
-                    $whereOpts = $queryBuilder->expr()->in('uid', $rowFilter['options']);
+                    $whereOpts = $queryBuilder->expr()->in('uid', $queryBuilder->quote($rowFilter['options']);
 
                     $resOpts = $queryBuilder
                         ->select($fieldsOpts)

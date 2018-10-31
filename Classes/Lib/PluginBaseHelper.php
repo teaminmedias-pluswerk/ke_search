@@ -57,7 +57,10 @@ class PluginBaseHelper
                 ->select('pages', 'recursive')
                 ->from('tt_content')
                 ->where(
-                    $queryBuilder->expr()->eq('uid', $queryBuilder->createNamedParameter($uid, \PDO::PARAM_INT))
+                    $queryBuilder->expr()->eq(
+                        'uid',
+                        $queryBuilder->createNamedParameter($uid, \PDO::PARAM_INT)
+                    )
                 )
                 ->execute()
                 ->fetch(0);
