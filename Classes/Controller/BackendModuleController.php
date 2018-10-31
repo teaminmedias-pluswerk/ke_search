@@ -274,44 +274,27 @@ class BackendModuleController extends AbstractBackendModuleController
         // get uri builder
         $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
 
-        $content = '';
-
         // admin only access
         if ($this->getBackendUser()->isAdmin()) {
             if ($this->do == 'clear') {
                 $databaseConnection = Db::getDatabaseConnection('tx_kesearch_index');
                 $databaseConnection->truncate('tx_kesearch_index');
             }
-
-            $content .= '<p>'
-                .
-                LocalizationUtility::translate(
-                    'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:index_contains',
-                    'KeSearch'
-                )
-                . ' '
-                . $this->getNumberOfRecordsInIndex()
-                . ' '
-                . LocalizationUtility::translate(
-                    'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:records',
-                    'KeSearch'
-                )
-                . '.</p>';
-
-            // show "clear index" link
-            $moduleUrl = $uriBuilder->buildUriFromRoute(
-                'web_KeSearchBackendModule',
-                [
-                    'id' => $this->id,
-                    'do' => 'clear'
-                ]
-            );
-            $content .= '<br /><a class="index-button" href="' . $moduleUrl . '">Clear whole search index!</a>';
-        } else {
-            $content .= '<p>Clear search index: This function is available to admins only.</p>';
         }
 
-        $this->view->assign('content', $content);
+        // build "clear index" link
+        $moduleUrl = $uriBuilder->buildUriFromRoute(
+            'web_KeSearchBackendModule',
+            [
+                'id' => $this->id,
+                'do' => 'clear'
+            ]
+        );
+
+        $this->view->assign('moduleUrl', $moduleUrl);
+        $this->view->assign('isAdmin', $this->getBackendUser()->isAdmin());
+        $this->view->assign('indexCount', $this->getNumberOfRecordsInIndex());
+
     }
 
     /**

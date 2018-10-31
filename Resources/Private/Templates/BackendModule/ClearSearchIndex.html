@@ -7,6 +7,21 @@
                 Clear Search Index
             </f:translate>
         </h2>
-        <f:format.raw>{content}</f:format.raw>
+
+        <f:if condition="{isAdmin}">
+            <f:then>
+                <f:translate key="LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:index_contains" />
+                {indexCount}
+                <f:translate key="LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:records" />
+                <br /><br />
+                <a class="index-button" href="{moduleUrl}">Clear whole search index!</a>
+            </f:then>
+            <f:else>
+                <div class="alert alert-error">
+                    Clear search index: This function is available to admins only.
+                </div>
+            </f:else>
+        </f:if>
+
     </div>
 </f:section>
