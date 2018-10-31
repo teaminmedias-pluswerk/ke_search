@@ -84,7 +84,7 @@ class BackendModuleController extends AbstractBackendModuleController
         // check access and redirect accordingly
         $access = is_array($this->pageinfo) ? 1 : 0;
 
-        if (($this->id && $access) || ($this->getBackendUser()->user['admin'] && !$this->id)) {
+        if (($this->id && $access) || ($this->getBackendUser()->isAdmin() && !$this->id)) {
             //proceed normally
         } else {
             if ($this->getActionName() !== 'alert') {
