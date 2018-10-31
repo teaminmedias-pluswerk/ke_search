@@ -21,6 +21,7 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer;
 
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Registry;
@@ -56,7 +57,12 @@ class IndexerRunner
     /**
      * @var array
      */
-    public $defaultIndexerTypes = array();
+    public $defaultIndexerTypes = [];
+
+    /**
+     * @var array
+     */
+    protected $extConfiguration = [];
 
     /**
      * Constructor of this class
@@ -72,6 +78,9 @@ class IndexerRunner
         foreach ($GLOBALS['TCA']['tx_kesearch_indexerconfig']['columns']['type']['config']['items'] as $indexerType) {
             $this->defaultIndexerTypes[] = $indexerType[1];
         }
+
+        // config
+        $this->extConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('ke_search');
 
         // init logger
         /** @var \TYPO3\CMS\Core\Log\Logger */
@@ -102,7 +111,9 @@ class IndexerRunner
         // this also prevents starting the indexer twice
         if ($this->registry->get('tx_kesearch', 'startTimeOfIndexer') === null) {
             $this->registry->set('tx_kesearch', 'startTimeOfIndexer', time());
-            $this->logger->info('indexing process started at '. strftime('%c', time()));
+            if ($this->extConfiguration['logging'] == 'medium') {
+                $this->logger->info('indexing process started at '. strftime('%c', time()));
+            }
         } else {
             // check lock time
             $lockTime = $this->registry->get('tx_kesearch', 'startTimeOfIndexer');
@@ -532,6 +543,7 @@ class IndexerRunner
         $debugOnly = false,
         $additionalFields = array()
     ) {
+
 
         $this->logger->info('indexing record "' . $title .'"', [
             'storagePid' => $storagePid,
