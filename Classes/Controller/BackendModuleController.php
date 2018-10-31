@@ -253,10 +253,16 @@ class BackendModuleController extends AbstractBackendModuleController
     {
         // days to show
         $days = 30;
-        $content = $this->getSearchwordStatistics($this->id, $days);
+        $data = $this->getSearchwordStatistics($this->id, $days);
+
+        if ($data['error']) {
+            $error = $data['error'];
+            unset($data['error']);
+        }
 
         $this->view->assign('days', $days);
-        $this->view->assign('content', $content);
+        $this->view->assign('data', $data);
+        $this->view->assign('error', $error);
     }
 
     /**
@@ -335,7 +341,7 @@ class BackendModuleController extends AbstractBackendModuleController
                     $queryBuilder->quote('[ke_search]%', \PDO::PARAM_STR)
                 )
             )
-            ->orderBy('tstamp',  'DESC')
+            ->orderBy('tstamp', 'DESC')
             ->setMaxResults(1)
             ->execute()
             ->fetchAll();
@@ -655,16 +661,14 @@ class BackendModuleController extends AbstractBackendModuleController
      */
     public function getSearchwordStatistics($pageUid, $days)
     {
-        if (!$pageUid) {
-            $content =
-                '<div class="alert alert-info">'
-                . LocalizationUtility::translate(
-                    'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:select_a_page',
-                    'KeSearch'
-                )
-                . '</div>';
+        $statisticData = [];
 
-            return $content;
+        if (!$pageUid) {
+            $statisticData['error'] = LocalizationUtility::translate(
+                'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:select_a_page',
+                'KeSearch'
+            );
+            return $statisticData;
         }
 
         // calculate statistic start
@@ -695,18 +699,15 @@ class BackendModuleController extends AbstractBackendModuleController
 
         $content = '';
         if (!count($languageResult)) {
-            $content .=
-                '<div class="alert alert-info">'
-                . 'No statistic data found! Please select the sysfolder where your index is stored or the page '
-                . 'where your search plugin is placed.</div>';
-
-            return $content;
+            $statisticData['error'] =
+                'No statistic data found! Please select the sysfolder 
+                where your index is stored or the page where your search plugin is placed.';
+            return $statisticData;
         }
 
-        foreach($languageResult as $languageRow) {
-            $content .= '<h1 style="clear:left; padding-top:1em;">Language ' . $languageRow['language'] . '</h1>';
+        foreach ($languageResult as $languageRow) {
             if ($isSysFolder) {
-                $content .= $this->getAndRenderStatisticTable(
+                $statisticData[$languageRow['language']]['searchphrase'] = $this->getStatisticTableData(
                     'tx_kesearch_stat_search',
                     $languageRow['language'],
                     $timestampStart,
@@ -714,10 +715,10 @@ class BackendModuleController extends AbstractBackendModuleController
                     'searchphrase'
                 );
             } else {
-                $content .=
-                    '<i>Please select the sysfolder where your index is stored for a list of search phrases</i>';
+                $statisticData['error'] = 'Please select the sysfolder where your index is stored for a list of search phrases';
             }
-            $content .= $this->getAndRenderStatisticTable(
+
+            $statisticData[$languageRow['language']]['word'] = $this->getStatisticTableData(
                 'tx_kesearch_stat_word',
                 $languageRow['language'],
                 $timestampStart,
@@ -725,9 +726,8 @@ class BackendModuleController extends AbstractBackendModuleController
                 'word'
             );
         }
-        $content .= '<br style="clear:left;" />';
 
-        return $content;
+        return $statisticData;
     }
 
     /**
@@ -738,11 +738,8 @@ class BackendModuleController extends AbstractBackendModuleController
      * @param string $tableCol
      * @return string
      */
-    public function getAndRenderStatisticTable($table, $language, $timestampStart, $pidWhere, $tableCol)
+    public function getStatisticTableData($table, $language, $timestampStart, $pidWhere, $tableCol)
     {
-        $content = '<div style="width=50%; float:left; margin-right:1em;">';
-        $content .= '<h2 style="margin:0em;">' . $tableCol . 's</h2>';
-
         // get statistic data from db
         $queryBuilder = Db::getQueryBuilder($table);
         $queryBuilder->getRestrictions()->removeAll();
@@ -760,35 +757,7 @@ class BackendModuleController extends AbstractBackendModuleController
             ->execute()
             ->fetchAll();
 
-        $numResults = count($statisticData);
-
-        // Todo: render statistics in fluid
-        // get statistic
-        $i = 1;
-        $rows = '';
-        if ($numResults) {
-            foreach ($statisticData as $row) {
-                $cssClass = ($i % 2 == 0) ? 'even' : 'odd';
-                $rows .= '<tr>';
-                $rows .= '	<td class="' . $cssClass . '">' . $row[$tableCol] . '</td>';
-                $rows .= '	<td class="times ' . $cssClass . '">' . $row['num'] . '</td>';
-                $rows .= '</tr>';
-                $i++;
-            }
-
-            $content .=
-                '<table class="statistics">
-					<tr>
-					<th>' . $tableCol . '</th>
-					<th>counter</th>
-					</tr>'
-                . $rows .
-                '</table>';
-        }
-
-        $content .= '</div>';
-
-        return $content;
+        return $statisticData;
     }
 
     /*

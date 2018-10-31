@@ -7,6 +7,31 @@
                 Searchword Statistics for the last {days} days
             </f:translate>
         </h2>
-        <f:format.raw>{content}</f:format.raw>
     </div>
+
+
+    <f:if condition="{error}">
+        <div class="alert alert-info">{error}</div>
+    </f:if>
+
+    <f:for each="{data}" as="language" key="languageId">
+        <div style="clear: both;">
+            <h3>Language {languageId}</h3>
+            <f:for each="{language}" as="stats" key="type">
+                <table class="statistics" style="float:left;">
+                    <tr>
+                        <th>{type}</th>
+                        <th>counter</th>
+                    </tr>
+                    <f:for each="{stats}" as="stat">
+                        <tr>
+                            <td>{stat.searchphrase}{stat.word}</td>
+                            <td class="times">{stat.num}</td>
+                        </tr>
+                    </f:for>
+                </table>
+            </f:for>
+        </div>
+    </f:for>
+
 </f:section>

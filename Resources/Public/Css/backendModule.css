@@ -132,7 +132,7 @@ table.statistics {
 	border-radius: 2px;
 	border: 3px solid #666;
 	padding: 10px;
-	margin-top: 20px;
+	margin: 20px 10px;
 	background: white;
 	border-spacing: 0;
 }
@@ -144,14 +144,14 @@ table.statistics th {
 }
 
 table.statistics td {
-	padding: 3px;
+	padding: 3px 5px;
 }
 
-table.statistics td.even {
+table.statistics tr:nth-child(even) {
 	background: #CCC;
 }
 
-table.statistics td.odd {
+table.statistics tr:nth-child(odd) {
 	background: white;
 }
 
