@@ -36,6 +36,7 @@ current master
 [TASK]    Use queryBuilder for database queries
 [FEATURE] Preview image or type icon is rendered by fluid
 [TASK]    Render statistics in fluid (instead of php) and resolve language titles
+[TASK]    Render last indexing report in fluid (instead of php)
 
 
 Version 2.8.0, July 2018

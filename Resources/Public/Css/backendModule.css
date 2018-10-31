@@ -54,32 +54,9 @@
 	width:48%;
 	float:left;
 }
-.summary {
-	-moz-border-radius: 2px;
-	border-radius: 2px;
-	border: 2px solid #666;
-	padding: 12px;
-	margin-top: 10px;
-	background: white;
-	box-shadow: 1px 1px 1px #AFAFAF;
-	-moz-box-shadow: 1px 1px 1px #AFAFAF;
-	-webkit-box-shadow: 1px 1px 1px #AFAFAF;
-}
+
 .infobox {
 	max-width: 400px;
-}
-.summary .title {
-	font-size: 120%;
-	font-weight: bold;
-	margin-bottom: 8px;
-	display:block;
-}
-.summary .leftcol {
-	float: left;
-}
-.summary .rightcol {
-	float: right;
-	text-align: left;
 }
 .orderedlist {
     list-style: none;
@@ -168,4 +145,15 @@ table.statistics td.times {
 	padding: 10px;
 	margin-top: 10px;
 	background: white;
+}
+
+table.report {
+    padding: 10px;
+    margin: 20px 10px;
+    background: white;
+    border-spacing: 0;
+}
+
+table.report td {
+    padding: 0 10px;
 }

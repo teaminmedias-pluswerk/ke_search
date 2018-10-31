@@ -319,19 +319,17 @@ class BackendModuleController extends AbstractBackendModuleController
      */
     public function lastIndexingReportAction()
     {
-        $content = $this->showLastIndexingReport();
-        $this->view->assign('content', $content);
+        $this->view->assign('logEntry', $this->getLastIndexingReport());
     }
 
     /**
-     * shows report from sys_log
+     * get report from sys_log
      * @return string
      * @author Christian Bülter <christian.buelter@inmedias.de>
      * @since 29.05.15
      */
-    public function showLastIndexingReport()
+    public function getLastIndexingReport()
     {
-
         $queryBuilder = Db::getQueryBuilder('sys_log');
         $logResults = $queryBuilder
             ->select('*')
@@ -347,13 +345,7 @@ class BackendModuleController extends AbstractBackendModuleController
             ->execute()
             ->fetchAll();
 
-        if (count($logResults)) {
-            $content = '<div class="summary"><pre>' . $logResults[0]['details'] . '</pre></div>';
-        } else {
-            $content = 'No report found.';
-        }
-
-        return $content;
+        return $logResults;
     }
 
     /**
