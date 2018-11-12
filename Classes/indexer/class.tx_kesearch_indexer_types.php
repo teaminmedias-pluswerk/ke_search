@@ -141,7 +141,7 @@ class tx_kesearch_indexer_types
         $where .= BackendUtility::BEenableFields($table);
         $where .= BackendUtility::deleteClause($table);
         $this->pageRecords = $this->getPageRecords($indexPids, $where, 'pages,' . $table, 'pages.*');
-        if (count($this->pageRecords)) {
+        if (!empty($this->pageRecords)) {
             // create a new list of allowed pids
             return array_keys($this->pageRecords);
         } else {
