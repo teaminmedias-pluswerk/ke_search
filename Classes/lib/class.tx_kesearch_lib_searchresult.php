@@ -124,7 +124,7 @@ class tx_kesearch_lib_searchresult
     public function getResultUrl($linked = false)
     {
         $linkText = $this->cObj->typoLink_URL($this->getResultLinkConfiguration());
-        $linkText = htmlspecialchars($linkText);
+        $linkText = htmlspecialchars(urldecode($linkText));
         if ($linked) {
             return $this->cObj->typoLink($linkText, $this->getResultLinkConfiguration());
         }
