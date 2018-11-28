@@ -692,6 +692,7 @@ class tx_kesearch_indexer_types_page extends tx_kesearch_indexer_types
         if (count($fileObjects) && $feGroups != DONOTINDEX) {
             // loop through files
             foreach ($fileObjects as $fileObject) {
+                $isInList = false;
                 if ($fileObject instanceof FileInterface) {
                     $isInList = \TYPO3\CMS\Core\Utility\GeneralUtility::inList(
                         $this->indexerConfig['fileext'],
