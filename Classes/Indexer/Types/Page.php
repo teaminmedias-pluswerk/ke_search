@@ -752,6 +752,7 @@ class Page extends IndexerBase
         if (count($fileObjects) && $feGroups != DONOTINDEX) {
             // loop through files
             foreach ($fileObjects as $fileObject) {
+                $isInList = false;
                 if ($fileObject instanceof FileInterface) {
                     $isInList = \TYPO3\CMS\Core\Utility\GeneralUtility::inList(
                         $this->indexerConfig['fileext'],

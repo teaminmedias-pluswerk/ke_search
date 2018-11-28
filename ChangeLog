@@ -39,6 +39,7 @@ current master
 [TASK]    Render last indexing report in fluid (instead of php).
 [TASK]    Render clear search index view in fluid (instead of php).
 [TASK]    Set compatibility to TYPO3 9.5 LTS in composer.json and ext_emconf.
+[BUGFIX]  Fix Null pointer exception during indexing. Thanks to Sicor KDL Dev Team. https://github.com/teaminmedias-pluswerk/ke_search/issues/221.
 
 
 Version 2.8.0, July 2018
