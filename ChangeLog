@@ -3,6 +3,7 @@ ChangeLog
 current master
 [BUGFIX]  Fix wrong default values for additional fields. https://github.com/teaminmedias-pluswerk/ke_search/pull/225.
 [BUGFIX]  Do not index content elements on pages set to "no_search" in tt_content-Indexer. https://github.com/teaminmedias-pluswerk/ke_search/pull/228. This fix only is relevant for the tt_content-Indexer, the pages-Indexer respects the no_index-Flag.
+[BUGFIX]  Remove type casting from already fully quoted variable. Thanks to Toben Schmidt. https://github.com/teaminmedias-pluswerk/ke_search/pull/235.
 
 Version 2.8.0, July 2018
 [!!!]     This version changes the database structure!
