@@ -93,11 +93,6 @@ $configurationArray = array(
                         'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_0.gif'
                     ),
                     array(
-                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.2',
-                        'ttnews',
-                        'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_2.gif'
-                    ),
-                    array(
                         'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.5',
                         'tt_address',
                         'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_5.gif'
@@ -142,7 +137,7 @@ $configurationArray = array(
         'startingpoints_recursive' => array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.startingpoints_recursive',
-            'displayCond' => 'FIELD:type:IN:page,tt_content,ttnews,tt_address,templavoila,'
+            'displayCond' => 'FIELD:type:IN:page,tt_content,tt_address,templavoila,'
                 . 'news,a21glossary,cal',
             'config' => array(
                 'type' => 'group',
@@ -179,7 +174,7 @@ $configurationArray = array(
         'sysfolder' => array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.sysfolder',
-            'displayCond' => 'FIELD:type:IN:ttnews,tt_address,news,a21glossary,cal',
+            'displayCond' => 'FIELD:type:IN:tt_address,news,a21glossary,cal',
             'config' => array(
                 'type' => 'group',
                 'internal_type' => 'db',
@@ -221,7 +216,7 @@ $configurationArray = array(
         'index_news_category_mode' => array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_news_category_mode',
-            'displayCond' => 'FIELD:type:IN:ttnews,news',
+            'displayCond' => 'FIELD:type:IN:news',
             'config' => array(
                 'type' => 'select',
                 'renderType' => 'selectSingle',
@@ -264,14 +259,6 @@ $configurationArray = array(
                 'maxitems' => 1,
             )
         ),
-        'index_news_category_selection' => array(
-            'exclude' => 1,
-            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_news_category_selection',
-            'displayCond' => 'FIELD:type:=:ttnews',
-            'config' => array(
-                'type' => 'none',
-            )
-        ),
         'index_extnews_category_selection' => array(
             'exclude' => 1,
             'l10n_mode' => 'mergeIfNotBlank',
@@ -281,29 +268,10 @@ $configurationArray = array(
                 'type' => 'none',
             )
         ),
-        'index_news_useHRDatesSingle' => array(
-            'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_news_useHRDatesSingle',
-            'displayCond' => 'FIELD:type:=:ttnews',
-            'config' => array(
-                'type' => 'check',
-                'default' => '0'
-            )
-        ),
-        'index_news_useHRDatesSingleWithoutDay' => array(
-            'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.'
-                . 'index_news_useHRDatesSingleWithoutDay',
-            'displayCond' => 'FIELD:type:=:ttnews',
-            'config' => array(
-                'type' => 'check',
-                'default' => '0'
-            )
-        ),
         'index_use_page_tags' => array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_use_page_tags',
-            'displayCond' => 'FIELD:type:IN:ttnews,tt_address,news',
+            'displayCond' => 'FIELD:type:IN:tt_address,news',
             'config' => array(
                 'type' => 'check',
                 'default' => '0'
@@ -416,26 +384,11 @@ $configurationArray = array(
     'types' => array(
         '0' => array('showitem' => 'hidden, title, storagepid,targetpid,type,'
             . 'startingpoints_recursive,single_pages,sysfolder,index_content_with_restrictions,'
-            . 'index_news_archived,index_news_category_mode,index_news_category_selection,'
-            . 'index_extnews_category_selection,index_news_useHRDatesSingle,index_news_useHRDatesSingleWithoutDay,'
+            . 'index_news_archived,index_news_category_mode,index_extnews_category_selection,'
             . 'index_use_page_tags,fal_storage,directories,fileext,index_page_doctypes,contenttypes,'
             . 'filteroption,tvpath,index_use_page_tags_for_files,cal_expired_events')
     )
 );
-
-// define dependencies to tt_news only if tt_news is installed
-if (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('tt_news')) {
-    $GLOBALS['TCA']['tx_kesearch_indexerconfig']['columns']['index_news_category_selection']['config'] = array(
-        'type' => 'select',
-        'form_type' => 'user',
-        'userFunc' => 'tx_ttnews_TCAform_selectTree->renderCategoryFields',
-        'treeView' => 1,
-        'foreign_table' => 'tt_news_cat',
-        'autoSizeMax' => 50,
-        'minitems' => 0,
-        'maxitems' => 500,
-    );
-}
 
 // define dependencies to news only if news is installed
 if (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')) {

@@ -42,6 +42,7 @@ current master
 [BUGFIX]  Fix Null pointer exception during indexing. Thanks to Sicor KDL Dev Team. https://github.com/teaminmedias-pluswerk/ke_search/issues/221.
 [TASK]    Use proper setup for template, partial and layout paths. https://github.com/teaminmedias-pluswerk/ke_search/issues/240
 [TASK]    Remove "Show score" and "Show percental score" feature. https://github.com/teaminmedias-pluswerk/ke_search/issues/253
+[TASK]    Remove tt_news Indexer. https://github.com/teaminmedias-pluswerk/ke_search/issues/248
 
 Version 2.8.0, July 2018
 [!!!]     This version changes the database structure!

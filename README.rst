@@ -27,7 +27,7 @@ templating or coding.
 
 ke_search does not use frontend crawling but fetches content elements and data records directly from the database.
 For each content type an indexer is needed (eg. pages, news).
-For the most used content types indexers are provided within the extension itself, including pages, news and tt_news.
+For the most used content types indexers are provided within the extension itself, including pages and news.
 
 That means there may not be an indexer already available for the content type you want to index, but it's quite
 easy for a programmer to write its own indexer for custom data records.

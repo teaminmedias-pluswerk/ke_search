@@ -222,7 +222,7 @@ class SearchHelper
                 break;
 
             case 'external':
-                // render a link for external results (provided by eg. ke_search_premium or tt_news)
+                // render a link for external results (provided by eg. ke_search_premium)
                 $linkconf['parameter'] = $resultRow['params'];
                 $linkconf['useCacheHash'] = false;
                 $linkconf['additionalParams'] = '';

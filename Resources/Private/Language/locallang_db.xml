@@ -51,7 +51,6 @@
 			<label index="tx_kesearch_indexerconfig.single_pages">Single Pages</label>
 			<label index="tx_kesearch_indexerconfig.sysfolder">Record storage page(s) of data to be indexed, single</label>
 			<label index="tx_kesearch_indexerconfig.type.I.0">Pages</label>
-			<label index="tx_kesearch_indexerconfig.type.I.2">News (tt_news)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.5">Address records (tt_address)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.6">Content records (tt_content)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.7">Files</label>
@@ -131,7 +130,6 @@
 			<label index="tx_kesearch_indexerconfig.single_pages">Einzelseiten</label>
 			<label index="tx_kesearch_indexerconfig.sysfolder">Ordner mit zu indexierenden Daten, einfach</label>
 			<label index="tx_kesearch_indexerconfig.type.I.0">Seiten</label>
-			<label index="tx_kesearch_indexerconfig.type.I.2">Nachrichten (tt_news)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.5">Adressen (tt_address)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.6">Inhaltselemente (tt_content)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.7">Dateien</label>
@@ -198,7 +196,6 @@
 			<label index="tx_kesearch_indexerconfig.single_pages">Enkele pagina's</label>
 			<label index="tx_kesearch_indexerconfig.sysfolder">Record opslag pagina(s) van te indexeren data</label>
 			<label index="tx_kesearch_indexerconfig.type.I.0">Pagina's</label>
-			<label index="tx_kesearch_indexerconfig.type.I.2">Nieuws (tt_news)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.5">Adres velden (tt_address)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.6">Inhouds elementen (tt_content)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.7">Bestanden</label>
