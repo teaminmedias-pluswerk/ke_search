@@ -54,7 +54,6 @@
 			<label index="tx_kesearch_indexerconfig.type.I.5">Address records (tt_address)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.6">Content records (tt_content)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.7">Files</label>
-			<label index="tx_kesearch_indexerconfig.type.I.9">TemplaVoila</label>
 			<label index="tx_kesearch_indexerconfig.type.I.12">News (news)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.13">Glossary (a21glossary)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.14">Calendar Base (cal)</label>
@@ -79,7 +78,6 @@
 			<label index="tx_kesearch_indexerconfig.fileext">File indexer: Comma separated list of allowed file extensions (eg. pdf,ppt,doc,xls):</label>
 			<label index="tx_kesearch_indexerconfig.contenttypes">Content element types which should be indexed (default: text,textpic,bullets,table,html,header,uploads):</label>
 			<label index="tx_kesearch_indexerconfig.filteroption">Add tag to all indexed elements:</label>
-			<label index="tx_kesearch_indexerconfig.tvpath">Tell us in which field configuration the indexer can find the tt_content uids. Normally it should be "field_content":</label>
 			<label index="tx_kesearch_indexerconfig.fal_storage">FAL Storage (IMPORTANT: backend user _cli_scheduler needs access to this storage!)</label>
 			<label index="tx_kesearch_indexerconfig.fal_storage.dont_use_fal">Dont' use FAL (write directories like 'fileadmin/user_upload/')</label>
 			<label index="tx_kesearch_indexerconfig.fal_storage.use_fal">Use FAL (write directories like 'user_upload/')</label>
@@ -134,7 +132,6 @@
 			<label index="tx_kesearch_indexerconfig.type.I.5">Adressen (tt_address)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.6">Inhaltselemente (tt_content)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.7">Dateien</label>
-			<label index="tx_kesearch_indexerconfig.type.I.9">TemplaVoila</label>
 			<label index="tx_kesearch_indexerconfig.type.I.12">Nachrichten (news)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.13">Glossar (a21glossary)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.14">Calendar Base (cal)</label>
@@ -155,7 +152,6 @@
 			<label index="tx_kesearch_indexerconfig.directories">Verzeichnisse (komma-getrennt, z. B. fileadmin/my_directory/,fileadmin/my_other_directory  oder my_directory/,my_other_directory/ bei FAL-Benutzung)</label>
 			<label index="tx_kesearch_indexerconfig.fileext">Datei-Indexer: Komma-separierte Liste von zu indexierenden Dateiendungen (z.B. pdf,ppt,doc,xls):</label>
 			<label index="tx_kesearch_indexerconfig.filteroption">Allen indexierten Elementen dieses Schlagwort hinzufügen:</label>
-			<label index="tx_kesearch_indexerconfig.tvpath">Geben Sie an in welcher Feldkonfiguration der Indexer die Aufstellung aller enthaltenen tt_content UIS findet. Normalerweise "field_content". Mehrere Felder können kommasepariert eingetragen werden:</label>
 			<label index="tx_kesearch_indexerconfig.cal_expired_events">Abgelaufene Termine indexieren?</label>
 		</languageKey>
 		<languageKey index="nl" type="array">
@@ -200,14 +196,12 @@
 			<label index="tx_kesearch_indexerconfig.type.I.5">Adres velden (tt_address)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.6">Inhouds elementen (tt_content)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.7">Bestanden</label>
-			<label index="tx_kesearch_indexerconfig.type.I.9">TemplaVoila</label>
 			<label index="tx_kesearch_indexerconfig.type">Type</label>
 			<label index="tx_kesearch_indexerconfig.index_content_with_restrictions">Indexeer inhouds elementen met restricties?</label>
 			<label index="tx_kesearch_indexerconfig.index_content_with_restrictions.I.0">Ja</label>
 			<label index="tx_kesearch_indexerconfig.index_content_with_restrictions.I.1">Nee</label>
 			<label index="tx_kesearch_indexerconfig.directories">Mappen (fileadmin/my_directory/,fileadmin/my_other_directory)</label>
 			<label index="tx_kesearch_indexerconfig.fileext">Door komma's gescheiden lijst van toegestane bestandsextensies (bijv. pdf,ppt,doc,xls)</label>
-			<label index="tx_kesearch_indexerconfig.tvpath">Tell us in which field configuration the indexer can find the tt_content uids. Normally it should be "field_content":</label>
 			<label index="tx_kesearch_indexerconfig.cal_expired_events">Index expired events?</label>
 		</languageKey>
 	</data>

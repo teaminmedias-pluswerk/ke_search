@@ -35,9 +35,6 @@ $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyPagesIndexEntry'][] =
 $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyContentIndexEntry'][] =
     TeaminmediasPluswerk\KeSearch\Hooks\AdditionalFields::class;
 
-$GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyTemplaVoilaIndexEntry'][] =
-    TeaminmediasPluswerk\KeSearch\Hooks\AdditionalFields::class;
-
 // add scheduler task
 $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][\TeaminmediasPluswerk\KeSearch\Scheduler\IndexerTask::class] = array(
     'extension' => $_EXTKEY,
