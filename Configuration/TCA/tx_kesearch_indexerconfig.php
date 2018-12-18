@@ -45,6 +45,60 @@ $configurationArray = array(
                 'size' => '30',
             )
         ),
+        'type' => array(
+            'exclude' => 0,
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type',
+            'config' => array(
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => array(
+                    array(
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.0',
+                        'page',
+                        'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_0.gif'
+                    ),
+                    array(
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.12',
+                        'news',
+                        'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_12.gif'
+                    ),
+                    array(
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.5',
+                        'tt_address',
+                        'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_5.gif'
+                    ),
+                    array(
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.6',
+                        'tt_content',
+                        'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_6.gif'
+                    ),
+                    array(
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.7',
+                        'file',
+                        'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_7.gif'
+                    ),
+                    array(
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.9',
+                        'templavoila',
+                        'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_9.gif'
+                    ),
+                    array(
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.13',
+                        'a21glossary',
+                        'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_13.gif'
+                    ),
+                    array(
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.14',
+                        'cal',
+                        'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_14.gif'
+                    ),
+                ),
+                'itemsProcFunc' => 'TeaminmediasPluswerk\KeSearch\Lib\Items->fillIndexerConfig',
+                'size' => 1,
+                'maxitems' => 1,
+                'default' => 'page',
+            )
+        ),
         'storagepid' => array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.storagepid',
@@ -78,60 +132,6 @@ $configurationArray = array(
                         'type' => 'suggest',
                     ),
                 ),
-            )
-        ),
-        'type' => array(
-            'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type',
-            'config' => array(
-                'type' => 'select',
-                'renderType' => 'selectSingle',
-                'items' => array(
-                    array(
-                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.0',
-                        'page',
-                        'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_0.gif'
-                    ),
-                    array(
-                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.5',
-                        'tt_address',
-                        'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_5.gif'
-                    ),
-                    array(
-                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.6',
-                        'tt_content',
-                        'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_6.gif'
-                    ),
-                    array(
-                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.7',
-                        'file',
-                        'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_7.gif'
-                    ),
-                    array(
-                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.9',
-                        'templavoila',
-                        'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_9.gif'
-                    ),
-                    array(
-                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.12',
-                        'news',
-                        'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_12.gif'
-                    ),
-                    array(
-                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.13',
-                        'a21glossary',
-                        'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_13.gif'
-                    ),
-                    array(
-                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.14',
-                        'cal',
-                        'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_14.gif'
-                    ),
-                ),
-                'itemsProcFunc' => 'TeaminmediasPluswerk\KeSearch\Lib\Items->fillIndexerConfig',
-                'size' => 1,
-                'maxitems' => 1,
-                'default' => 'page',
             )
         ),
         'startingpoints_recursive' => array(
@@ -230,6 +230,7 @@ $configurationArray = array(
                         '2'
                     ),
                 ),
+                'default' => 1,
                 'size' => 1,
                 'maxitems' => 1,
             )
@@ -262,7 +263,7 @@ $configurationArray = array(
         'index_extnews_category_selection' => array(
             'exclude' => 1,
             'l10n_mode' => 'mergeIfNotBlank',
-            'label' => 'LLL:EXT:news/Resources/Private/Language/Resources/Private/Language/locallang_db.xml:tx_news_domain_model_news.categories',
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_extnews_category_selection',
             'displayCond' => 'FIELD:type:=:news',
             'config' => array(
                 'type' => 'none',
@@ -382,7 +383,7 @@ $configurationArray = array(
         )
     ),
     'types' => array(
-        '0' => array('showitem' => 'hidden, title, storagepid,targetpid,type,'
+        '0' => array('showitem' => 'hidden,title,type,storagepid,targetpid,'
             . 'startingpoints_recursive,single_pages,sysfolder,index_content_with_restrictions,'
             . 'index_news_archived,index_news_category_mode,index_extnews_category_selection,'
             . 'index_use_page_tags,fal_storage,directories,fileext,index_page_doctypes,contenttypes,'
