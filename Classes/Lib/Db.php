@@ -247,28 +247,6 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
                 . ' * MATCH (title) AGAINST ("'
                 . $this->pObj->scoreAgainst
                 . '")) AS score';
-            // The percentage calculation is really expensive and forces a full table scan for each
-            // search query. If we don't use the percentage we skip this and can make efficient use
-            // of the fulltext index.
-            if ($this->conf['showPercentalScore']) {
-                $fields .= ', IFNULL(ROUND((MATCH (title, content) AGAINST ("'
-                    . $this->pObj->scoreAgainst
-                    . '") + ('
-                    . $this->pObj->extConf['multiplyValueToTitle']
-                    . ' * MATCH (title) AGAINST ("'
-                    . $this->pObj->scoreAgainst
-                    . '"))) / maxScore * 100), 0) AS percent';
-
-                $table .= ', (SELECT MAX(MATCH (title, content) AGAINST ("'
-                    . $this->pObj->scoreAgainst
-                    . '") + ('
-                    . $this->pObj->extConf['multiplyValueToTitle']
-                    . ' * MATCH (title) AGAINST ("'
-                    . $this->pObj->scoreAgainst
-                    . '"))) AS maxScore FROM '
-                    . $this->table
-                    . ') maxScoreTable';
-            }
         }
 
         // add where clause

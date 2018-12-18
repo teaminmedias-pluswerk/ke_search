@@ -8,11 +8,6 @@
 		<span class="result-number">{resultrow.number}.</span>
 	</f:if>
 	<span class="result-title"><f:format.raw>{resultrow.title}</f:format.raw></span>
-	<f:if condition="{conf.showScoreScale}">
-		<f:if condition="{resultrow.percent} > 0">
-			<span class="scoreBar"><span class="score" style="width: {resultrow.percent}%;"></span></span>
-		</f:if>
-	</f:if>
 	<span class="clearer">&nbsp;</span>
 	<div class="add-info">
 		<f:if condition="{conf.showResultUrl}">
@@ -31,15 +26,6 @@
 					<i>{f:translate(key: 'LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:label_date')}:</i> {resultrow.date}<br />
 				</f:if>
 			</f:else>
-		</f:if>
-
-		<f:if condition="{conf.showScore}">
-			<i>{f:translate(key: 'LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:label_score')}:</i> {resultrow.score}<br />
-		</f:if>
-		<f:if condition="{resultrow.percent} > 0">
-			<f:if condition="{conf.showPercentalScore}">
-				<i>{f:translate(key: 'LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:label_score_percent')}:</i> {resultrow.percent}<br />
-			</f:if>
 		</f:if>
 		<f:if condition="{conf.showTags}">
 			<i>{f:translate(key: 'LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:label_tags')}:</i> {resultrow.tags}<br />

@@ -720,17 +720,10 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                     - $this->conf['resultsPerPage'];
                 $resultrowTemplateValues['number'] = $resultNumber;
 
-                // set score (used for plain score output and score scale)
-                $resultScore = number_format($row['score'], 2, ',', '');
-                $resultrowTemplateValues['score'] = $resultScore;
-
                 // set date (formatted and raw as a timestamp)
                 $resultDate = date($GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'], $row['sortdate']);
                 $resultrowTemplateValues['date'] = $resultDate;
                 $resultrowTemplateValues['date_timestamp'] = $row['sortdate'];
-
-                // set percental score
-                $resultrowTemplateValues['percent'] = $row['percent'];
 
                 // show tags?
                 $tags = $row['tags'];

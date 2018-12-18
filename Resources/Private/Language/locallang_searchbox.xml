@@ -29,9 +29,7 @@
 			<label index="ff.showQueryTime">Show time (query process duration)?</label>
 			<label index="ff.showResultUrl">Show result URL?</label>
 			<label index="ff.renderResultUrlAsLink">Render result URL as link (a-Tag)?</label>
-			<label index="ff.showScore">Show score?</label>
 			<label index="ff.showDate">Show date?</label>
-			<label index="ff.showPercentalScore">Show percental score?</label>
 			<label index="ff.resultLinkTarget">Target for result link</label>
 			<label index="ff.resultLinkTargetFiles">Target for result link for files</label>
 			<label index="ff.resultLinkTarget.I.0">Open in new window</label>
@@ -86,8 +84,6 @@
 			<label index="label_sort">Sorting:</label>
 			<label index="label_score">Score</label>
 			<label index="label_date">Date</label>
-			<label index="label_score_percent">Percental score</label>
-			<label index="label_score_scale">Score scale</label>
 			<label index="label_tags">Tags</label>
 			<label index="label_all">select all / deselect all</label>
 
@@ -160,10 +156,7 @@
 			<label index="ff.showNewsImages">Zeige Nachrichtenbilder (ext:news) als Vorschau?</label>
 			<label index="ff.showResultUrl">Ergebnis-URL anzeigen?</label>
 			<label index="ff.renderResultUrlAsLink">Generiere aus der Ergebnis-URL einen Link (a-Tag)?</label>
-			<label index="ff.showScore">Zeige Relevanz?</label>
 			<label index="ff.showDate">Zeige Datum?</label>
-			<label index="ff.showPercentalScore">Zeige Prozentuale Relevanz?</label>
-			<label index="ff.showScoreScale">Zeige Relevanz-Skala?</label>
 
 			<label index="ff.page.debug">Debug (Admin)</label>
 			<label index="ff.showTags">Zeige Schlagworte?</label>
@@ -194,8 +187,6 @@
 			<label index="label_sort">Sortierung:</label>
 			<label index="label_score">Relevanz</label>
 			<label index="label_date">Datum</label>
-			<label index="label_score_percent">Prozentuale Relevanz</label>
-			<label index="label_score_scale">Relevanz-Skala</label>
 			<label index="label_tags">Schlagworte</label>
 			<label index="label_all">alle auswählen / alle abwählen</label>
 
@@ -259,10 +250,7 @@
 			<label index="ff.showTypeIcon">Toon resultaat type icoon?</label>
 			<label index="ff.showResultUrl">Toon resultaat URL?</label>
 			<label index="ff.renderResultUrlAsLink">Render resultaat URL als link (a-Label)?</label>
-			<label index="ff.showScore">Toon score?</label>
 			<label index="ff.showDate">Toon datum?</label>
-			<label index="ff.showPercentalScore">Toon percentage score?</label>
-			<label index="ff.showScoreScale">Toon score schaal?</label>
 			<label index="ff.page.debug">Debug (Admin)</label>
 			<label index="ff.showTags">Toon labels?</label>
 			<label index="ff.logQuery">Toon query (backend devLog extension)?</label>
@@ -285,8 +273,6 @@
 			<label index="label_sort">Sorteer op:</label>
 			<label index="label_score">Score</label>
 			<label index="label_date">Datum</label>
-			<label index="label_score_percent">procentuele score</label>
-			<label index="label_score_scale">Score schaal</label>
 			<label index="label_tags">Labels</label>
 			<label index="label_all">Selecteer alles / deselecteer alles</label>
 			<label index="loading">Laden</label>
