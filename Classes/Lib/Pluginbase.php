@@ -960,7 +960,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     {
         /** @var \TYPO3\CMS\Fluid\View\StandaloneView $view */
         $view = GeneralUtility::makeInstance(\TYPO3\CMS\Fluid\View\StandaloneView::class);
-        $view->setTemplateRootPaths($this->conf['templateRootPaths']);
+        $view->setTemplateRootPaths($this->conf['view']['templateRootPaths']);
         $view->setTemplate('Widget/Pagination');
         $pagination = [];
 

@@ -22,6 +22,7 @@ namespace TeaminmediasPluswerk\KeSearch\Plugins;
 use TeaminmediasPluswerk\KeSearch\Lib\Pluginbase;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Plugin 'Faceted search - resultlist plugin' for the 'ke_search' extension.
@@ -124,9 +125,9 @@ class ResultlistPlugin extends Pluginbase
     public function initFluidTemplate()
     {
         $this->resultListView = GeneralUtility::makeInstance(\TYPO3\CMS\Fluid\View\StandaloneView::class);
-        $this->resultListView->setTemplateRootPaths($this->conf['templateRootPaths']);
-        $this->resultListView->setPartialRootPaths($this->conf['partialRootPaths']);
-        $this->resultListView->setLayoutRootPaths($this->conf['layoutRootPaths']);
+        $this->resultListView->setTemplateRootPaths($this->conf['view']['templateRootPaths']);
+        $this->resultListView->setPartialRootPaths($this->conf['view']['partialRootPaths']);
+        $this->resultListView->setLayoutRootPaths($this->conf['view']['layoutRootPaths']);
         $this->resultListView->setTemplate('ResultList');
 
         // make settings available in fluid template

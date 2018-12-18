@@ -22,6 +22,7 @@ namespace TeaminmediasPluswerk\KeSearch\Plugins;
 use TeaminmediasPluswerk\KeSearch\Lib\Pluginbase;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 
 /**
  * Plugin 'Faceted search - searchbox and filters' for the 'ke_search' extension.
@@ -87,9 +88,9 @@ class SearchboxPlugin extends Pluginbase
     public function initFluidTemplate()
     {
         $this->searchFormView = GeneralUtility::makeInstance(\TYPO3\CMS\Fluid\View\StandaloneView::class);
-        $this->searchFormView->setTemplateRootPaths($this->conf['templateRootPaths']);
-        $this->searchFormView->setPartialRootPaths($this->conf['partialRootPaths']);
-        $this->searchFormView->setLayoutRootPaths($this->conf['layoutRootPaths']);
+        $this->searchFormView->setTemplateRootPaths($this->conf['view']['templateRootPaths']);
+        $this->searchFormView->setPartialRootPaths($this->conf['view']['partialRootPaths']);
+        $this->searchFormView->setLayoutRootPaths($this->conf['view']['layoutRootPaths']);
         $this->searchFormView->setTemplate('SearchForm');
 
         // make settings available in fluid template
