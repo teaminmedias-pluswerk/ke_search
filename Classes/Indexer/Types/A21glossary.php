@@ -36,7 +36,7 @@ class A21glossary extends IndexerBase
 {
 
     /**
-     * Initializes indexer for tt_news
+     * Initializes indexer for a21glossary
      */
     public function __construct($pObj)
     {

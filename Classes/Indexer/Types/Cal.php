@@ -36,7 +36,7 @@ class Cal extends IndexerBase
 {
 
     /**
-     * Initializes indexer for tt_news
+     * Initializes indexer for cal
      */
     public function __construct($pObj)
     {

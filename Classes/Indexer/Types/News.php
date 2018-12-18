@@ -36,7 +36,7 @@ class News extends IndexerBase
 {
 
     /**
-     * Initializes indexer for tt_news
+     * Initializes indexer for news
      */
     public function __construct($pObj)
     {
