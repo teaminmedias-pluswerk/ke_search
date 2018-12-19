@@ -65,8 +65,8 @@ class PluginBaseHelper
                 ->execute()
                 ->fetch(0);
             if (is_array($pageResult) && count($pageResult)) {
-                $startingpoint['pages'] = $row['pages'];
-                $startingpoint['recursive'] = $row['recursive'];
+                $startingpoint['pages'] = $pageResult['pages'];
+                $startingpoint['recursive'] = $pageResult['recursive'];
             }
         } else {
             // if loadFlexformsFromOtherCE is NOT set
