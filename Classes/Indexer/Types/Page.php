@@ -1,4 +1,5 @@
 <?php
+
 namespace TeaminmediasPluswerk\KeSearch\Indexer\Types;
 
 /* ***************************************************************
@@ -31,6 +32,7 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer\Types;
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
+use TYPO3\CMS\Core\Configuration\Features;
 use TYPO3\CMS\Core\Html\RteHtmlParser;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Resource\FileRepository;
@@ -307,7 +309,7 @@ class Page extends IndexerBase
                     'uid', implode(',', $uids)
                 )
             )
-        ->execute();
+            ->execute();
 
         $pageRows = [];
         while ($row = $pageQuery->fetch()) {
@@ -333,7 +335,10 @@ class Page extends IndexerBase
             if ($sysLang['uid'] > 0) {
 
                 // check for unified page translation handling feature
-                if ($GLOBALS['TYPO3_CONF_VARS']['SYS']['features']['unifiedPageTranslationHandling'] == true) {
+                // see https://docs.typo3.org/typo3cms/extensions/core/Changelog/9.0/Breaking-82445-PagesAndPageTranslations.html
+                if (GeneralUtility::makeInstance(Features::class)->isFeatureEnabled(
+                    'unifiedPageTranslationHandling'
+                )) {
                     $queryBuilder = Db::getQueryBuilder('pages');
                     list($pageOverlay) = $queryBuilder
                         ->select('*')
@@ -351,6 +356,7 @@ class Page extends IndexerBase
                         ->execute()
                         ->fetchAll();
                 } else {
+                    // use fallback for translated pages in "pages_language_overlay"
                     $queryBuilder = Db::getQueryBuilder('pages_language_overlay');
                     list($pageOverlay) = $queryBuilder
                         ->select('*')
@@ -506,7 +512,7 @@ class Page extends IndexerBase
         // respect to the language.
         // While doing so, fetch also content from attached files and write
         // their content directly to the index.
-        $fieldArray = GeneralUtility::trimExplode(',',$fields);
+        $fieldArray = GeneralUtility::trimExplode(',', $fields);
         $ttContentRows = $queryBuilder
             ->select(...$fieldArray)
             ->from($table)
@@ -599,7 +605,7 @@ class Page extends IndexerBase
         // store record in index table
         if (count($pageContent)) {
             foreach ($pageContent as $language_uid => $content) {
-                
+
                 if (!$pageAccessRestrictions['hidden'] && $this->checkIfpageShouldBeIndexed($uid, $language_uid)) {
                     // overwrite access restrictions with language overlay values
                     $accessRestrictionsLanguageOverlay = $pageAccessRestrictions;
