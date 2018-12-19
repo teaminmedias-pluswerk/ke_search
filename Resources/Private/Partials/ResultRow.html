@@ -42,14 +42,15 @@
 </div>
 
 
-
 <f:section name="typeIconOrPreviewImage">
     <f:if condition="{iconConf} && !{preview}">
         <f:then>
             <f:image src="{icon}" maxWidth="16" maxHeight="16" />
         </f:then>
         <f:else>
-            <f:image src="{preview}" treatIdAsReference="1" maxWidth="200" />
+            <f:if condition="{preview}">
+                <f:image src="{preview}" treatIdAsReference="1" maxWidth="200" />
+            </f:if>
         </f:else>
     </f:if>
 </f:section>
