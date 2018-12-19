@@ -47,14 +47,12 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tce']['formevals']
 ['TeaminmediasPluswerk\\KeSearch\\UserFunction\\CustomFieldValidation\\FilterOptionTagValidator'] =
     'EXT:ke_search/Classes/UserFunction/CustomFieldValidation/FilterOptionTagValidator.php';
 
-// indexing logger
+// logging
+$extConf = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)->get('ke_search');
 $GLOBALS['TYPO3_CONF_VARS']['LOG']['TeaminmediasPluswerk']['KeSearch']['Indexer']['writerConfiguration'] = array(
-    \TYPO3\CMS\Core\Log\LogLevel::DEBUG => array(
-        // add a SyslogWriter
+    \TYPO3\CMS\Core\Log\LogLevel::normalizeLevel($extConf['loglevel']) => array(
         'TYPO3\\CMS\\Core\\Log\\Writer\\FileWriter' => array(
-            // configuration for the writer
-            'logFile' => 'typo3temp/var/logs/ke_search_indexer'
+            'logFileInfix' => 'kesearch'
         )
-    ),
-
+    )
 );

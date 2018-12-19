@@ -52,7 +52,7 @@ class IndexerRunner
     /**
      * @var \TYPO3\CMS\Core\Log\Logger
      */
-    protected $logger;
+    public $logger;
 
     /**
      * @var array
@@ -85,12 +85,6 @@ class IndexerRunner
         // init logger
         /** @var \TYPO3\CMS\Core\Log\Logger */
         $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
-        /** @var \TYPO3\CMS\Core\Log\Writer\FileWriter $writer */
-        foreach($this->logger->getWriters() as $writer) {
-            $writers[] = $writer;
-        }
-        $timedLogFilePath = $writers[0][0]->getLogFile() . '_' . time();
-        $writers[0][0]->setLogFile($timedLogFilePath);
     }
 
 
@@ -111,9 +105,7 @@ class IndexerRunner
         // this also prevents starting the indexer twice
         if ($this->registry->get('tx_kesearch', 'startTimeOfIndexer') === null) {
             $this->registry->set('tx_kesearch', 'startTimeOfIndexer', time());
-            if ($this->extConfiguration['logging'] == 'medium') {
-                $this->logger->info('indexing process started at '. strftime('%c', time()));
-            }
+            $this->logger->info('indexing process started at '. strftime('%c', time()));
         } else {
             // check lock time
             $lockTime = $this->registry->get('tx_kesearch', 'startTimeOfIndexer');
@@ -122,9 +114,9 @@ class IndexerRunner
                 // lock is older than 12 hours - remove
                 $this->registry->removeAllByNamespace('tx_kesearch');
                 $this->registry->set('tx_kesearch', 'startTimeOfIndexer', time());
-                $this->logger->info('lock has been removed because it is older than 12 hours'. time());
+                $this->logger->notice('lock has been removed because it is older than 12 hours'. time());
             } else {
-                $this->logger->info('lock is set, you can\'t start indexer twice.');
+                $this->logger->warning('lock is set, you can\'t start indexer twice.');
                 return 'You can\'t start the indexer twice. Please wait '
                 . 'while first indexer process is currently running';
             }
@@ -689,8 +681,13 @@ class IndexerRunner
             . '@crdate'
             . $addQueryPartFor['execute'] . ';';
 
-        Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['set']);
-        Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['execute']);
+        try  {
+            Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['set']);
+            Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['execute']);
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+        }
+
     }
 
     /**
@@ -738,8 +735,13 @@ class IndexerRunner
             . $addQueryPartFor['execute']
             . ', @uid;';
 
-        Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['set']);
-        Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['execute']);
+        try  {
+            Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['set']);
+            Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['execute']);
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+        }
+
     }
 
 
@@ -936,12 +938,15 @@ class IndexerRunner
 
         // check for empty values
         if (empty($storagePid)) {
+            $this->logger->error('no storage pid set');
             $errors[] = 'No storage PID set';
         }
         if (empty($type)) {
+            $this->logger->error('no type set');
             $errors[] = 'No type set';
         }
         if (empty($targetPid)) {
+            $this->logger->error('No target PID set');
             $errors[] = 'No target PID set';
         }
 
@@ -957,6 +962,7 @@ class IndexerRunner
             if (!empty($storagePid)) {
                 $errormessage .= 'STORAGE PID: ' . $storagePid . '; ';
             }
+            $this->logger->error($errormessage);
             $this->indexingErrors[] = ' (' . $errormessage . ')';
 
             // break indexing and wait for next record to store

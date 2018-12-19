@@ -31,5 +31,6 @@ pathPdfinfo = /usr/bin/
 # cat=filepath//30; type=string; label=Path to catdoc, catppt, xls2csv: This path must be valid, if you want to extract content from doc, xls and ppt files.
 pathCatdoc = /usr/bin/
 
-# cat=logging//10; type=options[basic, medium, full]; label=Loglevel: select the level of logging.
-logging = basic
+# cat=logging//10; type=options[DEBUG, INFO, NOTICE, WARNING, ERROR, CRITICAL, ALERT, EMERGENCY]; label=Loglevel: select the minimum loglevel.
+loglevel = ERROR
+

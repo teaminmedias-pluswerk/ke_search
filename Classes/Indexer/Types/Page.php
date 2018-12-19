@@ -177,7 +177,7 @@ class Page extends IndexerBase
 
     /**
      * tx_kesearch_indexer_types_page constructor.
-     * @param $pObj
+     * @param \TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner $pObj
      */
     public function __construct($pObj)
     {
