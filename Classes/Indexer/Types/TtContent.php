@@ -1,11 +1,12 @@
 <?php
+
 namespace TeaminmediasPluswerk\KeSearch\Indexer\Types;
 
-use TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Core\Resource\Index\Indexer;
+use TYPO3\CMS\Core\Database\Query\Restriction\EndTimeRestriction;
+use TYPO3\CMS\Core\Database\Query\Restriction\StartTimeRestriction;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TeaminmediasPluswerk\KeSearch\Lib\Db;
 
 /***************************************************************
  *  Copyright notice
@@ -48,24 +49,52 @@ class TtContent extends Page
         $where = 'pid = ' . intval($uid);
         $where .= ' AND (' . $this->whereClauseForCType . ')';
 
-        // add condition for not indexing gridelement columns with colPos = -2 (= invalid)
-        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('gridelements')) {
-            $where .= ' AND colPos <> -2 ';
-        }
+        $table = 'tt_content';
+        $queryBuilder = Db::getQueryBuilder($table);
 
         // don't index elements which are hidden or deleted, but do index
         // those with time restrictions, the time restrictions will be
         // copied to the index
-        //$where .= t3lib_BEfunc::BEenableFields($table);
-        $where .= ' AND hidden=0';
-        $where .= BackendUtility::deleteClause($table);
+        $queryBuilder->getRestrictions()
+            ->removeByType(StartTimeRestriction::class)
+            ->removeByType(EndTimeRestriction::class);
+
+        // build array with where clauses
+        $where = [];
+        $where[] = $queryBuilder->expr()->eq(
+            'pid',
+            $queryBuilder->createNamedParameter(
+                $uid,
+                \PDO::PARAM_INT
+            )
+        );
+        $where[] = $this->whereClauseForCType;
+
+        // add condition for not indexing gridelement columns with colPos = -2 (= invalid)
+        if (\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('gridelements')) {
+            $where[] = $queryBuilder->expr()->neq(
+                'colPos',
+                $queryBuilder->createNamedParameter(
+                    -2,
+                    \PDO::PARAM_INT
+                )
+            );
+        }
 
         // Get access restrictions for this page
         $pageAccessRestrictions = $this->getInheritedAccessRestrictions($uid);
 
-        $rows = $GLOBALS['TYPO3_DB']->exec_SELECTgetRows($fields, $table, $where);
+        $rows = $queryBuilder
+            ->select($fields)
+            ->from($table)
+            ->where(...$where)
+            ->execute()
+            ->fetchAll();
+
+
         if (count($rows)) {
             foreach ($rows as $row) {
+
                 // skip this content element if the page itself is hidden or a
                 // parent page with "extendToSubpages" set is hidden
                 if ($pageAccessRestrictions['hidden']) {
@@ -120,7 +149,7 @@ class TtContent extends Page
                     $content .= $this->getContentFromContentElement($row) . "\n";
                 }
 
-                // index the files fond
+                // index the files found
                 $this->indexFiles($fileObjects, $row, $pageAccessRestrictions['fe_group]'], $tags);
 
                 // Combine starttime and endtime from page, page language overlay
