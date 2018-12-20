@@ -324,16 +324,13 @@ class IndexerBase
     {
         if (count($this->errors)) {
             $messages = [];
-            foreach ($this->errors as $errorMessage) {
-                /** @var \TYPO3\CMS\Core\Messaging\FlashMessage $message */
-                $messages[] = GeneralUtility::makeInstance(
-                    FlashMessage::class,
-                    $errorMessage,
-                    '',
-                    \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR,
-                    false
-                );
-            }
+            $messages[] = GeneralUtility::makeInstance(
+                FlashMessage::class,
+                'There were errors. Check ke_search log for details.'. "\n",
+                '',
+                \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR,
+                false
+            );
             return $this->renderFlashMessages($messages);
         } else {
             return '';

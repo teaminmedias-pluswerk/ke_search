@@ -266,7 +266,9 @@ class File extends IndexerBase
                 }
             }
         } else {
-            $this->addError($file . ' is not a file.');
+            $errorMessage = $file . ' is not a file.';
+            $this->pObj->logger->error($errorMessage);
+            $this->addError($errorMessage);
             return false;
         }
     }

@@ -105,7 +105,11 @@ class IndexerRunner
         // this also prevents starting the indexer twice
         if ($this->registry->get('tx_kesearch', 'startTimeOfIndexer') === null) {
             $this->registry->set('tx_kesearch', 'startTimeOfIndexer', time());
-            $this->logger->info('indexing process started at '. strftime('%c', time()));
+            $this->logger->notice(
+                "\n============================\n"
+                . "= Indexing process started =\n"
+                . "============================"
+            );
         } else {
             // check lock time
             $lockTime = $this->registry->get('tx_kesearch', 'startTimeOfIndexer');
@@ -118,7 +122,7 @@ class IndexerRunner
             } else {
                 $this->logger->warning('lock is set, you can\'t start indexer twice.');
                 return 'You can\'t start the indexer twice. Please wait '
-                . 'while first indexer process is currently running';
+                    . 'while first indexer process is currently running';
             }
         }
 
@@ -155,7 +159,9 @@ class IndexerRunner
                     $searchObj = GeneralUtility::makeInstance($className,$this);
                     $content .= $searchObj->startIndexing();
                 } else {
-                    $content .= '<div class="error"> Could not find class ' . $className . '</div>' . "\n";
+                    $errorMessage = 'Could not find class ' . $className;
+                    $this->logger->error($errorMessage);
+                    $content .= '<div class="error">' . $errorMessage . '</div>' . "\n";
                 }
             }
 
@@ -173,7 +179,7 @@ class IndexerRunner
         }
 
         // process index cleanup
-        $this->logger->info('cleanup started');
+        $this->logger->info('CleanUpIndex started');
         $content .= $this->cleanUpIndex();
 
         // count index records
@@ -193,19 +199,16 @@ class IndexerRunner
         $this->cleanUpProcessAfterIndexing();
 
         // print indexing errors
-        if (sizeof($this->indexingErrors)) {
-            $content .= "\n\n" . '<br /><br /><br /><b>INDEXING ERRORS ('
-                . sizeof($this->indexingErrors)
-                . ')<br /><br />'
-                . chr(10);
-            foreach ($this->indexingErrors as $error) {
-                $content .= $error . '<br />' . chr(10);
-            }
+        if (!empty($this->indexingErrors)) {
+            $content .= "\n\n" . 'There were indexing errors. Check ke_search log for details.';
         }
 
         // create plaintext report
         $plaintextReport = $this->createPlaintextReport($content);
-        $this->logger->info($plaintextReport);
+
+        // log finishing
+        $this->logger->info('Indexing finishing time: ' . date($GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'] . ', H:i'));
+        $this->logger->info('Indexing process ran ' . $this->calculateAndFormatIndexingTime());
 
         // send notification in CLI mode
         if ($mode == 'CLI') {
@@ -249,9 +252,18 @@ class IndexerRunner
     {
         $report = ' indexing report' . "\n\n";
         $report .= 'Finishing time: ' . date($GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'] . ', H:i') . "\n\n";
-        $report .= strip_tags($content);
+        $report .= preg_replace('~[ ]{2,}~', '', strip_tags($content));
+        $report .= "\n\n" . 'Indexing process ran ' . $this->calculateAndFormatIndexingTime();
 
-        // calculate and format indexing time
+        return $report;
+    }
+
+    /**
+     * create human readable string for indexing time
+     *
+     * @return float|int|string
+     */
+    protected function calculateAndFormatIndexingTime() {
         $indexingTime = time() - $this->startTime;
         if ($indexingTime > 3600) {
             // format hours
@@ -268,10 +280,10 @@ class IndexerRunner
                 $indexingTime .= ' seconds';
             }
         }
-        $report .= "\n\n" . 'Indexing process ran ' . $indexingTime;
 
-        return $report;
+        return $indexingTime;
     }
+
 
     /**
      * prepare sql-statements for indexer
@@ -414,6 +426,7 @@ class IndexerRunner
 
         $content .= '<p><b>Index cleanup:</b><br />' . "\n";
         $content .= $count . ' entries deleted.<br />' . "\n";
+        $this->logger->info('CleanUpIndex: ' . $count . ' entries deleted.');
 
         // rotate Sphinx Index (ke_search_premium function)
         $content .= $this->rotateSphinxIndex();
@@ -535,15 +548,6 @@ class IndexerRunner
         $debugOnly = false,
         $additionalFields = array()
     ) {
-
-
-        $this->logger->info('indexing record "' . $title .'"', [
-            'storagePid' => $storagePid,
-            'title' => $title,
-            'type' => $type,
-            'targetPid' => $targetPid,
-            'additionalFields' => $additionalFields
-        ]);
 
         // if there are errors found in current record return false and break processing
         if (!$this->checkIfRecordHasErrorsBeforeIndexing($storagePid, $title, $type, $targetPid)) {

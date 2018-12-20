@@ -239,6 +239,9 @@ class Page extends IndexerBase
         // create an array of cached page records which contains pages in
         // default and all other languages registered in the system
         foreach ($this->pageRecords as $pageRecord) {
+            $this->pObj->logger->debug('Indexing page record "' . $pageRecord['title'] .'"', [
+                'uid' => $pageRecord['uid']
+            ]);
             $this->addLocalizedPagesToCache($pageRecord);
         }
 
@@ -259,6 +262,10 @@ class Page extends IndexerBase
                 $this->getPageContent($uid);
             }
         }
+
+        $logMessage = 'Indexer "' . $this->indexerConfig['title'] . '" finished'
+            . ' (' . count($indexPids) . ' records processed)';
+        $this->pObj->logger->info($logMessage);
 
         // show indexer content
         $content = '<p><b>Indexer "' . $this->indexerConfig['title'] . '": </b><br />'
