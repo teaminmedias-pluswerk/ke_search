@@ -449,6 +449,7 @@ class IndexerRunner
         // check if Sphinx is enabled
         // in this case we have to update sphinx index, too.
         if ($this->extConfPremium['enableSphinxSearch']) {
+            $this->logger->info('Sphinx index rotation started');
             if (!$this->extConfPremium['sphinxIndexerName']) {
                 $this->extConfPremium['sphinxIndexerConf'] = '--all';
             }
@@ -465,6 +466,7 @@ class IndexerRunner
                     $sphinxFailedToConnect = false;
                     foreach ($retArr as $retRow) {
                         if (strpos($retRow, 'WARNING') !== false) {
+                            $this->logger->warning('Sphinx: ' .$retRow);
                             $content .= '<div class="error">SPHINX ' . $retRow . '</div>' . "\n";
                             $sphinxFailedToConnect = true;
                         }
@@ -474,6 +476,7 @@ class IndexerRunner
                     if ($sphinxFailedToConnect) {
                         $retArr = array();
                         exec($this->extConfPremium['sphinxSearchdPath'], $retArr);
+                        $this->logger->info('Sphinx: Trying to start deamon');
                         $content .= '<p><b>Trying to start Sphinx daemon.</b><br />'
                             . implode('<br />', $retArr)
                             . '</p>'
@@ -491,6 +494,7 @@ class IndexerRunner
                         . $this->extConfPremium['sphinxIndexerName'],
                         $retArr
                     );
+                    $this->logger->warning('Sphinx: Creating new index (rotating)');
                     $content .= '<p><b>Creating new Sphinx index (rotating).</b><br />'
                         . "\n"
                         . implode('<br />' . "\n", $retArr)
@@ -498,14 +502,18 @@ class IndexerRunner
                         . "\n\n";
                     foreach ($retArr as $retRow) {
                         if (strpos($retRow, 'WARNING') !== false) {
+                            $this->logger->error('Sphinx: ' .$retRow);
                             $content .= '<div class="error">SPHINX ' . $retRow . '</div>' . "\n";
                         }
                     }
                 } else {
+                    $this->logger->error('Sphinx: "exec" call is not allowed. '
+                        . 'Check your disable_functions setting in php.ini');
                     $content .= '<div class="error">SPHINX ERROR: "exec" call is not allowed. '
                         . 'Check your disable_functions setting in php.ini.</div>';
                 }
             } else {
+                $this->logger->error('Sphinx: Executables not found or execution permission missing.');
                 $content .= '<div class="error">SPHINX ERROR: Sphinx executables '
                     . 'not found or execution permission is missing.</div>';
             }
