@@ -40,9 +40,7 @@ use \TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use \TYPO3\CMS\Frontend\DataProcessing\FilesProcessor;
 use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use \TYPO3\CMS\Core\Resource\ResourceFactory;
 use \TYPO3\CMS\Core\Resource\FileInterface;
-use \TYPO3\CMS\Core\Resource\Exception\ResourceDoesNotExistException;
 use TYPO3\CMS\Backend\Configuration\TranslationConfigurationProvider;
 
 define('DONOTINDEX', -3);
@@ -765,7 +763,9 @@ class Page extends IndexerBase
                         $fileObject->getExtension()
                     );
                 } else {
-                    $this->addError('Could not index file in content element #' . $ttContentRow['uid'] . ' (no file object).');
+                    $errorMessage = 'Could not index file in content element #' . $ttContentRow['uid'] . ' (no file object).';
+                    $this->pObj->logger->warning($errorMessage);
+                    $this->addError($errorMessage);
                 }
 
                 // check if the file extension fits in the list of extensions
@@ -789,7 +789,9 @@ class Page extends IndexerBase
                     // write file data to the index as a seperate index entry
                     // count indexed files, add it to the indexer output
                     if (!file_exists($filePath)) {
-                        $this->addError('Could not index file ' . $filePath . ' in content element #' . $ttContentRow['uid'] . ' (file does not exist).');
+                        $errorMessage = 'Could not index file ' . $filePath . ' in content element #' . $ttContentRow['uid'] . ' (file does not exist).';
+                        $this->pObj->logger->warning($errorMessage);
+                        $this->addError($errorMessage);
                     } else {
                         if ($fileIndexerObject->fileInfo->setFile($fileObject)) {
                             if (($content = $fileIndexerObject->getFileContent($filePath))) {
@@ -804,7 +806,9 @@ class Page extends IndexerBase
                                 $this->fileCounter++;
                             } else {
                                 $this->addError($fileIndexerObject->getErrors());
-                                $this->addError('Could not index file ' . $filePath . '.');
+                                $errorMessage = 'Could not index file ' . $filePath . '.';
+                                $this->pObj->logger->warning($errorMessage);
+                                $this->addError($errorMessage);
                             }
                         }
                     }
@@ -850,54 +854,19 @@ class Page extends IndexerBase
         /* @var $rteHtmlParser \TYPO3\CMS\Core\Html\RteHtmlParser */
         $rteHtmlParser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(RteHtmlParser::class);
 
-        if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
-            \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('8.0')
-        ) {
-            // TYPO3 7.6
-            $blockSplit = $rteHtmlParser->splitIntoBlock('link', $ttContentRow['bodytext'], 1);
-            foreach ($blockSplit as $k => $v) {
-                if ($k % 2) {
-                    $tagCode = GeneralUtility::unQuoteFilenames(
-                        trim(substr($rteHtmlParser->getFirstTag($v), 0, -1)),
-                        true
-                    );
-                    $link_param = $tagCode[1];
-
-                    // Check for FAL link-handler keyword
-                    list($linkHandlerKeyword, $linkHandlerValue) = explode(':', trim($link_param), 2);
-                    if ($linkHandlerKeyword === 'file') {
-                        try {
-                            $fileOrFolderObject = ResourceFactory::getInstance()->retrieveFileOrFolderObject(
-                                rawurldecode($linkHandlerValue)
-                            );
-                            if ($fileOrFolderObject instanceof FileInterface) {
-                                $fileObjects[] = $fileOrFolderObject;
-                            }
-                        } catch (ResourceDoesNotExistException $resourceDoesNotExistException) {
-                            $this->addError(
-                                'Could not index file with FAL uid #'
-                                . $linkHandlerValue
-                                . ' (the indentifier inserted in the RTE is already gone).'
-                            );
-                        }
-                    }
-                }
-            }
-        } else {
-            // TYPO3 8.7
-            /** @var \TYPO3\CMS\Core\LinkHandling\LinkService $linkService */
-            $linkService = GeneralUtility::makeInstance(\TYPO3\CMS\Core\LinkHandling\LinkService::class);
-            $blockSplit = $rteHtmlParser->splitIntoBlock('A', $ttContentRow['bodytext'], 1);
-            foreach ($blockSplit as $k => $v) {
-                list($attributes) = $rteHtmlParser->get_tag_attributes($rteHtmlParser->getFirstTag($v), true);
-                if (!empty($attributes['href'])) {
-                    $hrefInformation = $linkService->resolve($attributes['href']);
-                    if ($hrefInformation['type'] === \TYPO3\CMS\Core\LinkHandling\LinkService::TYPE_FILE) {
-                        $fileObjects[] = $hrefInformation['file'];
-                    }
+        /** @var \TYPO3\CMS\Core\LinkHandling\LinkService $linkService */
+        $linkService = GeneralUtility::makeInstance(\TYPO3\CMS\Core\LinkHandling\LinkService::class);
+        $blockSplit = $rteHtmlParser->splitIntoBlock('A', $ttContentRow['bodytext'], 1);
+        foreach ($blockSplit as $k => $v) {
+            list($attributes) = $rteHtmlParser->get_tag_attributes($rteHtmlParser->getFirstTag($v), true);
+            if (!empty($attributes['href'])) {
+                $hrefInformation = $linkService->resolve($attributes['href']);
+                if ($hrefInformation['type'] === \TYPO3\CMS\Core\LinkHandling\LinkService::TYPE_FILE) {
+                    $fileObjects[] = $hrefInformation['file'];
                 }
             }
         }
+
         return $fileObjects;
     }
 
