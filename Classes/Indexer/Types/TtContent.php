@@ -120,6 +120,14 @@ class TtContent extends Page
                     continue;
                 }
 
+                $logMessage = 'Indexing tt_content record';
+                $logMessage .= $row['header'] ? ' "' . $row['header'] .'"' : '';
+                $this->pObj->logger->debug( $logMessage, [
+                    'uid' => $row['uid'],
+                    'pid' => $row['pid'],
+                    'CType' => $row['CType']
+                ]);
+
                 // get content for this content element
                 $content = '';
 

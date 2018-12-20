@@ -1,4 +1,5 @@
 <?php
+
 namespace TeaminmediasPluswerk\KeSearch\Indexer\Filetypes;
 
 /* * *************************************************************
@@ -71,8 +72,10 @@ class Pdf extends File implements FileIndexerInterface
         }
 
         if (!$this->isAppArraySet) {
-            $this->addError('The path to pdftools is not correctly set in the '
-                . 'extension manager configuration. You can get the path with "which pdfinfo" or "which pdftotext".');
+            $errorMessage = 'The path to pdftools is not correctly set in the '
+                . 'extension manager configuration. You can get the path with "which pdfinfo" or "which pdftotext".';
+            $this->pObj->logger->error($errorMessage);
+            $this->addError($errorMessage);
         }
     }
 
@@ -110,7 +113,9 @@ class Pdf extends File implements FileIndexerInterface
                 $content = GeneralUtility::getUrl($tempFileName);
                 unlink($tempFileName);
             } else {
-                $this->addError('Content for file ' . $file . ' could not be extracted. Maybe it is encrypted?');
+                $errorMessage = 'Content for file ' . $file . ' could not be extracted. Maybe it is encrypted?';
+                $this->pObj->logger->warning($errorMessage);
+                $this->addError($errorMessage);
 
                 // return empty string if no content was found
                 $content = '';

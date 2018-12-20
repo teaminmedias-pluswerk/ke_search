@@ -1,4 +1,5 @@
 <?php
+
 namespace TeaminmediasPluswerk\KeSearch\Indexer\Filetypes;
 
 /* * *************************************************************
@@ -44,8 +45,10 @@ class Ppt extends File implements FileIndexerInterface
 
     /**
      * class constructor
+     *
+     * @param \TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner $pObj
      */
-    public function __construct()
+    public function __construct($pObj)
     {
         // get extension configuration of ke_search
         $this->extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ke_search'];
@@ -66,8 +69,10 @@ class Ppt extends File implements FileIndexerInterface
         }
 
         if (!$this->isAppArraySet) {
-            $this->addError('The path to catppttools is not correctly set in '
-                . 'extension manager configuration. You can get the path with "which catppt".');
+            $errorMessage = 'The path to catppttools is not correctly set in '
+                . 'extension manager configuration. You can get the path with "which catppt".';
+            $pObj->logger->error($errorMessage);
+            $this->addError($errorMessage);
         }
     }
 

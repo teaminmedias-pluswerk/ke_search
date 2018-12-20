@@ -1,4 +1,5 @@
 <?php
+
 namespace TeaminmediasPluswerk\KeSearch\Indexer\Types;
 
 /***************************************************************
@@ -37,10 +38,13 @@ class News extends IndexerBase
 
     /**
      * Initializes indexer for news
+     *
+     * @param \TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner $pObj
      */
     public function __construct($pObj)
     {
         parent::__construct($pObj);
+        $this->pObj = $pObj;
     }
 
     /**
@@ -113,6 +117,12 @@ class News extends IndexerBase
         $resCount = $res->rowCount();
         if ($resCount) {
             while (($newsRecord = $res->fetch())) {
+
+                $this->pObj->logger->debug('Indexing news record "' . $newsRecord['title'] .'"', [
+                    'uid' => $newsRecord['uid'],
+                    'pid' => $newsRecord['pid']
+                ]);
+
                 // get category data for this news record (list of
                 // assigned categories and single view from category, if it exists)
                 $categoryData = $this->getCategoryData($newsRecord);
@@ -200,8 +210,7 @@ class News extends IndexerBase
                         // NOTE that translated news records are linked by their l10n_parent uid (and overlaid later)
                         $paramsSingleView['tx_news_pi1']['news'] = $newsRecord['l10n_parent']
                             ? $newsRecord['l10n_parent']
-                            : $newsRecord['uid']
-                        ;
+                            : $newsRecord['uid'];
                         $paramsSingleView['tx_news_pi1']['controller'] = 'News';
                         $paramsSingleView['tx_news_pi1']['action'] = 'detail';
                         $params = '&' . http_build_query($paramsSingleView, null, '&');
@@ -277,8 +286,11 @@ class News extends IndexerBase
                 $indexedNewsCounter++;
             }
 
+            $logMessage = 'Indexer "' . $this->indexerConfig['title'] . '" finished'
+                . ' ('.$indexedNewsCounter.' records processed)';
+            $this->pObj->logger->info($logMessage);
             $content = '<p><b>Indexer "' . $this->indexerConfig['title'] . '":</b><br />' . "\n"
-                . $indexedNewsCounter . ' News have been indexed.</p>' . "\n";
+                . $indexedNewsCounter . ' News have been indexed .</p> ' . "\n";
 
             $content .= $this->showErrors();
             $content .= $this->showTime();
@@ -472,11 +484,11 @@ class News extends IndexerBase
 
         // get content from content elements
         // NOTE: If the content elements contain links to files, those files will NOT be indexed.
-        // NOTE: There's no restriction to certain content element types.
+        // NOTE: There's no restriction to certain content element types .
         // All attached content elements will be indexed. Only fields "header" and "bodytext" will be indexed.
         if (count($contentElements)) {
             /* @var $pageIndexerObject Page */
-            $pageIndexerObject = GeneralUtility::makeInstance(Page::class,$this->pObj);
+            $pageIndexerObject = GeneralUtility::makeInstance(Page::class, $this->pObj);
 
             foreach ($contentElements as $contentElement) {
                 // index header, add header only if not set to "hidden"

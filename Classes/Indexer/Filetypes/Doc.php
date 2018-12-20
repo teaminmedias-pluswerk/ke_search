@@ -1,4 +1,5 @@
 <?php
+
 namespace TeaminmediasPluswerk\KeSearch\Indexer\Filetypes;
 
 /* * *************************************************************
@@ -45,8 +46,10 @@ class Doc extends File implements FileIndexerInterface
 
     /**
      * class constructor
+     *
+     * @param \TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner $pObj
      */
-    public function __construct()
+    public function __construct($pObj)
     {
         // get extension configuration of ke_search
         $this->extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ke_search'];
@@ -67,10 +70,10 @@ class Doc extends File implements FileIndexerInterface
         }
 
         if (!$this->isAppArraySet) {
-            $this->addError(
-                'The path to catdoctools is not correctly set in the '
-                . 'extension manager configuration. You can get the path with "which catdoc".'
-            );
+            $errorMessage = 'The path to catdoctools is not correctly set in the '
+                . 'extension manager configuration. You can get the path with "which catdoc".';
+            $pObj->logger->error($errorMessage);
+            $this->addError($errorMessage);
         }
     }
 

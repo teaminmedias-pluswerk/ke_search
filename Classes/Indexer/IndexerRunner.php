@@ -21,6 +21,8 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer;
 
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\Utility\DebugUtility;
@@ -48,9 +50,19 @@ class IndexerRunner
     public $registry;
 
     /**
+     * @var \TYPO3\CMS\Core\Log\Logger
+     */
+    public $logger;
+
+    /**
      * @var array
      */
-    public $defaultIndexerTypes = array();
+    public $defaultIndexerTypes = [];
+
+    /**
+     * @var array
+     */
+    protected $extConfiguration = [];
 
     /**
      * Constructor of this class
@@ -66,7 +78,15 @@ class IndexerRunner
         foreach ($GLOBALS['TCA']['tx_kesearch_indexerconfig']['columns']['type']['config']['items'] as $indexerType) {
             $this->defaultIndexerTypes[] = $indexerType[1];
         }
+
+        // config
+        $this->extConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('ke_search');
+
+        // init logger
+        /** @var \TYPO3\CMS\Core\Log\Logger */
+        $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
     }
+
 
 
     /**
@@ -85,6 +105,11 @@ class IndexerRunner
         // this also prevents starting the indexer twice
         if ($this->registry->get('tx_kesearch', 'startTimeOfIndexer') === null) {
             $this->registry->set('tx_kesearch', 'startTimeOfIndexer', time());
+            $this->logger->notice(
+                "\n============================\n"
+                . "= Indexing process started =\n"
+                . "============================"
+            );
         } else {
             // check lock time
             $lockTime = $this->registry->get('tx_kesearch', 'startTimeOfIndexer');
@@ -93,9 +118,11 @@ class IndexerRunner
                 // lock is older than 12 hours - remove
                 $this->registry->removeAllByNamespace('tx_kesearch');
                 $this->registry->set('tx_kesearch', 'startTimeOfIndexer', time());
+                $this->logger->notice('lock has been removed because it is older than 12 hours'. time());
             } else {
+                $this->logger->warning('lock is set, you can\'t start indexer twice.');
                 return 'You can\'t start the indexer twice. Please wait '
-                . 'while first indexer process is currently running';
+                    . 'while first indexer process is currently running';
             }
         }
 
@@ -117,6 +144,7 @@ class IndexerRunner
         $this->prepareStatements();
 
         foreach ($configurations as $indexerConfig) {
+
             $this->indexerConfig = $indexerConfig;
 
             // run default indexers shipped with ke_search
@@ -124,10 +152,16 @@ class IndexerRunner
                 $className = __NAMESPACE__ . '\\Types\\';
                 $className .= GeneralUtility::underscoredToUpperCamelCase($this->indexerConfig['type']);
                 if (class_exists($className)) {
+                    $this->logger->info(
+                        'indexer "' . $this->indexerConfig['title'] . '" started ',
+                        $this->indexerConfig
+                    );
                     $searchObj = GeneralUtility::makeInstance($className,$this);
                     $content .= $searchObj->startIndexing();
                 } else {
-                    $content .= '<div class="error"> Could not find class ' . $className . '</div>' . "\n";
+                    $errorMessage = 'Could not find class ' . $className;
+                    $this->logger->error($errorMessage);
+                    $content .= '<div class="error">' . $errorMessage . '</div>' . "\n";
                 }
             }
 
@@ -135,12 +169,17 @@ class IndexerRunner
             if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customIndexer'])) {
                 foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customIndexer'] as $_classRef) {
                     $_procObj = &GeneralUtility::makeInstance($_classRef);
+                    $this->logger->info(
+                        'custom indexer "' . $this->indexerConfig['title'] . '" started ',
+                        $this->indexerConfig
+                    );
                     $content .= $_procObj->customIndexer($indexerConfig, $this);
                 }
             }
         }
 
         // process index cleanup
+        $this->logger->info('CleanUpIndex started');
         $content .= $this->cleanUpIndex();
 
         // count index records
@@ -153,23 +192,23 @@ class IndexerRunner
             ->fetchColumn(0);
 
         $content .= '<p><b>Index contains ' . $count . ' entries.</b></p>';
+        $this->logger->info('Index contains ' . $count . ' entries');
+
 
         // clean up process after indezing to free memory
         $this->cleanUpProcessAfterIndexing();
 
         // print indexing errors
-        if (sizeof($this->indexingErrors)) {
-            $content .= "\n\n" . '<br /><br /><br /><b>INDEXING ERRORS ('
-                . sizeof($this->indexingErrors)
-                . ')<br /><br />'
-                . chr(10);
-            foreach ($this->indexingErrors as $error) {
-                $content .= $error . '<br />' . chr(10);
-            }
+        if (!empty($this->indexingErrors)) {
+            $content .= "\n\n" . 'There were indexing errors. Check ke_search log for details.';
         }
 
         // create plaintext report
         $plaintextReport = $this->createPlaintextReport($content);
+
+        // log finishing
+        $this->logger->info('Indexing finishing time: ' . date($GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'] . ', H:i'));
+        $this->logger->info('Indexing process ran ' . $this->calculateAndFormatIndexingTime());
 
         // send notification in CLI mode
         if ($mode == 'CLI') {
@@ -213,9 +252,18 @@ class IndexerRunner
     {
         $report = ' indexing report' . "\n\n";
         $report .= 'Finishing time: ' . date($GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'] . ', H:i') . "\n\n";
-        $report .= strip_tags($content);
+        $report .= preg_replace('~[ ]{2,}~', '', strip_tags($content));
+        $report .= "\n\n" . 'Indexing process ran ' . $this->calculateAndFormatIndexingTime();
 
-        // calculate and format indexing time
+        return $report;
+    }
+
+    /**
+     * create human readable string for indexing time
+     *
+     * @return float|int|string
+     */
+    protected function calculateAndFormatIndexingTime() {
         $indexingTime = time() - $this->startTime;
         if ($indexingTime > 3600) {
             // format hours
@@ -232,10 +280,10 @@ class IndexerRunner
                 $indexingTime .= ' seconds';
             }
         }
-        $report .= "\n\n" . 'Indexing process ran ' . $indexingTime;
 
-        return $report;
+        return $indexingTime;
     }
+
 
     /**
      * prepare sql-statements for indexer
@@ -378,6 +426,7 @@ class IndexerRunner
 
         $content .= '<p><b>Index cleanup:</b><br />' . "\n";
         $content .= $count . ' entries deleted.<br />' . "\n";
+        $this->logger->info('CleanUpIndex: ' . $count . ' entries deleted.');
 
         // rotate Sphinx Index (ke_search_premium function)
         $content .= $this->rotateSphinxIndex();
@@ -400,6 +449,7 @@ class IndexerRunner
         // check if Sphinx is enabled
         // in this case we have to update sphinx index, too.
         if ($this->extConfPremium['enableSphinxSearch']) {
+            $this->logger->info('Sphinx index rotation started');
             if (!$this->extConfPremium['sphinxIndexerName']) {
                 $this->extConfPremium['sphinxIndexerConf'] = '--all';
             }
@@ -416,6 +466,7 @@ class IndexerRunner
                     $sphinxFailedToConnect = false;
                     foreach ($retArr as $retRow) {
                         if (strpos($retRow, 'WARNING') !== false) {
+                            $this->logger->warning('Sphinx: ' .$retRow);
                             $content .= '<div class="error">SPHINX ' . $retRow . '</div>' . "\n";
                             $sphinxFailedToConnect = true;
                         }
@@ -425,6 +476,7 @@ class IndexerRunner
                     if ($sphinxFailedToConnect) {
                         $retArr = array();
                         exec($this->extConfPremium['sphinxSearchdPath'], $retArr);
+                        $this->logger->info('Sphinx: Trying to start deamon');
                         $content .= '<p><b>Trying to start Sphinx daemon.</b><br />'
                             . implode('<br />', $retArr)
                             . '</p>'
@@ -442,6 +494,7 @@ class IndexerRunner
                         . $this->extConfPremium['sphinxIndexerName'],
                         $retArr
                     );
+                    $this->logger->warning('Sphinx: Creating new index (rotating)');
                     $content .= '<p><b>Creating new Sphinx index (rotating).</b><br />'
                         . "\n"
                         . implode('<br />' . "\n", $retArr)
@@ -449,14 +502,18 @@ class IndexerRunner
                         . "\n\n";
                     foreach ($retArr as $retRow) {
                         if (strpos($retRow, 'WARNING') !== false) {
+                            $this->logger->error('Sphinx: ' .$retRow);
                             $content .= '<div class="error">SPHINX ' . $retRow . '</div>' . "\n";
                         }
                     }
                 } else {
+                    $this->logger->error('Sphinx: "exec" call is not allowed. '
+                        . 'Check your disable_functions setting in php.ini');
                     $content .= '<div class="error">SPHINX ERROR: "exec" call is not allowed. '
                         . 'Check your disable_functions setting in php.ini.</div>';
                 }
             } else {
+                $this->logger->error('Sphinx: Executables not found or execution permission missing.');
                 $content .= '<div class="error">SPHINX ERROR: Sphinx executables '
                     . 'not found or execution permission is missing.</div>';
             }
@@ -499,6 +556,7 @@ class IndexerRunner
         $debugOnly = false,
         $additionalFields = array()
     ) {
+
         // if there are errors found in current record return false and break processing
         if (!$this->checkIfRecordHasErrorsBeforeIndexing($storagePid, $title, $type, $targetPid)) {
             return false;
@@ -635,8 +693,13 @@ class IndexerRunner
             . '@crdate'
             . $addQueryPartFor['execute'] . ';';
 
-        Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['set']);
-        Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['execute']);
+        try  {
+            Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['set']);
+            Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['execute']);
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+        }
+
     }
 
     /**
@@ -684,8 +747,13 @@ class IndexerRunner
             . $addQueryPartFor['execute']
             . ', @uid;';
 
-        Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['set']);
-        Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['execute']);
+        try  {
+            Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['set']);
+            Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['execute']);
+        } catch (\Exception $e) {
+            $this->logger->error($e->getMessage());
+        }
+
     }
 
 
@@ -882,12 +950,15 @@ class IndexerRunner
 
         // check for empty values
         if (empty($storagePid)) {
+            $this->logger->error('no storage pid set');
             $errors[] = 'No storage PID set';
         }
         if (empty($type)) {
+            $this->logger->error('no type set');
             $errors[] = 'No type set';
         }
         if (empty($targetPid)) {
+            $this->logger->error('No target PID set');
             $errors[] = 'No target PID set';
         }
 
@@ -903,6 +974,7 @@ class IndexerRunner
             if (!empty($storagePid)) {
                 $errormessage .= 'STORAGE PID: ' . $storagePid . '; ';
             }
+            $this->logger->error($errormessage);
             $this->indexingErrors[] = ' (' . $errormessage . ')';
 
             // break indexing and wait for next record to store
