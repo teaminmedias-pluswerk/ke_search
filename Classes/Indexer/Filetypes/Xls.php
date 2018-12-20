@@ -1,4 +1,5 @@
 <?php
+
 namespace TeaminmediasPluswerk\KeSearch\Indexer\Filetypes;
 
 /* * *************************************************************
@@ -25,6 +26,7 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer\Filetypes;
  * ************************************************************* */
 
 use TeaminmediasPluswerk\KeSearch\Indexer\Types\File;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\CommandUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -44,8 +46,10 @@ class Xls extends File implements FileIndexerInterface
 
     /**
      * class constructor
+     *
+     * @param \TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner $pObj
      */
-    public function __construct()
+    public function __construct($pObj)
     {
         // get extension configuration of ke_search
         $this->extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ke_search'];
@@ -66,8 +70,10 @@ class Xls extends File implements FileIndexerInterface
         }
 
         if (!$this->isAppArraySet) {
-            $this->addError('The path for xls2csv is not correctly set in '
-                . 'extConf. You can get the path with "which xls2csv".');
+            $errorMessage = 'The path for xls2csv is not correctly set in '
+                . 'extConf. You can get the path with "which xls2csv".';
+            $pObj->logger->error($errorMessage);
+            $this->addError($errorMessage);
         }
     }
 

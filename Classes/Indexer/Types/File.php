@@ -1,4 +1,5 @@
 <?php
+
 namespace TeaminmediasPluswerk\KeSearch\Indexer\Types;
 
 /* * *************************************************************
@@ -59,10 +60,13 @@ class File extends IndexerBase
 
     /**
      * Initializes indexer for files
+     *
+     * @param \TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner $pObj
      */
     public function __construct($pObj)
     {
         parent::__construct($pObj);
+        $this->pObj = $pObj;
 
         // get extension configuration of ke_search
         $this->extConf = SearchHelper::getExtConf();
@@ -225,7 +229,7 @@ class File extends IndexerBase
             // check if class exists
             if (class_exists($className)) {
                 // make instance
-                $fileObj = GeneralUtility::makeInstance($className);
+                $fileObj = GeneralUtility::makeInstance($className, $this->pObj);
 
                 // check if new object has interface implemented
                 if ($fileObj instanceof FileIndexerInterface) {
@@ -255,7 +259,9 @@ class File extends IndexerBase
                 if ($this->pObj->indexerConfig['fal_storage'] > 0) {
                     return '';
                 } else {
-                    $this->addError('No indexer for this type of file. (class ' . $className . ' does not exist).');
+                    $errorMessage = 'No indexer for this type of file. (class ' . $className . ' does not exist).';
+                    $this->pObj->logger->error($errorMessage);
+                    $this->addError($errorMessage);
                     return false;
                 }
             }

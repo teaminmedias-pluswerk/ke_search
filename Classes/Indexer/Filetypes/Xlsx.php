@@ -1,4 +1,5 @@
 <?php
+
 namespace TeaminmediasPluswerk\KeSearch\Indexer\Filetypes;
 
 /* * *************************************************************
@@ -54,6 +55,11 @@ class Xlsx extends File implements FileIndexerInterface
     {
         /** @var \TeaminmediasPluswerk\KeSearch\Utility\OoxmlConversion $reader */
         $reader = GeneralUtility::makeInstance(\TeaminmediasPluswerk\KeSearch\Utility\OoxmlConversion::class, $file);
-        return trim($reader->convertToText());
+
+        try {
+            return trim($reader->convertToText());
+        } catch (\Exception $e) {
+            $this->pObj->logger->error($e->getMessage());
+        }
     }
 }
