@@ -40,7 +40,7 @@ class ClearIndexCommand extends Command
     {
         $this->setDescription('Truncates the ke_search index table')
             ->setHelp(
-                'Completely truncates the ke_search index table.'
+                'Completely truncates the ke_search index table. Use with care!'
             )
             ->setAliases([
                 'kesearch:clearindex',

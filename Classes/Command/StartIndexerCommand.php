@@ -40,7 +40,7 @@ class StartIndexerCommand extends Command
     {
         $this->setDescription('Starts the indexing process for ke_search')
             ->setHelp(
-                'Will process all active indexer configuration records that are present in the datbase. '
+                'Will process all active indexer configuration records that are present in the database. '
                 . 'There is no possibility to start indexing for a single indexer configuration')
             ->setAliases([
                 'kesearch:index',
