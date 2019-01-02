@@ -42,8 +42,8 @@ class RemoveLockCommand extends Command
             ->setHelp(
                 'Removing the lock for the ke_search index process can be useful when errors occured '
                 . 'while indexing. In this case, the lock won\'t be removed automatically and can be done '
-                . 'manually by this command.'
-            );
+                . 'manually by this command.')
+            ->setAliases(['kesearch:removelock']);
     }
 
     /**
