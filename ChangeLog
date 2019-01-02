@@ -46,6 +46,11 @@ current master
 [TASK]    Remove Templavoila Indexer. https://github.com/teaminmedias-pluswerk/ke_search/issues/247
 [BUGFIX]  TypeIcon / PreviewImage section. Thanks to David Bruchmann. https://github.com/teaminmedias-pluswerk/ke_search/issues/241
 [BUGFIX]  Get starting point correct from other CE. Thanks to crealistiques. https://github.com/teaminmedias-pluswerk/ke_search/issues/258
+[FEATURE] Implement proper logging. https://github.com/teaminmedias-pluswerk/ke_search/issues/255
+[TASK]    Remove cli script and implement command controller. https://github.com/teaminmedias-pluswerk/ke_search/issues/229
+[FEATURE] Add command controller script for "clear index"
+[FEATURE] Add command controller script for "remove indexer lock"
+
 
 Version 2.8.0, July 2018
 [!!!]     This version changes the database structure!

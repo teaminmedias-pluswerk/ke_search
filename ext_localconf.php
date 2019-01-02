@@ -3,14 +3,6 @@ if (!defined('TYPO3_MODE')) {
     die ('Access denied.');
 }
 
-// register cli-script
-if (TYPO3_MODE == 'BE') {
-    $TYPO3_CONF_VARS['SC_OPTIONS']['GLOBAL']['cliKeys'][$_EXTKEY] = array(
-        'EXT:' . $_EXTKEY . '/cli/class.cli_kesearch.php',
-        '_CLI_kesearch'
-    );
-}
-
 // add Searchbox Plugin, override class name with namespace
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPItoST43($_EXTKEY, '', '_pi1');
 $overrideSetup = 'plugin.tx_kesearch_pi1.userFunc = TeaminmediasPluswerk\KeSearch\Plugins\SearchboxPlugin->main';
