@@ -60,11 +60,6 @@ class IndexerRunner
     public $defaultIndexerTypes = [];
 
     /**
-     * @var array
-     */
-    protected $extConfiguration = [];
-
-    /**
      * Constructor of this class
      */
     public function __construct()
@@ -78,9 +73,6 @@ class IndexerRunner
         foreach ($GLOBALS['TCA']['tx_kesearch_indexerconfig']['columns']['type']['config']['items'] as $indexerType) {
             $this->defaultIndexerTypes[] = $indexerType[1];
         }
-
-        // config
-        $this->extConfiguration = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('ke_search');
 
         // init logger
         /** @var \TYPO3\CMS\Core\Log\Logger */
@@ -213,13 +205,13 @@ class IndexerRunner
         // send notification in CLI mode
         if ($mode == 'CLI') {
             // send finishNotification
-            $isValidEmail = GeneralUtility::validEmail($this->extConfiguration['notificationRecipient']);
-            if ($this->extConfiguration['finishNotification'] && $isValidEmail) {
+            $isValidEmail = GeneralUtility::validEmail($this->extConf['notificationRecipient']);
+            if ($this->extConf['finishNotification'] && $isValidEmail) {
                 // send the notification message
                 $mail = GeneralUtility::makeInstance(MailMessage::class);
-                $mail->setFrom(array($this->extConfiguration['notificationSender']));
-                $mail->setTo(array($this->extConfiguration['notificationRecipient']));
-                $mail->setSubject($this->extConfiguration['notificationSubject']);
+                $mail->setFrom(array($this->extConf['notificationSender']));
+                $mail->setTo(array($this->extConf['notificationRecipient']));
+                $mail->setSubject($this->extConf['notificationSubject']);
                 $mail->setBody($plaintextReport);
                 $mail->send();
             }

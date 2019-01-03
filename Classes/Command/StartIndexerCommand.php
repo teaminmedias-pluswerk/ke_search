@@ -59,9 +59,7 @@ class StartIndexerCommand extends Command
         $indexerRunner = GeneralUtility::makeInstance(IndexerRunner::class);
         $indexerRunner->logger->log('notice', 'Indexer process started by command controller.');
         $indexerResponse = $indexerRunner->startIndexing(
-            true,
-            $this->extConf,
-            'CLI'
+            true, [], 'CLI'
         );
 
         if (strstr($indexerResponse, 'You can\'t start the indexer twice')) {
