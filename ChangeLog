@@ -50,6 +50,7 @@ current master
 [TASK]    Remove cli script and implement command controller. https://github.com/teaminmedias-pluswerk/ke_search/issues/229
 [FEATURE] Add command controller script for "clear index"
 [FEATURE] Add command controller script for "remove indexer lock"
+[BUGFIX]  Make ke_search installable without composer in TYPO3 9 LTS. https://github.com/teaminmedias-pluswerk/ke_search/issues/254
 
 
 Version 2.8.0, July 2018
