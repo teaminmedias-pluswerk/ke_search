@@ -26,6 +26,7 @@
 namespace TeaminmediasPluswerk\KeSearch\UserFunction\CustomFieldValidation;
 
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -44,7 +45,7 @@ class FilterOptionTagValidator
      */
     public function evaluateFieldValue($value)
     {
-        $extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ke_search'];
+        $extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('ke_search');
         $minLength = isset($extConf['searchWordLength']) ? (int) $extConf['searchWordLength'] : 4;
 
         if (strlen($value) < $minLength) {

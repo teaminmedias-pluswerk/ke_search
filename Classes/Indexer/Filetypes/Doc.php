@@ -26,6 +26,7 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer\Filetypes;
  * ************************************************************* */
 
 use TeaminmediasPluswerk\KeSearch\Indexer\Types\File;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\CommandUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -52,7 +53,7 @@ class Doc extends File implements FileIndexerInterface
     public function __construct($pObj)
     {
         // get extension configuration of ke_search
-        $this->extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ke_search'];
+        $this->extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('ke_search');
 
         // check if path to catdoc is correct
         if ($this->extConf['pathCatdoc']) {

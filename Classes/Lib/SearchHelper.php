@@ -1,4 +1,5 @@
 <?php
+
 namespace TeaminmediasPluswerk\KeSearch\Lib;
 
 /***************************************************************
@@ -19,8 +20,10 @@ namespace TeaminmediasPluswerk\KeSearch\Lib;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * helper functions
@@ -40,7 +43,7 @@ class SearchHelper
      */
     public static function getExtConf()
     {
-        $extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['kesearch'];
+        $extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('ke_search');
 
         // Set the "tagChar"
         // sphinx has problems with # in query string.
@@ -79,7 +82,8 @@ class SearchHelper
     {
         $keSearchPremiumIsLoaded = ExtensionManagementUtility::isLoaded('ke_search_premium');
         if ($keSearchPremiumIsLoaded) {
-            $extConfPremium = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ke_search_premium'];
+            $extConfPremium = GeneralUtility::makeInstance(ExtensionConfiguration::class)
+                ->get('ke_search_premium');
             if (!$extConfPremium['prePostTagChar']) {
                 $extConfPremium['prePostTagChar'] = '_';
             }
@@ -132,7 +136,7 @@ class SearchHelper
                 ->fetchAll();
 
             if (!empty($categoryRecords)) {
-                foreach($categoryRecords as $cat) {
+                foreach ($categoryRecords as $cat) {
                     $categoryData['uid_list'][] = $cat['uid'];
                     $categoryData['title_list'][] = $cat['title'];
                 }

@@ -29,7 +29,7 @@ class IndexerTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
     {
 
         // get extension configuration
-        $this->extConf = $GLOBALS['TYPO3_CONF_VARS']['EXTENSIONS']['ke_search'];
+        $this->extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('ke_search');
 
         // make indexer instance
         $indexer = GeneralUtility::makeInstance(\TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner::class);
