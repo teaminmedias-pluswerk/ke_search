@@ -41,8 +41,9 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tce']['formevals']
 
 // logging
 $extConf = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)->get('ke_search');
+$loglevel = !empty($extConf['loglevel']) ? $extConf['loglevel'] : 'ERROR';
 $GLOBALS['TYPO3_CONF_VARS']['LOG']['TeaminmediasPluswerk']['KeSearch']['Indexer']['writerConfiguration'] = array(
-    \TYPO3\CMS\Core\Log\LogLevel::normalizeLevel($extConf['loglevel']) => array(
+    \TYPO3\CMS\Core\Log\LogLevel::normalizeLevel($loglevel) => array(
         'TYPO3\\CMS\\Core\\Log\\Writer\\FileWriter' => array(
             'logFileInfix' => 'kesearch'
         )
