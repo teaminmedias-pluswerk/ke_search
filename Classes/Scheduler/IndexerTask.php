@@ -1,6 +1,7 @@
 <?php
 namespace TeaminmediasPluswerk\KeSearch\Scheduler;
 
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /***************************************************************
