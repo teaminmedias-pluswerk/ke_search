@@ -25,6 +25,7 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer\Filetypes;
  *  This copyright notice MUST APPEAR in all copies of the script!
  * ************************************************************* */
 
+use TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner;
 use TeaminmediasPluswerk\KeSearch\Indexer\Lib\Fileinfo;
 use TeaminmediasPluswerk\KeSearch\Indexer\Types\File;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
@@ -75,7 +76,9 @@ class Pdf extends File implements FileIndexerInterface
         if (!$this->isAppArraySet) {
             $errorMessage = 'The path to pdftools is not correctly set in the '
                 . 'extension manager configuration. You can get the path with "which pdfinfo" or "which pdftotext".';
-            $this->pObj->logger->error($errorMessage);
+            $runner = GeneralUtility::makeInstance(IndexerRunner::class);
+            $runner->logger->error($errorMessage);
+
             $this->addError($errorMessage);
         }
     }
