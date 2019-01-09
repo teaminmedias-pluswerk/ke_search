@@ -1,4 +1,7 @@
 <T3DataStructure>
+	<meta>
+		<langDisable>1</langDisable>
+	</meta>
 	<sheets>
 		<MAIN>
 			<ROOT>
@@ -10,7 +13,7 @@
 
 					<loadFlexformsFromOtherCE>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_resultlist..xml:ff.loadFlexformsFromOtherCE</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_resultlist.xml:ff.loadFlexformsFromOtherCE</label>
 							<config>
 								<type>group</type>
 								<internal_type>db</internal_type>

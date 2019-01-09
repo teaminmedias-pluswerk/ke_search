@@ -8,8 +8,6 @@
 Examples
 ========
 
-.. only:: html
-
 Editing an indexer configuration
 --------------------------------
 
