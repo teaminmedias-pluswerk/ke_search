@@ -49,4 +49,4 @@ ke_search
 
 	Introduction/Index
 	Introduction/Examples
-	QuickInstallation/Index
+	QuickStart/Index

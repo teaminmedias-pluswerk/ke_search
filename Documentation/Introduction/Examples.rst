@@ -8,8 +8,8 @@
 Examples
 ========
 
-Editing an indexer configuration
---------------------------------
+Indexer configuration
+---------------------
 
 .. image:: ../Images/Introduction/Indexer-Configuration.png
 

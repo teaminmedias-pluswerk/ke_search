@@ -19,9 +19,12 @@ Good examples would be a product finder for companies or a study finder for univ
 By writing your own indexer you can put any content you want into the index.
 
 ke_search does not use frontend crawling but fetches content elements and data records directly from the database.
-That means it needs more configuration work than indexed_search and there may not be an indexer already available
-for the content type you want to index. On the other hand, it's quite easy for a programmer to write it's own
-indexer for custom data records.
+This approach has the advantage that content will only be stored once in the index, even if it shows up on multiple
+pages of the website.
+For each type of content (pages, news, files ...) there has to be a dedicated indexer available. That means there may
+not be an indexer already available for the content type you want to index. On the other hand, it's quite easy for a
+programmer to write it's own indexer for custom data records. A set of indexers for common content types comes
+bundled together with ke_search (including pages, news and pdf files).
 
 ke_search uses the MySQL fulltext search algorithm, so it does not need any tools installed on
 the server. But you will need to install tools if you want to use file indexing (PDF, XLS, DOC files).
