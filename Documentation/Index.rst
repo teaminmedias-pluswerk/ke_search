@@ -50,3 +50,8 @@ ke_search
 	Introduction/Index
 	Introduction/Examples
 	QuickStart/Index
+	Indexing/Index
+	Filters/Index
+	Templating/Index
+	Statistics/Index
+	Behaviour/Index

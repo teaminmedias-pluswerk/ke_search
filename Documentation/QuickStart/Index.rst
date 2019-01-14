@@ -24,6 +24,11 @@ You can find the current version (and older ones) at
 
 https://github.com/teaminmedias-pluswerk/ke_search/releases
 
+Include static template
+-----------------------
+
+In your main template include the "static template" of the extension ke_search.
+
 Create pages
 ------------
 
