@@ -95,7 +95,7 @@ CREATE TABLE tx_kesearch_index (
 
 	PRIMARY KEY (uid),
 	KEY parent (pid)
-);
+) ENGINE = MyISAM;
 
 
 

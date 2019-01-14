@@ -53,6 +53,7 @@ current master
 [BUGFIX]  Make ke_search installable without composer in TYPO3 9 LTS. https://github.com/teaminmedias-pluswerk/ke_search/issues/254
 [TASK]    Add documentation in Documentation/ folder. This will be the main source for the documentation. https://www.typo3-macher.de/en/facetted-search-ke-search/documentation/introduction/ is obsolete.
 [TASK]    Respect cropping of images for pages. https://github.com/teaminmedias-pluswerk/ke_search/issues/206 and https://github.com/teaminmedias-pluswerk/ke_search/issues/211.
+[TASK]    Change index table back to MyISAM since phrase search is not supported by InnoDB and throws an error (had been changed from "InnoDB" to "empty"/"default" in 2.6.1). https://github.com/teaminmedias-pluswerk/ke_search/issues/214.
 
 Version 2.8.0, July 2018
 [!!!]     This version changes the database structure!
