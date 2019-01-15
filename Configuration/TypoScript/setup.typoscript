@@ -15,7 +15,7 @@ plugin.tx_kesearch_pi1 {
         }
         layoutRootPaths {
             0 = EXT:ke_search/Resources/Private/Layouts/
-            1 = {$plugin.tx_kesearch_pi1.partialRootPath}
+            1 = {$plugin.tx_kesearch_pi1.layoutRootPath}
         }
     }
 }
@@ -32,7 +32,7 @@ plugin.tx_kesearch_pi2 {
         }
         layoutRootPaths {
             0 = EXT:ke_search/Resources/Private/Layouts/
-            1 = {$plugin.tx_kesearch_pi1.partialRootPath}
+            1 = {$plugin.tx_kesearch_pi1.layoutRootPath}
         }
     }
 }
