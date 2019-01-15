@@ -7,15 +7,15 @@ plugin.tx_kesearch_pi1 {
     view {
         templateRootPaths {
             0 = EXT:ke_search/Resources/Private/Templates/
-            1 = {$plugin.tx_kesearch_pi1.templateRootPath}
+            1 = {$plugin.tx_kesearch.templateRootPath}
         }
         partialRootPaths {
             0 = EXT:ke_search/Resources/Private/Partials/
-            1 = {$plugin.tx_kesearch_pi1.partialRootPath}
+            1 = {$plugin.tx_kesearch.partialRootPath}
         }
         layoutRootPaths {
             0 = EXT:ke_search/Resources/Private/Layouts/
-            1 = {$plugin.tx_kesearch_pi1.layoutRootPath}
+            1 = {$plugin.tx_kesearch.layoutRootPath}
         }
     }
 }
@@ -24,15 +24,15 @@ plugin.tx_kesearch_pi2 {
     view {
         templateRootPaths {
             0 = EXT:ke_search/Resources/Private/Templates/
-            1 = {$plugin.tx_kesearch_pi1.templateRootPath}
+            1 = {$plugin.tx_kesearch.templateRootPath}
         }
         partialRootPaths {
             0 = EXT:ke_search/Resources/Private/Partials/
-            1 = {$plugin.tx_kesearch_pi1.partialRootPath}
+            1 = {$plugin.tx_kesearch.partialRootPath}
         }
         layoutRootPaths {
             0 = EXT:ke_search/Resources/Private/Layouts/
-            1 = {$plugin.tx_kesearch_pi1.layoutRootPath}
+            1 = {$plugin.tx_kesearch.layoutRootPath}
         }
     }
 }

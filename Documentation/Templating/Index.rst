@@ -17,5 +17,6 @@ which control the frontend appearence.
 	:glob:
 
 	Css
+	CustomTemplates
 	Searchbox
 
