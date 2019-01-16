@@ -59,5 +59,6 @@ ke_search
 	Statistics/Index
 	Hooks/Index
 	Logging/Index
+	CommandLine/Index
 	Changelog/Index
 	Premium/Index
