@@ -731,7 +731,17 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                 $resultrowTemplateValues['tags'] = $tags;
 
                 // set preview image and/or type icons
-                $resultrowTemplateValues['previewReferenceUid'] = $this->getFileReference($row);
+                // for files we have the corresponding entry in sys_file as "orig_uid" available (not sys_file_reference)
+                // for pages and news we have to fetch the file reference uid
+                if ($type == 'file') {
+                    $resultrowTemplateValues['filePreviewId'] = $row['orig_uid'];
+                    $resultrowTemplateValues['treatIdAsReference'] = 0;
+                } else {
+                    $resultrowTemplateValues['filePreviewId'] = $this->getFileReference($row);
+                    $resultrowTemplateValues['treatIdAsReference'] = 1;
+                }
+
+                // get the icon for the current record type
                 $resultrowTemplateValues['typeIconPath'] = $this->getTypeIconPath($row['type']);
 
                 // set end date for cal events
@@ -757,21 +767,17 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
      */
     public function getFileReference($row)
     {
-        list($type, $filetype) = explode(':', $row['type']);
+        list($type) = explode(':', $row['type']);
         switch ($type) {
-            case 'file':
-                if ($this->conf['showFilePreview']) {
-                    return $this->getFirstFalRelationUid(
-                        'tt_content', 'media', $row['orig_uid']);
-                }
-                break;
-
             case 'page':
                 if ($this->conf['showPageImages']) {
+
+                    // first check if "tx_kesearch_resultimage" is set
                     $result = $this->getFirstFalRelationUid(
                         'pages', 'tx_kesearch_resultimage', $row['orig_uid']
                     );
 
+                    // fallback to standard "media" field
                     if (empty($result)) {
                         $result = $this->getFirstFalRelationUid(
                             'pages', 'media', $row['orig_uid']

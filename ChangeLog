@@ -2,9 +2,13 @@ ChangeLog
 
 current master
 [!!!]     This version changes the database structure!
-[TASK]    Set compatibility to TYPO3 9.3 in composer.json.
+[!!!]     This version has lots of changes regarding TYPO3 9 LTS. It is not compatible with TYPO3 8 anymmore
+          (at least it has not been tested). For TYPO3 8 you can still use ke_search 2.X. A lot has been refactored
+          (file names, namespacing, doctrince database access) which hopefully makes the code easier to read and
+          maintain. Some features have been removed like indexers for obsolete extensions like tt_news and the
+          "show score" feature. New features are logging, command controllers and fluid rendered preview images.
 [TASK]    Add third parameter (extension key) to addPlugin call.
-[TASK]    Add dependency to typo3db-legacy and TYPO3 v9.
+[TASK]    Add dependency to TYPO3 9.5.
 [TASK]    use namespaces for hooks class.
 [TASK]    replace deprecated getUserObj with makeInstance.
 [TASK]    Move flexform hook class to namespaces.
@@ -14,7 +18,6 @@ current master
 [TASK]    Remove deprecated call of utf8_strlen.
 [BUGFIX]  Fix wrong default values for additional fields. https://github.com/teaminmedias-pluswerk/ke_search/pull/225.
 [TASK]    Remove support for outdated extensions comments, mmforum, t3s_content, ke_yac.
-[TASK]    Set compatibility to TYPO3 9.4.
 [TASK]    use namespaces for all classes.
 [TASK]    Remove obsolete pi3.
 [TASK]    Use nicer svg image as wizard icon.
@@ -54,6 +57,7 @@ current master
 [TASK]    Add documentation in Documentation/ folder. This will be the main source for the documentation. https://www.typo3-macher.de/en/facetted-search-ke-search/documentation/introduction/ is obsolete.
 [TASK]    Respect cropping of images for pages. https://github.com/teaminmedias-pluswerk/ke_search/issues/206 and https://github.com/teaminmedias-pluswerk/ke_search/issues/211.
 [TASK]    Change index table back to MyISAM since phrase search is not supported by InnoDB and throws an error (had been changed from "InnoDB" to "empty"/"default" in 2.6.1). https://github.com/teaminmedias-pluswerk/ke_search/issues/214.
+[BUGFIX]  Fix rendering of file preview image. https://github.com/teaminmedias-pluswerk/ke_search/issues/261.
 
 Version 2.8.0, July 2018
 [!!!]     This version changes the database structure!

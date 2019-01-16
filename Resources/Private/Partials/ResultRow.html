@@ -34,7 +34,7 @@
 	<span class="teaser_icon">
         <f:render
             section="typeIconOrPreviewImage"
-            arguments="{icon: resultrow.typeIconPath, preview: resultrow.previewReferenceUid, iconConf: conf.showTypeIcon}"
+            arguments="{icon: resultrow.typeIconPath, filePreviewId: resultrow.filePreviewId, treatIdAsReference:resultrow.treatIdAsReference, iconConf: conf.showTypeIcon}"
         />
     </span>
 	<span class="result-teaser"><f:format.raw>{resultrow.teaser}</f:format.raw></span>
@@ -43,13 +43,13 @@
 
 
 <f:section name="typeIconOrPreviewImage">
-    <f:if condition="{iconConf} && !{preview}">
+    <f:if condition="{iconConf} && !{filePreviewId}">
         <f:then>
             <f:image src="{icon}" maxWidth="16" maxHeight="16" />
         </f:then>
         <f:else>
-            <f:if condition="{preview}">
-                <f:image src="{preview}" treatIdAsReference="1" maxWidth="200" />
+            <f:if condition="{filePreviewId}">
+                <f:image src="{filePreviewId}" treatIdAsReference="{treatIdAsReference}" maxWidth="200" />
             </f:if>
         </f:else>
     </f:if>
