@@ -144,6 +144,7 @@ return array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_index.language',
             'config' => array(
+                'default' => 0,
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => array(

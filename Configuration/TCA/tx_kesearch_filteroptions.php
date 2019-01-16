@@ -33,6 +33,7 @@ return array(
             'exclude' => 1,
             'label' => $langGeneralPath . 'LGL.language',
             'config' => array(
+                'default' => 0,
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'foreign_table' => 'sys_language',

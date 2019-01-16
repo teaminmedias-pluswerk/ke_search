@@ -34,6 +34,7 @@ return array(
             'exclude' => 1,
             'label' => $langGeneralPath . 'LGL.language',
             'config' => array(
+                'default' => 0,
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'foreign_table' => 'sys_language',
@@ -142,6 +143,7 @@ return array(
             'l10n_mode' => 'exclude',
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_filters.target_pid',
             'config' => array(
+                'default' => 0,
                 'type' => 'group',
                 'internal_type' => 'db',
                 'allowed' => 'pages',
