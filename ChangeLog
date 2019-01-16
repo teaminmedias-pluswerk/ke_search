@@ -2,7 +2,7 @@ ChangeLog
 
 current master
 [!!!]     This version changes the database structure!
-[!!!]     This version has lots of changes regarding TYPO3 9 LTS. It is not compatible with TYPO3 8 anymmore
+[!!!]     This version has lots of changes regarding TYPO3 9 LTS. It is not compatible with TYPO3 8 anymore
           (at least it has not been tested). For TYPO3 8 you can still use ke_search 2.X. A lot has been refactored
           (file names, namespacing, doctrince database access) which hopefully makes the code easier to read and
           maintain. Some features have been removed like indexers for obsolete extensions like tt_news and the
