@@ -18,7 +18,7 @@ Search for phrases: The result must contain exactly the searched phrase.
 
 .. code-block:: none
 
-	“französische Küche“
+	"french cooking"
 
 Conjunction: The result must contain the word
 ---------------------------------------------

@@ -3,13 +3,11 @@
 .. --------------------------------------------------
 .. -*- coding: utf-8 -*- with BOM.
 
-
 .. _start:
 
 =========
 ke_search
 =========
-
 
 ke_search is a search engine for the TYPO3 content management system.
 
@@ -19,21 +17,14 @@ called facets or filter options.
 
 It is very flexible: By writing your own indexer you can put any content you want into the index.
 
-It uses fluid templates (since version 2.0).
-
 ke_search comes with strong defaults and with very little configuration. You can have a powerful
 search engine in your TYPO3 website, eg. images in the search result list and faceting without
 templating or coding.
 
 ke_search does not use frontend crawling but fetches content elements and data records directly from the database.
-For each content type an indexer is needed (eg. pages, news).
 For the most used content types indexers are provided within the extension itself, including pages and news.
 
-That means there may not be an indexer already available for the content type you want to index, but it's quite
-easy for a programmer to write its own indexer for custom data records.
+If you found a bug or want to ask for a feature, please use https://github.com/teaminmedias-pluswerk/ke_search/issues.
 
-See https://www.typo3-macher.de/en/facetted-search-ke-search/documentation/introduction/ for further documentation and
-a quickstart tutorial.
-
-If you find bugs or want to ask for a feature, please use https://github.com/teaminmedias-pluswerk/ke_search/issues
+Pull requests are welcome.
 

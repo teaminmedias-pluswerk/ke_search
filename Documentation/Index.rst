@@ -53,5 +53,11 @@ ke_search
 	Indexing/Index
 	Filters/Index
 	Templating/Index
-	Statistics/Index
+	Configuration/Index
+	Multilingual/Index
 	Behaviour/Index
+	Statistics/Index
+	Hooks/Index
+	Logging/Index
+	Changelog/Index
+	Premium/Index

@@ -19,4 +19,5 @@ which control the frontend appearence.
 	Css
 	CustomTemplates
 	Searchbox
-
+	Images
+	TemplateSelector
