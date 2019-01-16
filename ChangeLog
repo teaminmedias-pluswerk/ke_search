@@ -1,6 +1,6 @@
 ChangeLog
 
-current master
+Version 3.0.0, January 2019
 [!!!]     This version changes the database structure!
 [!!!]     This version has lots of changes regarding TYPO3 9 LTS. It is not compatible with TYPO3 8 anymore
           (at least it has not been tested). For TYPO3 8 you can still use ke_search 2.X. A lot has been refactored

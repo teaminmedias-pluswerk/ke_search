@@ -1,10 +1,10 @@
 <?php
 $EM_CONF[$_EXTKEY] = array(
     'title' => 'Faceted Search',
-    'description' => 'Faceted fulltext search for TYPO3. Fast, flexible and easy to use. Very easy to install. Fast (tested with over 200.000 records) and flexible (you can write your own indexers). Indexes content directly from the databases. Visit kesearch.de for further information and documentation.',
+    'description' => 'Faceted fulltext search for TYPO3. Fast, flexible and easy to install and use. Indexes content directly from the databases. Features faceting / filtering, file indexing, images in result lists and respects access restrictions.',
     'category' => 'plugin',
     'shy' => 0,
-    'version' => '2.8.0',
+    'version' => '3.0.0',
     'dependencies' => '',
     'conflicts' => '',
     'priority' => '',
@@ -16,9 +16,9 @@ $EM_CONF[$_EXTKEY] = array(
     'modify_tables' => '',
     'clearcacheonload' => 0,
     'lockType' => '',
-    'author' => 'Christian Buelter (team.inmedias)',
-    'author_email' => 'christian.buelter@inmedias.de',
-    'author_company' => 'team.inmedias',
+    'author' => 'ke_search Dev Team',
+    'author_email' => 'christian.buelter@pluswerk.ag',
+    'author_company' => 'Pluswerk AG',
     'CGLcompliance' => '',
     'CGLcompliance_note' => '',
     'constraints' => array(
