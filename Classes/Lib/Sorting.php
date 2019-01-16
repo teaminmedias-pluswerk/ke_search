@@ -116,6 +116,9 @@ class Sorting
                         $sortByDir = $this->changeOrdering($sortByDir);
                     }
 
+                    $url = $this->generateSortingLink($field, $sortByDir);
+                    $classname = $this->getClassNameForUpDownArrow($field, $dbOrdering);
+
                     $fluidTemplateVariables['sortingLinks'][] = array(
                         'field' => $field,
                         'url' => $url,
