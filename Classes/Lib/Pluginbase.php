@@ -656,9 +656,6 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         // set number of results
         $this->numberOfResults = $this->db->getAmountOfSearchResults();
 
-        // count searchword with ke_stats
-        $this->countSearchWordWithKeStats($this->sword);
-
         // count search phrase in ke_search statistic tables
         if ($this->conf['countSearchPhrases']) {
             $this->countSearchPhrase($this->sword, $this->swords, $this->numberOfResults, $this->tagsAgainst);
@@ -858,55 +855,6 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         }
 
     }
-
-    /**
-     * Counts searchword and -phrase if ke_stats is installed
-     * @param   string $searchphrase
-     * @return  void
-     * @author  Christian Buelter <buelter@kennziffer.com>
-     * @since   Tue Mar 01 2011 12:34:25 GMT+0100
-     */
-    public function countSearchWordWithKeStats($searchphrase = '')
-    {
-        $searchphrase = trim($searchphrase);
-        $keStatsIsLoaded = ExtensionManagementUtility::isLoaded('ke_stats');
-        if ($keStatsIsLoaded && !empty($searchphrase)) {
-            $keStatsObj = GeneralUtility::makeInstance('EXT:ke_stats/pi1/class.tx_kestats_pi1.php:tx_kestats_pi1');
-            $keStatsObj->initApi();
-
-            // count words
-            $wordlist = GeneralUtility::trimExplode(' ', $searchphrase, true);
-            foreach ($wordlist as $singleword) {
-                $keStatsObj->increaseCounter(
-                    'ke_search Words',
-                    'element_title,year,month',
-                    $singleword,
-                    0,
-                    $this->firstStartingPoint,
-                    $GLOBALS['TSFE']->sys_page->sys_language_uid,
-                    0,
-                    'extension'
-                );
-            }
-
-            // count phrase
-            $keStatsObj->increaseCounter(
-                'ke_search Phrases',
-                'element_title,year,month',
-                $searchphrase,
-                0,
-                $this->firstStartingPoint,
-                $GLOBALS['TSFE']->sys_page->sys_language_uid,
-                0,
-                'extension'
-            );
-
-            unset($wordlist);
-            unset($singleword);
-            unset($keStatsObj);
-        }
-    }
-
 
     /**
      * Fetches configuration value given its name.

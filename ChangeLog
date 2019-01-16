@@ -58,6 +58,7 @@ current master
 [TASK]    Respect cropping of images for pages. https://github.com/teaminmedias-pluswerk/ke_search/issues/206 and https://github.com/teaminmedias-pluswerk/ke_search/issues/211.
 [TASK]    Change index table back to MyISAM since phrase search is not supported by InnoDB and throws an error (had been changed from "InnoDB" to "empty"/"default" in 2.6.1). https://github.com/teaminmedias-pluswerk/ke_search/issues/214.
 [BUGFIX]  Fix rendering of file preview image. https://github.com/teaminmedias-pluswerk/ke_search/issues/261.
+[TASK]    Remove obsolete code for ke_stats. https://github.com/teaminmedias-pluswerk/ke_search/issues/260.
 
 Version 2.8.0, July 2018
 [!!!]     This version changes the database structure!
