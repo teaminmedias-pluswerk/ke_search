@@ -529,7 +529,7 @@ class Page extends IndexerBase
                 // If yes, check if the container is hidden or placed outsite the page (colPos: -2).
                 // this adds a query for each content element which may result in slow indexing. But simply
                 // joining the tt_content table to itself does not work either, since then all content elements which
-                // are not located inside a gridelement won't be indexing
+                // are not located inside a gridelement won't be indexed then.
                 if (ExtensionManagementUtility::isLoaded('gridelements') && $ttContentRow['tx_gridelements_container']) {
                     $queryBuilder = Db::getQueryBuilder($table);
                     $gridelementsContainer = $queryBuilder
