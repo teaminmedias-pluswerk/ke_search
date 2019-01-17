@@ -1,5 +1,8 @@
 ChangeLog
 
+current master
+[BUGFIX]  Exception when indexing pages with active extension Gridelements. https://github.com/teaminmedias-pluswerk/ke_search/issues/262.
+
 Version 3.0.0, January 2019
 [!!!]     This version changes the database structure!
 [!!!]     This version has lots of changes regarding TYPO3 9 LTS. It is not compatible with TYPO3 8 anymore

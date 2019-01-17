@@ -36,7 +36,6 @@ use TYPO3\CMS\Core\Configuration\Features;
 use TYPO3\CMS\Core\Html\RteHtmlParser;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Resource\FileRepository;
-use \TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Frontend\ContentObject\ContentObjectRenderer;
 use \TYPO3\CMS\Frontend\DataProcessing\FilesProcessor;
 use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
@@ -493,12 +492,9 @@ class Page extends IndexerBase
         );
         $where[] = $this->whereClauseForCType;
 
-        // add condition for not indexing gridelement columns with colPos = -2 (= invalid)
-        // TODO check gridelements
+        // If gridelements is installed, add the uid of the container to the field list
         if (ExtensionManagementUtility::isLoaded('gridelements')) {
-            $fields .= ', (SELECT hidden FROM tt_content as t2 WHERE t2.uid = tt_content.tx_gridelements_container)' .
-                ' as parentGridHidden';
-            $where[] = $queryBuilder->expr()->neq('colPos', intval(-2));
+            $fields .= ', tt_content.tx_gridelements_container';
         }
 
         // Get access restrictions for this page, this access restrictions apply to all
@@ -528,9 +524,37 @@ class Page extends IndexerBase
         $pageContent = array();
         if (count($ttContentRows)) {
             foreach ($ttContentRows as $ttContentRow) {
-                if (ExtensionManagementUtility::isLoaded('gridelements') && $ttContentRow['parentGridHidden'] === '1') {
-                    // If parent grid element is hidden, don't index this content element
-                    continue;
+
+                // If gridelements is installed, check if the content element sits inside a gridelements container.
+                // If yes, check if the container is hidden or placed outsite the page (colPos: -2).
+                // this adds a query for each content element which may result in slow indexing. But simply
+                // joining the tt_content table to itself does not work either, since then all content elements which
+                // are not located inside a gridelement won't be indexing
+                if (ExtensionManagementUtility::isLoaded('gridelements') && $ttContentRow['tx_gridelements_container']) {
+                    $queryBuilder = Db::getQueryBuilder($table);
+                    $gridelementsContainer = $queryBuilder
+                        ->select(...['colPos','hidden'])
+                        ->from($table)
+                        ->where($queryBuilder->expr()->eq(
+                            'uid',
+                            $queryBuilder->createNamedParameter($ttContentRow['tx_gridelements_container'])
+                        )
+                        )
+                        ->execute()
+                        ->fetch();
+
+                    // If there's no gridelement container found, it means it is hidden or deleted or time restricted.
+                    // In this case, skip the content elements inside the gridelements container
+                    if ($gridelementsContainer === FALSE) {
+                        continue;
+                    } else {
+
+                        // If the colPos of the gridelement container is -2, it is not on the page, so skip it.
+                        if ($gridelementsContainer['colPos'] === -2) {
+                            continue;
+                        }
+
+                    }
                 }
 
                 $content = '';
