@@ -1,6 +1,6 @@
 ChangeLog
 
-current master
+Version 3.0.1, January 2019
 [BUGFIX]  Exception when indexing pages with active extension Gridelements. https://github.com/teaminmedias-pluswerk/ke_search/issues/262.
 
 Version 3.0.0, January 2019
