@@ -118,7 +118,8 @@ class IndexerBase
     public function getPageRecords(array $uids, $whereClause = '', $table = 'pages', $fields = 'pages.*')
     {
 
-        $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
+        $queryBuilder = Db::getQueryBuilder($table);
+        $queryBuilder->getRestrictions()->removeAll();
         $where = [];
         $where[] = $queryBuilder->expr()->in('pages.uid', implode(',', $uids));
         // index only pages which are searchable
@@ -136,6 +137,11 @@ class IndexerBase
             $queryBuilder->createNamedParameter(0,\PDO::PARAM_INT)
         );
 
+        // add additional where clause
+        if ($whereClause) {
+            $where[] = $whereClause;
+        }
+
         $tables = GeneralUtility::trimExplode(',',$table);
         $query = $queryBuilder
             ->select($fields);
@@ -143,11 +149,6 @@ class IndexerBase
             $query->from($table);
         }
         $query->where(...$where);
-
-        // add additional where clause
-        if ($whereClause) {
-            $query->add('where', $whereClause);
-        }
 
         $pageRows = $query->execute()->fetchAll();
 
