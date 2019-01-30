@@ -1,10 +1,10 @@
 <?php
+
 namespace TeaminmediasPluswerk\KeSearch\Indexer\Types;
 
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
+use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Persistence\Generic\Backend;
 
 /***************************************************************
  *  Copyright notice
@@ -64,172 +64,182 @@ class TtAddress extends IndexerBase
             $this->pageRecords = $this->getPageRecords($indexPids);
             $this->addTagsToRecords($indexPids);
         }
-        $where = 'pid IN (' . implode(',', $indexPids) . ') ';
 
-        $where .= BackendUtility::BEenableFields($table);
-        $where .= BackendUtility::deleteClause($table);
+        $queryBuilder = Db::getQueryBuilder($table);
 
-        $res = $GLOBALS['TYPO3_DB']->exec_SELECTquery($fields, $table, $where);
-        $resCount = $GLOBALS['TYPO3_DB']->sql_num_rows($res);
+        $result = $queryBuilder
+            ->select($fields)
+            ->from($table)
+            ->where(
+                $queryBuilder->expr()->in(
+                    'pid',
+                    $queryBuilder->createNamedParameter(
+                        implode(',', $indexPids), \PDO::PARAM_STR
+                    )
+                )
+            )
+            ->execute()
+            ->fetchAll();
 
         // no address records found
-        if (!$resCount) {
+        if (!count($result)) {
             $content = '<p>No address records found!</p>';
             return $content;
-        }
+        } else {
+            foreach ($result as $addressRow) {
 
-        // if records found: process them
-        while (($addressRow = $GLOBALS['TYPO3_DB']->sql_fetch_assoc($res))) {
-            $abstract = '';
-            $content = '';
+                $abstract = '';
+                $content = '';
 
-            // set title, use company if set, otherwise name
-            $title = !empty($addressRow['company'])
-                ? $addressRow['company'] :
-                (!empty($addressRow['name']) ? $addressRow['name']
-                    : ($addressRow['first_name'] . ' ' . $addressRow['last_name']));
+                // set title, use company if set, otherwise name
+                $title = !empty($addressRow['company'])
+                    ? $addressRow['company'] :
+                    (!empty($addressRow['name']) ? $addressRow['name']
+                        : ($addressRow['first_name'] . ' ' . $addressRow['last_name']));
 
-            // use description as abstract if set
-            if (!empty($addressRow['description'])) {
-                $abstract = $addressRow['description'];
-            }
-
-            // build content
-            if (!empty($addressRow['company'])) {
-                $content .= $addressRow['company'] . "\n";
-            }
-            if (!empty($addressRow['title'])) {
-                $content .= $addressRow['title'] . ' ';
-            }
-            if (!empty($addressRow['name'])) {
-                $content .= $addressRow['name'] . "\n"; // name
-            } else {
-                if (!empty($addressRow['first_name'])) {
-                    $content .= $addressRow['first_name'] . ' ';
+                // use description as abstract if set
+                if (!empty($addressRow['description'])) {
+                    $abstract = $addressRow['description'];
                 }
-                if (!empty($addressRow['middle_name'])) {
-                    $content .= $addressRow['middle_name'] . ' ';
+
+                // build content
+                if (!empty($addressRow['company'])) {
+                    $content .= $addressRow['company'] . "\n";
                 }
-                if (!empty($addressRow['last_name'])) {
-                    $content .= $addressRow['last_name'] . ' ';
+                if (!empty($addressRow['title'])) {
+                    $content .= $addressRow['title'] . ' ';
                 }
-                if (!empty($addressRow['last_name'])
-                    || !empty($addressRow['middle_name'])
-                    || !empty($addressRow['middle_name'])) {
-                    $content .= "\n";
+                if (!empty($addressRow['name'])) {
+                    $content .= $addressRow['name'] . "\n"; // name
+                } else {
+                    if (!empty($addressRow['first_name'])) {
+                        $content .= $addressRow['first_name'] . ' ';
+                    }
+                    if (!empty($addressRow['middle_name'])) {
+                        $content .= $addressRow['middle_name'] . ' ';
+                    }
+                    if (!empty($addressRow['last_name'])) {
+                        $content .= $addressRow['last_name'] . ' ';
+                    }
+                    if (!empty($addressRow['last_name'])
+                        || !empty($addressRow['middle_name'])
+                        || !empty($addressRow['middle_name'])) {
+                        $content .= "\n";
+                    }
                 }
-            }
-            if (!empty($addressRow['address'])) {
-                $content .= $addressRow['address'] . "\n";
-            }
-            if (!empty($addressRow['zip'])) {
-                $content .= $addressRow['zip'] . "\n";
-            }
-            if (!empty($addressRow['city'])) {
-                $content .= $addressRow['city'] . "\n";
-            }
-            if (!empty($addressRow['country'])) {
-                $content .= $addressRow['country'] . "\n";
-            }
-            if (!empty($addressRow['region'])) {
-                $content .= $addressRow['region'] . "\n";
-            }
-            if (!empty($addressRow['email'])) {
-                $content .= $addressRow['email'] . "\n";
-            }
-            if (!empty($addressRow['phone'])) {
-                $content .= $addressRow['phone'] . "\n";
-            }
-            if (!empty($addressRow['fax'])) {
-                $content .= $addressRow['fax'] . "\n";
-            }
-            if (!empty($addressRow['mobile'])) {
-                $content .= $addressRow['mobile'] . "\n";
-            }
-            if (!empty($addressRow['www'])) {
-                $content .= $addressRow['www'];
-            }
-
-            // put content together
-            $fullContent = $abstract . "\n" . $content;
-
-            // there is no tt_address default param like this; you have to modify this by hook to fit your needs
-            $params = '&tt_address[showUid]=' . $addressRow['uid'];
-
-            // no tags yet
-            if ($this->indexerConfig['index_use_page_tags']) {
-                $tagContent = $this->pageRecords[intval($addressRow['pid'])]['tags'];
-            } else {
-                $tagContent = '';
-            }
-
-            // set additional fields for sorting
-            $additionalFields = array(
-                'sortdate' => $addressRow['tstamp'],
-            );
-
-            // fill orig_uid
-            if (isset($addressRow['uid']) && $addressRow['uid'] > 0) {
-                $additionalFields['orig_uid'] = $addressRow['uid'];
-            }
-
-            // fill orig_pid
-            if (isset($addressRow['pid']) && $addressRow['pid'] > 0) {
-                $additionalFields['orig_pid'] = $addressRow['pid'];
-            }
-
-            // make it possible to modify the indexerConfig via hook
-            $indexerConfig = $this->indexerConfig;
-
-            // add some fields which you may set in your own hook
-            $customfields = array(
-                'sys_language_uid' => 0,
-                'starttime' => 0,
-                'endtime' => 0,
-                'fe_group' => ''
-            );
-
-            // hook for custom modifications of the indexed data, e. g. the tags
-            if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyAddressIndexEntry'])) {
-                foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyAddressIndexEntry'] as $_classRef) {
-                    $_procObj = &GeneralUtility::makeInstance($_classRef);
-                    $_procObj->modifyAddressIndexEntry(
-                        $title,
-                        $abstract,
-                        $fullContent,
-                        $params,
-                        $tagContent,
-                        $addressRow,
-                        $additionalFields,
-                        $indexerConfig,
-                        $customfields
-                    );
+                if (!empty($addressRow['address'])) {
+                    $content .= $addressRow['address'] . "\n";
                 }
-            }
+                if (!empty($addressRow['zip'])) {
+                    $content .= $addressRow['zip'] . "\n";
+                }
+                if (!empty($addressRow['city'])) {
+                    $content .= $addressRow['city'] . "\n";
+                }
+                if (!empty($addressRow['country'])) {
+                    $content .= $addressRow['country'] . "\n";
+                }
+                if (!empty($addressRow['region'])) {
+                    $content .= $addressRow['region'] . "\n";
+                }
+                if (!empty($addressRow['email'])) {
+                    $content .= $addressRow['email'] . "\n";
+                }
+                if (!empty($addressRow['phone'])) {
+                    $content .= $addressRow['phone'] . "\n";
+                }
+                if (!empty($addressRow['fax'])) {
+                    $content .= $addressRow['fax'] . "\n";
+                }
+                if (!empty($addressRow['mobile'])) {
+                    $content .= $addressRow['mobile'] . "\n";
+                }
+                if (!empty($addressRow['www'])) {
+                    $content .= $addressRow['www'];
+                }
 
-            // store in index
-            $this->pObj->storeInIndex(
-                $indexerConfig['storagepid'],       // storage PID
-                $title,                             // page/record title
-                'tt_address',                       // content type
-                $indexerConfig['targetpid'],        // target PID: where is the single view?
-                $fullContent,                       // indexed content, includes the title (linebreak after title)
-                $tagContent,                        // tags
-                $params,                            // typolink params for singleview
-                $abstract,                          // abstract
-                $customfields['sys_language_uid'],  // language uid
-                $customfields['starttime'],         // starttime
-                $customfields['endtime'],           // endtime
-                $customfields['fe_group'],          // fe_group
-                false,                              // debug only?
-                $additionalFields                   // additional fields added by hooks
-            );
+                // put content together
+                $fullContent = $abstract . "\n" . $content;
+
+                // there is no tt_address default param like this; you have to modify this by hook to fit your needs
+                $params = '&tt_address[showUid]=' . $addressRow['uid'];
+
+                // no tags yet
+                if ($this->indexerConfig['index_use_page_tags']) {
+                    $tagContent = $this->pageRecords[intval($addressRow['pid'])]['tags'];
+                } else {
+                    $tagContent = '';
+                }
+
+                // set additional fields for sorting
+                $additionalFields = array(
+                    'sortdate' => $addressRow['tstamp'],
+                );
+
+                // fill orig_uid
+                if (isset($addressRow['uid']) && $addressRow['uid'] > 0) {
+                    $additionalFields['orig_uid'] = $addressRow['uid'];
+                }
+
+                // fill orig_pid
+                if (isset($addressRow['pid']) && $addressRow['pid'] > 0) {
+                    $additionalFields['orig_pid'] = $addressRow['pid'];
+                }
+
+                // make it possible to modify the indexerConfig via hook
+                $indexerConfig = $this->indexerConfig;
+
+                // add some fields which you may set in your own hook
+                $customfields = array(
+                    'sys_language_uid' => 0,
+                    'starttime' => 0,
+                    'endtime' => 0,
+                    'fe_group' => ''
+                );
+
+                // hook for custom modifications of the indexed data, e. g. the tags
+                if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyAddressIndexEntry'])) {
+                    foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyAddressIndexEntry'] as $_classRef) {
+                        $_procObj = &GeneralUtility::makeInstance($_classRef);
+                        $_procObj->modifyAddressIndexEntry(
+                            $title,
+                            $abstract,
+                            $fullContent,
+                            $params,
+                            $tagContent,
+                            $addressRow,
+                            $additionalFields,
+                            $indexerConfig,
+                            $customfields
+                        );
+                    }
+                }
+
+                // store in index
+                $this->pObj->storeInIndex(
+                    $indexerConfig['storagepid'],       // storage PID
+                    $title,                             // page/record title
+                    'tt_address',                       // content type
+                    $indexerConfig['targetpid'],        // target PID: where is the single view?
+                    $fullContent,                       // indexed content, includes the title (linebreak after title)
+                    $tagContent,                        // tags
+                    $params,                            // typolink params for singleview
+                    $abstract,                          // abstract
+                    $customfields['sys_language_uid'],  // language uid
+                    $customfields['starttime'],         // starttime
+                    $customfields['endtime'],           // endtime
+                    $customfields['fe_group'],          // fe_group
+                    false,                              // debug only?
+                    $additionalFields                   // additional fields added by hooks
+                );
+
+            }
         }
 
         $content = '<p><b>Indexer "'
             . $this->indexerConfig['title']
             . '": '
-            . $resCount
+            . count($result)
             . ' address records have been indexed.</b></p>'
             . "\n";
 
