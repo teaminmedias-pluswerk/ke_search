@@ -5,7 +5,6 @@ use TeaminmediasPluswerk\KeSearch\Plugins\SearchboxPlugin;
 use TeaminmediasPluswerk\KeSearchPremium\KeSearchPremium;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Frontend\Page\PageRepository;
@@ -56,10 +55,6 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
         $this->pObj = $pObj;
         $this->cObj = $this->pObj->cObj;
         $this->conf = $this->pObj->conf;
-
-        if (ExtensionManagementUtility::isLoaded('ke_search_premium')) {
-            $this->keSearchPremium = GeneralUtility::makeInstance(KeSearchPremium::class);
-        }
     }
 
     /**
