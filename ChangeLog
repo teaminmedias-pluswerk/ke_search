@@ -1,6 +1,6 @@
 ChangeLog
 
-Master
+Version 3.0.2, January 2019
 [BUGFIX]  news indexer does not respect storage folder. https://github.com/teaminmedias-pluswerk/ke_search/pull/266.
 [BUGFIX]  different indexer for news has wrong target page. https://github.com/teaminmedias-pluswerk/ke_search/issues/263.
 [TASK]    migrate tt_address indexer. https://github.com/teaminmedias-pluswerk/ke_search/issues/250.
