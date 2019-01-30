@@ -2,9 +2,9 @@
 namespace TeaminmediasPluswerk\KeSearch\Lib;
 
 use TeaminmediasPluswerk\KeSearch\Plugins\SearchboxPlugin;
+use TeaminmediasPluswerk\KeSearchPremium\KeSearchPremium;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Frontend\Page\PageRepository;
@@ -42,6 +42,7 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
     protected $hasSearchResults = true;
     protected $searchResults = array();
     protected $numberOfResults = 0;
+    protected $keSearchPremium = NULL;
 
     /**
      * @var SearchboxPlugin
@@ -150,20 +151,19 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
     /**
      * get a limitted amount of search results for a requested page
      *
-     * @return array Array containing a limitted (one page) amount of search results
+     * @return array Array containing a limited (one page) amount of search results
      */
     public function getSearchResultBySphinx()
     {
-        require_once(ExtensionManagementUtility::extPath('ke_search_premium')
-            . 'class.user_kesearchpremium.php');
-        $this->user_kesearchpremium = GeneralUtility::makeInstance('user_kesearchpremium');
+        /** @var KeSearchPremium keSearchPremium */
+        $this->keSearchPremium = GeneralUtility::makeInstance(KeSearchPremium::class);
 
         // set ordering
-        $this->user_kesearchpremium->setSorting($this->getOrdering());
+        $this->keSearchPremium->setSorting($this->getOrdering());
 
         // set limit
         $limit = $this->getLimit();
-        $this->user_kesearchpremium->setLimit($limit[0], $limit[1], intval($this->pObj->extConfPremium['sphinxLimit']));
+        $this->keSearchPremium->setLimit($limit[0], $limit[1], intval($this->pObj->extConfPremium['sphinxLimit']));
 
         // generate query
         $queryForSphinx = '';
@@ -217,13 +217,13 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['appendWhereToSphinx'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['appendWhereToSphinx'] as $_classRef) {
                 $_procObj = &GeneralUtility::makeInstance($_classRef);
-                $queryForSphinx = $_procObj->appendWhereToSphinx($queryForSphinx, $this->user_kesearchpremium, $this);
+                $queryForSphinx = $_procObj->appendWhereToSphinx($queryForSphinx, $this->keSearchPremium, $this);
             }
         }
-        $rows = $this->user_kesearchpremium->getSearchResults($queryForSphinx);
+        $rows = $this->keSearchPremium->getSearchResults($queryForSphinx);
 
         // get number of records
-        $this->numberOfResults = $this->user_kesearchpremium->getTotalFound();
+        $this->numberOfResults = $this->keSearchPremium->getTotalFound();
         return $rows;
     }
 
