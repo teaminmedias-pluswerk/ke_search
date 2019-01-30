@@ -20,9 +20,9 @@ namespace TeaminmediasPluswerk\KeSearch\Lib;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TeaminmediasPluswerk\KeSearchPremium\KeSearchPremium;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
-use \TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use \TYPO3\CMS\Core\Utility\HttpUtility;
 use TYPO3\CMS\Frontend\Page\PageRepository;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
@@ -115,9 +115,9 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     public $typoScriptService;
 
     /**
-     * @var user_kesearchpremium
+     * @var KeSearchPremium keSearchPremium
      */
-    public $user_kesearchpremium;
+    public $keSearchPremium;
 
     /**
      * @var Searchresult
