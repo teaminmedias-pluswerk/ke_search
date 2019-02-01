@@ -815,6 +815,9 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             } else if ($type == 'file') {
                 // fallback for file results: use default if no image for this file extension is available
                 return 'EXT:ke_search/Resources/Public/Icons/types/file.gif';
+            } else {
+                // fallback if no icon found
+                return 'EXT:ke_search/Resources/Public/Icons/types/default.gif';
             }
         }
     }
