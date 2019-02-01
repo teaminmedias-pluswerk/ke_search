@@ -2,6 +2,7 @@ ChangeLog
 
 Master
 [TASK]    Changes and fixes needed for TYPO3 9 compatibility of ke_search_premium. https://github.com/teaminmedias-pluswerk/ke_search/pull/270.
+[TASK]    Add default type icon as fallback if no type icon was found
 
 Version 3.0.2, January 2019
 [BUGFIX]  news indexer does not respect storage folder. https://github.com/teaminmedias-pluswerk/ke_search/pull/266.
