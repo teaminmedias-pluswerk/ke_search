@@ -1441,7 +1441,7 @@ class tx_kesearch_lib extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
      */
     public function sortArrayByColumn(&$arr, $col)
     {
-
+	$newArray = [];
         $sort_col = array();
         foreach ($arr as $key => $row) {
             $sort_col[$key] = strtoupper($row[$col]);
