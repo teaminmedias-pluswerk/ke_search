@@ -1,5 +1,8 @@
 ChangeLog
 
+master
+[BUGFIX]  Initialize array to avoid PHP warning. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/273.
+
 Version 3.0.3, January 2019
 [TASK]    Changes and fixes needed for TYPO3 9 compatibility of ke_search_premium. https://github.com/teaminmedias-pluswerk/ke_search/pull/270.
 [TASK]    Add default type icon as fallback if no type icon was found
