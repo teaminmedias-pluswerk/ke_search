@@ -664,6 +664,7 @@ class IndexerRunner
 			@endtime = ' . $queryBuilder->quote($fieldValues['endtime'], \PDO::PARAM_INT) . ',
 			@fe_group = ' . $queryBuilder->quote($fieldValues['fe_group'], \PDO::PARAM_INT) . ',
 			@tstamp = ' . $queryBuilder->quote($fieldValues['tstamp'], \PDO::PARAM_INT) . ',
+			@sortdate = ' . $queryBuilder->quote($fieldValues['sortdate'], \PDO::PARAM_INT) . ',
 			@crdate = ' . $queryBuilder->quote($fieldValues['crdate'], \PDO::PARAM_INT)
             . $addQueryPartFor['set'] . '
 		;';
@@ -682,6 +683,7 @@ class IndexerRunner
             . '@endtime, '
             . '@fe_group, '
             . '@tstamp, '
+            . '@sortdate, '
             . '@crdate'
             . $addQueryPartFor['execute'] . ';';
 
