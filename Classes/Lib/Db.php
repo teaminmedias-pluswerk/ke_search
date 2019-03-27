@@ -105,7 +105,7 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
 
         $limit = $this->getLimit();
         if (is_array($limit)) {
-            $resultQuery->setMaxResults(10);
+            $resultQuery->setMaxResults($limit[1]);
             $resultQuery->setFirstResult($limit[0]);
         }
 
