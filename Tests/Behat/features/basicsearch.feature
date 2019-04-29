@@ -10,4 +10,11 @@ Feature: Basic search
   Scenario: Searching for a single word
     Given I am on "/search/default-search"
     And fill in "tx_kesearch_pi1[sword]" with "Pelican"
+    And I press "Find"
     Then I should see "Pelican From Wikipedia"
+
+  Scenario: Searching for two words
+    Given I am on "/search/default-search"
+    And fill in "tx_kesearch_pi1[sword]" with "Lorem Ipsum"
+    And I press "Find"
+    Then I should see "23 results:"
