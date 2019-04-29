@@ -1,4 +1,5 @@
 <?php
+
 namespace TeaminmediasPluswerk\KeSearch\Lib;
 
 use TeaminmediasPluswerk\KeSearch\Plugins\SearchboxPlugin;
@@ -238,15 +239,21 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
         $table = $this->table;
         $where = '1=1';
 
+        $databaseConnection = self::getDatabaseConnection('tx_kesearch_index');
+        $scoreAgainstQuoted = $databaseConnection->quote(
+            $this->pObj->scoreAgainst,
+            \PDO::PARAM_STR
+        );
+
         // if a searchword was given, calculate percent of score
         if ($this->pObj->sword) {
-            $fields .= ', MATCH (title, content) AGAINST ("'
-                . $this->pObj->scoreAgainst
-                . '") + ('
+            $fields .= ', MATCH (title, content) AGAINST ('
+                . $scoreAgainstQuoted
+                . ') + ('
                 . $this->pObj->extConf['multiplyValueToTitle']
-                . ' * MATCH (title) AGAINST ("'
-                . $this->pObj->scoreAgainst
-                . '")) AS score';
+                . ' * MATCH (title) AGAINST ('
+                . $scoreAgainstQuoted
+                . ')) AS score';
         }
 
         // add where clause
@@ -380,7 +387,7 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
         if (count($tags) && is_array($tags)) {
             foreach ($tags as $value) {
                 // @TODO: check if this works as intended / search for better way
-                $value = $databaseConnection->quote($value);
+                $value = $databaseConnection->quote($value, \PDO::PARAM_STR);
                 $value = rtrim($value, "'");
                 $value = ltrim($value, "'");
                 $where .= ' AND MATCH (tags) AGAINST (\'' . $value . '\' IN BOOLEAN MODE) ';
@@ -399,9 +406,16 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
     {
         $where = '';
 
+        $databaseConnection = self::getDatabaseConnection('tx_kesearch_index');
+        $wordsAgainstQuoted = $databaseConnection->quote(
+            $this->pObj->wordsAgainst,
+            \PDO::PARAM_STR
+        );
+
         // add boolean where clause for searchwords
         if ($this->pObj->wordsAgainst != '') {
-            $where .= ' AND MATCH (title, content) AGAINST (\'' . $this->pObj->wordsAgainst . '\' IN BOOLEAN MODE) ';
+            $where .= ' AND MATCH (title, content) AGAINST (';
+            $where .= $wordsAgainstQuoted . ' IN BOOLEAN MODE) ';
         }
 
         // add boolean where clause for tags
