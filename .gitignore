@@ -1,3 +1,5 @@
 .idea
 vendor
 .DS_Store
+Tests/Behat/vendor
+Tests/Behat/composer.lock
