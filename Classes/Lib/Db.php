@@ -424,7 +424,8 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
         }
 
         // restrict to storage page
-        $where .= ' AND pid in (' . $this->pObj->startingPoints . ') ';
+        $startingPoints = $this->pObj->pi_getPidList($this->pObj->startingPoints);
+        $where .= ' AND pid in (' . $startingPoints . ') ';
 
         // add language
         $lang = intval($GLOBALS['TSFE']->sys_language_uid);
