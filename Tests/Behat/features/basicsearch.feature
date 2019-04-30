@@ -17,4 +17,4 @@ Feature: Basic search
     Given I am on "/search/default-search"
     And fill in "tx_kesearch_pi1[sword]" with "Lorem Ipsum"
     And I press "Find"
-    Then I should see "23 results:"
+    Then I should see "24 results:"
