@@ -1,7 +1,7 @@
 ChangeLog
 
 feature/newsAttachedFiles
-[FEATURE] Index files attached to news. 
+[FEATURE] Index files attached to news. Thanks to d-mind GmbH for sponsoring this feature.
 
 master
 [BUGFIX]  Initialize array to avoid PHP warning. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/273.
