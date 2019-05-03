@@ -1,5 +1,8 @@
 ChangeLog
 
+feature/newsAttachedFiles
+[FEATURE] Index files attached to news. 
+
 master
 [BUGFIX]  Initialize array to avoid PHP warning. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/273.
 
