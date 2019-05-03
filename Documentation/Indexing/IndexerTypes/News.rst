@@ -58,4 +58,6 @@ In order to index news, create a new indexer configuration an configure it as fo
 * record storage page(s) single/recursive: Sysfolders with news data to index.
 * Category selection: Here you can define if you want to index all news or just news from selected categories. Important: This selection is not recursive. You have to select each category individually if you don't select "all".
 * Add tag(s) of parent sysfolder: If you added a tag to the sysfolder containing news, this / these tag(s) will be added to the news index entry.
+* File indexer: Define which extensions of related files will be indexed.
+* Attached files should be handled as: Define if the contents of related files will be indexed as separate index records or as content of the news index record.
 * Add tag to all indexed elements: You can select an already existing filter option / tag to add it to all indexed elements.
