@@ -71,7 +71,7 @@
 			<label index="tx_kesearch_indexerconfig.index_news_category_selection">Categories:</label>
 			<label index="tx_kesearch_indexerconfig.index_news_useHRDatesSingleWithoutDay">Use dates without day for single-view-URLs:</label>
 			<label index="tx_kesearch_indexerconfig.index_news_files_mode">Attached files should be handled as:</label>
-			<label index="tx_kesearch_indexerconfig.index_news_files_mode.I.0">Seperate search result</label>
+			<label index="tx_kesearch_indexerconfig.index_news_files_mode.I.0">Separate search result</label>
 			<label index="tx_kesearch_indexerconfig.index_news_files_mode.I.1">Content of news record</label>
 			<label index="tx_kesearch_indexerconfig.index_extnews_category_selection">Categories:</label>
 			<label index="tx_kesearch_indexerconfig.index_use_page_tags">Add tags of parent pages/sys-folders?</label>

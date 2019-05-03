@@ -197,8 +197,8 @@ class News extends IndexerBase
                                 $newsRecord['uid']
                             );
                         } else {
-                            // index file as seperate index record
-                            $this->indexFilesAsSeperateResults($relatedFiles, $newsRecord);
+                            // index file as separate index record
+                            $this->indexFilesAsSeparateResults($relatedFiles, $newsRecord);
                         }
                     }
                 }
@@ -610,7 +610,7 @@ class News extends IndexerBase
      * @param array $files
      * @param array $newsRecord
      */
-    protected function indexFilesAsSeperateResults($relatedFiles, $newsRecord)
+    protected function indexFilesAsSeparateResults($relatedFiles, $newsRecord)
     {
         /** @var FileReference $relatedFile */
         foreach ($relatedFiles as $relatedFile) {
