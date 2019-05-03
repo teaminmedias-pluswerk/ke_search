@@ -13,12 +13,12 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
 // Configure FlexForm field
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
     $_EXTKEY . '_pi1',
-    'FILE:EXT:ke_search/Configuration/FlexForms/flexform_searchbox.xml'
+    'FILE:EXT:ke_search/Configuration/FlexForms/flexform_searchbox.xlf'
 );
 
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
     $_EXTKEY . '_pi2',
-    'FILE:EXT:ke_search/Configuration/FlexForms/flexform_resultlist.xml'
+    'FILE:EXT:ke_search/Configuration/FlexForms/flexform_resultlist.xlf'
 );
 
 // add module
@@ -36,7 +36,7 @@ if (TYPO3_MODE == 'BE') {
         array(          // Additional configuration
             'access' => 'user,group',
             'icon' => 'EXT:ke_search/Resources/Public/Icons/moduleicon.svg',
-            'labels' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml',
+            'labels' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xlf',
         )
     );
 }

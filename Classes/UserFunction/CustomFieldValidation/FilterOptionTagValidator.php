@@ -77,16 +77,16 @@ class FilterOptionTagValidator
     }
 
     /**
-     * Returns the translation of current language, stored in locallang_db.xml.
+     * Returns the translation of current language, stored in locallang_db.xlf.
      *
-     * @param string $key key in locallang_db.xml to translate
+     * @param string $key key in locallang_db.xlf to translate
      * @param array $arguments optional arguments
      * @return string Translated text
      */
     protected function translate($key, array $arguments = [])
     {
         return \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate(
-            'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:' . $key,
+            'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xlf:' . $key,
             'KeSearch',
             $arguments
         );

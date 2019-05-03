@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="nl" datatype="plaintext" original="messages"
+		  date="2014-06-02T11:48:25Z" product-name="ke_search">
+		<header/>
+		<body>
+			<trans-unit id="pi_title">
+				<source>Faceted Search</source>
+				<target>Facet Zoeken</target>
+			</trans-unit>
+			<trans-unit id="pi_plus_wiz_description">
+				<source>Show searchbox and filters.</source>
+				<target>Toon Zoekveld en filters</target>
+			</trans-unit>
+			<trans-unit id="ff.page.main">
+				<source>General</source>
+				<target>Algemeen</target>
+			</trans-unit>
+			<trans-unit id="ff.resultPage">
+				<source>Page with result list</source>
+				<target>Pagina met resultaat lijst</target>
+			</trans-unit>
+			<trans-unit id="ff.showTextInsteadOfResults">
+				<source>Show text instead of searchresults if no filter or searchword has
+					been given?
+				</source>
+				<target>Laat tekst in plaats van zoekresultaten zien als er geen filter of zoekwoord is gegeven.</target>
+			</trans-unit>
+			<trans-unit id="ff.textForResults">
+				<source>Insert this text if no filter or searchword has been given.</source>
+				<target>Plaats deze tekst als er geen filter of zoekwoord is gegeven.</target>
+			</trans-unit>
+			<trans-unit id="ff.showNoResultsText">
+				<source>Show individual text if no results were found?</source>
+				<target>Toon individuele tekst als er geen resultaten zijn gevonden?</target>
+			</trans-unit>
+			<trans-unit id="ff.noResultsText">
+				<source>Individual text for "no results found"</source>
+				<target>Individuele tekst voor &quot;geen resultaten gevonden&quot;</target>
+			</trans-unit>
+			<trans-unit id="ff.countSearchPhrases">
+				<source>Count search phrases in statistic tables?</source>
+				<target>Tel zoektermen in statistiek tabellen?</target>
+			</trans-unit>
+			<trans-unit id="ff.cssFile">
+				<source>CSS File</source>
+				<target>CSS bestand</target>
+			</trans-unit>
+			<trans-unit id="ff.page.sorting">
+				<source>Sorting</source>
+				<target>Sorteer op</target>
+			</trans-unit>
+			<trans-unit id="ff.sortByAdmin">
+				<source>Sorting for searchresults</source>
+				<target>Alle zoekresultaten worden gesorteerd op deze waarde</target>
+			</trans-unit>
+			<trans-unit id="ff.sortWithoutSearchword">
+				<source>Sorting for searchresults if no searchword/filter is given</source>
+				<target>Hoe moet het soort resultaten worden gesorteerd als er geen zoekwoord / filter is gegeven?</target>
+			</trans-unit>
+			<trans-unit id="ff.showSortInFrontend">
+				<source>The website visitor should be able to order the searchresults</source>
+				<target>Moet de bezoeker van de website de zoekresultaten kunnen ordenen?</target>
+			</trans-unit>
+			<trans-unit id="ff.sortByVisitor">
+				<source>Fields the website user should be able to order by</source>
+				<target>Welke velden kan de bezoeker ordenen?</target>
+			</trans-unit>
+			<trans-unit id="ff.page.view">
+				<source>General Layout</source>
+				<target>Layout</target>
+			</trans-unit>
+			<trans-unit id="ff.showQueryTime">
+				<source>Show time (query process duration)?</source>
+				<target>Toon tijd (query proces duur)?</target>
+			</trans-unit>
+			<trans-unit id="ff.showResultUrl">
+				<source>Show result URL?</source>
+				<target>Toon resultaat URL?</target>
+			</trans-unit>
+			<trans-unit id="ff.renderResultUrlAsLink">
+				<source>Render result URL as link (a-Tag)?</source>
+				<target>Render resultaat URL als link (a-Label)?</target>
+			</trans-unit>
+			<trans-unit id="ff.showDate">
+				<source>Show date?</source>
+				<target>Toon datum?</target>
+			</trans-unit>
+			<trans-unit id="ff.resultLinkTarget">
+				<source>Target for result link</source>
+				<target>Doel voor resultaat-link</target>
+			</trans-unit>
+			<trans-unit id="ff.resultLinkTarget.I.0">
+				<source>Open in new window</source>
+				<target>Open in nieuw scherm</target>
+			</trans-unit>
+			<trans-unit id="ff.resultLinkTarget.I.1">
+				<source>Open in same window</source>
+				<target>Open in hetzelfde scherm</target>
+			</trans-unit>
+			<trans-unit id="ff.resultsNumeration">
+				<source>Number results consecutively?</source>
+				<target>Aantal resultaten achter elkaar?</target>
+			</trans-unit>
+			<trans-unit id="ff.highlightSword">
+				<source>Highlight search word in result preview</source>
+				<target>Markeer zoekterm in het resultaat voorbeeld</target>
+			</trans-unit>
+			<trans-unit id="ff.previewMode">
+				<source>Text for used for search result (preview text)</source>
+				<target>Voorbeeld Mode</target>
+			</trans-unit>
+			<trans-unit id="ff.previewMode.I.0">
+				<source>Always show the abstract if set.</source>
+				<target>Toon altijd samenvatting indien ingesteld</target>
+			</trans-unit>
+			<trans-unit id="ff.previewMode.I.1">
+				<source>Show abstract if it contains searchword, otherwise show an excerpt from the
+					content.
+				</source>
+				<target>Toon samenvatting als het de zoekterm bevat, toon anders de inhoud</target>
+			</trans-unit>
+			<trans-unit id="ff.resultChars">
+				<source>Number of characters used for the result preview text.</source>
+				<target>Aantal chars gebruikt bij het resultaat voorbeeld</target>
+			</trans-unit>
+			<trans-unit id="ff.showTypeIcon">
+				<source>Show result type icon?</source>
+				<target>Toon resultaat type icoon?</target>
+			</trans-unit>
+			<trans-unit id="ff.page.pagebrowser">
+				<source>Pagebrowser</source>
+				<target>Toon pagebrowser boven de lijst met resultaten</target>
+			</trans-unit>
+			<trans-unit id="ff.pagebrowserAtBottom">
+				<source>Show pagebrowser at the bottom of the result list</source>
+				<target>Toon pagebrowser onderaan de lijst met resultaten</target>
+			</trans-unit>
+			<trans-unit id="ff.maxPagesInPagebrowser">
+				<source>Number of pages shown in pagebrowser</source>
+				<target>Aantal pagina's weergegeven in pagebrowser</target>
+			</trans-unit>
+			<trans-unit id="ff.resultsPerPage">
+				<source>Results per page</source>
+				<target>Resultaten per pagina</target>
+			</trans-unit>
+			<trans-unit id="ff.showTags">
+				<source>Show tags?</source>
+				<target>Toon labels?</target>
+			</trans-unit>
+			<trans-unit id="ff.logQuery">
+				<source>Log query in backend (needs devLog extension)?</source>
+				<target>Toon query (backend devLog extension)?</target>
+			</trans-unit>
+			<trans-unit id="ff.showTaggedContentOnly">
+				<source>Show tagged content only?</source>
+				<target>Toon alleen gelabelde inhoud?</target>
+			</trans-unit>
+			<trans-unit id="ff.filters">
+				<source>Shown Filters</source>
+				<target>Filters</target>
+			</trans-unit>
+			<trans-unit id="ff.preselected_filters">
+				<source>Preselected filter options</source>
+				<target>vooraf ingestelde filters</target>
+			</trans-unit>
+			<trans-unit id="ff.checkFilterCondition">
+				<source>Availability check for filter options</source>
+				<target>Controle beschikbaarheid van filter opties</target>
+			</trans-unit>
+			<trans-unit id="ff.checkFilterCondition.I.0">
+				<source>Check in condition to other filters</source>
+				<target>Controleer in conditie tot andere filters</target>
+			</trans-unit>
+			<trans-unit id="ff.checkFilterCondition.I.1">
+				<source>no check</source>
+				<target>Geen controle</target>
+			</trans-unit>
+			<trans-unit id="results">
+				<source>Search results</source>
+				<target>Zoek resultaten</target>
+			</trans-unit>
+			<trans-unit id="num_results">
+				<source>%s results:</source>
+				<target>%s resultaten:</target>
+			</trans-unit>
+			<trans-unit id="until">
+				<source>until</source>
+				<target>tot</target>
+			</trans-unit>
+			<trans-unit id="of">
+				<source>of</source>
+				<target>van</target>
+			</trans-unit>
+			<trans-unit id="no_results_found">
+				<source>No results found</source>
+				<target>Geen zoekresultaten gevonden</target>
+			</trans-unit>
+			<trans-unit id="searchword_length_error">
+				<source>Search words under length of %d characters are not processed.</source>
+				<target>Zoek woorden in lengte van minder dan %d karakter zijn niet	verwerkt.</target>
+			</trans-unit>
+			<trans-unit id="error_resultPage">
+				<source>You have defined an results page in your Plugin configuration. So it
+					makes no sense to insert resultlist plugin on to this page, too.
+				</source>
+				<target>Er is al een pagina met zoekresultaten in de Plugin configuratie. Dus het heeft geen zin om nogmaals de resultatenlijst plug-in te voegen op deze pagina.
+				</target>
+			</trans-unit>
+			<trans-unit id="label_sort">
+				<source>Sorting:</source>
+				<target>Sorteer op:</target>
+			</trans-unit>
+			<trans-unit id="label_date">
+				<source>Date</source>
+				<target>Datum</target>
+			</trans-unit>
+			<trans-unit id="label_tags">
+				<source>Tags</source>
+				<target>Labels</target>
+			</trans-unit>
+			<trans-unit id="label_all">
+				<source>select all / deselect all</source>
+				<target>Selecteer alles / deselecteer alles</target>
+			</trans-unit>
+			<trans-unit id="loading">
+				<source>Loading</source>
+				<target>Laden</target>
+			</trans-unit>
+			<trans-unit id="all_options">
+				<source>ALL</source>
+				<target>Allemaal</target>
+			</trans-unit>
+			<trans-unit id="message_before_search">
+				<source>Please choose your search parameters.</source>
+				<target>Kies je zoekcriteria.</target>
+			</trans-unit>
+			<trans-unit id="query_time">
+				<source>The search query was processed in %s ms.</source>
+				<target>De zoekopdracht is verwerkt in %s ms.</target>
+			</trans-unit>
+			<trans-unit id="reset_button">
+				<source>Reset</source>
+				<target>Opnieuw instellen</target>
+			</trans-unit>
+			<trans-unit id="reset_filter">
+				<source>Reset filter</source>
+				<target>Filter opnieuw instellen</target>
+			</trans-unit>
+			<trans-unit id="submit">
+				<source>Find</source>
+				<target>Zoek</target>
+			</trans-unit>
+			<trans-unit id="back">
+				<source>Back</source>
+				<target>Terug</target>
+			</trans-unit>
+			<trans-unit id="checkbox_submit">
+				<source>Apply filter</source>
+				<target>Filter toepassen</target>
+			</trans-unit>
+			<trans-unit id="orderlink_title">
+				<source>Title</source>
+				<target>Titel</target>
+			</trans-unit>
+			<trans-unit id="orderlink_score">
+				<source>Relevance</source>
+				<target>Relevantie</target>
+			</trans-unit>
+			<trans-unit id="orderlink_sortdate">
+				<source>Date</source>
+				<target>datum</target>
+			</trans-unit>
+			<trans-unit id="searchbox_default_value">
+				<source>Your search phrase</source>
+				<target>Je zoekterm</target>
+			</trans-unit>
+			<trans-unit id="linktext_more">
+				<source>More %s and Multiselection</source>
+				<target>Meer %s en Multiselectie</target>
+			</trans-unit>
+			<trans-unit id="show_results">
+				<source>Show results</source>
+				<target>Toon resultaten</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

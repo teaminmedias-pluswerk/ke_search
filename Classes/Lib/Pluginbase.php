@@ -315,7 +315,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         $searchString = $this->piVars['sword'];
 
         $searchboxDefaultValue = LocalizationUtility::translate(
-            'LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:searchbox_default_value',
+            'LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:searchbox_default_value',
             'KeSearch'
         );
 

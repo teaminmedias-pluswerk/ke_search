@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="nl" datatype="plaintext" original="messages"
+		  date="2014-06-02T11:48:25Z" product-name="ke_search">
+		<header/>
+		<body>
+			<trans-unit id="mlang_tabs_tab">
+				<source>Faceted Search</source>
+				<target>Facet Zoeken</target>
+			</trans-unit>
+			<trans-unit id="mlang_labels_tabdescr">
+				<source>Manage the search index, manually start the indexer process, see what
+					content has been indexed, clear the the index.
+				</source>
+				<target>Start het indexeer proces handmatig</target>
+			</trans-unit>
+			<trans-unit id="mlang_labels_tablabel">
+				<source>Faceted Search Management</source>
+				<target>Indexeer management</target>
+			</trans-unit>
+			<trans-unit id="title">
+				<source>Faceted Search</source>
+				<target>Facet Zoeken</target>
+			</trans-unit>
+			<trans-unit id="function1">
+				<source>Start indexing</source>
+				<target>Start indexeren</target>
+			</trans-unit>
+			<trans-unit id="function2">
+				<source>Indexed content</source>
+				<target>Geindexeerde inhoud</target>
+			</trans-unit>
+			<trans-unit id="function3">
+				<source>Index table information</source>
+				<target>Index tabel informatie</target>
+			</trans-unit>
+			<trans-unit id="function4">
+				<source>Searchword statistics</source>
+				<target>Zoekwoorden statistieken</target>
+			</trans-unit>
+			<trans-unit id="function5">
+				<source>Clear search index</source>
+				<target>Wis zoek index</target>
+			</trans-unit>
+			<trans-unit id="select_a_page">
+				<source>Please select a page.</source>
+				<target>Selecteer een pagina</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

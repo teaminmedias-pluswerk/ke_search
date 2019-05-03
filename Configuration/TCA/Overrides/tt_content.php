@@ -16,7 +16,7 @@ $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['ke_searc
 // add plugins
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
     array(
-        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tt_content.list_type_pi1',
+        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xlf:tt_content.list_type_pi1',
         'ke_search_pi1'
     ),
     'list_type',
@@ -25,7 +25,7 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
 
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
     array(
-        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tt_content.list_type_pi2',
+        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xlf:tt_content.list_type_pi2',
         'ke_search_pi2'
     ),
     'list_type',

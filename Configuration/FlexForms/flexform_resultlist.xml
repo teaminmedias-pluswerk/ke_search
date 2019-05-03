@@ -6,14 +6,14 @@
 		<MAIN>
 			<ROOT>
 				<TCEforms>
-					<sheetTitle>LLL:EXT:ke_search/Resources/Private/Language/locallang_resultlist.xml:ff.main</sheetTitle>
+					<sheetTitle>LLL:EXT:ke_search/Resources/Private/Language/locallang_resultlist.xlf:ff.main</sheetTitle>
 				</TCEforms>
 				<type>array</type>
 				<el>
 
 					<loadFlexformsFromOtherCE>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_resultlist.xml:ff.loadFlexformsFromOtherCE</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_resultlist.xlf:ff.loadFlexformsFromOtherCE</label>
 							<config>
 								<type>group</type>
 								<internal_type>db</internal_type>

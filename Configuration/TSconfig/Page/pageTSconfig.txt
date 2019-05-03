@@ -6,8 +6,8 @@ mod {
     elements {
       ke_search_pi1 {
         iconIdentifier = ext-kesearch-wizard-icon
-        title = LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:pi_title
-        description = LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:pi_plus_wiz_description
+        title = LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:pi_title
+        description = LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:pi_plus_wiz_description
         tt_content_defValues {
           CType = list
           list_type = ke_search_pi1
@@ -15,8 +15,8 @@ mod {
       }
       ke_search_pi2 {
         iconIdentifier = ext-kesearch-wizard-icon
-        title = LLL:EXT:ke_search/Resources/Private/Language/locallang_resultlist.xml:pi_title
-        description = LLL:EXT:ke_search/Resources/Private/Language/locallang_resultlist.xml:pi_plus_wiz_description
+        title = LLL:EXT:ke_search/Resources/Private/Language/locallang_resultlist.xlf:pi_title
+        description = LLL:EXT:ke_search/Resources/Private/Language/locallang_resultlist.xlf:pi_plus_wiz_description
         tt_content_defValues {
           CType = list
           list_type = ke_search_pi2

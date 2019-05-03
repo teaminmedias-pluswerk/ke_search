@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2014-06-02T11:48:25Z"
+		  product-name="ke_search">
+		<header/>
+		<body>
+			<trans-unit id="pi_title">
+				<source>Faceted Search</source>
+			</trans-unit>
+			<trans-unit id="pi_plus_wiz_description">
+				<source>Show resultlist.</source>
+			</trans-unit>
+			<trans-unit id="ff.main">
+				<source>General</source>
+			</trans-unit>
+			<trans-unit id="ff.loadFlexformsFromOtherCE">
+				<source>Load flexforms config from this search box</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

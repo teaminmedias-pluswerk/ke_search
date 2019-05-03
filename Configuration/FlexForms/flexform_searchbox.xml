@@ -6,7 +6,7 @@
 		<MAIN>
 			<ROOT>
 				<TCEforms>
-					<sheetTitle>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.page.main</sheetTitle>
+					<sheetTitle>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.page.main</sheetTitle>
 				</TCEforms>
 				<type>array</type>
 				<el>
@@ -14,7 +14,7 @@
 					<resultPage>
 						<TCEforms>
 							<exclude>1</exclude>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.resultPage</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.resultPage</label>
 							<config>
 								<type>group</type>
 								<internal_type>db</internal_type>
@@ -29,7 +29,7 @@
 					<cssFile>
 						<TCEforms>
 							<exclude>1</exclude>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.cssFile</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.cssFile</label>
 							<config>
 								<type>input</type>
 								<default>EXT:ke_search/Resources/Public/Css/ke_search_pi1.css</default>
@@ -41,7 +41,7 @@
 					<showTextInsteadOfResults>
 						<TCEforms>
 							<onChange>reload</onChange>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.showTextInsteadOfResults</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.showTextInsteadOfResults</label>
 							<config>
 								<type>check</type>
 								<default>0</default>
@@ -51,7 +51,7 @@
 
 					<textForResults>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.textForResults</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.textForResults</label>
 							<displayCond>FIELD:showTextInsteadOfResults:=:1</displayCond>
 							<config>
 								<type>text</type>
@@ -65,7 +65,7 @@
 					<showNoResultsText>
 						<TCEforms>
 							<onChange>reload</onChange>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.showNoResultsText</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.showNoResultsText</label>
 							<config>
 								<type>check</type>
 								<default>0</default>
@@ -75,7 +75,7 @@
 
 					<noResultsText>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.noResultsText</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.noResultsText</label>
 							<displayCond>FIELD:showNoResultsText:=:1</displayCond>
 							<config>
 								<type>text</type>
@@ -88,7 +88,7 @@
 
 					<countSearchPhrases>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.countSearchPhrases</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.countSearchPhrases</label>
 							<config>
 								<type>check</type>
 								<default>1</default>
@@ -102,13 +102,13 @@
 		<sorting>
 			<ROOT>
 				<TCEforms>
-					<sheetTitle>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.page.sorting</sheetTitle>
+					<sheetTitle>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.page.sorting</sheetTitle>
 				</TCEforms>
 				<type>array</type>
 				<el>
 					<sortByAdmin>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.sortByAdmin</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.sortByAdmin</label>
 							<displayCond>FIELD:showSortInFrontend:!=:1</displayCond>
 							<config type="array">
 								<type>select</type>
@@ -122,7 +122,7 @@
 
 					<sortWithoutSearchword>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.sortWithoutSearchword</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.sortWithoutSearchword</label>
 							<config type="array">
 								<type>select</type>
 								<maxitems>1</maxitems>
@@ -137,7 +137,7 @@
 					<showSortInFrontend>
 						<TCEforms>
 							<onChange>reload</onChange>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.showSortInFrontend</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.showSortInFrontend</label>
 							<config>
 								<type>check</type>
 								<default>0</default>
@@ -147,7 +147,7 @@
 
 					<sortByVisitor>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.sortByVisitor</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.sortByVisitor</label>
 							<displayCond>FIELD:showSortInFrontend:=:1</displayCond>
 							<config type="array">
 								<type>select</type>
@@ -163,19 +163,19 @@
 		<view>
 			<ROOT>
 				<TCEforms>
-					<sheetTitle>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.page.view</sheetTitle>
+					<sheetTitle>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.page.view</sheetTitle>
 				</TCEforms>
 				<type>array</type>
 				<el>
 
 					<templateLayout>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.templateLayout</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.templateLayout</label>
 							<config>
 								<type>select</type>
 								<items>
 									<numIndex index="0">
-										<numIndex index="0">LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.templateLayout.I.0</numIndex>
+										<numIndex index="0">LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.templateLayout.I.0</numIndex>
 										<numIndex index="1">10</numIndex>
 									</numIndex>
 								</items>
@@ -186,7 +186,7 @@
 
 					<highlightSword>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.highlightSword</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.highlightSword</label>
 							<config>
 								<type>check</type>
 								<default>1</default>
@@ -196,16 +196,16 @@
 
 					<resultLinkTarget>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.resultLinkTarget</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.resultLinkTarget</label>
 							<config>
 								<type>select</type>
 								<items>
 									<numIndex index="0">
-										<numIndex index="0">LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.resultLinkTarget.I.1</numIndex>
+										<numIndex index="0">LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.resultLinkTarget.I.1</numIndex>
 										<numIndex index="1">_self</numIndex>
 									</numIndex>
 									<numIndex index="1">
-										<numIndex index="0">LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.resultLinkTarget.I.0</numIndex>
+										<numIndex index="0">LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.resultLinkTarget.I.0</numIndex>
 										<numIndex index="1">_blank</numIndex>
 									</numIndex>
 								</items>
@@ -217,16 +217,16 @@
 
 					<resultLinkTargetFiles>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.resultLinkTargetFiles</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.resultLinkTargetFiles</label>
 							<config>
 								<type>select</type>
 								<items>
 									<numIndex index="0">
-										<numIndex index="0">LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.resultLinkTarget.I.1</numIndex>
+										<numIndex index="0">LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.resultLinkTarget.I.1</numIndex>
 										<numIndex index="1">_self</numIndex>
 									</numIndex>
 									<numIndex index="1">
-										<numIndex index="0">LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.resultLinkTarget.I.0</numIndex>
+										<numIndex index="0">LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.resultLinkTarget.I.0</numIndex>
 										<numIndex index="1">_blank</numIndex>
 									</numIndex>
 								</items>
@@ -238,16 +238,16 @@
 
 					<previewMode>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.previewMode</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.previewMode</label>
 							<config>
 								<type>select</type>
 								<items>
 									<numIndex index="0">
-										<numIndex index="0">LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.previewMode.I.0</numIndex>
+										<numIndex index="0">LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.previewMode.I.0</numIndex>
 										<numIndex index="1">abstract</numIndex>
 									</numIndex>
 									<numIndex index="1">
-										<numIndex index="0">LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.previewMode.I.1</numIndex>
+										<numIndex index="0">LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.previewMode.I.1</numIndex>
 										<numIndex index="1">hit</numIndex>
 									</numIndex>
 								</items>
@@ -259,7 +259,7 @@
 
 					<resultChars>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.resultChars</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.resultChars</label>
 							<config>
 								<type>input</type>
 								<size>4</size>
@@ -275,7 +275,7 @@
 
 					<resultsNumeration>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.resultsNumeration</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.resultsNumeration</label>
 							<config>
 								<type>check</type>
 								<default>1</default>
@@ -285,7 +285,7 @@
 
 					<showQueryTime>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.showQueryTime</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.showQueryTime</label>
 							<config>
 								<type>check</type>
 								<default>0</default>
@@ -295,7 +295,7 @@
 
 					<showResultUrl>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.showResultUrl</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.showResultUrl</label>
 							<config>
 								<type>check</type>
 								<default>0</default>
@@ -305,7 +305,7 @@
 
 					<renderResultUrlAsLink>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.renderResultUrlAsLink</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.renderResultUrlAsLink</label>
 							<config>
 								<type>check</type>
 								<default>0</default>
@@ -315,7 +315,7 @@
 
 					<showDate>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.showDate</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.showDate</label>
 							<config>
 								<type>check</type>
 								<default>0</default>
@@ -330,13 +330,13 @@
 		<images>
 			<ROOT>
 				<TCEforms>
-					<sheetTitle>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.page.images</sheetTitle>
+					<sheetTitle>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.page.images</sheetTitle>
 				</TCEforms>
 				<type>array</type>
 				<el>
 					<showTypeIcon>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.showTypeIcon</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.showTypeIcon</label>
 							<config>
 								<type>check</type>
 								<default>1</default>
@@ -346,7 +346,7 @@
 
 					<showPageImages>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.showPageImages</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.showPageImages</label>
 							<config>
 								<type>check</type>
 								<default>1</default>
@@ -356,7 +356,7 @@
 
 					<showNewsImages>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.showNewsImages</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.showNewsImages</label>
 							<config>
 								<type>check</type>
 								<default>1</default>
@@ -366,7 +366,7 @@
 
 					<showFilePreview>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.showFilePreview</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.showFilePreview</label>
 							<config>
 								<type>check</type>
 								<default>1</default>
@@ -380,13 +380,13 @@
 		<pagebrowser>
 			<ROOT>
 				<TCEforms>
-					<sheetTitle>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.page.pagebrowser</sheetTitle>
+					<sheetTitle>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.page.pagebrowser</sheetTitle>
 				</TCEforms>
 				<type>array</type>
 				<el>
 					<pagebrowserOnTop>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.pagebrowserOnTop</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.pagebrowserOnTop</label>
 							<config>
 								<type>check</type>
 								<default>0</default>
@@ -396,7 +396,7 @@
 
 					<pagebrowserAtBottom>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.pagebrowserAtBottom</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.pagebrowserAtBottom</label>
 							<config>
 								<type>check</type>
 								<default>1</default>
@@ -406,7 +406,7 @@
 
 					<resultsPerPage>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.resultsPerPage</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.resultsPerPage</label>
 							<config>
 								<type>input</type>
 								<size>2</size>
@@ -422,7 +422,7 @@
 
 					<maxPagesInPagebrowser>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.maxPagesInPagebrowser</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.maxPagesInPagebrowser</label>
 							<config>
 								<type>input</type>
 								<size>2</size>
@@ -444,7 +444,7 @@
 		<filter>
 			<ROOT>
 				<TCEforms>
-					<sheetTitle>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.page.filter</sheetTitle>
+					<sheetTitle>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.page.filter</sheetTitle>
 				</TCEforms>
 				<type>array</type>
 				<el>
@@ -452,7 +452,7 @@
 					<filters>
 						<TCEforms>
 							<exclude>1</exclude>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.filters</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.filters</label>
 							<config type="array">
 								<type>select</type>
 								<multiple>1</multiple>
@@ -468,7 +468,7 @@
 					<hiddenfilters>
 						<TCEforms>
 							<exclude>1</exclude>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.hiddenfilters</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.hiddenfilters</label>
 							<config type="array">
 								<type>select</type>
 								<multiple>1</multiple>
@@ -484,7 +484,7 @@
 					<preselected_filters>
 						<TCEforms>
 							<exclude>1</exclude>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.preselected_filters</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.preselected_filters</label>
 							<config type="array">
 								<type>select</type>
 								<multiple>1</multiple>
@@ -499,16 +499,16 @@
 
 					<checkFilterCondition>
 						<TCEforms>
-							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.checkFilterCondition</label>
+							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.checkFilterCondition</label>
 							<config>
 								<type>select</type>
 								<items>
 									<numIndex index="0">
-										<numIndex index="0">LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.checkFilterCondition.I.0</numIndex>
+										<numIndex index="0">LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.checkFilterCondition.I.0</numIndex>
 										<numIndex index="1">multi</numIndex>
 									</numIndex>
 									<numIndex index="1">
-										<numIndex index="0">LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.checkFilterCondition.I.1</numIndex>
+										<numIndex index="0">LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.checkFilterCondition.I.1</numIndex>
 										<numIndex index="1">none</numIndex>
 									</numIndex>
 								</items>
@@ -525,13 +525,13 @@
 		<debug>
 				<ROOT>
 						<TCEforms>
-							<sheetTitle>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.page.debug</sheetTitle>
+							<sheetTitle>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.page.debug</sheetTitle>
 						</TCEforms>
 						<type>array</type>
 						<el>
 								<showTags>
 										<TCEforms>
-												<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.showTags</label>
+												<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.showTags</label>
 												<displayCond>HIDE_FOR_NON_ADMINS</displayCond>
 												<config>
 														<type>check</type>
@@ -542,7 +542,7 @@
 
 								<logQuery>
 										<TCEforms>
-												<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.logQuery</label>
+												<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.logQuery</label>
 												<displayCond>HIDE_FOR_NON_ADMINS</displayCond>
 												<config>
 														<type>check</type>
@@ -553,7 +553,7 @@
 
 								<showTaggedContentOnly>
 										<TCEforms>
-												<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.showTaggedContentOnly</label>
+												<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:ff.showTaggedContentOnly</label>
 												<displayCond>HIDE_FOR_NON_ADMINS</displayCond>
 												<config>
 														<type>check</type>

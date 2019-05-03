@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="de" datatype="plaintext" original="messages"
+		  date="2014-06-02T11:48:25Z" product-name="ke_search">
+		<header/>
+		<body>
+			<trans-unit id="mlang_tabs_tab">
+				<source>Faceted Search</source>
+				<target>Facettierte Suche</target>
+			</trans-unit>
+			<trans-unit id="mlang_labels_tabdescr">
+				<source>Manage the search index, manually start the indexer process, see what
+					content has been indexed, clear the the index.
+				</source>
+				<target>Manuelles Starten der Indizierung</target>
+			</trans-unit>
+			<trans-unit id="mlang_labels_tablabel">
+				<source>Faceted Search Management</source>
+				<target>Indizierung verwalten</target>
+			</trans-unit>
+			<trans-unit id="title">
+				<source>Faceted Search</source>
+				<target>Facettierte Suche</target>
+			</trans-unit>
+			<trans-unit id="function1">
+				<source>Start indexing</source>
+				<target>Indexer starten</target>
+			</trans-unit>
+			<trans-unit id="function2">
+				<source>Indexed content</source>
+				<target>Indizierte Inhalte</target>
+			</trans-unit>
+			<trans-unit id="function3">
+				<source>Index table information</source>
+				<target>Informationen über Index-Tabelle</target>
+			</trans-unit>
+			<trans-unit id="function4">
+				<source>Searchword statistics</source>
+				<target>Suchwort-Statistik</target>
+			</trans-unit>
+			<trans-unit id="function5">
+				<source>Clear search index</source>
+				<target>Suchindex leeren</target>
+			</trans-unit>
+			<trans-unit id="function6">
+				<source>Last indexing report</source>
+				<target>Bericht der letzten Indexierung</target>
+			</trans-unit>
+			<trans-unit id="select_a_page">
+				<source>Please select a page.</source>
+				<target>Bitte wählen Sie eine Seite aus.</target>
+			</trans-unit>
+			<trans-unit id="start_indexer">
+				<source>Start Indexer</source>
+				<target>Indexer starten</target>
+			</trans-unit>
+			<trans-unit id="not_allowed_remove_indexer_lock">
+				<source>You are not allowed to remove the indexer lock! This is for admins only!
+				</source>
+				<target>Sie haben nicht die Berechtigung, die Indexer-Sperre zu entfernen. Diese
+					Funktion steht nur Admins zur Verfügung!
+				</target>
+			</trans-unit>
+			<trans-unit id="no_indexer_configurations">
+				<source>No indexer configurations have been found. Please create an indexer
+					configuration record first!
+				</source>
+				<target>Es wurden keine Indexer-Konfigurationen gefunden. Bitte erstellen Sie zuerst
+					einen Datensatz vom Typ "Indexer-Konfiguration".
+				</target>
+			</trans-unit>
+			<trans-unit id="index_contains">
+				<source>The index currently contains</source>
+				<target>Der Index enthält derzeit</target>
+			</trans-unit>
+			<trans-unit id="last_indexing">
+				<source>Last indexing was done on</source>
+				<target>Die letzte Indexierung fand statt am</target>
+			</trans-unit>
+			<trans-unit id="records">
+				<source>records</source>
+				<target>Einträge</target>
+			</trans-unit>
+			<trans-unit id="configurations_found">
+				<source>Indexer configurations have been found:</source>
+				<target>Die folgenden Indexer-Konfigurationen sind angelegt:</target>
+			</trans-unit>
+			<trans-unit id="tag_too_short">
+				<source>Tag too short</source>
+				<target>Tag zu kurz</target>
+			</trans-unit>
+			<trans-unit id="tag_too_short_message">
+				<source>The given tag "%s" is too short. A minimum length of %d is required. See
+					extension setting "searchWordLength" for further info.
+				</source>
+				<target>Der Tag "%s" ist zu kurz. Er muss mindestens %d Zeichen lang sein. Siehe die
+					Erweiterungs-Einstellung "searchWordLength" für mehr Infos.
+				</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

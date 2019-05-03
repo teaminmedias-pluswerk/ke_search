@@ -5,7 +5,7 @@ defined('TYPO3_MODE') || die();
 $tempColumns = [
     'tx_kesearch_tags' => [
         'exclude' => 1,
-        'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:pages.tx_kesearch_tags',
+        'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xlf:pages.tx_kesearch_tags',
         'config' => [
             'type' => 'select',
             'renderType' => 'selectSingleBox',
@@ -19,7 +19,7 @@ $tempColumns = [
     ],
     'tx_kesearch_abstract' => [
         'exclude' => 1,
-        'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:pages.tx_kesearch_abstract',
+        'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xlf:pages.tx_kesearch_abstract',
         'config' => [
             'type' => 'text',
             'cols' => 40,
@@ -28,7 +28,7 @@ $tempColumns = [
     ],
     'tx_kesearch_resultimage' => [
         'exclude' => true,
-        'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:pages.tx_kesearch_resultimage',
+        'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xlf:pages.tx_kesearch_resultimage',
         'config' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getFileFieldTCAConfig(
             'tx_kesearch_resultimage',
             [
@@ -50,7 +50,7 @@ $tempColumns = [
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('pages', $tempColumns);
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
     'pages',
-    '--div--;LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:pages.tx_kesearch_label,no_search;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.no_search_formlabel, tx_kesearch_tags,tx_kesearch_abstract,tx_kesearch_resultimage;;;;1-1-1'
+    '--div--;LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xlf:pages.tx_kesearch_label,no_search;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.no_search_formlabel, tx_kesearch_tags,tx_kesearch_abstract,tx_kesearch_resultimage;;;;1-1-1'
 );
 
 // remove field "no_search" from "miscellaneous" palette

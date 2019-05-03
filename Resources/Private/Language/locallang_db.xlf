@@ -1,0 +1,261 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2014-06-02T11:48:25Z"
+		  product-name="ke_search">
+		<header/>
+		<body>
+			<trans-unit id="pages.tx_kesearch_label">
+				<source>Search</source>
+			</trans-unit>
+			<trans-unit id="pages.tx_kesearch_label">
+				<source>Search</source>
+			</trans-unit>
+			<trans-unit id="pages.tx_kesearch_tags">
+				<source>Tags for faceted search</source>
+			</trans-unit>
+			<trans-unit id="pages.tx_kesearch_resultimage">
+				<source>Search result image</source>
+			</trans-unit>
+			<trans-unit id="pages.tx_kesearch_abstract">
+				<source>Abstract for search result</source>
+			</trans-unit>
+			<trans-unit id="tt_content.list_type_pi1">
+				<source>Faceted search - Searchbox and Filters</source>
+			</trans-unit>
+			<trans-unit id="tt_content.list_type_pi2">
+				<source>Faceted search - Results</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_filters">
+				<source>Filters</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_filters.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_filters.rendertype">
+				<source>Rendering type</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_filters.markAllCheckboxes">
+				<source>Mark all checkboxes by default?</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_filters.options">
+				<source>Filter options</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_filters.target_pid">
+				<source>Choose page where to show all filter options</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_filters.amount">
+				<source>How many textlinks should be displayed?</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_filters.shownumberofresults">
+				<source>Show number of results for each filter option?</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_filters.alphabeticalsorting">
+				<source>Sort filteroptions alphabetically?</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_filters.rendertype">
+				<source>Rendering type</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_filters.rendertype.I.0">
+				<source>Select/Dropdown</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_filters.rendertype.I.1">
+				<source>List/Textlinks</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_filters.rendertype.I.2">
+				<source>Checkboxes (multiselection OR)</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_filters.rendertype.I.3">
+				<source>List/Textlinks with multiselection checkboxes on additional page</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_filteroptions">
+				<source>Filter options</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_filteroptions.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_filteroptions.tag">
+				<source>Tag</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_filteroptions.automated_tagging">
+				<source>Set tag for all children of this page</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_filteroptions.automated_tagging_exclude">
+				<source>Exclude tag for all children of this page</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_index">
+				<source>Index</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_index.relevance">
+				<source>Relevance</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_index.targetpid">
+				<source>Target PID</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_index.content">
+				<source>Indexed content</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_index.params">
+				<source>Parameters</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_index.type">
+				<source>Type</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_index.tags">
+				<source>Tags</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_index.abstract">
+				<source>Abstract</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_index.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_index.language">
+				<source>Language UID</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_index.sortdate">
+				<source>Date</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_index.directory">
+				<source>Directory</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig">
+				<source>Indexer Configuration</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.title">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.storagepid">
+				<source>Record storage page of search data</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.targetpid">
+				<source>Target page for extension content</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.startingpoints_recursive">
+				<source>Record storage page(s) of data to be indexed, recursive</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.single_pages">
+				<source>Single Pages</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.sysfolder">
+				<source>Record storage page(s) of data to be indexed, single</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.type.I.0">
+				<source>Pages</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.type.I.5">
+				<source>Address records (tt_address)</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.type.I.6">
+				<source>Content records (tt_content)</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.type.I.7">
+				<source>Files</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.type.I.12">
+				<source>News (news)</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.type.I.13">
+				<source>Glossary (a21glossary)</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.type.I.14">
+				<source>Calendar Base (cal)</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.type">
+				<source>Type</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.index_content_with_restrictions">
+				<source>Index content elements with restrictions?</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.index_content_with_restrictions.I.0">
+				<source>Yes</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.index_content_with_restrictions.I.1">
+				<source>No</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.index_news_category_mode">
+				<source>Index only news of the following categories:</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.index_news_category_mode.I.1">
+				<source>All</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.index_news_category_mode.I.2">
+				<source>Only the following categories:</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.index_news_archived">
+				<source>Archived news settings</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.index_news_archived.I.0">
+				<source>Index all news</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.index_news_archived.I.1">
+				<source>Index only active news</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.index_news_archived.I.2">
+				<source>Index only archived news</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.index_news_category_selection">
+				<source>Categories:</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.index_news_useHRDatesSingle">
+				<source>Use dates for single-view-URLs:</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.index_news_useHRDatesSingleWithoutDay">
+				<source>Use dates without day for single-view-URLs:</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.index_news_files_mode">
+				<source>Attached files should be handled as:</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.index_news_files_mode.I.0">
+				<source>Separate search result</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.index_news_files_mode.I.1">
+				<source>Content of news record</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.index_extnews_category">
+				<source>selection Categories:</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.index_use_page_tags">
+				<source>Add tags of parent pages/sys-folders?</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.index_use_page_tags_for_files">
+				<source>Add tags to files also?</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.index_page_doctypes">
+				<source>Page types which should be indexed (field:doktype, default: 1,2,5):</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.directories">
+				<source>Directories (comma-separated, e.g.
+					fileadmin/my_directory/,fileadmin/my_other_directory or
+					my_directory/,my_other_directory/ if you use FAL)
+				</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.fileext">
+				<source>File indexer: Comma separated list of allowed file extensions (eg.
+					pdf,ppt,doc,xls):
+				</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.contenttypes">
+				<source>Content element types which should be indexed (default:
+					text,textpic,bullets,table,html,header,uploads):
+				</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.filteroption">
+				<source>Add tag to all indexed elements:</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.fal_storage">
+				<source>FAL Storage (IMPORTANT: backend user _cli_scheduler needs access to this
+					storage!)
+				</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.fal_storage.dont_use_fal">
+				<source>Dont' use FAL (write directories like 'fileadmin/user_upload/')</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.fal_storage.use_fal">
+				<source>Use FAL (write directories like 'user_upload/')</source>
+			</trans-unit>
+			<trans-unit id="tx_kesearch_indexerconfig.cal_expired_events">
+				<source>Index expired events?</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

@@ -4,7 +4,7 @@
 -->
 
 <div class="clearer"> </div>
-<div id="kesearch_num_results">{numberofresults} {f:translate(key: 'LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:num_results_plain')}:</div>
+<div id="kesearch_num_results">{numberofresults} {f:translate(key: 'LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xlf:num_results_plain')}:</div>
 <f:render partial="Sorting" arguments="{conf: conf, numberofresults: numberofresults, sortingLinks: sortingLinks}" />
 <f:if condition="{conf.pagebrowserOnTop}">
 	<div id="kesearch_pagebrowser_top"><f:render partial="PageBrowser" arguments="{conf: conf, numberofresults:numberofresults, pagebrowser:pagebrowser}" /></div>
