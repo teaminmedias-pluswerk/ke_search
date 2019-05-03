@@ -538,6 +538,7 @@ class News extends IndexerBase
      */
     protected function getRelatedFiles($newsRecord)
     {
+
         $relatedFiles = [];
 
         $queryBuilder = Db::getQueryBuilder('sys_file');
@@ -549,27 +550,30 @@ class News extends IndexerBase
                 $queryBuilder->expr()->eq(
                     'ref.tablenames',
                     $queryBuilder->createNamedParameter(
-                        'tx_news_domain_model_news',
-                        \PDO::PARAM_STR
+                        'tx_news_domain_model_news', \PDO::PARAM_STR
                     )
                 ),
                 $queryBuilder->expr()->eq(
                     'ref.fieldname',
                     $queryBuilder->createNamedParameter(
-                        'fal_related_files',
-                        \PDO::PARAM_STR
+                        'fal_related_files', \PDO::PARAM_STR
                     )
                 ),
                 $queryBuilder->expr()->eq(
                     'ref.uid_foreign',
                     $queryBuilder->createNamedParameter(
-                        $newsRecord['uid'],
-                        \PDO::PARAM_INT
+                        $newsRecord['uid'], \PDO::PARAM_INT
                     )
                 ),
                 $queryBuilder->expr()->eq(
                     'ref.uid_local',
                     $queryBuilder->quoteIdentifier('file.uid')
+                ),
+                $queryBuilder->expr()->eq(
+                    'ref.sys_language_uid',
+                    $queryBuilder->createNamedParameter(
+                        $newsRecord['sys_language_uid'], \PDO::PARAM_INT
+                    )
                 )
             )
             ->orderBy('ref.sorting_foreign')
