@@ -1,6 +1,7 @@
 ChangeLog
 
-master
+Version 3.0.4, May 2019
+[BUGFIX]  Security Bugfix. Please update!
 [BUGFIX]  Initialize array to avoid PHP warning. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/273.
 
 Version 3.0.3, January 2019
