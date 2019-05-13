@@ -1,6 +1,8 @@
 ChangeLog
 
 compat8 branch
+
+Version 2.8.2, May 2019
 [BUGFIX]  Initialize array to avoid PHP warning. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/273
 
 Version 2.8.1, November 2018
