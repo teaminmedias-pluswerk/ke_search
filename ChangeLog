@@ -2,6 +2,7 @@ ChangeLog
 
 master
 [FEATURE] Index files attached to news. Thanks to d-mind GmbH for sponsoring this feature.
+[FEATURE] Add basic behat tests.
 
 Version 3.0.4, May 2019
 [BUGFIX]  Security Bugfix. Please update!
