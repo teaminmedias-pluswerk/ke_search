@@ -70,6 +70,9 @@
 			<label index="tx_kesearch_indexerconfig.index_news_archived.I.2">Index only archived news</label>
 			<label index="tx_kesearch_indexerconfig.index_news_category_selection">Categories:</label>
 			<label index="tx_kesearch_indexerconfig.index_news_useHRDatesSingleWithoutDay">Use dates without day for single-view-URLs:</label>
+			<label index="tx_kesearch_indexerconfig.index_news_files_mode">Attached files should be handled as:</label>
+			<label index="tx_kesearch_indexerconfig.index_news_files_mode.I.0">Separate search result</label>
+			<label index="tx_kesearch_indexerconfig.index_news_files_mode.I.1">Content of news record</label>
 			<label index="tx_kesearch_indexerconfig.index_extnews_category_selection">Categories:</label>
 			<label index="tx_kesearch_indexerconfig.index_use_page_tags">Add tags of parent pages/sys-folders?</label>
 			<label index="tx_kesearch_indexerconfig.index_use_page_tags_for_files">Add tags to files also?</label>
@@ -146,6 +149,9 @@
 			<label index="tx_kesearch_indexerconfig.index_extnews_category_selection">Kategorien:</label>
 			<label index="tx_kesearch_indexerconfig.index_news_useHRDatesSingle">Datum in Single-View-URLs:</label>
 			<label index="tx_kesearch_indexerconfig.index_news_useHRDatesSingleWithoutDay">Datum ohne Tag in Single-View-URLs:</label>
+			<label index="tx_kesearch_indexerconfig.index_news_files_mode">Verknüpfte Dateien behandeln als</label>
+			<label index="tx_kesearch_indexerconfig.index_news_files_mode.I.0">Separates Suchergebnis</label>
+			<label index="tx_kesearch_indexerconfig.index_news_files_mode.I.1">Inhalt des News-Datensatzes</label>
 			<label index="tx_kesearch_indexerconfig.index_use_page_tags">Schlagworte der übergeordneten Seite/des Sys-Ordners übernehmen?</label>
 			<label index="tx_kesearch_indexerconfig.index_use_page_tags_for_files">Schlagworte auch für Dateien übernehmen?</label>
 			<label index="tx_kesearch_indexerconfig.index_page_doctypes">Seitentypen, die indexiert werden sollen (Feld:doktype, Standard: 1,2,5):</label>

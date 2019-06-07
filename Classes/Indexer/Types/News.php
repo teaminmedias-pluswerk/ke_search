@@ -23,7 +23,9 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer\Types;
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
+use TYPO3\CMS\Core\Resource\FileReference;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Resource\FileRepository;
 
 /**
  * Plugin 'Faceted search' for the 'ke_search' extension.
@@ -36,6 +38,12 @@ use \TYPO3\CMS\Core\Utility\GeneralUtility;
 class News extends IndexerBase
 {
 
+    /** @var FileRepository $fileRepository  */
+    protected $fileRepository = NULL;
+
+    /** @var int $fileCounter */
+    protected $fileCounter = 0;
+
     /**
      * Initializes indexer for news
      *
@@ -45,6 +53,7 @@ class News extends IndexerBase
     {
         parent::__construct($pObj);
         $this->pObj = $pObj;
+        $this->fileRepository = GeneralUtility::makeInstance(FileRepository::class);
     }
 
     /**
@@ -177,6 +186,23 @@ class News extends IndexerBase
                 $contentElements = $this->getAttachedContentElements($newsRecord);
                 $content .= $this->getContentFromContentElements($contentElements);
 
+                // get related files if fileext is configured
+                if (!empty($this->indexerConfig['fileext'])) {
+                    $relatedFiles = $this->getRelatedFiles($newsRecord);
+                    if (!empty($relatedFiles)) {
+                        if ($this->indexerConfig['index_news_files_mode'] === 1) {
+                            // add file content to news index record
+                            $content .= $this->getContentFromRelatedFiles(
+                                $relatedFiles,
+                                $newsRecord['uid']
+                            );
+                        } else {
+                            // index file as separate index record
+                            $this->indexFilesAsSeparateResults($relatedFiles, $newsRecord);
+                        }
+                    }
+                }
+
                 // create content
                 $fullContent = '';
                 if (isset($abstract)) {
@@ -290,7 +316,8 @@ class News extends IndexerBase
                 . ' ('.$indexedNewsCounter.' records processed)';
             $this->pObj->logger->info($logMessage);
             $content = '<p><b>Indexer "' . $this->indexerConfig['title'] . '":</b><br />' . "\n"
-                . $indexedNewsCounter . ' News have been indexed .</p> ' . "\n";
+                . $indexedNewsCounter . ' News and ' . $this->fileCounter
+                . ' related files have been indexed.</p> ' . "\n";
 
             $content .= $this->showErrors();
             $content .= $this->showTime();
@@ -503,4 +530,250 @@ class News extends IndexerBase
 
         return $content;
     }
+
+
+    /**
+     * get files related to current news record
+     * @param array $newsRecord
+     */
+    protected function getRelatedFiles($newsRecord)
+    {
+
+        $relatedFiles = [];
+
+        $queryBuilder = Db::getQueryBuilder('sys_file');
+        $relatedFilesQuery = $queryBuilder
+            ->select('ref.uid')
+            ->from('sys_file', 'file')
+            ->from('sys_file_reference', 'ref')
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'ref.tablenames',
+                    $queryBuilder->createNamedParameter(
+                        'tx_news_domain_model_news', \PDO::PARAM_STR
+                    )
+                ),
+                $queryBuilder->expr()->eq(
+                    'ref.fieldname',
+                    $queryBuilder->createNamedParameter(
+                        'fal_related_files', \PDO::PARAM_STR
+                    )
+                ),
+                $queryBuilder->expr()->eq(
+                    'ref.uid_foreign',
+                    $queryBuilder->createNamedParameter(
+                        $newsRecord['uid'], \PDO::PARAM_INT
+                    )
+                ),
+                $queryBuilder->expr()->eq(
+                    'ref.uid_local',
+                    $queryBuilder->quoteIdentifier('file.uid')
+                ),
+                $queryBuilder->expr()->eq(
+                    'ref.sys_language_uid',
+                    $queryBuilder->createNamedParameter(
+                        $newsRecord['sys_language_uid'], \PDO::PARAM_INT
+                    )
+                )
+            )
+            ->orderBy('ref.sorting_foreign')
+            ->execute();
+
+        if ($relatedFilesQuery->rowCount()) {
+            return $this->getFilesForIndexing($relatedFilesQuery->fetchAll(), $newsRecord['uid']);
+        }
+
+        return $relatedFiles;
+    }
+
+    /**
+     * get files matching configured extensions
+     * @param $relatedFiles
+     * @param int $newsUid
+     */
+    protected function getFilesForIndexing($relatedFiles, $newsUid)
+    {
+        $filesToIndex = [];
+
+        foreach ($relatedFiles as $key => $relatedFile) {
+            $fileReference = $this->fileRepository->findFileReferenceByUid($relatedFile['uid']);
+            if (GeneralUtility::inList(
+                $this->indexerConfig['fileext'],
+                $fileReference->getExtension()
+            )) {
+                $filesToIndex[] = $fileReference;
+            }
+        }
+
+        return $filesToIndex;
+    }
+
+
+    /**
+     * index related files as seperate file index records
+     * @param array $files
+     * @param array $newsRecord
+     */
+    protected function indexFilesAsSeparateResults($relatedFiles, $newsRecord)
+    {
+        /** @var FileReference $relatedFile */
+        foreach ($relatedFiles as $relatedFile) {
+            $filePath = $relatedFile->getForLocalProcessing(false);
+            if (!file_exists($filePath)) {
+                $errorMessage = 'Could not index file ' . $filePath;
+                $errorMessage .= ' in news record #' . $newsUid . ' (file does not exist).';
+                $this->pObj->logger->warning($errorMessage);
+                $this->addError($errorMessage);
+            } else {
+                /* @var $fileIndexerObject File */
+                $fileIndexerObject = GeneralUtility::makeInstance(File::class, $this->pObj);
+
+                // add tag to identify this index record as file
+                SearchHelper::makeTags($tags, ['file']);
+
+                if ($fileIndexerObject->fileInfo->setFile($relatedFile)) {
+                    if (($content = $fileIndexerObject->getFileContent($filePath))) {
+                        $this->storeFileContentToIndex(
+                            $relatedFile,
+                            $content,
+                            $fileIndexerObject,
+                            $newsRecord['fe_group'],
+                            $tags,
+                            $newsRecord
+                        );
+                    } else {
+                        $this->addError($fileIndexerObject->getErrors());
+                        $errorMessage = 'Could not index file ' . $filePath . '.';
+                        $this->pObj->logger->warning($errorMessage);
+                        $this->addError($errorMessage);
+                    }
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Store the file content and additional information to the index
+     * @param FileReference $fileReference File reference object
+     * @param string $content file text content
+     * @param File $fileIndexerObject
+     * @param string $feGroups comma list of groups to assign
+     * @param array $newsRecord the news row the file was assigned to
+     */
+    public function storeFileContentToIndex(
+        $fileReference,
+        $content,
+        $fileIndexerObject,
+        $feGroups,
+        $tags,
+        $newsRecord
+    )
+    {
+        // get metadata
+        $orig_uid = $fileReference->getOriginalFile()->getUid();
+        $metadata = $fileReference->getOriginalFile()->_getMetaData();
+
+        if ($metadata['fe_groups']) {
+            if ($feGroups) {
+                $feGroupsContentArray = GeneralUtility::intExplode(',', $feGroups);
+                $feGroupsFileArray = GeneralUtility::intExplode(',', $metadata['fe_groups']);
+                $feGroups = implode(',', array_intersect($feGroupsContentArray, $feGroupsFileArray));
+            } else {
+                $feGroups = $metadata['fe_groups'];
+            }
+        }
+
+        // assign category titles as tags
+        $categories = SearchHelper::getCategories($metadata['uid'], 'sys_file_metadata');
+        SearchHelper::makeTags($tags, $categories['title_list']);
+
+        // assign categories as generic tags
+        SearchHelper::makeSystemCategoryTags($tags, $metadata['uid'], 'sys_file_metadata');
+
+        if ($metadata['title']) {
+            $content = $metadata['title'] . "\n" . $content;
+        }
+
+        $abstract = '';
+        if ($metadata['description']) {
+            $abstract = $metadata['description'];
+            $content = $metadata['description'] . "\n" . $content;
+        }
+
+        if ($metadata['alternative']) {
+            $content .= "\n" . $metadata['alternative'];
+        }
+
+        $additionalFields = [
+            'sortdate' => $fileIndexerObject->fileInfo->getModificationTime(),
+            'orig_uid' => $orig_uid,
+            'orig_pid' => 0,
+            'directory' => $fileIndexerObject->fileInfo->getRelativePath(),
+            'hash' => $fileIndexerObject->getUniqueHashForFile()
+        ];
+
+        // Store record in index table
+        $this->pObj->storeInIndex(
+            $this->indexerConfig['storagepid'],         // storage PID
+            $fileIndexerObject->fileInfo->getName(),    // file name
+            'file:' . $fileReference->getExtension(),   // content type
+            $newsRecord['pid'],                         // target PID: where is the single view?
+            $content,                                   // indexed content
+            $tags,                                      // tags
+            '',                                         // typolink params for singleview
+            $abstract,                                  // abstract
+            $newsRecord['sys_language_uid'],            // language uid
+            $newsRecord['starttime'],                   // starttime
+            $newsRecord['endtime'],                     // endtime
+            $feGroups,                                  // fe_group
+            FALSE,                                      // debug only?
+            $additionalFields                           // additional fields added by hooks
+        );
+
+        $this->pObj->logger->debug(
+            'related file was indexed for news #' . $newsRecord['uid'],
+            [$fileReference->getPublicUrl()]
+        );
+
+        $this->fileCounter++;
+    }
+
+
+    /**
+     * extract content from files to index
+     * @param array $relatedFiles
+     * @param int $newsUid
+     * @return string
+     */
+    protected function getContentFromRelatedFiles($relatedFiles, $newsUid)
+    {
+        $fileContent = '';
+
+        /** @var FileReference $relatedFile */
+        foreach ($relatedFiles as $relatedFile) {
+
+            /* @var $fileIndexerObject File */
+            $fileIndexerObject = GeneralUtility::makeInstance(
+                File::class,
+                $this->pObj
+            );
+
+            if ($fileIndexerObject->fileInfo->setFile($relatedFile)) {
+                $fileContent .= $fileIndexerObject->getFileContent(
+                        $relatedFile->getForLocalProcessing(false)
+                    ) . "\n";
+
+                $this->pObj->logger->debug(
+                    'related file was indexed for news #' . $newsUid,
+                    [$relatedFile->getPublicUrl()]
+                );
+
+                $this->fileCounter++;
+            }
+        }
+
+        return $fileContent;
+    }
+
 }

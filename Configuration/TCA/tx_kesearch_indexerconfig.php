@@ -286,7 +286,7 @@ $configurationArray = array(
         'fileext' => array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.fileext',
-            'displayCond' => 'FIELD:type:IN:file,page,tt_content',
+            'displayCond' => 'FIELD:type:IN:file,page,tt_content,news',
             'config' => array(
                 'type' => 'input',
                 'size' => '30',
@@ -364,13 +364,35 @@ $configurationArray = array(
                 'type' => 'check',
                 'default' => '0'
             )
-        )
+        ),
+        'index_news_files_mode' => [
+            'exclude' => 0,
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_news_files_mode',
+            'displayCond' => 'FIELD:type:IN:news',
+            'config' => array(
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    [
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_news_files_mode.I.0',
+                        '0'
+                    ],
+                    [
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_news_files_mode.I.1',
+                        '1'
+                    ]
+                ],
+                'size' => 1,
+                'maxitems' => 1,
+            )
+        ]
     ),
     'types' => array(
         '0' => array('showitem' => 'hidden,title,type,storagepid,targetpid,'
             . 'startingpoints_recursive,single_pages,sysfolder,index_content_with_restrictions,'
             . 'index_news_archived,index_news_category_mode,index_extnews_category_selection,'
             . 'index_use_page_tags,fal_storage,directories,fileext,index_page_doctypes,contenttypes,'
+            . 'index_news_files_mode,'
             . 'filteroption,index_use_page_tags_for_files,cal_expired_events')
     )
 );
