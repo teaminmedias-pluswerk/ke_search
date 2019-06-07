@@ -119,19 +119,38 @@ class SearchHelper
 
         if ($uid && $table) {
             $queryBuilder = Db::getQueryBuilder($table);
+
             $categoryRecords = $queryBuilder
-                ->add('select', '`sys_category`.`uid`, `sys_category`.`title`')
+                ->select('sys_category.uid', 'sys_category.title')
                 ->from('sys_category')
                 ->from('sys_category_record_mm')
                 ->from($table)
-                ->add(
-                    'where',
-                    '`sys_category`.`uid` = `sys_category_record_mm`.`uid_local`'
-                    . ' AND `' . $table . '`.`uid` = `sys_category_record_mm`.`uid_foreign`'
-                    . ' AND `' . $table . '`.`uid` = ' . $uid
-                    . ' AND `sys_category_record_mm`.`tablenames` ="' . $table . '"'
+                ->where(
+                    $queryBuilder->expr()->eq(
+                        'sys_category.uid',
+                        $queryBuilder->quoteIdentifier(
+                            'sys_category_record_mm.uid_local'
+                        )
+                    ),
+                    $queryBuilder->expr()->eq(
+                        $table . '.uid',
+                        $queryBuilder->quoteIdentifier(
+                            'sys_category_record_mm.uid_foreign'
+                        )
+                    ),
+                    $queryBuilder->expr()->eq(
+                        $table . '.uid',
+                        $queryBuilder->createNamedParameter(
+                            $uid,
+                            \PDO::PARAM_INT
+                        )
+                    ),
+                    $queryBuilder->expr()->eq(
+                        'sys_category_record_mm.tablenames',
+                        $queryBuilder->quote($table, \PDO::PARAM_STR)
+                    )
                 )
-                ->add('orderBy', '`sys_category_record_mm`.`sorting`')
+                ->orderBy('sys_category_record_mm.sorting')
                 ->execute()
                 ->fetchAll();
 
