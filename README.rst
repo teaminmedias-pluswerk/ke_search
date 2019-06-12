@@ -27,4 +27,3 @@ For the most used content types indexers are provided within the extension itsel
 If you found a bug or want to ask for a feature, please use https://github.com/teaminmedias-pluswerk/ke_search/issues.
 
 Pull requests are welcome.
-
