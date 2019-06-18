@@ -46,11 +46,18 @@ class Pdf extends File implements FileIndexerInterface
     public $app = array(); // saves the path to the executables
     public $isAppArraySet = false;
 
+    /** @var IndexerRunner  */
+    public $pObj;
+
     /**
      * class constructor
+     *
+     * @param \TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner $pObj
      */
-    public function __construct()
+    public function __construct($pObj)
     {
+        $this->pObj = $pObj;
+
         // get extension configuration of ke_search_hooks
         $this->extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('ke_search');
 
