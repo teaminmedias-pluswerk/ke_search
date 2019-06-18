@@ -362,6 +362,10 @@ class News extends IndexerBase
             'tx_news_domain_model_news.uid',
             $queryBuilder->createNamedParameter($newsRecord['uid'], \PDO::PARAM_INT)
         );
+        $where[] = $queryBuilder->expr()->eq(
+            'sys_category_record_mm.tablenames',
+            $queryBuilder->createNamedParameter('tx_news_domain_model_news', \PDO::PARAM_STR)
+        );
 
         $catRes = $queryBuilder
             ->select(
