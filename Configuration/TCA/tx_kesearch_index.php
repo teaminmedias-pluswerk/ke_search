@@ -32,7 +32,6 @@ return array(
             'config' => array(
                 'type' => 'input',
                 'size' => '8',
-                'max' => '20',
                 'eval' => 'date',
                 'renderType' => 'inputDateTime',
                 'default' => '0',
@@ -45,7 +44,6 @@ return array(
             'config' => array(
                 'type' => 'input',
                 'size' => '8',
-                'max' => '20',
                 'eval' => 'date',
                 'renderType' => 'inputDateTime',
                 'checkbox' => '0',
@@ -165,7 +163,6 @@ return array(
                 'type' => 'input',
                 'renderType' => 'inputDateTime',
                 'size' => '10',
-                'max' => '20',
                 'eval' => 'datetime',
                 'checkbox' => '0',
                 'default' => '0'
