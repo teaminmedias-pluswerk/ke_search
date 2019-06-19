@@ -161,8 +161,13 @@ class TtAddress extends IndexerBase
                 // put content together
                 $fullContent = $abstract . "\n" . $content;
 
-                // there is no tt_address default param like this; you have to modify this by hook to fit your needs
-                $params = '&tt_address[showUid]=' . $addressRow['uid'];
+                // generate detail view link, example:
+                // index.php?id=123&tx_ttaddress_listview%5Baction%5D=show&tx_ttaddress_listview%5Baddress%5D=1&tx_ttaddress_listview%5Bcontroller%5D=Address
+                $paramsSingleView['tx_ttaddress_listview']['address'] = $addressRow['uid'];
+                $paramsSingleView['tx_ttaddress_listview']['controller'] = 'Address';
+                $paramsSingleView['tx_ttaddress_listview']['action'] = 'show';
+                $params = '&' . http_build_query($paramsSingleView, null, '&');
+                $params = rawurldecode($params);
 
                 // no tags yet
                 if ($this->indexerConfig['index_use_page_tags']) {
