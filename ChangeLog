@@ -3,6 +3,7 @@ ChangeLog
 master
 [FEATURE] Index files attached to news. Thanks to d-mind GmbH for sponsoring this feature.
 [FEATURE] Add basic behat tests.
+[FEATURE] Index tt_address records with sys_language_uid -1 (all languages). https://github.com/teaminmedias-pluswerk/ke_search/issues/87
 [FEATURE] Support tt_address single view. https://github.com/teaminmedias-pluswerk/ke_search/issues/297
 
 Version 3.0.4, May 2019

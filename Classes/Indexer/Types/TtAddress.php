@@ -196,7 +196,7 @@ class TtAddress extends IndexerBase
 
                 // add some fields which you may set in your own hook
                 $customfields = array(
-                    'sys_language_uid' => 0,
+                    'sys_language_uid' => -1,
                     'starttime' => 0,
                     'endtime' => 0,
                     'fe_group' => ''
