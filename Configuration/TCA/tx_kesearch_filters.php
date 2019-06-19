@@ -132,9 +132,6 @@ return array(
                         'delete' => true,
                         'localize' => true,
                     )
-                ),
-                'behaviour' => array(
-                    'localizeChildrenAtParentLocalization' => true,
                 )
             ),
         ),
@@ -150,11 +147,6 @@ return array(
                 'size' => 1,
                 'minitems' => 0,
                 'maxitems' => 1,
-                'wizards' => array(
-                    'suggest' => array(
-                        'type' => 'suggest',
-                    ),
-                ),
             )
         ),
         'amount' => array(

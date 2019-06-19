@@ -102,11 +102,6 @@ return array(
                 'size' => 5,
                 'minitems' => 0,
                 'maxitems' => 99,
-                'wizards' => array(
-                    'suggest' => array(
-                        'type' => 'suggest',
-                    ),
-                ),
             )
         ),
         'automated_tagging_exclude' => array(
@@ -120,11 +115,6 @@ return array(
                 'size' => 5,
                 'minitems' => 0,
                 'maxitems' => 99,
-                'wizards' => array(
-                    'suggest' => array(
-                        'type' => 'suggest',
-                    ),
-                ),
             )
         ),
     ),
