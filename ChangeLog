@@ -6,6 +6,7 @@ master
 [BUGFIX]  News indexer category selection not working properly. https://github.com/teaminmedias-pluswerk/ke_search/issues/287
 [FEATURE] Index tt_address records with sys_language_uid -1 (all languages). https://github.com/teaminmedias-pluswerk/ke_search/issues/87
 [FEATURE] Support tt_address single view. https://github.com/teaminmedias-pluswerk/ke_search/issues/297
+[BUGFIX]  "resultsPerPage" not working if >10. https://github.com/teaminmedias-pluswerk/ke_search/issues/280
 
 Version 3.0.4, May 2019
 [BUGFIX]  Security Bugfix. Please update!
