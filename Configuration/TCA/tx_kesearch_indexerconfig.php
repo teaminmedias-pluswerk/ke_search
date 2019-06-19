@@ -20,8 +20,7 @@ $configurationArray = array(
             'disabled' => 'hidden',
         ),
         'iconfile' => 'EXT:ke_search/Resources/Public/Icons/table_icons/icon_tx_kesearch_indexerconfig.gif',
-        'searchFields' => 'title',
-        'requestUpdate' => 'type'
+        'searchFields' => 'title'
     ),
     'interface' => array(
         'showRecordFieldList' => 'hidden,title,storagepid,startingpoints_recursive,single_pages,sysfolder,'
@@ -48,6 +47,7 @@ $configurationArray = array(
         'type' => array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type',
+            'onChange' => 'reload',
             'config' => array(
                 'type' => 'select',
                 'renderType' => 'selectSingle',
@@ -104,11 +104,6 @@ $configurationArray = array(
                 'size' => 1,
                 'minitems' => 1,
                 'maxitems' => 1,
-                'wizards' => array(
-                    'suggest' => array(
-                        'type' => 'suggest',
-                    ),
-                ),
             )
         ),
         'targetpid' => array(
@@ -122,11 +117,6 @@ $configurationArray = array(
                 'size' => 1,
                 'minitems' => 1,
                 'maxitems' => 1,
-                'wizards' => array(
-                    'suggest' => array(
-                        'type' => 'suggest',
-                    ),
-                ),
             )
         ),
         'startingpoints_recursive' => array(
@@ -140,11 +130,6 @@ $configurationArray = array(
                 'size' => 10,
                 'minitems' => 0,
                 'maxitems' => 99,
-                'wizards' => array(
-                    'suggest' => array(
-                        'type' => 'suggest',
-                    ),
-                ),
             )
         ),
         'single_pages' => array(
@@ -158,11 +143,6 @@ $configurationArray = array(
                 'size' => 10,
                 'minitems' => 0,
                 'maxitems' => 99,
-                'wizards' => array(
-                    'suggest' => array(
-                        'type' => 'suggest',
-                    ),
-                ),
             )
         ),
         'sysfolder' => array(
@@ -176,11 +156,6 @@ $configurationArray = array(
                 'size' => 10,
                 'minitems' => 0,
                 'maxitems' => 99,
-                'wizards' => array(
-                    'suggest' => array(
-                        'type' => 'suggest',
-                    ),
-                ),
             )
         ),
         'index_content_with_restrictions' => array(
@@ -256,11 +231,13 @@ $configurationArray = array(
         ),
         'index_extnews_category_selection' => array(
             'exclude' => 1,
-            'l10n_mode' => 'mergeIfNotBlank',
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_extnews_category_selection',
             'displayCond' => 'FIELD:type:=:news',
             'config' => array(
                 'type' => 'none',
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true
+                ]
             )
         ),
         'index_use_page_tags' => array(
