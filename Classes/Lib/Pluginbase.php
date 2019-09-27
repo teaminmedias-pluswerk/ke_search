@@ -581,6 +581,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                 $options[$option['uid']] = array(
                     'title' => $option['title'],
                     'value' => $option['tag'],
+                    'results' => $this->tagsInSearchResult[$option['tag']],
                     'selected' =>
                         is_array($filter['selectedOptions'])
                         && !empty($filter['selectedOptions'])
