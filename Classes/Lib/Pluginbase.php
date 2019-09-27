@@ -577,6 +577,8 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                     );
                 }
             } else {
+                // get results
+                $this->filters->checkIfTagMatchesRecords($option['value']);
                 // do not process any checks; show all filter options
                 $options[$option['uid']] = array(
                     'title' => $option['title'],
