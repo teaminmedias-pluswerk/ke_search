@@ -346,11 +346,11 @@ class Page extends IndexerBase
         foreach ($this->sysLanguages as $sysLang) {
             if ($sysLang['uid'] > 0) {
 
-                // check for unified page translation handling feature
+                // get translations from "pages" not from "pages_language_overlay" if on TYPO3 9 or higher
                 // see https://docs.typo3.org/typo3cms/extensions/core/Changelog/9.0/Breaking-82445-PagesAndPageTranslations.html
-                if (GeneralUtility::makeInstance(Features::class)->isFeatureEnabled(
-                    'unifiedPageTranslationHandling'
-                )) {
+                if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) >=
+                    \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('9.0')
+                ) {
                     $queryBuilder = Db::getQueryBuilder('pages');
                     list($pageOverlay) = $queryBuilder
                         ->select('*')

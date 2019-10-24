@@ -10,6 +10,7 @@ master
 [FEATURE] Support tt_address single view. https://github.com/teaminmedias-pluswerk/ke_search/issues/297
 [BUGFIX]  "resultsPerPage" not working if >10. https://github.com/teaminmedias-pluswerk/ke_search/issues/280
 [TASK]    Show titles of indexed languages in page indexer report.
+[BUGFIX]  Do not rely on unifiedPageTranslationHandling feature toggle but on version check (TYPO3 9 or higher) to decide wether or not to query pages instead of pages_language_overlay. https://github.com/teaminmedias-pluswerk/ke_search/issues/305.
 
 Version 3.0.4, May 2019
 [BUGFIX]  Security Bugfix. Please update!
