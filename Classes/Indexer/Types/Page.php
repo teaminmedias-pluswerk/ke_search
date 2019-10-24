@@ -344,7 +344,7 @@ class Page extends IndexerBase
 
         // create entry in cachedPageRecods for additional languages, skip default language 0
         foreach ($this->sysLanguages as $sysLang) {
-            if ($sysLang['uid'] > 0) {
+            if ($sysLang['uid'] != 0) {
 
                 // get translations from "pages" not from "pages_language_overlay" if on TYPO3 9 or higher
                 // see https://docs.typo3.org/typo3cms/extensions/core/Changelog/9.0/Breaking-82445-PagesAndPageTranslations.html
@@ -601,6 +601,15 @@ class Page extends IndexerBase
                     || $ttContentRow['fe_group'] == '0'
                 ) {
                     $pageContent[$ttContentRow['sys_language_uid']] .= $content;
+
+                    // add content elements with sys_language_uid = -1 to all language versions of this page
+                    if ($ttContentRow['sys_language_uid'] == -1) {
+                        foreach ($this->sysLanguages as $sysLang) {
+                            if ($sysLang['uid'] != -1) {
+                                $pageContent[$sysLang['uid']] .= $content;
+                            }
+                        }
+                    }
                 }
             }
         } else {

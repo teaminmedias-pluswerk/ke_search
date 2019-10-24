@@ -11,6 +11,7 @@ master
 [BUGFIX]  "resultsPerPage" not working if >10. https://github.com/teaminmedias-pluswerk/ke_search/issues/280
 [TASK]    Show titles of indexed languages in page indexer report.
 [BUGFIX]  Do not rely on unifiedPageTranslationHandling feature toggle but on version check (TYPO3 9 or higher) to decide wether or not to query pages instead of pages_language_overlay. https://github.com/teaminmedias-pluswerk/ke_search/issues/305.
+[BUGFIX]  Do not ignore content with sys_language_uid = -1, but add it to all language versions of the page. https://github.com/teaminmedias-pluswerk/ke_search/pull/198.
 
 Version 3.0.4, May 2019
 [BUGFIX]  Security Bugfix. Please update!
