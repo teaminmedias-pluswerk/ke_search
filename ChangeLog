@@ -1,6 +1,6 @@
 ChangeLog
 
-master
+Version 3.0.5, October 2019
 [FEATURE] Index files attached to news. Thanks to d-mind GmbH for sponsoring this feature.
 [FEATURE] Add basic behat tests.
 [BUGFIX]  Missing logger instance in pdf indexer. https://github.com/teaminmedias-pluswerk/ke_search/issues/302
