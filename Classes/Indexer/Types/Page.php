@@ -239,7 +239,7 @@ class Page extends IndexerBase
         // create an array of cached page records which contains pages in
         // default and all other languages registered in the system
         foreach ($this->pageRecords as $pageRecord) {
-            $this->pObj->logger->debug('Indexing page record "' . $pageRecord['title'] .'"', [
+            $this->pObj->logger->debug('Indexing page record "' . $pageRecord['title'] . '"', [
                 'uid' => $pageRecord['uid']
             ]);
             $this->addLocalizedPagesToCache($pageRecord);
@@ -267,12 +267,19 @@ class Page extends IndexerBase
             . ' (' . count($indexPids) . ' records processed)';
         $this->pObj->logger->info($logMessage);
 
+        // compile title of languages
+        $languageTitels = '';
+        foreach ($this->sysLanguages as $language) {
+            if (strlen($languageTitels)) $languageTitels .= ', ';
+            $languageTitels .= $language['title'];
+        }
+
         // show indexer content
         $content = '<p><b>Indexer "' . $this->indexerConfig['title'] . '": </b><br />'
             . count($indexPids)
             . ' pages in '
             . count($this->sysLanguages)
-            . ' languages have been found for indexing.<br />' . "\n"
+            . ' languages (' . $languageTitels . ') have been found for indexing.<br />' . "\n"
             . $this->counter
             . ' '
             . $this->indexedElementsName
