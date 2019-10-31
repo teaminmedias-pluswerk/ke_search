@@ -48,9 +48,6 @@ class File extends IndexerBase
     public $app = array(); // saves the path to the executables
     public $isAppArraySet = false;
 
-    // string which separates metadata from file content in the index record
-    const METADATASEPARATOR = "\n";
-
     /**
      * @var Fileinfo
      */
@@ -367,29 +364,12 @@ class File extends IndexerBase
         // add metadata content, frontend groups and catagory tags if FAL is used
         if ($this->pObj->indexerConfig['fal_storage'] > 0) {
 
-            // remove previously indexed metadata
-            if (strpos($content, self::METADATASEPARATOR)) {
-                $content = substr($content, strrpos($content, self::METADATASEPARATOR));
-            }
-
             // index meta data from FAL: title, description, alternative
-            $metadataContent = '';
+            $content = $this->addFileMetata($fileProperties, $content);
 
-            if ($fileProperties['title']) {
-                $metadataContent = $fileProperties['title'] . " ";
-            }
-
+            // use file description as abstract
             if ($fileProperties['description']) {
                 $indexRecordValues['abstract'] = $fileProperties['description'];
-                $metadataContent .= $fileProperties['description'] . " ";
-            }
-
-            if ($fileProperties['alternative']) {
-                $metadataContent .= $fileProperties['alternative'] . " ";
-            }
-
-            if ($metadataContent) {
-                $content = $metadataContent . self::METADATASEPARATOR . $content;
             }
 
             // respect groups from metadata

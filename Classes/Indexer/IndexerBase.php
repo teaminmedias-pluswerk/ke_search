@@ -42,6 +42,9 @@ class IndexerBase
     public $startMicrotime = 0;
     public $indexerConfig = array(); // current indexer configuration
 
+    // string which separates metadata from file content in the index record
+    const METADATASEPARATOR = "\n";
+
     /**
      * @var IndexerRunner
      */
@@ -380,4 +383,41 @@ class IndexerBase
         return $this->errors;
     }
 
+
+    /**
+     * compile file metadata from file properties and add it to already given file content
+     *
+     * @param array file properties (including metadata)
+     * @param string content already prepared for this file index record
+     * @author Christian Bülter <christian.buelter@pluswerk.ag>
+     * @since 31.11.19
+     * @return string metadata compiled into a string
+     */
+    public function addFileMetata($fileProperties, $fileContent)
+    {
+        // remove previously indexed metadata
+        if (strpos($fileContent, self::METADATASEPARATOR)) {
+            $fileContent = substr($fileContent, strrpos($fileContent, self::METADATASEPARATOR));
+        }
+
+        $metadataContent = '';
+
+        if ($fileProperties['title']) {
+            $metadataContent = $fileProperties['title'] . " ";
+        }
+
+        if ($fileProperties['description']) {
+            $metadataContent .= $fileProperties['description'] . " ";
+        }
+
+        if ($fileProperties['alternative']) {
+            $metadataContent .= $fileProperties['alternative'] . " ";
+        }
+
+        if ($metadataContent) {
+            $fileContent = $metadataContent . self::METADATASEPARATOR . $fileContent;
+        }
+
+        return $fileContent;
+    }
 }

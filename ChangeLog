@@ -3,6 +3,7 @@ ChangeLog
 current master
 [BUGFIX]  Do not show indexed files (and all other content other than "pages") on every page in backend module "Indexed content" mode.
 [BUGFIX]  Do not double-index the metadata of a file. fixes https://github.com/teaminmedias-pluswerk/ke_search/issues/149.
+[BUGFIX]  Do not double-index the metadata files attached to news records.
 
 Version 3.0.5, October 2019
 [FEATURE] Index files attached to news. Thanks to d-mind GmbH for sponsoring this feature.

@@ -538,7 +538,9 @@ class News extends IndexerBase
 
     /**
      * get files related to current news record
+     *
      * @param array $newsRecord
+     * @return array list of files
      */
     protected function getRelatedFiles($newsRecord)
     {
@@ -592,8 +594,10 @@ class News extends IndexerBase
 
     /**
      * get files matching configured extensions
+     *
      * @param $relatedFiles
      * @param int $newsUid
+     * @return array list of files
      */
     protected function getFilesForIndexing($relatedFiles, $newsUid)
     {
@@ -676,37 +680,33 @@ class News extends IndexerBase
     {
         // get metadata
         $orig_uid = $fileReference->getOriginalFile()->getUid();
-        $metadata = $fileReference->getOriginalFile()->_getMetaData();
+        $fileProperties = $fileReference->getOriginalFile()->getProperties();
 
-        if ($metadata['fe_groups']) {
+        // respect fe_groups from news record and from file metadata
+        if ($fileProperties['fe_groups']) {
             if ($feGroups) {
                 $feGroupsContentArray = GeneralUtility::intExplode(',', $feGroups);
-                $feGroupsFileArray = GeneralUtility::intExplode(',', $metadata['fe_groups']);
+                $feGroupsFileArray = GeneralUtility::intExplode(',', $fileProperties['fe_groups']);
                 $feGroups = implode(',', array_intersect($feGroupsContentArray, $feGroupsFileArray));
             } else {
-                $feGroups = $metadata['fe_groups'];
+                $feGroups = $fileProperties['fe_groups'];
             }
         }
 
         // assign category titles as tags
-        $categories = SearchHelper::getCategories($metadata['uid'], 'sys_file_metadata');
+        $categories = SearchHelper::getCategories($fileProperties['uid'], 'sys_file_metadata');
         SearchHelper::makeTags($tags, $categories['title_list']);
 
         // assign categories as generic tags
-        SearchHelper::makeSystemCategoryTags($tags, $metadata['uid'], 'sys_file_metadata');
+        SearchHelper::makeSystemCategoryTags($tags, $fileProperties['uid'], 'sys_file_metadata');
 
-        if ($metadata['title']) {
-            $content = $metadata['title'] . "\n" . $content;
-        }
+        // index meta data from FAL: title, description, alternative
+        $content = $this->addFileMetata($fileProperties, $content);
 
+        // use file description as abstract
         $abstract = '';
-        if ($metadata['description']) {
-            $abstract = $metadata['description'];
-            $content = $metadata['description'] . "\n" . $content;
-        }
-
-        if ($metadata['alternative']) {
-            $content .= "\n" . $metadata['alternative'];
+        if ($fileProperties['description']) {
+            $abstract = $fileProperties['description'];
         }
 
         $additionalFields = [
