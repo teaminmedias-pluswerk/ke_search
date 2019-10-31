@@ -32,7 +32,7 @@ use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\StorageRepository;
-use \TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Plugin 'Faceted search' for the 'ke_search' extension.
@@ -47,6 +47,9 @@ class File extends IndexerBase
     public $extConf = array(); // saves the configuration of extension ke_search_hooks
     public $app = array(); // saves the path to the executables
     public $isAppArraySet = false;
+
+    // string which separates metadata from file content in the index record
+    const METADATASEPARATOR = "\n";
 
     /**
      * @var Fileinfo
@@ -242,11 +245,10 @@ class File extends IndexerBase
                     if (!$fileContent) {
                         $fileContent = $fileObj->getContent($file);
                         $this->addError($fileObj->getErrors());
-                    }
 
-                    // remove line breaks from content in order to identify
-                    // additional content (which will have trailing linebreaks)
-                    $fileContent = str_replace("\n", ' ', $fileContent);
+                        // remove metadata separator if it appears in the content
+                        $fileContent = str_replace(self::METADATASEPARATOR, ' ', $fileContent);
+                    }
 
                     return $fileContent;
                 } else {
@@ -326,14 +328,16 @@ class File extends IndexerBase
     public function storeToIndex($file, $content)
     {
         $tags = '';
+
+        // add tag "file" to all index records which represent a file
         SearchHelper::makeTags($tags, array('file'));
 
         // get data from FAL
         if ($file instanceof \TYPO3\CMS\Core\Resource\File) {
-            $metadata = $file->_getMetaData();
+            $fileProperties = $file->getProperties();
             $orig_uid = $file->getUid();
         } else {
-            $metadata = false;
+            $fileProperties = false;
             $orig_uid = 0;
         }
 
@@ -360,45 +364,47 @@ class File extends IndexerBase
             'hash' => $this->getUniqueHashForFile()
         );
 
-        // add additional content if FAL is used
+        // add metadata content, frontend groups and catagory tags if FAL is used
         if ($this->pObj->indexerConfig['fal_storage'] > 0) {
+
+            // remove previously indexed metadata
+            if (strpos($content, self::METADATASEPARATOR)) {
+                $content = substr($content, strrpos($content, self::METADATASEPARATOR));
+            }
+
             // index meta data from FAL: title, description, alternative
-            $additionalContent = '';
+            $metadataContent = '';
 
-            if ($metadata['fe_groups']) {
-                $indexRecordValues['fe_group'] = $metadata['fe_groups'];
+            if ($fileProperties['title']) {
+                $metadataContent = $fileProperties['title'] . " ";
             }
 
-            if ($metadata['title']) {
-                $additionalContent = $metadata['title'] . "\n";
+            if ($fileProperties['description']) {
+                $indexRecordValues['abstract'] = $fileProperties['description'];
+                $metadataContent .= $fileProperties['description'] . " ";
             }
 
-            if ($metadata['description']) {
-                $indexRecordValues['abstract'] = $metadata['description'];
-                $additionalContent .= $metadata['description'] . "\n";
+            if ($fileProperties['alternative']) {
+                $metadataContent .= $fileProperties['alternative'] . " ";
             }
 
-            if ($metadata['alternative']) {
-                $additionalContent .= $metadata['alternative'] . "\n";
+            if ($metadataContent) {
+                $content = $metadataContent . self::METADATASEPARATOR . $content;
             }
 
-            // remove previously indexed additional content elements (they can be identified by having trailing
-            // linebreaks, the linebreaks in the file content have been removed)
-            if (strpos($content, "\n")) {
-                $content = substr($content, strrpos($content, "\n"));
+            // respect groups from metadata
+            if ($fileProperties['fe_groups']) {
+                $indexRecordValues['fe_group'] = $fileProperties['fe_groups'];
             }
-
-            // add additional content
-            $content = $additionalContent . $content;
 
             // make tags from assigned categories
-            $categories = SearchHelper::getCategories($metadata['uid'], 'sys_file_metadata');
+            $categories = SearchHelper::getCategories($fileProperties['uid'], 'sys_file_metadata');
             SearchHelper::makeTags($indexRecordValues['tags'], $categories['title_list']);
 
             // assign categories as generic tags (eg. "syscat123")
             SearchHelper::makeSystemCategoryTags(
                 $indexRecordValues['tags'],
-                $metadata['uid'],
+                $fileProperties['uid'],
                 'sys_file_metadata'
             );
         }

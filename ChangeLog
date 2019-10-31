@@ -1,5 +1,8 @@
 ChangeLog
 
+current master
+[BUGFIX]  do not double-index the metadata of a file. fixes https://github.com/teaminmedias-pluswerk/ke_search/issues/149.
+
 Version 3.0.5, October 2019
 [FEATURE] Index files attached to news. Thanks to d-mind GmbH for sponsoring this feature.
 [FEATURE] Add basic behat tests.
