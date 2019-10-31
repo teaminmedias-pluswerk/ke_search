@@ -55,10 +55,8 @@
 							<displayCond>FIELD:showTextInsteadOfResults:=:1</displayCond>
 							<config>
 								<type>text</type>
-								<cols>52</cols>
-								<rows>5</rows>
+                                <enableRichtext>1</enableRichtext>
 							</config>
-							<defaultExtras>richtext[]</defaultExtras>
 						</TCEforms>
 					</textForResults>
 
@@ -79,10 +77,8 @@
 							<displayCond>FIELD:showNoResultsText:=:1</displayCond>
 							<config>
 								<type>text</type>
-								<cols>52</cols>
-								<rows>5</rows>
+								<enableRichtext>1</enableRichtext>
 							</config>
-							<defaultExtras>richtext[]</defaultExtras>
 						</TCEforms>
 					</noResultsText>
 
