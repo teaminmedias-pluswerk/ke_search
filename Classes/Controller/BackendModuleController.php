@@ -561,7 +561,8 @@ class BackendModuleController extends AbstractBackendModuleController
                 $queryBuilder->expr()->eq('targetpid', intval($pageUid))
             )
             ->orWhere(
-                $queryBuilder->expr()->neq('type', $queryBuilder->createNamedParameter('page')),
+                $queryBuilder->expr()->neq('type', $queryBuilder->createNamedParameter('page')) .
+                ' AND ' .
                 $queryBuilder->expr()->eq('pid', intval($pageUid))
             )
             ->execute();
