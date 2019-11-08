@@ -169,7 +169,7 @@ class Filterlist
                     $queryBuilder = Db::getQueryBuilder('tx_kesearch_filteroptions');
                     $fieldsOpts = '*';
                     $tableOpts = 'tx_kesearch_filteroptions';
-                    $whereOpts = $queryBuilder->expr()->in('uid', $queryBuilder->quote($rowFilter['options']));
+                    $whereOpts = $queryBuilder->expr()->in('uid', $rowFilter['options']);
 
                     $resOpts = $queryBuilder
                         ->select($fieldsOpts)
