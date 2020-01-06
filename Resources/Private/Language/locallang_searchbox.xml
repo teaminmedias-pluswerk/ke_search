@@ -263,6 +263,7 @@
 			<label index="ff.checkFilterCondition.I.1">Geen controle</label>
 			<label index="results">Zoek resultaten</label>
 			<label index="num_results">%s resultaten:</label>
+			<label index="num_results_plain">resultaten</label>
 			<label index="until">tot</label>
 			<label index="of">van</label>
 			<label index="no_results_found">Geen zoekresultaten gevonden</label>
