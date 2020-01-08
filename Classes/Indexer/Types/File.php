@@ -30,6 +30,7 @@ use TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase;
 use TeaminmediasPluswerk\KeSearch\Indexer\Lib\Fileinfo;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
+use TYPO3\CMS\Core\Resource\Index\MetaDataRepository;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\StorageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -331,8 +332,13 @@ class File extends IndexerBase
 
         // get data from FAL
         if ($file instanceof \TYPO3\CMS\Core\Resource\File) {
+            // get file properties for this file, this information is merged from file record and meta information
             $fileProperties = $file->getProperties();
             $orig_uid = $file->getUid();
+
+            // get raw metadata for this file
+            $metaDataRepository = GeneralUtility::makeInstance(MetaDataRepository::class);
+            $metaDataProperties = $metaDataRepository->findByFile($file);
         } else {
             $fileProperties = false;
             $orig_uid = 0;
@@ -377,14 +383,22 @@ class File extends IndexerBase
                 $indexRecordValues['fe_group'] = $fileProperties['fe_groups'];
             }
 
-            // make tags from assigned categories
-            $categories = SearchHelper::getCategories($fileProperties['uid'], 'sys_file_metadata');
-            SearchHelper::makeTags($indexRecordValues['tags'], $categories['title_list']);
+            // get list of assigned system categories
+            $categories = SearchHelper::getCategories(
+                $metaDataProperties['uid'],
+                'sys_file_metadata'
+            );
+
+            // make Tags from category titles
+            SearchHelper::makeTags(
+                $indexRecordValues['tags'],
+                $categories['title_list']
+            );
 
             // assign categories as generic tags (eg. "syscat123")
             SearchHelper::makeSystemCategoryTags(
                 $indexRecordValues['tags'],
-                $fileProperties['uid'],
+                $metaDataProperties['uid'],
                 'sys_file_metadata'
             );
         }
