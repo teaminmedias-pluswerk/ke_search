@@ -263,12 +263,15 @@
 			<label index="ff.checkFilterCondition.I.1">Geen controle</label>
 			<label index="results">Zoek resultaten</label>
 			<label index="num_results">%s resultaten:</label>
+			<label index="num_results_plain">resultaten</label>
 			<label index="until">tot</label>
 			<label index="of">van</label>
 			<label index="no_results_found">Geen zoekresultaten gevonden</label>
 			<label index="no_results_refine">Deze zoekterm is niet specifiek genoeg. Kies een andere.</label>
 			<label index="searchword_length_error">Zoek woorden in lengte van minder dan %d karakter zijn niet verwerkt.</label>
 			<label index="error_resultPage">Er is al een pagina met zoekresultaten in de Plugin configuratie. Dus het heeft geen zin om nogmaals de resultatenlijst plug-in te voegen op deze pagina.</label>
+			<label index="pagebrowser_prev">Vorige</label>
+			<label index="pagebrowser_next">Volgende</label>
 			<label index="label_resulturl">URL</label>
 			<label index="label_sort">Sorteer op:</label>
 			<label index="label_score">Score</label>
