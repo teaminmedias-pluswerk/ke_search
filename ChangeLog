@@ -1,6 +1,8 @@
 ChangeLog
 
 current master
+[BUGFIX]  Fix uncaught TYPO3 Exception Class 'GeneralUtility' not found in Templavoila Indexer. https://github.com/teaminmedias-pluswerk/ke_search/issues/316
+[TASK]    Add Dutch labels. https://github.com/teaminmedias-pluswerk/ke_search/pull/328  
 [BUGFIX]  Fix assigning of tags from system categories in file indexer. https://github.com/teaminmedias-pluswerk/ke_search/issues/326.
 
 Version 3.0.6, November 2019
