@@ -4,6 +4,8 @@ if (!defined('TYPO3_MODE')) {
     die('Access denied.');
 }
 
+$_EXTKEY = 'ke_search';
+
 // add help file
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
     'tx_kesearch_filters',
