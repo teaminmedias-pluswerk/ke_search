@@ -429,6 +429,7 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
         $where .= ' AND pid in (' . $startingPoints . ') ';
 
         // add language
+        $languageAspect = GeneralUtility::makeInstance(Context::class)->getAspect('language');
         $where .= ' AND language IN(' . $languageAspect->getId() . ', -1) ';
 
         // add "tagged content only" searchphrase
