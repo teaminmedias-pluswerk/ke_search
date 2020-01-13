@@ -132,9 +132,9 @@ abstract class AbstractBackendModuleController extends ActionController
             foreach ($arguments as $argumentKey => $argumentValue) {
                 if ($argumentValue) {
                     if (!in_array($argumentKey, $this->excludedArguments)) {
-                        GeneralUtility::_GETset($argumentValue, $this->argumentsKey . '|' . $argumentKey);
+                        $this->request->setArgument($this->argumentsKey . '|' . $argumentKey, $argumentValue);
                     } else {
-                        GeneralUtility::_GETset('', $this->argumentsKey . '|' . $argumentKey);
+                        $this->request->setArgument($this->argumentsKey . '|' . $argumentKey, '');
                     }
                 }
             }
