@@ -21,6 +21,7 @@ namespace TeaminmediasPluswerk\KeSearch\Lib;
  ***************************************************************/
 
 use TeaminmediasPluswerk\KeSearchPremium\KeSearchPremium;
+use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Core\Utility\HttpUtility;
@@ -1017,6 +1018,9 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     public function countSearchPhrase($searchPhrase, $searchWordsArray, $hits, $tagsAgainst)
     {
 
+        // prepare language aspect
+        $languageAspect = GeneralUtility::makeInstance(Context::class)->getAspect('language');
+
         // prepare "tagsAgainst"
         $search = array('"', ' ', '+');
         $replace = array('', '', '');
@@ -1037,7 +1041,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                 'tstamp' => time(),
                 'hits' => $hits,
                 'tagsagainst' => $tagsAgainst,
-                'language' => $GLOBALS['TSFE']->sys_language_uid,
+                'language' => $languageAspect->getId(),
             );
             $queryBuilder = Db::getQueryBuilder($table);
             $queryBuilder
@@ -1062,7 +1066,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                     'tstamp' => time(),
                     'pageid' => $GLOBALS['TSFE']->id,
                     'resultsfound' => $hits ? 1 : 0,
-                    'language' => $GLOBALS['TSFE']->sys_language_uid,
+                    'language' => $languageAspect->getId(),
                 );
                 $queryBuilder
                     ->insert($table)
