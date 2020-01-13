@@ -967,6 +967,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         }
 
         $pagination['currentPage'] = $this->piVars['page'];
+        $pagination['sword'] = $this->sword;
         $view->assign('pagination', $pagination);
 
         // render pagebrowser content and pass it together with some variables to fluid template
