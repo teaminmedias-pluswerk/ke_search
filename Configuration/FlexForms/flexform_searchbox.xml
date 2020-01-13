@@ -108,6 +108,7 @@
 							<displayCond>FIELD:showSortInFrontend:!=:1</displayCond>
 							<config type="array">
 								<type>select</type>
+								<renderType>selectSingle</renderType>
 								<maxitems>1</maxitems>
 								<size>5</size>
 								<itemsProcFunc>TeaminmediasPluswerk\KeSearch\Backend\Flexform->listAvailableOrderingsForAdmin</itemsProcFunc>
@@ -121,6 +122,7 @@
 							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.sortWithoutSearchword</label>
 							<config type="array">
 								<type>select</type>
+								<renderType>selectSingle</renderType>
 								<maxitems>1</maxitems>
 								<size>5</size>
 								<relevanceNotAllowed>1</relevanceNotAllowed>
@@ -169,6 +171,7 @@
 							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.templateLayout</label>
 							<config>
 								<type>select</type>
+								<renderType>selectSingle</renderType>
 								<items>
 									<numIndex index="0">
 										<numIndex index="0">LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.templateLayout.I.0</numIndex>
@@ -195,6 +198,7 @@
 							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.resultLinkTarget</label>
 							<config>
 								<type>select</type>
+								<renderType>selectSingle</renderType>
 								<items>
 									<numIndex index="0">
 										<numIndex index="0">LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.resultLinkTarget.I.1</numIndex>
@@ -216,6 +220,7 @@
 							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.resultLinkTargetFiles</label>
 							<config>
 								<type>select</type>
+								<renderType>selectSingle</renderType>
 								<items>
 									<numIndex index="0">
 										<numIndex index="0">LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.resultLinkTarget.I.1</numIndex>
@@ -237,6 +242,7 @@
 							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.previewMode</label>
 							<config>
 								<type>select</type>
+								<renderType>selectSingle</renderType>
 								<items>
 									<numIndex index="0">
 										<numIndex index="0">LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.previewMode.I.0</numIndex>
@@ -451,6 +457,7 @@
 							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.filters</label>
 							<config type="array">
 								<type>select</type>
+								<renderType>selectMultipleSideBySide</renderType>
 								<multiple>1</multiple>
 								<maxitems>100</maxitems>
 								<size>5</size>
@@ -467,6 +474,7 @@
 							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.hiddenfilters</label>
 							<config type="array">
 								<type>select</type>
+								<renderType>selectMultipleSideBySide</renderType>
 								<multiple>1</multiple>
 								<maxitems>100</maxitems>
 								<size>5</size>
@@ -483,6 +491,7 @@
 							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.preselected_filters</label>
 							<config type="array">
 								<type>select</type>
+								<renderType>selectMultipleSideBySide</renderType>
 								<multiple>1</multiple>
 								<maxitems>100</maxitems>
 								<size>5</size>
@@ -498,6 +507,7 @@
 							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.checkFilterCondition</label>
 							<config>
 								<type>select</type>
+								<renderType>selectSingle</renderType>
 								<items>
 									<numIndex index="0">
 										<numIndex index="0">LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.checkFilterCondition.I.0</numIndex>
