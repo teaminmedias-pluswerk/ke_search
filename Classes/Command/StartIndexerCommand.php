@@ -99,5 +99,7 @@ class StartIndexerCommand extends Command
 
             $io->success('Indexer process completed.');
         }
+
+        return 0;
     }
 }
