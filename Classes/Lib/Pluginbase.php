@@ -27,6 +27,7 @@ use \TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Core\Utility\HttpUtility;
 use TYPO3\CMS\Frontend\Page\PageRepository;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Frontend\Resource\FilePathSanitizer;
 
 /**
  * Parent class for plugins pi1 and pi2
@@ -267,7 +268,8 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         }
 
         // add cssTag to header if set
-        $cssFile = $GLOBALS['TSFE']->tmpl->getFileName($this->conf['cssFile']);
+        $filePathSanitizer = GeneralUtility::makeInstance(FilePathSanitizer::class);
+        $cssFile =  $filePathSanitizer->sanitize($this->conf['cssFile']);
         if (!empty($cssFile)) {
             /** @var \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer */
             $pageRenderer = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
