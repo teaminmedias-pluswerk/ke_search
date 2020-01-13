@@ -44,10 +44,19 @@ $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['tce']['formevals']
 // logging
 $extConf = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Configuration\ExtensionConfiguration::class)->get('ke_search');
 $loglevel = !empty($extConf['loglevel']) ? $extConf['loglevel'] : 'ERROR';
-$GLOBALS['TYPO3_CONF_VARS']['LOG']['TeaminmediasPluswerk']['KeSearch']['Indexer']['writerConfiguration'] = array(
-    strtolower($loglevel) => array(
-        'TYPO3\\CMS\\Core\\Log\\Writer\\FileWriter' => array(
+
+if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
+    \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('10.0')
+) {
+    $loglevel = \TYPO3\CMS\Core\Log\LogLevel::normalizeLevel($loglevel);
+} else {
+    $loglevel = strtolower($loglevel);
+}
+
+$GLOBALS['TYPO3_CONF_VARS']['LOG']['TeaminmediasPluswerk']['KeSearch']['Indexer']['writerConfiguration'] = [
+     $loglevel => [
+        'TYPO3\\CMS\\Core\\Log\\Writer\\FileWriter' => [
             'logFileInfix' => 'kesearch'
-        )
-    )
-);
+        ]
+    ]
+];
