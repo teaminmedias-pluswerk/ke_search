@@ -25,13 +25,24 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
 
 // add module
 if (TYPO3_MODE == 'BE') {
+
+    if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) >=
+        \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('10.0')
+    ) {
+        $extensionName = 'ke_search';
+        $controller = TeaminmediasPluswerk\KeSearch\Controller\BackendModuleController::class;
+    } else {
+        $extensionName = 'TeaminmediasPluswerk.ke_search';
+        $controller = 'BackendModule';
+    }
+
     \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-        'ke_search',
+        $extensionName,
         'web',          // Main area
         'backend_module',         // Name of the module
         '',             // Position of the module
         array(          // Allowed controller action combinations
-            TeaminmediasPluswerk\KeSearch\Controller\BackendModuleController::class =>
+            $controller =>
                 'startIndexing,indexedContent,indexTableInformation,'
                 . 'searchwordStatistics,clearSearchIndex,lastIndexingReport,alert',
         ),
