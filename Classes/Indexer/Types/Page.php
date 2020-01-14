@@ -934,7 +934,7 @@ class Page extends IndexerBase
         // get metadata
         if ($fileObject instanceof FileReference) {
             $orig_uid = $fileObject->getOriginalFile()->getUid();
-            $metadata = $fileObject->getOriginalFile()->_getMetaData();
+            $metadata = $fileObject->getOriginalFile()->getMetaData()->get();
         } else {
             $orig_uid = $fileObject->getUid();
             $metadata = $fileObject->_getMetaData();

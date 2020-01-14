@@ -100,7 +100,7 @@ class Searchresult
             case 'file':
                 // if we use FAL, see if we have a title in the metadata
                 if ($this->row['orig_uid'] && ($fileObject = SearchHelper::getFile($this->row['orig_uid']))) {
-                    $metadata = $fileObject->_getMetaData();
+                    $metadata = $fileObject->getMetaData()->get();
                     $linktext = ($metadata['title'] ? $metadata['title'] : $this->row['title']);
                 } else {
                     $linktext = $this->row['title'];
