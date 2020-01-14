@@ -25,6 +25,7 @@ use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Core\Utility\HttpUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Frontend\Page\PageRepository;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Frontend\Resource\FilePathSanitizer;
@@ -560,7 +561,13 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                         . $filter['uid']
                         . ']='
                         . $option['tag'];
-                    $linkconf['useCacheHash'] = false;
+
+                    if (VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
+                        VersionNumberUtility::convertVersionNumberToInteger('10.0')
+                    ) {
+                        $linkconf['useCacheHash'] = false;
+                    }
+
                     if (is_array($this->piVars['filter']) && count($this->piVars['filter'])) {
                         foreach ($this->piVars['filter'] as $key => $value) {
                             if ($key != $filter['uid']) {

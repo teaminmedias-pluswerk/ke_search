@@ -24,6 +24,7 @@ use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 
 /**
  * helper functions
@@ -264,6 +265,13 @@ class SearchHelper
                 $linkconf['useCacheHash'] = true;
                 $linkconf['target'] = $targetDefault;
                 break;
+        }
+
+        if (VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) >=
+            VersionNumberUtility::convertVersionNumberToInteger('10.0')
+        ) {
+            // Deprecated: Setting typolink.useCacheHash has no effect anymore
+            unset($linkconf['useCacheHash']);
         }
 
         return $linkconf;
