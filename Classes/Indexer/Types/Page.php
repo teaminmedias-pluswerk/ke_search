@@ -32,7 +32,6 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer\Types;
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
-use TYPO3\CMS\Core\Configuration\Features;
 use TYPO3\CMS\Core\Html\RteHtmlParser;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Resource\FileRepository;
@@ -208,7 +207,18 @@ class Page extends IndexerBase
         // get all available sys_language_uid records
         /** @var TranslationConfigurationProvider $translationProvider */
         $translationProvider = GeneralUtility::makeInstance(TranslationConfigurationProvider::class);
-        $this->sysLanguages = $translationProvider->getSystemLanguages();
+        if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) >=
+            \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('10.0')
+        ) {
+            $startingPoints = GeneralUtility::trimExplode(',', $this->indexerConfig['startingpoints_recursive'], true);
+            foreach ($startingPoints as $startingPoint) {
+                foreach ($translationProvider->getSystemLanguages($startingPoint) as $key => $lang) {
+                    $this->sysLanguages[$key] = $lang;
+                }
+            }
+        } else {
+            $this->sysLanguages = $translationProvider->getSystemLanguages();
+        }
 
         // make file repository
         /* @var $this ->fileRepository \TYPO3\CMS\Core\Resource\FileRepository */
