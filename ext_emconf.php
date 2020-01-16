@@ -4,7 +4,7 @@ $EM_CONF[$_EXTKEY] = array(
     'description' => 'Faceted fulltext search for TYPO3. Fast, flexible and easy to install and use. Indexes content directly from the databases. Features faceting / filtering, file indexing, images in result lists and respects access restrictions.',
     'category' => 'plugin',
     'shy' => 0,
-    'version' => '3.0.6',
+    'version' => '3.1.0',
     'dependencies' => '',
     'conflicts' => '',
     'priority' => '',
@@ -23,7 +23,7 @@ $EM_CONF[$_EXTKEY] = array(
     'CGLcompliance_note' => '',
     'constraints' => array(
         'depends' => array(
-            'typo3' => '9.5.0-9.99.99'
+            'typo3' => '9.5.0-10.2.99'
         ),
         'conflicts' => array(),
         'suggests' => array(),
