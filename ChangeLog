@@ -1,6 +1,25 @@
 ChangeLog
 
 current master
+[TASK]    get sys_languages depending on siteconf from starting points
+[BUGFIX]  version switch for module registration
+[TASK]    remove deprecated useCacheHash param
+[TASK]    move vendor name to controller when registering module 
+[TASK]    replace _getMetaData() on file objects
+[BUGFIX]  add version switch for loglevel config
+[TASK]    set general language file path
+[BUGFIX]  loglevel in lowercase
+[TASK]    set loglevel as string, not normalized
+[TASK]    add return values to commands
+[BUGFIX]  add language aspect instance
+[TASK]    sanitize css path
+[TASK]    replace sys_language_id with language aspect
+[TASK]    replace PATH_site
+[TASK]    replace _GETset() wit setArgument()
+[TASK]    set general language path
+[TASK]    make flexform work again
+[TASK]    set extkey
+[TASK]    add TYPO3 10.2 as requirement in addition to 9.5
 [BUGFIX]  Fix uncaught TYPO3 Exception Class 'GeneralUtility' not found in Templavoila Indexer. https://github.com/teaminmedias-pluswerk/ke_search/issues/316
 [TASK]    Add Dutch labels. https://github.com/teaminmedias-pluswerk/ke_search/pull/328  
 [BUGFIX]  Fix assigning of tags from system categories in file indexer. https://github.com/teaminmedias-pluswerk/ke_search/issues/326.

@@ -2,7 +2,7 @@
 namespace TeaminmediasPluswerk\KeSearch\Backend;
 
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Lang\LanguageService;
+use TYPO3\CMS\Core\Localization\LanguageService;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
 
 class Flexform

@@ -179,7 +179,8 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
         }
 
         // add language
-        $queryForSphinx .= ' @language _language_-1 | _language_' . $GLOBALS['TSFE']->sys_language_uid;
+        $languageAspect = GeneralUtility::makeInstance(Context::class)->getAspect('language');
+        $queryForSphinx .= ' @language _language_-1 | _language_' . $languageAspect->getId();
 
         // add fe_groups to query
         $queryForSphinx .= ' @fe_group _group_NULL | _group_0';
@@ -428,8 +429,8 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
         $where .= ' AND pid in (' . $startingPoints . ') ';
 
         // add language
-        $lang = intval($GLOBALS['TSFE']->sys_language_uid);
-        $where .= ' AND language IN(' . $lang . ', -1) ';
+        $languageAspect = GeneralUtility::makeInstance(Context::class)->getAspect('language');
+        $where .= ' AND language IN(' . $languageAspect->getId() . ', -1) ';
 
         // add "tagged content only" searchphrase
         if ($this->conf['showTaggedContentOnly']) {

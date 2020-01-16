@@ -71,6 +71,8 @@ class RemoveLockCommand extends Command
             $io->warning('There was an error accessing the TYPO3 registry.');
             $indexerRunner->logger->log('warning', 'There was an error accessing the TYPO3 registry');
         }
+
+        return 0;
     }
 
 }

@@ -90,6 +90,7 @@ class ClearIndexCommand extends Command
             $io->note('There are no entries in ke_search index table.');
         }
 
+        return 0;
 
     }
 

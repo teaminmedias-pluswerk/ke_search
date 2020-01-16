@@ -1,6 +1,7 @@
 <?php
 namespace TeaminmediasPluswerk\KeSearch\Indexer\Lib;
 
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /***************************************************************
@@ -120,7 +121,7 @@ class Fileinfo
         if ($this->file !== null) {
             return dirname($this->file->getForLocalProcessing(false)) . '/';
         } else {
-            return str_replace(PATH_site, '', $this->fileInfo['path']);
+            return str_replace(Environment::getPublicPath() . '/', '', $this->fileInfo['path']);
         }
     }
 

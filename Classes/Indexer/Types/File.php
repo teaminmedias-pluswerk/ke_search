@@ -30,6 +30,7 @@ use TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase;
 use TeaminmediasPluswerk\KeSearch\Indexer\Lib\Fileinfo;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Resource\Index\MetaDataRepository;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\StorageRepository;
@@ -176,7 +177,7 @@ class File extends IndexerBase
         if (is_array($directoryArray) && count($directoryArray)) {
             foreach ($directoryArray as $key => $directory) {
                 $directory = rtrim($directory, '/');
-                $directoryArray[$key] = PATH_site . $directory . '/';
+                $directoryArray[$key] = Environment::getPublicPath() . '/' . $directory . '/';
             }
             return $directoryArray;
         } else {

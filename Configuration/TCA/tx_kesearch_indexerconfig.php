@@ -1,10 +1,11 @@
 <?php
 
-$langGeneralPath = 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:';
+$langGeneralPath = 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:';
+
 if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
-    \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('8.0')
+    \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('10.0')
 ) {
-    $langGeneralPath = 'LLL:EXT:lang/locallang_general.xml:';
+    $langGeneralPath = 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:';
 }
 
 $configurationArray = array(
