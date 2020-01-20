@@ -149,6 +149,7 @@
 							<displayCond>FIELD:showSortInFrontend:=:1</displayCond>
 							<config type="array">
 								<type>select</type>
+								<renderType>selectMultipleSideBySide</renderType>
 								<maxitems>100</maxitems>
 								<size>5</size>
 								<itemsProcFunc>TeaminmediasPluswerk\KeSearch\Backend\Flexform->listAvailableOrderingsForFrontend</itemsProcFunc>
