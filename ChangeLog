@@ -1,6 +1,6 @@
 ChangeLog
 
-current master
+Version 3.1.1, January 2020
 [BUGFIX]  fix regression in compatibility with TYPO3 9: getMetaData() ist not available in TYPO3 9. https://github.com/teaminmedias-pluswerk/ke_search/issues/335.
 [BUGFIX]  fix regression: removing css file in typoscript results in an error in Pluginbase.php. https://github.com/teaminmedias-pluswerk/ke_search/issues/333.
 [BUGFIX]  flexform sorting field misses renderingType. https://github.com/teaminmedias-pluswerk/ke_search/pull/334.
