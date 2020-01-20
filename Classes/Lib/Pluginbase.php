@@ -269,12 +269,14 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         }
 
         // add cssTag to header if set
-        $filePathSanitizer = GeneralUtility::makeInstance(FilePathSanitizer::class);
-        $cssFile =  $filePathSanitizer->sanitize($this->conf['cssFile']);
-        if (!empty($cssFile)) {
-            /** @var \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer */
-            $pageRenderer = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
-            $pageRenderer->addCssFile($cssFile);
+        if ($this->conf['cssFile'] !== NULL) {
+            $filePathSanitizer = GeneralUtility::makeInstance(FilePathSanitizer::class);
+            $cssFile = $filePathSanitizer->sanitize($this->conf['cssFile']);
+            if (!empty($cssFile)) {
+                /** @var \TYPO3\CMS\Core\Page\PageRenderer $pageRenderer */
+                $pageRenderer = GeneralUtility::makeInstance(\TYPO3\CMS\Core\Page\PageRenderer::class);
+                $pageRenderer->addCssFile($cssFile);
+            }
         }
     }
 
