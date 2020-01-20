@@ -1070,6 +1070,13 @@ class Page extends IndexerBase
             // replace table dividers with whitespace
             $bodytext = str_replace('|', ' ', $bodytext);
         }
+
+        // remove script and style tags
+        // thanks to the wordpress project
+        // https://core.trac.wordpress.org/browser/tags/5.3/src/wp-includes/formatting.php#L5178
+        $bodytext = preg_replace( '@<(script|style)[^>]*?>.*?</\\1>@si', '', $bodytext );
+
+        // remove other tags
         $bodytext = strip_tags($bodytext);
 
         // hook for modifiying a content elements content
