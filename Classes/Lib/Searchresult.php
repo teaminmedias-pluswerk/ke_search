@@ -105,7 +105,7 @@ class Searchresult
                     ) {
                         $metadata = $fileObject->_getMetaData();
                     } else {
-                        $metadata = $fileObject->getMetaData()->get()();
+                        $metadata = $fileObject->getMetaData()->get();
                     }
                     $linktext = ($metadata['title'] ? $metadata['title'] : $this->row['title']);
                 } else {
