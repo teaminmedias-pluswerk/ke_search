@@ -1,5 +1,8 @@
 ChangeLog
 
+current master
+[BUGFIX]  fix regression in compatibility with TYPO3 9: getMetaData() ist not available in TYPO3 9. https://github.com/teaminmedias-pluswerk/ke_search/issues/335.
+
 Version 3.1.0, January 2020
 [TASK]    get sys_languages depending on siteconf from starting points
 [BUGFIX]  version switch for module registration

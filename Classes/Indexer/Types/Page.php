@@ -944,10 +944,22 @@ class Page extends IndexerBase
         // get metadata
         if ($fileObject instanceof FileReference) {
             $orig_uid = $fileObject->getOriginalFile()->getUid();
-            $metadata = $fileObject->getOriginalFile()->getMetaData()->get();
+            if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
+                \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('10.0')
+            ) {
+                $metadata = $fileObject->getOriginalFile()->_getMetaData();
+            } else {
+                $metadata = $fileObject->getOriginalFile()->getMetaData()->get();
+            }
         } else {
             $orig_uid = $fileObject->getUid();
-            $metadata = $fileObject->_getMetaData();
+            if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
+                \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('10.0')
+            ) {
+                $metadata = $fileObject->_getMetaData();
+            } else {
+                $metadata = $fileObject->getMetaData()->get()();
+            }
         }
 
         if ($metadata['fe_groups']) {
