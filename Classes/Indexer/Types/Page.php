@@ -958,7 +958,7 @@ class Page extends IndexerBase
             ) {
                 $metadata = $fileObject->_getMetaData();
             } else {
-                $metadata = $fileObject->getMetaData()->get()();
+                $metadata = $fileObject->getMetaData()->get();
             }
         }
 
