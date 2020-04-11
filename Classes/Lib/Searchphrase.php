@@ -207,28 +207,19 @@ class Searchphrase
         // add filter options selected in the frontend
         $tagChar = $this->pObj->extConf['prePostTagChar'];
         if (is_array($this->pObj->piVars['filter'])) {
-            $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
             foreach ($this->pObj->piVars['filter'] as $key => $tag) {
                 if (is_array($this->pObj->piVars['filter'][$key])) {
                     foreach ($this->pObj->piVars['filter'][$key] as $subkey => $subtag) {
                         // Don't add the tag if it is already inserted by preselected filters
                         if (!empty($subtag) && strstr($tagsAgainst[$key], $subtag) === false) {
                             // Don't add a "+", because we are here in checkbox mode. It's a OR.
-                            $tagsAgainst[$key] .= ' "'
-                                . $tagChar
-                                . $queryBuilder->quote($subtag)
-                                . $tagChar
-                                . '"';
+                            $tagsAgainst[$key] .= ' "' . $tagChar . $subtag . $tagChar . '"';
                         }
                     }
                 } else {
                     // Don't add the tag if it is already inserted by preselected filters
                     if (!empty($tag) && strstr($tagsAgainst[$key], $tag) === false) {
-                        $tagsAgainst[$key] .= ' +"'
-                            . $tagChar
-                            . $queryBuilder->quote($tag)
-                            . $tagChar
-                            . '"';
+                        $tagsAgainst[$key] .= ' +"' . $tagChar . $tag . $tagChar . '"';
                     }
                 }
             }
