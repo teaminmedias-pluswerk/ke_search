@@ -570,8 +570,8 @@ class Page extends IndexerBase
                 $content = '';
 
                 // index header
-                // add header only if not set to "hidden"
-                if ($ttContentRow['header_layout'] != 100) {
+                // add header only if not set to "hidden", do not add header of html element
+                if ($ttContentRow['header_layout'] != 100 && $ttContentRow['CType'] != 'html') {
                     $content .= strip_tags($ttContentRow['header']) . "\n";
                 }
 
