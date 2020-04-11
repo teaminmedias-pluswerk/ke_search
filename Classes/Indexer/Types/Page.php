@@ -237,7 +237,7 @@ class Page extends IndexerBase
      */
     public function startIndexing()
     {
-        // get all pages. Regardeless if they are shortcut, sysfolder or external link
+        // get all pages. Regardless if they are shortcut, sysfolder or external link
         $indexPids = $this->getPagelist(
             $this->indexerConfig['startingpoints_recursive'],
             $this->indexerConfig['single_pages']
@@ -285,21 +285,13 @@ class Page extends IndexerBase
         }
 
         // show indexer content
-        $content = '<p><b>Indexer "' . $this->indexerConfig['title'] . '": </b><br />'
-            . count($indexPids)
-            . ' pages in '
-            . count($this->sysLanguages)
-            . ' languages (' . $languageTitels . ') have been found for indexing.<br />' . "\n"
-            . $this->counter
-            . ' '
-            . $this->indexedElementsName
-            . ' have been indexed ('
-            . $this->counterWithoutContent
-            . ' more had no content). <br />'
-            . "\n"
-            . $this->fileCounter
-            . ' files have been indexed.<br />'
-            . "\n"
+        $content = '<p>'
+            . '<b>Indexer "' . $this->indexerConfig['title'] . '": </b>'. "<br />\n"
+            . count($indexPids) . ' ' . $this->indexedElementsName . ' have been selected for indexing in the main language.' . "<br />\n"
+            . count($this->sysLanguages) . ' languages (' . $languageTitels . ') have been found.' . "<br />\n"
+            . $this->counter . ' ' . $this->indexedElementsName . ' have been indexed. '
+            . $this->counterWithoutContent . ' had no content or the content was not indexable.' . "<br />\n"
+            . $this->fileCounter . ' files have been indexed.' . "<br />\n"
             . '</p>'
             . "\n";
 
