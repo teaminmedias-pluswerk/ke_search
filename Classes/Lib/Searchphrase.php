@@ -223,7 +223,7 @@ class Searchphrase
                     }
                 } else {
                     // Don't add the tag if it is already inserted by preselected filters
-                    if (!empty($tag) && strstr($tagsAgainst[$key], $subtag) === false) {
+                    if (!empty($tag) && strstr($tagsAgainst[$key], $tag) === false) {
                         $tagsAgainst[$key] .= ' +"'
                             . $tagChar
                             . $queryBuilder->quote($tag)

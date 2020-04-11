@@ -1,6 +1,7 @@
 ChangeLog
 
 current master
+[BUGFIX]  Use correct variable name to check if tag already exists / prevent PHP 7.3 deprecation notice. https://github.com/teaminmedias-pluswerk/ke_search/issues/325
 [TASK]    Improve message after indexing for page indexer.
 [TASK]    Do not add a tag more than once / Fix results counted too often in filter form. https://github.com/teaminmedias-pluswerk/ke_search/issues/312
 [TASK]    Remove code of obsolete filter type "textlinks". https://github.com/teaminmedias-pluswerk/ke_search/issues/269
