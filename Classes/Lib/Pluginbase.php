@@ -435,11 +435,6 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
 
             // special classes / custom code
             switch ($filter['rendertype']) {
-                case 'textlinks':
-                    $textLinkObj = GeneralUtility::makeInstance(Textlinks::class, $this);
-                    $textLinkObj->renderTextlinks($filter['uid'], $options, $this);
-                    break;
-
                 // use custom code for filter rendering
                 // set $filterData['rendertype'] = 'custom'
                 // and $filterData['rawHtmlContent'] to your pre-rendered filter code

@@ -25,7 +25,6 @@
 			<label index="tx_kesearch_filters.rendertype.I.0">Select/Dropdown</label>
 			<label index="tx_kesearch_filters.rendertype.I.1">List/Textlinks</label>
 			<label index="tx_kesearch_filters.rendertype.I.2">Checkboxes (multiselection OR)</label>
-			<label index="tx_kesearch_filters.rendertype.I.3">List/Textlinks with multiselection checkboxes on additional page</label>
 			<label index="tx_kesearch_filteroptions">Filter options</label>
 			<label index="tx_kesearch_filteroptions.title">Title</label>
 			<label index="tx_kesearch_filteroptions.tag">Tag</label>
@@ -106,7 +105,6 @@
 			<label index="tx_kesearch_filters.rendertype.I.0">Selectbox</label>
 			<label index="tx_kesearch_filters.rendertype.I.1">Liste</label>
 			<label index="tx_kesearch_filters.rendertype.I.2">Checkboxen (Mehrfachauswahl ODER)</label>
-			<label index="tx_kesearch_filters.rendertype.I.3">Textlinks</label>
 			<label index="tx_kesearch_filteroptions">Filteroptionen</label>
 			<label index="tx_kesearch_filteroptions.title">Titel</label>
 			<label index="tx_kesearch_filteroptions.tag">Schlagwort</label>
@@ -174,7 +172,6 @@
 			<label index="tx_kesearch_filters.rendertype.I.0">Selecteer</label>
 			<label index="tx_kesearch_filters.rendertype.I.1">Lijst</label>
 			<label index="tx_kesearch_filters.rendertype.I.2">Checkboxen (Multiselectie OR)</label>
-			<label index="tx_kesearch_filters.rendertype.I.3">Tekstlinks</label>
 			<label index="tx_kesearch_filteroptions">Filter opties</label>
 			<label index="tx_kesearch_filteroptions.title">Titel</label>
 			<label index="tx_kesearch_filteroptions.tag">Label</label>

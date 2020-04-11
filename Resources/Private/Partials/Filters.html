@@ -8,7 +8,6 @@
 		<f:case value="select"><f:render partial="Filters/Select" arguments="{conf: conf, filter: filter}" /></f:case>
 		<f:case value="list"><f:render partial="Filters/List" arguments="{conf: conf, filter: filter}" /></f:case>
 		<f:case value="checkbox"><f:render partial="Filters/Checkbox" arguments="{conf: conf, filter: filter}" /></f:case>
-		<f:case value="textlinks"><f:render partial="Filters/Textlinks" arguments="{conf: conf, filter: filter}" /></f:case>
 		<f:case value="custom"><f:format.raw>{filter.rawHtmlContent}</f:format.raw></f:case>
 	</f:switch>
 </f:for>

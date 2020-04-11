@@ -94,7 +94,6 @@ return array(
                     array('LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_filters.rendertype.I.0', 'select'),
                     array('LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_filters.rendertype.I.1', 'list'),
                     array('LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_filters.rendertype.I.2', 'checkbox'),
-                    array('LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_filters.rendertype.I.3', 'textlinks'),
                 ),
                 'size' => 1,
                 'maxitems' => 1,
@@ -188,8 +187,5 @@ return array(
         'checkbox' => array('showitem' => 'sys_language_uid,l10n_parent, l10n_diffsource, hidden,'
             . ' title,rendertype, markAllCheckboxes, options, shownumberofresults,'
             . ' alphabeticalsorting'),
-        'textlinks' => array('showitem' => 'sys_language_uid,l10n_parent, l10n_diffsource, hidden,'
-            . ' title,rendertype, target_pid, amount, shownumberofresults,'
-            . ' alphabeticalsorting, options')
     )
 );
