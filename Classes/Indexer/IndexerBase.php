@@ -257,8 +257,6 @@ class IndexerBase
         $where = $pageWhere . ' AND no_search <> 1 ';
 
         foreach ($filterOptionsRows as $row) {
-            $tempTags = array();
-
             if ($row['automated_tagging_exclude'] > '') {
                 $whereRow = $where . 'AND FIND_IN_SET(pages.pid, "' . $row['automated_tagging_exclude'] . '") = 0';
             } else {
@@ -276,11 +274,7 @@ class IndexerBase
             }
 
             foreach ($pageList as $uid) {
-                if ($this->pageRecords[$uid]['tags']) {
-                    $this->pageRecords[$uid]['tags'] .= ',' . $tagChar . $row['tag'] . $tagChar;
-                } else {
-                    $this->pageRecords[$uid]['tags'] = $tagChar . $row['tag'] . $tagChar;
-                }
+                $this->pageRecords[$uid]['tags'] = SearchHelper::addTag($row['tag'], $this->pageRecords[$uid]['tags']);
             }
         }
     }

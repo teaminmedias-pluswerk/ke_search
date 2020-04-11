@@ -167,6 +167,32 @@ class SearchHelper
     }
 
     /**
+     * Adds a tag to a given list of comma-separated tags.
+     * Does not add the tag if it is already in the list.
+     *
+     * @param $tagToAdd Tag without the "prePostTagChar" (normally #)
+     * @param string $tags
+     * @author Christian Bülter <christian.buelter@web.de>
+     * @since 11.04.2020
+     * @return string
+     */
+    public function addTag($tagToAdd, $tags='')
+    {
+        if ($tagToAdd) {
+            $extConf = SearchHelper::getExtConf();
+            $tagToAdd = $extConf['prePostTagChar'] . $tagToAdd . $extConf['prePostTagChar'];
+            $tagArray = GeneralUtility::trimExplode(',', $tags);
+            if (!in_array($tagToAdd, $tagArray)) {
+                if (strlen($tags)) {
+                    $tags .= ',';
+                }
+                $tags .= $tagToAdd;
+            }
+        }
+        return $tags;
+    }
+
+    /**
      * creates tags from category titles
      * removes characters: # , space ( ) _
      * @param string $tags comma-list of tags, new tags will be added to this
