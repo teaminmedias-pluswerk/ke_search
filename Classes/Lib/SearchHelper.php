@@ -176,7 +176,7 @@ class SearchHelper
      * @since 11.04.2020
      * @return string
      */
-    public function addTag($tagToAdd, $tags='')
+    public static function addTag($tagToAdd, $tags='')
     {
         if ($tagToAdd) {
             $extConf = SearchHelper::getExtConf();
