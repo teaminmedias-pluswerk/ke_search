@@ -726,6 +726,10 @@ class Page extends IndexerBase
         if (!in_array($this->cachedPageRecords[$language_uid][$uid]['doktype'], $this->indexDokTypes)) {
             $index = false;
         }
+        
+        if ((int) $language_uid === 0 && GeneralUtility::hideIfDefaultLanguage($this->cachedPageRecords[$language_uid][$uid]['l18n_cfg'])) {
+            $index = false;
+        }
 
         return $index;
     }
