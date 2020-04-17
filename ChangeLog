@@ -1,6 +1,7 @@
 ChangeLog
 
 current master
+[BUGFIX]  Do not remove field "editlock" from palette "miscellaneous" in page properties. Thanks to Naderio. https://github.com/teaminmedias-pluswerk/ke_search/pull/310
 [TASK]    Do not set a cookie (a cookie has been set to store the number of search results per filter option)
 [TASK]    Show number of filter options only if set (if > 0) (added check in fluid template)
 [TASK]    Show number of results in filter options even if "Availability check for filter options" is set to "no check". Thanks to user igaumann. https://github.com/teaminmedias-pluswerk/ke_search/pull/318
