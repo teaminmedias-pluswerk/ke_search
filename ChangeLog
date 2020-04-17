@@ -1,6 +1,6 @@
 ChangeLog
 
-current master
+Version 3.1.2, April 2020
 [FEATURE] Add hook 'modifyFieldValuesBeforeStoring' which allows to modify data directly before storing in the database. Thanks to Velletti. https://github.com/teaminmedias-pluswerk/ke_search/issues/130
 [BUGFIX]  Fix Data too long for column 'details' in sys_log. https://github.com/teaminmedias-pluswerk/ke_search/issues/342
 [BUGFIX]  Only variables can be passed by reference in IndexerRunner
