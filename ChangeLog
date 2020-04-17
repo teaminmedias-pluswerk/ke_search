@@ -1,13 +1,14 @@
 ChangeLog
 
 current master
-[BUGFIX]  Respect "Hide default translation of page". https://github.com/teaminmedias-pluswerk/ke_search/pull/347
-[BUGFIX]  Page Indexer indexes "header" of "html" content element. https://github.com/teaminmedias-pluswerk/ke_search/issues/338
-[BUGFIX]  Use correct variable name to check if tag already exists / prevent PHP 7.3 deprecation notice. https://github.com/teaminmedias-pluswerk/ke_search/issues/325
-[TASK]    Improve message after indexing for page indexer.
-[TASK]    Do not add a tag more than once / Fix results counted too often in filter form. https://github.com/teaminmedias-pluswerk/ke_search/issues/312
+[BUGFIS]  Searchword statistics: folder exclusion does not take effect. Thanks to Timo Schulz. https://github.com/teaminmedias-pluswerk/ke_search/pull/336
+[BUGFIX]  Respect "Hide default translation of page". Thanks to Marc Lindemann. https://github.com/teaminmedias-pluswerk/ke_search/pull/347
+[BUGFIX]  Page Indexer indexes "header" of "html" content element. Thanks to user r3h6. https://github.com/teaminmedias-pluswerk/ke_search/issues/338
+[BUGFIX]  Use correct variable name to check if tag already exists / prevent PHP 7.3 deprecation notice. Thanks to Stefan Franke. https://github.com/teaminmedias-pluswerk/ke_search/issues/325
+[TASK]    Improve message after indexing for page indexer
+[TASK]    Do not add a tag more than once / Fix results counted too often in filter form. Thanks to Johannes Nielsen. https://github.com/teaminmedias-pluswerk/ke_search/issues/312
 [TASK]    Remove code of obsolete filter type "textlinks". https://github.com/teaminmedias-pluswerk/ke_search/issues/269
-[TASK]    Pass sword to pagination template. https://github.com/teaminmedias-pluswerk/ke_search/pull/329.
+[TASK]    Pass sword to pagination template. Thanks to user revoltek-daniel. https://github.com/teaminmedias-pluswerk/ke_search/pull/329
 
 Version 3.1.1, January 2020
 [BUGFIX]  fix regression in compatibility with TYPO3 9: getMetaData() ist not available in TYPO3 9. https://github.com/teaminmedias-pluswerk/ke_search/issues/335.
