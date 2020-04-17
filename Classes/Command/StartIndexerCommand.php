@@ -56,8 +56,10 @@ class StartIndexerCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $io->title('Start ke_search indexer process');
+
+        /** @var IndexerRunner $indexerRunner */
         $indexerRunner = GeneralUtility::makeInstance(IndexerRunner::class);
-        $indexerRunner->logger->log('notice', 'Indexer process started by command controller.');
+        $indexerRunner->logger->log('notice', 'Indexer process started by command.');
         $indexerResponse = $indexerRunner->startIndexing(
             true, [], 'CLI'
         );

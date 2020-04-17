@@ -57,8 +57,9 @@ class ClearIndexCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title('Clear ke_search index table');
 
+        /** @var IndexerRunner $indexerRunner */
         $indexerRunner = GeneralUtility::makeInstance(IndexerRunner::class);
-        $indexerRunner->logger->log('notice', 'Clear index table started by command controller.');
+        $indexerRunner->logger->log('notice', 'Clear index table started by command.');
 
         // get number of records in index
         $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');

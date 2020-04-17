@@ -53,8 +53,10 @@ class RemoveLockCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $io->title('Remove ke_search indexer lock');
+
+        /** @var IndexerRunner $indexerRunner */
         $indexerRunner = GeneralUtility::makeInstance(IndexerRunner::class);
-        $indexerRunner->logger->log('notice', 'Remove indexer lock started by command controller.');
+        $indexerRunner->logger->log('notice', 'Remove indexer lock started by command.');
         $registry = GeneralUtility::makeInstance(Registry::class);
 
         try {
