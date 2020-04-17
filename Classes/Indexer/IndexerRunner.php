@@ -594,6 +594,14 @@ class IndexerRunner
             $additionalFields
         );
 
+        // hook to manipulate the fieldvalues before they go to the database
+        if(is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFieldValuesBeforeStoring'])) {
+            foreach($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFieldValuesBeforeStoring'] as $_classRef) {
+                $_procObj = GeneralUtility::makeInstance($_classRef);
+                $fieldValues = $_procObj->modifyFieldValuesBeforeStoring($this->indexerConfig, $fieldValues);
+            }
+        }
+
         // check if record already exists
         if (substr($type, 0, 4) == 'file') {
             $recordExists = $this->checkIfFileWasIndexed(
