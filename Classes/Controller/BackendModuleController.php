@@ -655,6 +655,9 @@ class BackendModuleController extends AbstractBackendModuleController
         // get data from sysfolder or from single page?
         $isSysFolder = $this->checkSysfolder();
 
+        // set folder or single page where the data is selected from
+        $pidWhere = $isSysFolder ? ' AND pid=' . intval($pageUid) . ' ' : ' AND pageid=' . intval($pageUid) . ' ';
+
         // get languages
         $queryBuilder = Db::getQueryBuilder('tx_kesearch_stat_word');
         $queryBuilder->getRestrictions()->removeAll();
