@@ -584,18 +584,27 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                     );
                 }
             } else {
-                // get results
-                $this->filters->checkIfTagMatchesRecords($option['value']);
                 // do not process any checks; show all filter options
                 $options[$option['uid']] = array(
                     'title' => $option['title'],
                     'value' => $option['tag'],
-                    'results' => $this->tagsInSearchResult[$option['tag']],
                     'selected' =>
                         is_array($filter['selectedOptions'])
                         && !empty($filter['selectedOptions'])
                         && in_array($option['uid'], $filter['selectedOptions']),
                 );
+
+                // If no filter option has been selected yet, we can show the number of results per filter option.
+                // After a filter option has been selected this does not make sense anymore because the number of
+                // number of results per filter option is calculated from the current result set, not from the
+                // full index.
+                if ($filter['shownumberofresults'] && !count($filter['selectedOptions'])) {
+                    if ($this->filters->checkIfTagMatchesRecords($option['tag'])) {
+                        $options[$option['uid']]['results'] = $this->tagsInSearchResult[$option['tag']];
+                    } else {
+                        $options[$option['uid']]['results'] = 0;
+                    }
+                }
             }
         }
 
