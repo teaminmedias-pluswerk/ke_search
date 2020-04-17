@@ -1,6 +1,7 @@
 ChangeLog
 
 current master
+[BUGFIX]  Fix Data too long for column 'details' in sys_log. https://github.com/teaminmedias-pluswerk/ke_search/issues/342
 [BUGFIX]  Only variables can be passed by reference in IndexerRunner
 [BUGFIX]  Fix Textlinks filter; it did not work when checkFilterCondition was set to 'none'
 [BUGFIX]  Only variables can be passed by reference in hook for modifying filter options and hook for custom filter renderer

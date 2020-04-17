@@ -219,13 +219,14 @@ class IndexerRunner
             }
         }
 
-        // log report to sys_log and decode urls to prevent errors in backend module
+        // Log report to sys_log and decode urls to prevent errors in backend module,
+        // make sure report fits into the 'details' column of sys_log which is of type "text" and can hold 64 KB.
         $GLOBALS['BE_USER']->writelog(
             4,
             0,
             0,
             -1,
-            '[ke_search] ' . urldecode(html_entity_decode($plaintextReport)),
+            '[ke_search] ' . urldecode(html_entity_decode(substr($plaintextReport, 0, 60000))),
             []
         );
 
