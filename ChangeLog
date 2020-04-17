@@ -1,6 +1,7 @@
 ChangeLog
 
 current master
+[BUGFIX]  Respect "Hide default translation of page". https://github.com/teaminmedias-pluswerk/ke_search/pull/347
 [BUGFIX]  Page Indexer indexes "header" of "html" content element. https://github.com/teaminmedias-pluswerk/ke_search/issues/338
 [BUGFIX]  Use correct variable name to check if tag already exists / prevent PHP 7.3 deprecation notice. https://github.com/teaminmedias-pluswerk/ke_search/issues/325
 [TASK]    Improve message after indexing for page indexer.
