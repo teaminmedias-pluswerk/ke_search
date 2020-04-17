@@ -535,80 +535,81 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
      */
     public function findFilterOptionsToDisplay($filter)
     {
-        $options = array();
+        $optionsToDisplay = array();
 
         foreach ($filter['options'] as $option) {
-            // should we check if the filter option is available in
-            // the current search result?
+            // build link which selects this option and keeps all the other selected filters
+            unset($linkconf);
+            $linkconf['parameter'] = $GLOBALS['TSFE']->id;
+            $linkconf['additionalParams'] =
+                '&tx_kesearch_pi1[sword]=' . $this->piVars['sword']
+                . '&tx_kesearch_pi1[filter][' . $filter['uid'] . ']=' . $option['tag'];
 
+            if (VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
+                VersionNumberUtility::convertVersionNumberToInteger('10.0')
+            ) {
+                $linkconf['useCacheHash'] = false;
+            }
+
+            if (is_array($this->piVars['filter']) && count($this->piVars['filter'])) {
+                foreach ($this->piVars['filter'] as $key => $value) {
+                    if ($key != $filter['uid']) {
+                        $linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter][' . $key . ']=' . $value;
+                    }
+                }
+            }
+            $optionLink = $this->cObj->typoLink_URL($linkconf);
+
+            // Should we check if the filter option is available in the current search result?
+            // multi --> Check for each filter option if it has results - display it only if it has results!
+            // none --> Just show all filter options, no matter wether they have results or not.
             if ($this->conf['checkFilterCondition'] != 'none') {
                 // Once one filter option has been selected, don't display the
                 // others anymore since this leads to a strange behaviour (options are
                 // only displayed if they have BOTH tags: the selected and the other filter option.
-                if ((!count($filter['selectedOptions'])
-                        || in_array($option['uid'], $filter['selectedOptions'])
-                    ) && $this->filters->checkIfTagMatchesRecords($option['tag'])
+                if (
+                    (!count($filter['selectedOptions']) || in_array($option['uid'], $filter['selectedOptions']))
+                    && $this->filters->checkIfTagMatchesRecords($option['tag'])
                 ) {
-                    // build link which selects this option and keeps all the other selected filters
-                    unset($linkconf);
-                    $linkconf['parameter'] = $GLOBALS['TSFE']->id;
-                    $linkconf['additionalParams'] = '&tx_kesearch_pi1[sword]='
-                        . $this->piVars['sword']
-                        . '&tx_kesearch_pi1[filter]['
-                        . $filter['uid']
-                        . ']='
-                        . $option['tag'];
 
-                    if (VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
-                        VersionNumberUtility::convertVersionNumberToInteger('10.0')
-                    ) {
-                        $linkconf['useCacheHash'] = false;
-                    }
-
-                    if (is_array($this->piVars['filter']) && count($this->piVars['filter'])) {
-                        foreach ($this->piVars['filter'] as $key => $value) {
-                            if ($key != $filter['uid']) {
-                                $linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter][' . $key . ']=' . $value;
-                            }
-                        }
-                    }
-                    $optionLink = $this->cObj->typoLink_URL($linkconf);
-
-                    $options[$option['uid']] = array(
+                    $optionsToDisplay[$option['uid']] = array(
                         'title' => $option['title'],
                         'value' => $option['tag'],
                         'results' => $this->tagsInSearchResult[$option['tag']],
-                        'selected' => is_array($filter['selectedOptions'])
+                        'selected' =>
+                            is_array($filter['selectedOptions'])
+                            && !empty($filter['selectedOptions'])
                             && in_array($option['uid'], $filter['selectedOptions']),
                         'link' => $optionLink
                     );
                 }
             } else {
                 // do not process any checks; show all filter options
-                $options[$option['uid']] = array(
+                $optionsToDisplay[$option['uid']] = array(
                     'title' => $option['title'],
                     'value' => $option['tag'],
                     'selected' =>
                         is_array($filter['selectedOptions'])
                         && !empty($filter['selectedOptions'])
                         && in_array($option['uid'], $filter['selectedOptions']),
+                    'link' => $optionLink
                 );
 
                 // If no filter option has been selected yet, we can show the number of results per filter option.
                 // After a filter option has been selected this does not make sense anymore because the number of
                 // number of results per filter option is calculated from the current result set, not from the
-                // full index.
+                // full index but since 'checkFilterConditon' is set to 'none' at this point all filter options are shown.
                 if ($filter['shownumberofresults'] && !count($filter['selectedOptions'])) {
                     if ($this->filters->checkIfTagMatchesRecords($option['tag'])) {
-                        $options[$option['uid']]['results'] = $this->tagsInSearchResult[$option['tag']];
+                        $optionsToDisplay[$option['uid']]['results'] = $this->tagsInSearchResult[$option['tag']];
                     } else {
-                        $options[$option['uid']]['results'] = 0;
+                        $optionsToDisplay[$option['uid']]['results'] = 0;
                     }
                 }
             }
         }
 
-        return $options;
+        return $optionsToDisplay;
     }
 
     /**
