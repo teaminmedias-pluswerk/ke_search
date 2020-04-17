@@ -54,4 +54,4 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
 );
 
 // remove field "no_search" from "miscellaneous" palette
-$GLOBALS['TCA']['pages']['palettes']['miscellaneous']['showitem'] = 'is_siteroot;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.is_siteroot_formlabel, php_tree_stop;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.php_tree_stop_formlabel';
+$GLOBALS['TCA']['pages']['palettes']['miscellaneous']['showitem'] = 'is_siteroot;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.is_siteroot_formlabel, editlock;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.editlock_formlabel, php_tree_stop;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.php_tree_stop_formlabel';
