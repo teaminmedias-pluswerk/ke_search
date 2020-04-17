@@ -323,7 +323,6 @@ class Filters
         // otherwise use the cached result list
         if (!$this->tagsInSearchResult) {
             $this->tagsInSearchResult = $this->pObj->tagsInSearchResult = $this->db->getTagsFromSearchResult();
-            $GLOBALS['TSFE']->fe_user->setKey('ses', 'ke_search.tagsInSearchResults', $this->tagsInSearchResult);
         }
 
         return array_key_exists($tag, $this->tagsInSearchResult);
