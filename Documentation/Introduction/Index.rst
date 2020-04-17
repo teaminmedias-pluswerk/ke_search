@@ -12,7 +12,7 @@ ke_search is a TYPO3 search engine. It allows to search content stored in the TY
 elements, news and other extension content) and files.
 
 It offers faceting possibilities to enhance the search experience. Faceting means you can narrow down your search
-results by selecting certain categories, called facets or filter options. By using facetting you can also
+results by selecting certain categories, called facets or filter options. By using faceting you can also
 create applications which are not related directly to fulltext search but make more use of filtering the content.
 Good examples would be a product finder for companies or a study finder for universities.
 
@@ -23,7 +23,7 @@ This approach has the advantage that content will only be stored once in the ind
 pages of the website.
 For each type of content (pages, news, files ...) there has to be a dedicated indexer available. That means there may
 not be an indexer already available for the content type you want to index. On the other hand, it's quite easy for a
-programmer to write it's own indexer for custom data records. A set of indexers for common content types comes
+programmer to write custom indexers for custom data records. A set of indexers for common content types comes
 bundled together with ke_search (including pages, news and pdf files).
 
 ke_search uses the MySQL fulltext search algorithm, so it does not need any tools installed on
