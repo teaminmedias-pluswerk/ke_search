@@ -405,7 +405,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptionsArray'])) {
                 foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptionsArray'] as
                          $_classRef) {
-                    $_procObj = &GeneralUtility::makeInstance($_classRef);
+                    $_procObj = GeneralUtility::makeInstance($_classRef);
                     $options = $_procObj->modifyFilterOptionsArray($filter['uid'], $options, $this);
                 }
             }
@@ -443,7 +443,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                     if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customFilterRenderer'])) {
                         foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customFilterRenderer'] as
                                  $_classRef) {
-                            $_procObj = &GeneralUtility::makeInstance($_classRef);
+                            $_procObj = GeneralUtility::makeInstance($_classRef);
                             $_procObj->customFilterRenderer($filter['uid'], $options, $this, $filterData);
                         }
                     }

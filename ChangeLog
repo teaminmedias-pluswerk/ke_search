@@ -1,6 +1,7 @@
 ChangeLog
 
 current master
+[BUGFIX]  Only variables can be passed by reference in hook for modifying filter options and hook for custom filter renderer
 [BUGFIX]  fix missing tablename and wrong select arguments for cal events. Thanks to Jürgen Venne. https://github.com/teaminmedias-pluswerk/ke_search/pull/345
 [BUGFIX]  Do not remove field "editlock" from palette "miscellaneous" in page properties. Thanks to Naderio. https://github.com/teaminmedias-pluswerk/ke_search/pull/310
 [TASK]    Do not set a cookie (a cookie has been set to store the number of search results per filter option)
