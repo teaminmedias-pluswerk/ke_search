@@ -19,9 +19,12 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Doctrine\DBAL\DBALException;
+use Exception;
+use PDO;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Log\Logger;
 use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Registry;
@@ -42,7 +45,6 @@ class IndexerRunner
     public $extConf; // extension configuration
     public $extConfPremium = array(); // extension configuration of ke_search_premium, if installed
     public $indexerConfig = array(); // saves the indexer configuration of current loop
-    public $lockFile = '';
     public $additionalFields = array();
     public $indexingErrors = array();
     public $startTime;
@@ -50,7 +52,7 @@ class IndexerRunner
     public $registry;
 
     /**
-     * @var \TYPO3\CMS\Core\Log\Logger
+     * @var Logger
      */
     public $logger;
 
@@ -75,7 +77,7 @@ class IndexerRunner
         }
 
         // init logger
-        /** @var \TYPO3\CMS\Core\Log\Logger */
+        /** @var Logger */
         $this->logger = GeneralUtility::makeInstance(LogManager::class)->getLogger(__CLASS__);
     }
 
@@ -280,6 +282,7 @@ class IndexerRunner
     /**
      * prepare sql-statements for indexer
      * @return void
+     * @throws DBALException
      */
     public function prepareStatements()
     {
@@ -354,6 +357,7 @@ class IndexerRunner
     /**
      * clean up statements
      * @return void
+     * @throws DBALException
      */
     public function cleanUpProcessAfterIndexing()
     {
@@ -391,7 +395,7 @@ class IndexerRunner
             'tstamp',
             $queryBuilder->quote(
                 $this->registry->get('tx_kesearch','startTimeOfIndexer'),
-                \PDO::PARAM_INT
+                PDO::PARAM_INT
             )
         );
 
@@ -651,20 +655,20 @@ class IndexerRunner
 
         $queryArray = array();
         $queryArray['set'] = 'SET
-			@pid = ' . $queryBuilder->quote($fieldValues['pid'], \PDO::PARAM_INT) . ',
-			@title = ' . $queryBuilder->quote($fieldValues['title'], \PDO::PARAM_STR) . ',
-			@type = ' . $queryBuilder->quote($fieldValues['type'], \PDO::PARAM_STR) . ',
-			@targetpid = ' . $queryBuilder->quote($fieldValues['targetpid'], \PDO::PARAM_INT) . ',
-			@content = ' . $queryBuilder->quote($fieldValues['content'], \PDO::PARAM_STR) . ',
-			@tags = ' . $queryBuilder->quote($fieldValues['tags'], \PDO::PARAM_STR) . ',
-			@params = ' . $queryBuilder->quote($fieldValues['params'], \PDO::PARAM_STR) . ',
-			@abstract = ' . $queryBuilder->quote($fieldValues['abstract'], \PDO::PARAM_STR) . ',
-			@language = ' . $queryBuilder->quote($fieldValues['language'], \PDO::PARAM_INT) . ',
-			@starttime = ' . $queryBuilder->quote($fieldValues['starttime'], \PDO::PARAM_INT) . ',
-			@endtime = ' . $queryBuilder->quote($fieldValues['endtime'], \PDO::PARAM_INT) . ',
-			@fe_group = ' . $queryBuilder->quote($fieldValues['fe_group'], \PDO::PARAM_INT) . ',
-			@tstamp = ' . $queryBuilder->quote($fieldValues['tstamp'], \PDO::PARAM_INT) . ',
-			@crdate = ' . $queryBuilder->quote($fieldValues['crdate'], \PDO::PARAM_INT)
+			@pid = ' . $queryBuilder->quote($fieldValues['pid'], PDO::PARAM_INT) . ',
+			@title = ' . $queryBuilder->quote($fieldValues['title'], PDO::PARAM_STR) . ',
+			@type = ' . $queryBuilder->quote($fieldValues['type'], PDO::PARAM_STR) . ',
+			@targetpid = ' . $queryBuilder->quote($fieldValues['targetpid'], PDO::PARAM_INT) . ',
+			@content = ' . $queryBuilder->quote($fieldValues['content'], PDO::PARAM_STR) . ',
+			@tags = ' . $queryBuilder->quote($fieldValues['tags'], PDO::PARAM_STR) . ',
+			@params = ' . $queryBuilder->quote($fieldValues['params'], PDO::PARAM_STR) . ',
+			@abstract = ' . $queryBuilder->quote($fieldValues['abstract'], PDO::PARAM_STR) . ',
+			@language = ' . $queryBuilder->quote($fieldValues['language'], PDO::PARAM_INT) . ',
+			@starttime = ' . $queryBuilder->quote($fieldValues['starttime'], PDO::PARAM_INT) . ',
+			@endtime = ' . $queryBuilder->quote($fieldValues['endtime'], PDO::PARAM_INT) . ',
+			@fe_group = ' . $queryBuilder->quote($fieldValues['fe_group'], PDO::PARAM_INT) . ',
+			@tstamp = ' . $queryBuilder->quote($fieldValues['tstamp'], PDO::PARAM_INT) . ',
+			@crdate = ' . $queryBuilder->quote($fieldValues['crdate'], PDO::PARAM_INT)
             . $addQueryPartFor['set'] . '
 		;';
 
@@ -688,7 +692,7 @@ class IndexerRunner
         try  {
             Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['set']);
             Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['execute']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error($e->getMessage());
         }
 
@@ -705,19 +709,19 @@ class IndexerRunner
 
         $queryArray = array();
         $queryArray['set'] = 'SET
-			@pid = ' . $queryBuilder->quote($fieldValues['pid'], \PDO::PARAM_INT) . ',
-			@title = ' . $queryBuilder->quote($fieldValues['title'], \PDO::PARAM_STR) . ',
-			@type = ' . $queryBuilder->quote($fieldValues['type'], \PDO::PARAM_STR) . ',
-			@targetpid = ' . $queryBuilder->quote($fieldValues['targetpid'], \PDO::PARAM_INT) . ',
-			@content = ' . $queryBuilder->quote($fieldValues['content'], \PDO::PARAM_STR) . ',
-			@tags = ' . $queryBuilder->quote($fieldValues['tags'], \PDO::PARAM_STR) . ',
-			@params = ' . $queryBuilder->quote($fieldValues['params'], \PDO::PARAM_STR) . ',
-			@abstract = ' . $queryBuilder->quote($fieldValues['abstract'], \PDO::PARAM_STR) . ',
-			@language = ' . $queryBuilder->quote($fieldValues['language'], \PDO::PARAM_INT) . ',
-			@starttime = ' . $queryBuilder->quote($fieldValues['starttime'], \PDO::PARAM_INT) . ',
-			@endtime = ' . $queryBuilder->quote($fieldValues['endtime'], \PDO::PARAM_INT) . ',
-			@fe_group = ' . $queryBuilder->quote($fieldValues['fe_group'], \PDO::PARAM_INT) . ',
-			@tstamp = ' . $queryBuilder->quote($fieldValues['tstamp'], \PDO::PARAM_INT) .
+			@pid = ' . $queryBuilder->quote($fieldValues['pid'], PDO::PARAM_INT) . ',
+			@title = ' . $queryBuilder->quote($fieldValues['title'], PDO::PARAM_STR) . ',
+			@type = ' . $queryBuilder->quote($fieldValues['type'], PDO::PARAM_STR) . ',
+			@targetpid = ' . $queryBuilder->quote($fieldValues['targetpid'], PDO::PARAM_INT) . ',
+			@content = ' . $queryBuilder->quote($fieldValues['content'], PDO::PARAM_STR) . ',
+			@tags = ' . $queryBuilder->quote($fieldValues['tags'], PDO::PARAM_STR) . ',
+			@params = ' . $queryBuilder->quote($fieldValues['params'], PDO::PARAM_STR) . ',
+			@abstract = ' . $queryBuilder->quote($fieldValues['abstract'], PDO::PARAM_STR) . ',
+			@language = ' . $queryBuilder->quote($fieldValues['language'], PDO::PARAM_INT) . ',
+			@starttime = ' . $queryBuilder->quote($fieldValues['starttime'], PDO::PARAM_INT) . ',
+			@endtime = ' . $queryBuilder->quote($fieldValues['endtime'], PDO::PARAM_INT) . ',
+			@fe_group = ' . $queryBuilder->quote($fieldValues['fe_group'], PDO::PARAM_INT) . ',
+			@tstamp = ' . $queryBuilder->quote($fieldValues['tstamp'], PDO::PARAM_INT) .
             $addQueryPartFor['set'] . ',
 			@uid = ' . $this->currentRow['uid'] . '
 		';
@@ -742,7 +746,7 @@ class IndexerRunner
         try  {
             Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['set']);
             Db::getDatabaseConnection('tx_kesearch_index')->exec($queryArray['execute']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             $this->logger->error($e->getMessage());
         }
 
@@ -762,7 +766,7 @@ class IndexerRunner
         $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
 
         foreach ($this->additionalFields as $value) {
-            $queryForSet .= ', @' . $value . ' = ' . $queryBuilder->quote($fieldValues[$value], \PDO::PARAM_STR);
+            $queryForSet .= ', @' . $value . ' = ' . $queryBuilder->quote($fieldValues[$value], PDO::PARAM_STR);
             $queryForExecute .= ', @' . $value;
         }
         return array('set' => $queryForSet, 'execute' => $queryForExecute);
@@ -787,10 +791,10 @@ class IndexerRunner
             ->select('*')
             ->from('tx_kesearch_index')
             ->where(
-                $queryBuilder->expr()->eq('orig_uid', $queryBuilder->quote($uid, \PDO::PARAM_INT)),
-                $queryBuilder->expr()->eq('pid', $queryBuilder->quote($pid, \PDO::PARAM_INT)),
-                $queryBuilder->expr()->eq('type', $queryBuilder->quote($type, \PDO::PARAM_STR)),
-                $queryBuilder->expr()->eq('language', $queryBuilder->quote($language, \PDO::PARAM_INT))
+                $queryBuilder->expr()->eq('orig_uid', $queryBuilder->quote($uid, PDO::PARAM_INT)),
+                $queryBuilder->expr()->eq('pid', $queryBuilder->quote($pid, PDO::PARAM_INT)),
+                $queryBuilder->expr()->eq('type', $queryBuilder->quote($type, PDO::PARAM_STR)),
+                $queryBuilder->expr()->eq('language', $queryBuilder->quote($language, PDO::PARAM_INT))
             )
             ->setMaxResults(1)
             ->execute()
@@ -816,6 +820,7 @@ class IndexerRunner
      * TODO: We should create an index to column type
      * @param integer $type
      * @param integer $hash
+     * @param integer $pid
      * @return boolean true if record was found, false if not
      */
     public function checkIfFileWasIndexed($type, $hash, $pid)
@@ -828,15 +833,15 @@ class IndexerRunner
             ->where(
                 $queryBuilder->expr()->eq(
                     'type',
-                    $queryBuilder->quote($type, \PDO::PARAM_STR)
+                    $queryBuilder->quote($type, PDO::PARAM_STR)
                 ),
                 $queryBuilder->expr()->eq(
                     'hash',
-                    $queryBuilder->quote($hash, \PDO::PARAM_STR)
+                    $queryBuilder->quote($hash, PDO::PARAM_STR)
                 ),
                 $queryBuilder->expr()->eq(
                     'pid',
-                    $queryBuilder->quote($pid, \PDO::PARAM_INT)
+                    $queryBuilder->quote($pid, PDO::PARAM_INT)
                 )
             )
             ->execute();
@@ -920,10 +925,6 @@ class IndexerRunner
             $fieldsValues = array_merge($fieldsValues, $additionalFields);
         }
 
-        // full quoting record
-        // Todo quoting
-//      $fieldsValues = Db::getQueryBuilder('tx_kesearch_index')->quoteColumnValuePairs($fieldsValues);
-
         return $fieldsValues;
     }
 
@@ -980,6 +981,7 @@ class IndexerRunner
      * function getTag
      * @param int $tagUid
      * @param bool $clearText . If true returns the title of the tag. false return the tag itself
+     * @return string
      */
     public function getTag($tagUid, $clearText = false)
     {
@@ -988,7 +990,7 @@ class IndexerRunner
         $table = 'tx_kesearch_filteroptions';
         $where = $queryBuilder->expr()->eq(
             'uid',
-            $queryBuilder->quote($tagUid, \PDO::PARAM_INT)
+            $queryBuilder->quote($tagUid, PDO::PARAM_INT)
         );
 
         $row = $queryBuilder
