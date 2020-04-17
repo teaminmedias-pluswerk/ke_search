@@ -1175,9 +1175,10 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
      */
     public function getCalEventEnddate($eventUid)
     {
+        $table = 'tx_cal_event';
         $queryBuilder = Db::getQueryBuilder($table);
         $row = $queryBuilder
-            ->select('end_date, end_time, allday, start_date')
+            ->select('end_date', 'end_time', 'allday', 'start_date')
             ->from($table)
             ->where(
                 $queryBuilder->expr()->eq(
