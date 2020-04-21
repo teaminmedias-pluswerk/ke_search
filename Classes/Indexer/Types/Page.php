@@ -616,7 +616,6 @@ class Page extends IndexerBase
             }
         } else {
             $this->counterWithoutContent++;
-            return;
         }
 
         // make it possible to modify the indexerConfig via hook
