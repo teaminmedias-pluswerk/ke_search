@@ -6,4 +6,5 @@ exclude_patterns = ['_build', 'Thumbs.db', '.DS_Store']
 master_doc=u'Index'
 
 # HTML logic
-html_theme = 'sphinx_rtd_theme'
+html_theme = 't3SphinxThemeRtd'
+html_theme_path = ["_themes", ]
