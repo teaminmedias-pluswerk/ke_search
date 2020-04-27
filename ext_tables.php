@@ -12,17 +12,6 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr(
     'EXT:ke_search/locallang_csh.xml'
 );
 
-// Configure FlexForm field
-TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
-    $_EXTKEY . '_pi1',
-    'FILE:EXT:ke_search/Configuration/FlexForms/flexform_searchbox.xml'
-);
-
-TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
-    $_EXTKEY . '_pi2',
-    'FILE:EXT:ke_search/Configuration/FlexForms/flexform_resultlist.xml'
-);
-
 // add module
 if (TYPO3_MODE == 'BE') {
 

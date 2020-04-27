@@ -31,3 +31,14 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
     'list_type',
     'ke_search'
 );
+
+// Configure FlexForm field
+TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
+    $_EXTKEY . '_pi1',
+    'FILE:EXT:ke_search/Configuration/FlexForms/flexform_searchbox.xml'
+);
+
+TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
+    $_EXTKEY . '_pi2',
+    'FILE:EXT:ke_search/Configuration/FlexForms/flexform_resultlist.xml'
+);
