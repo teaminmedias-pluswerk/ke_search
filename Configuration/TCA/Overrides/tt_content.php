@@ -34,11 +34,11 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
 
 // Configure FlexForm field
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
-    $_EXTKEY . '_pi1',
+    'ke_search_pi1',
     'FILE:EXT:ke_search/Configuration/FlexForms/flexform_searchbox.xml'
 );
 
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
-    $_EXTKEY . '_pi2',
+    'ke_search_pi2',
     'FILE:EXT:ke_search/Configuration/FlexForms/flexform_resultlist.xml'
 );
