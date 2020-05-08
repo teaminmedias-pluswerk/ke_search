@@ -20,4 +20,8 @@ the following features:
 
 More information can be found on
 
-https://www.typo3-macher.de/en/facetted-search-ke-search/premium/
+http://dev.kesearch.de/documentation/ke_search_premium/
+
+and
+
+https://www.typo3-macher.de/facettierte-suche-ke-search/premium/ (sorry, only in german)
