@@ -126,7 +126,7 @@ class Cal extends IndexerBase
                 // hook for custom modifications of the indexed data, e.g. the tags
                 if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyCalIndexEntry'])) {
                     foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyCalIndexEntry'] as $_classRef) {
-                        $_procObj = &GeneralUtility::makeInstance($_classRef);
+                        $_procObj = GeneralUtility::makeInstance($_classRef);
                         $_procObj->modifyCalIndexEntry(
                             $title,
                             $abstract,

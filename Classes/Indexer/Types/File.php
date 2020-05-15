@@ -407,7 +407,7 @@ class File extends IndexerBase
         // hook for custom modifications of the indexed data, e. g. the tags
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFileIndexEntry'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFileIndexEntry'] as $_classRef) {
-                $_procObj = &GeneralUtility::makeInstance($_classRef);
+                $_procObj = GeneralUtility::makeInstance($_classRef);
                 $_procObj->modifyFileIndexEntry($file, $content, $additionalFields, $indexRecordValues, $this);
             }
         }
