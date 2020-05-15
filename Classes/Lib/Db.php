@@ -241,20 +241,19 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
         $where = '1=1';
 
         $databaseConnection = self::getDatabaseConnection('tx_kesearch_index');
-        $scoreAgainstQuoted = $databaseConnection->quote(
+        $searchwordQuoted = $databaseConnection->quote(
             $this->pObj->scoreAgainst,
             \PDO::PARAM_STR
         );
 
         // if a searchword was given, calculate percent of score
         if ($this->pObj->sword) {
-            $fields .= ', MATCH (title, content) AGAINST ('
-                . $scoreAgainstQuoted
-                . ') + ('
+            $fields .=
+                ', MATCH (title, content) AGAINST (' . $searchwordQuoted . ')'
+                . '+ ('
                 . $this->pObj->extConf['multiplyValueToTitle']
-                . ' * MATCH (title) AGAINST ('
-                . $scoreAgainstQuoted
-                . ')) AS score';
+                . ' * MATCH (title) AGAINST (' . $searchwordQuoted . ')'
+                . ') AS score';
         }
 
         // add where clause
@@ -279,7 +278,7 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['getQueryParts'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['getQueryParts'] as $_classRef) {
                 $_procObj = GeneralUtility::makeInstance($_classRef);
-                $queryParts = $_procObj->getQueryParts($queryParts, $this);
+                $queryParts = $_procObj->getQueryParts($queryParts, $this, $searchwordQuoted);
             }
         }
 
@@ -415,7 +414,7 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
 
         // add boolean where clause for searchwords
         if ($this->pObj->wordsAgainst != '') {
-            $where .= ' AND MATCH (title, content) AGAINST (';
+            $where .= ' AND MATCH (title,content) AGAINST (';
             $where .= $wordsAgainstQuoted . ' IN BOOLEAN MODE) ';
         }
 

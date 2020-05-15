@@ -1,4 +1,4 @@
-# cat=basic//10; type=options[1,2,3,4,5]; label = Multiply value to title score: If you want you can score a searchword found in a title higher than a searchword found in bodytext. Default is 1. So an entry in title is as high scored than an entry in bodytext.
+# cat=basic//10; type=options[1,2,3,4,5,6,7,8,9,10]; label = Multiply value to title score: If you want you can score a searchword found in a title higher than a searchword found in bodytext. Default is 1. So an entry in title is as high scored than an entry in bodytext.
 multiplyValueToTitle = 1
 
 # cat=basic//20; type=options[1,2,3,4,5,6,7,8,9,10]; label = Change searchword length: Leave this to 4 if you have no access to MySQL-Server configuration. If you have configured MySQL to search for 3 digit words, you have to set this option to 3, too.
