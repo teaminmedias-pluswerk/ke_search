@@ -639,7 +639,7 @@ class IndexerRunner
         } else { // insert new record
             if ($debugOnly) { // do not process - just debug query
                 DebugUtility::debug(
-                    Db::getDatabaseConnection()
+                    Db::getDatabaseConnection($table)
                         ->insert(
                             $table,
                             $fieldValues
