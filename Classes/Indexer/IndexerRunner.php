@@ -151,7 +151,8 @@ class IndexerRunner
                         $this->indexerConfig
                     );
                     $searchObj = GeneralUtility::makeInstance($className,$this);
-                    $content .= $searchObj->startIndexing();
+                    $message = $searchObj->startIndexing();
+                    $content .= $this->renderIndexingReport($message);
                 } else {
                     $errorMessage = 'Could not find class ' . $className;
                     $this->logger->error($errorMessage);
@@ -167,7 +168,8 @@ class IndexerRunner
                         'custom indexer "' . $this->indexerConfig['title'] . '" started ',
                         $this->indexerConfig
                     );
-                    $content .= $_procObj->customIndexer($indexerConfig, $this);
+                    $message = $_procObj->customIndexer($indexerConfig, $this);
+                    $content .= $this->renderIndexingReport($message);
                 }
             }
         }
@@ -236,6 +238,20 @@ class IndexerRunner
         }
 
         return '';
+    }
+
+    /**
+     * Renders the message from the indexers.
+     *
+     * @param string $message
+     * @return string
+     */
+    public function renderIndexingReport($message='')
+    {
+        // message
+        $message = str_ireplace(['<br />','<br>','<br/>','</span>'], "\n", $message);
+        $message = strip_tags($message);
+        return nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8'));
     }
 
     /**

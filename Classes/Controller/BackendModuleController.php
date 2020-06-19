@@ -363,7 +363,7 @@ class BackendModuleController extends AbstractBackendModuleController
             $content .= '<ol class="orderedlist">';
             foreach ($indexerConfigurations as $indexerConfiguration) {
                 $content .= '<li class="summary infobox">'
-                    . '<span class="title">' . $indexerConfiguration['title'] . '</span>'
+                    . '<span class="title">' . htmlspecialchars($indexerConfiguration['title'], ENT_QUOTES, 'UTF-8') . '</span>'
 
                     . ' <span class="tagsmall">'
                     . $indexerConfiguration['type']
@@ -567,12 +567,13 @@ class BackendModuleController extends AbstractBackendModuleController
             )
             ->execute();
 
+        $content = '';
         while ($row = $contentRows->fetch()) {
             // build tag table
             $tagTable = '<div class="tags" >';
             $tags = GeneralUtility::trimExplode(',', $row['tags'], true);
             foreach ($tags as $tag) {
-                $tagTable .= '<span class="tag">' . $tag . '</span>';
+                $tagTable .= '<span class="tag">' . htmlspecialchars($tag, ENT_QUOTES, 'UTF-8') . '</span>';
             }
             $tagTable .= '</div>';
 
@@ -580,7 +581,7 @@ class BackendModuleController extends AbstractBackendModuleController
             $timeformat = '%d.%m.%Y %H:%M';
             $content .=
                 '<div class="summary">'
-                . '<span class="title">' . $row['title'] . '</span>'
+                . '<span class="title">' . htmlspecialchars($row['title'], ENT_QUOTES, 'UTF-8') . '</span>'
                 . '<div class="clearer">&nbsp;</div>'
                 . $this->renderFurtherInformation('Type', $row['type'])
                 . $this->renderFurtherInformation('Words', str_word_count($row['content']))
@@ -607,9 +608,9 @@ class BackendModuleController extends AbstractBackendModuleController
                 . $this->renderFurtherInformation('Path', $row['directory'])
                 . '<div class="clearer">&nbsp;</div>'
                 . '<div class="box"><div class="headline">Abstract</div><div class="content">'
-                . nl2br($row['abstract']) . '</div></div>'
+                . nl2br(htmlspecialchars($row['abstract'], ENT_QUOTES, 'UTF-8')) . '</div></div>'
                 . '<div class="box"><div class="headline">Content</div><div class="content">'
-                . nl2br($row['content']) . '</div></div>'
+                . nl2br(htmlspecialchars($row['content'], ENT_QUOTES, 'UTF-8')) . '</div></div>'
                 . '<div class="box"><div class="headline">Tags</div><div class="content">' . $tagTable . '</div></div>'
                 . '</div>';
         }
@@ -628,7 +629,7 @@ class BackendModuleController extends AbstractBackendModuleController
             '<div class="info"><span class="infolabel">'
             . $label
             . ': </span><span class="value">'
-            . $content
+            . htmlspecialchars($content, ENT_QUOTES, 'UTF-8')
             . '</span></div>';
     }
 
