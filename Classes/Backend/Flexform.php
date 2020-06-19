@@ -24,7 +24,7 @@ class Flexform
         $this->lang->init($GLOBALS['BE_USER']->uc['lang']);
 
         // get orderings
-        $fieldLabel = $this->lang->sL('LLL:EXT:ke_search/locallang_db.php:tx_kesearch_index.relevance');
+        $fieldLabel = $this->lang->sL('LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_index.relevance');
         $config['items'][] = array($fieldLabel, 'score');
         $res = Db::getDatabaseConnection('tx_kesearch_index')->fetchAll('SHOW COLUMNS FROM tx_kesearch_index');
 
@@ -44,7 +44,7 @@ class Flexform
         $this->lang->init($GLOBALS['BE_USER']->uc['lang']);
 
         // get orderings
-        $fieldLabel = $this->lang->sL('LLL:EXT:ke_search/locallang_db.php:tx_kesearch_index.relevance');
+        $fieldLabel = $this->lang->sL('LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_index.relevance');
         if (!$config['config']['relevanceNotAllowed']) {
             $config['items'][] = array($fieldLabel . ' UP', 'score asc');
             $config['items'][] = array($fieldLabel . ' DOWN', 'score desc');
