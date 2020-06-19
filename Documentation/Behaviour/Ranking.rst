@@ -5,12 +5,19 @@
 
 .. _ranking:
 
-Ranking
-=======
+Ranking / Sorting
+=================
 
-The ranking of search results (in case "relevance" is selected in the plugin settings or selected by the user)
-is based on the MySQL fulltext search. You can find more information about the
-ranking algorithm of MySQL here:
+The ranking of search results can be defined in the plugin settings of the "searchbox" plugin
+in the tab "Sorting". By default, search results will be sorted by "relevance" if a searchword is given
+and by "date" if no searchword is given.
+
+Ranking by relevance ("score")
+------------------------------
+
+The ranking of search results by relevance (in case "relevance" is selected in the plugin
+settings or selected by the user) is based on the MySQL fulltext search.
+You can find more information about the ranking algorithm of MySQL here:
 
 https://dev.mysql.com/doc/internals/en/full-text-search.html
 
@@ -45,4 +52,12 @@ least one search word is found as exact string in the index content
 * search for „testcontent“ will deliver a relevance value if this word exists in index content
 * search for „testco“ will NOT deliver a relevance value if „testcontent“ exists in index content
 
+Custom Ranking
+--------------
+If you want to have more power about the ranking of search results or want to push certain results to the
+top of the list, consider the premium version of ke_search which adds the features "custom ranking"
+and "boost keywords".
 
+More information
+* http://dev.kesearch.de/documentation/ke_search_premium/Index.html
+* https://www.typo3-macher.de/facettierte-suche-ke-search/premium/

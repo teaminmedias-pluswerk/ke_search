@@ -108,9 +108,9 @@
 							<displayCond>FIELD:showSortInFrontend:!=:1</displayCond>
 							<config type="array">
 								<type>select</type>
-								<renderType>selectSingle</renderType>
-								<maxitems>1</maxitems>
-								<size>5</size>
+								<renderType>selectMultipleSideBySide</renderType>
+								<maxitems>10</maxitems>
+								<size>10</size>
 								<itemsProcFunc>TeaminmediasPluswerk\KeSearch\Backend\Flexform->listAvailableOrderingsForAdmin</itemsProcFunc>
 								<default>score desc</default>
 							</config>
@@ -122,9 +122,9 @@
 							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.sortWithoutSearchword</label>
 							<config type="array">
 								<type>select</type>
-								<renderType>selectSingle</renderType>
-								<maxitems>1</maxitems>
-								<size>5</size>
+								<renderType>selectMultipleSideBySide</renderType>
+								<maxitems>10</maxitems>
+								<size>10</size>
 								<relevanceNotAllowed>1</relevanceNotAllowed>
 								<default>sortdate desc</default>
 								<itemsProcFunc>TeaminmediasPluswerk\KeSearch\Backend\Flexform->listAvailableOrderingsForAdmin</itemsProcFunc>
