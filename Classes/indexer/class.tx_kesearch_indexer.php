@@ -132,7 +132,8 @@ class tx_kesearch_indexer
                         . $this->indexerConfig['type'],
                         $this
                     );
-                    $content .= $searchObj->startIndexing();
+                    $message = $searchObj->startIndexing();
+                    $content .= $this->renderIndexingReport($message);
                 } else {
                     $content .= '<div class="error"> Could not find file ' . $path . '</div>' . "\n";
                 }
@@ -142,7 +143,8 @@ class tx_kesearch_indexer
             if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customIndexer'])) {
                 foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customIndexer'] as $_classRef) {
                     $_procObj = &TYPO3\CMS\Core\Utility\GeneralUtility::getUserObj($_classRef);
-                    $content .= $_procObj->customIndexer($indexerConfig, $this);
+                    $message = $_procObj->customIndexer($indexerConfig, $this);
+                    $content .= $this->renderIndexingReport($message);
                 }
             }
         }
@@ -195,6 +197,20 @@ class tx_kesearch_indexer
         }
 
         return '';
+    }
+
+    /**
+     * Renders the message from the indexers.
+     *
+     * @param string $message
+     * @return string
+     */
+    public function renderIndexingReport($message='')
+    {
+        // message
+        $message = str_ireplace(['<br />','<br>','<br/>','</span>'], "\n", $message);
+        $message = strip_tags($message);
+        return nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8'));
     }
 
     /**

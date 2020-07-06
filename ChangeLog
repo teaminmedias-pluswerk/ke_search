@@ -2,6 +2,9 @@ ChangeLog
 
 compat8 branch
 
+Version 2.8.3, July 2020
+[!!!][BUGFIX]  Security Bugfix. Please update!
+
 Version 2.8.2, May 2019
 [BUGFIX]  Initialize array to avoid PHP warning. Thanks to Markus Klein. https://github.com/teaminmedias-pluswerk/ke_search/pull/273
 
