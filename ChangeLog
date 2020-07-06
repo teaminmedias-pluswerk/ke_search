@@ -1,7 +1,8 @@
 ChangeLog
 
-current master
-[BREAKING] [TASK] Add one more parameter to hook getQueryPart in class Db
+Version 3.1.4, July 2020
+[!!!][BUGFIX] Security Bugfix. Please update!
+[TASK]    Add one more parameter to hook getQueryPart in class Db. Please adopt your hooks if necessary!
 [TASK]    Add more options to extension setting "multiplyValueToTitle"
 [TASK]    move addPiFlexFormValue calls to TCA overrides. Thanks to Ingo Fabbri. https://github.com/teaminmedias-pluswerk/ke_search/pull/350
 [BUGFIX]  Fix "Only variables can be passed by reference" in class Db and in indexer classes
