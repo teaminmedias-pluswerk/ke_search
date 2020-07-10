@@ -1,5 +1,11 @@
 ChangeLog
 
+Version 3.1.5, July 2020
+[TASK]    Improve documentation about filtering
+[TASK]    Add documentation on how to use system categories for filtering
+[FEATURE] Allow multiple sortings for search results (setting in plugin flexform)
+[BUGFIX]  Fix label for "relevance" in sorting flexform field
+
 Version 3.1.4, July 2020
 [!!!][BUGFIX] Security Bugfix. Please update!
 [TASK]    Add one more parameter to hook getQueryPart in class Db. Please adopt your hooks if necessary!
