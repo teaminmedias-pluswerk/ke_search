@@ -1,5 +1,8 @@
 ChangeLog
 
+Development version
+[TASK]    Make it possible to override palette miscellaneous. Thanks to Jan Delius. https://github.com/teaminmedias-pluswerk/ke_search/issues/356
+
 Version 3.1.5, July 2020
 [TASK]    Improve documentation about filtering
 [TASK]    Add documentation on how to use system categories for filtering

@@ -46,12 +46,26 @@ $tempColumns = [
     ],
 ];
 
-// add new fields to tab "search" and move field "no_search" to "search tab"
+// add the new fields to tab "search" and include the core field "no_search"
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns('pages', $tempColumns);
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
     'pages',
     '--div--;LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:pages.tx_kesearch_label,no_search;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.no_search_formlabel, tx_kesearch_tags,tx_kesearch_abstract,tx_kesearch_resultimage'
 );
 
-// remove field "no_search" from "miscellaneous" palette
-$GLOBALS['TCA']['pages']['palettes']['miscellaneous']['showitem'] = 'is_siteroot;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.is_siteroot_formlabel, editlock;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.editlock_formlabel, php_tree_stop;LLL:EXT:frontend/Resources/Private/Language/locallang_tca.xlf:pages.php_tree_stop_formlabel';
+// remove field "no_search" from "miscellaneous" palette of the "Behaviour" tab
+// first use API to replace it with a dummy field
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addFieldsToPalette(
+    'pages',
+    'miscellaneous',
+    'tx_kesearch_thisfielddoesnotexist',
+    'replace:no_search'
+);
+
+// then delete the dummy field in order to clean up the TCA
+$GLOBALS['TCA']['pages']['palettes']['miscellaneous']['showitem'] =
+    str_replace(
+        'tx_kesearch_thisfielddoesnotexist,',
+        '',
+        $GLOBALS['TCA']['pages']['palettes']['miscellaneous']['showitem']
+    );
