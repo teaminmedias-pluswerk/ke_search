@@ -150,7 +150,7 @@ class IndexerRunner
                         'indexer "' . $this->indexerConfig['title'] . '" started ',
                         $this->indexerConfig
                     );
-                    $searchObj = GeneralUtility::makeInstance($className,$this);
+                    $searchObj = GeneralUtility::makeInstance($className, $this);
                     $message = $searchObj->startIndexing();
                     $content .= $this->renderIndexingReport($message);
                 } else {
@@ -163,12 +163,12 @@ class IndexerRunner
             // hook for custom indexer
             if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customIndexer'])) {
                 foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customIndexer'] as $_classRef) {
-                    $_procObj = GeneralUtility::makeInstance($_classRef);
+                    $searchObj = GeneralUtility::makeInstance($_classRef, $this);
                     $this->logger->info(
                         'custom indexer "' . $this->indexerConfig['title'] . '" started ',
                         $this->indexerConfig
                     );
-                    $message = $_procObj->customIndexer($indexerConfig, $this);
+                    $message = $searchObj->customIndexer($indexerConfig, $this);
                     $content .= $this->renderIndexingReport($message);
                 }
             }
