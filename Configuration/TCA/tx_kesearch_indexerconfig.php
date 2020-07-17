@@ -8,7 +8,7 @@ if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(
     $langGeneralPath = 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:';
 }
 
-$configurationArray = array(
+return array(
     'ctrl' => array(
         'title' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig',
         'label' => 'title',
@@ -374,33 +374,3 @@ $configurationArray = array(
             . 'filteroption,index_use_page_tags_for_files,cal_expired_events')
     )
 );
-
-// define dependencies to news only if news is installed
-if (TYPO3\CMS\Core\Utility\ExtensionManagementUtility::isLoaded('news')) {
-    $configurationArray['columns']['index_extnews_category_selection']['config'] = array(
-        'type' => 'select',
-        'renderType' => 'selectTree',
-        'renderMode' => 'tree',
-        'treeConfig' => array(
-            'parentField' => 'parentcategory',
-        ),
-        'foreign_table' => 'tx_news_domain_model_category',
-        'foreign_table_where' => ' AND (tx_news_domain_model_category.sys_language_uid = 0'
-            . ' OR tx_news_domain_model_category.l10n_parent = 0) ORDER BY tx_news_domain_model_category.sorting',
-        'size' => 10,
-        'minitems' => 0,
-        'maxitems' => 20,
-    );
-
-    // news version 3 features system categories instead of it's own
-    // category system which was used in previous versions
-    if (version_compare(TYPO3\CMS\Core\Utility\ExtensionManagementUtility::getExtensionVersion('news'), '3.0.0') >= 0) {
-        $configurationArray['columns']['index_extnews_category_selection']['config']['treeConfig']['parentField'] =
-            'parent';
-        $configurationArray['columns']['index_extnews_category_selection']['config']['foreign_table'] = 'sys_category';
-        $configurationArray['columns']['index_extnews_category_selection']['config']['foreign_table_where'] = '';
-    }
-}
-
-
-return $configurationArray;
