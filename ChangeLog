@@ -3,6 +3,7 @@ ChangeLog
 Development version
 [TASK]    Make it possible to override palette miscellaneous. Thanks to Jan Delius. https://github.com/teaminmedias-pluswerk/ke_search/issues/356
 [TASK]    Use category selector TCA definition from news extension. Thanks to André Steiling. https://github.com/teaminmedias-pluswerk/ke_search/issues/354
+[TASK]    Cleanup ext_localconf.php and ext_tables.php
 
 Version 3.1.5, July 2020
 [TASK]    Improve documentation about filtering
