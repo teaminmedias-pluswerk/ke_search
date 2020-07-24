@@ -63,6 +63,7 @@ class StartIndexerCommand extends Command
         $indexerResponse = $indexerRunner->startIndexing(
             true, [], 'CLI'
         );
+        $indexerResponse = $indexerRunner->createPlaintextReport($indexerResponse);
 
         if (strstr($indexerResponse, 'You can\'t start the indexer twice')) {
             $io->warning(

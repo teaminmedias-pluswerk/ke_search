@@ -98,14 +98,8 @@ class File extends IndexerBase
         $counter = $this->extractContentAndSaveToIndex($files);
 
         // show indexer content?
-        $content = '<p><b>Indexer "' . $this->indexerConfig['title'] . '": </b><br />'
-            . count($files) . ' files have been found for indexing.<br />' . "\n"
-            . $counter . ' files have been indexed.</p>' . "\n";
-
-        $content .= $this->showErrors();
-        $content .= $this->showTime();
-
-        return $content;
+        return count($files) . ' files have been found for indexing.' . LF
+            . $counter . ' files have been indexed.';
     }
 
     /** * fetches files recurively using FAL

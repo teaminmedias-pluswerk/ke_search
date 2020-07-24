@@ -160,15 +160,9 @@ class Cal extends IndexerBase
                 );
                 $indexedRecordsCounter++;
             }
-
-            $content = '<p><b>Indexer "' . $this->indexerConfig['title'] . '":</b><br />' . "\n"
-                . $indexedRecordsCounter . ' "Calendar Base" records have been indexed.</p>' . "\n";
-
-            $content .= $this->showErrors();
-            $content .= $this->showTime();
         }
 
-        return $content;
+        return $indexedRecordsCounter . ' "Calendar Base" records have been indexed.';
     }
 
     /**

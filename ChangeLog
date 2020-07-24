@@ -1,6 +1,7 @@
 ChangeLog
 
 Development version
+[TASK]    Improve Rendering of indexing report
 [FEATURE] Add support for EXT:container, https://github.com/teaminmedias-pluswerk/ke_search/issues/362
 [TASK]    Add hook for check if a content element should be indexed, https://github.com/teaminmedias-pluswerk/ke_search/issues/362
 [TASK]    Make it possible to override palette miscellaneous. Thanks to Jan Delius. https://github.com/teaminmedias-pluswerk/ke_search/issues/356

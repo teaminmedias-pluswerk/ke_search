@@ -152,7 +152,7 @@ class IndexerRunner
                     );
                     $searchObj = GeneralUtility::makeInstance($className, $this);
                     $message = $searchObj->startIndexing();
-                    $content .= $this->renderIndexingReport($message);
+                    $content .= $this->renderIndexingReport($searchObj, $message);
                 } else {
                     $errorMessage = 'Could not find class ' . $className;
                     $this->logger->error($errorMessage);
@@ -169,7 +169,9 @@ class IndexerRunner
                         $this->indexerConfig
                     );
                     $message = $searchObj->customIndexer($indexerConfig, $this);
-                    $content .= $this->renderIndexingReport($message);
+                    if ($message) {
+                        $content .= $this->renderIndexingReport($searchObj, $message);
+                    }
                 }
             }
         }
@@ -187,17 +189,14 @@ class IndexerRunner
             ->execute()
             ->fetchColumn(0);
 
-        $content .= '<p><b>Index contains ' . $count . ' entries.</b></p>';
+        $content .= '<div class="summary infobox">';
+        $content .= 'Index contains ' . $count . ' entries.';
+        $content .= '</div>';
         $this->logger->info('Index contains ' . $count . ' entries');
 
 
         // clean up process after indezing to free memory
         $this->cleanUpProcessAfterIndexing();
-
-        // print indexing errors
-        if (!empty($this->indexingErrors)) {
-            $content .= "\n\n" . 'There were indexing errors. Check ke_search log for details.';
-        }
 
         // create plaintext report
         $plaintextReport = $this->createPlaintextReport($content);
@@ -243,15 +242,51 @@ class IndexerRunner
     /**
      * Renders the message from the indexers.
      *
+     * @param object $searchObj Indexer Object (should extend IndexerBase, but this may not be the case)
      * @param string $message
      * @return string
      */
-    public function renderIndexingReport($message='')
+    public function renderIndexingReport($searchObj, $message='')
     {
+        $content = '<div class="summary infobox">';
+
+        // title
+        $title = $searchObj->indexerConfig['title'];
+        $content .= '<span class="title">' . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . '</span>';
+
         // message
         $message = str_ireplace(['<br />','<br>','<br/>','</span>'], "\n", $message);
         $message = strip_tags($message);
-        return nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8'));
+        $content .= nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8'));
+
+        // duration, show sec or ms
+        if (is_subclass_of($searchObj, '\TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase')) {
+            $duration = method_exists($searchObj, 'getDuration') ? $searchObj->getDuration() : 0;
+            if ($duration > 0) {
+                $content .= '<br />';
+                $content .= '<i>Indexing process took ';
+                if ($duration > 1000) {
+                    $duration /= 1000;
+                    $duration = intval($duration);
+                    $content .= $duration . ' s.';
+                } else {
+                    $content .= $duration . ' ms.';
+                }
+                $content .= '</i><br />';
+            }
+        }
+
+        // errors
+        if (is_subclass_of($searchObj, '\TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase')) {
+            $errors = method_exists($searchObj, 'getErrors') ? $searchObj->getErrors() : [];
+            if (count($errors)) {
+                $content .= '<br />';
+                $content .= '<b>Warning: There have been errors. Please refer to the error log (typically in var/log/)</b>.';
+            }
+        }
+
+        $content .= '</div>';
+        return $content;
     }
 
     /**
@@ -261,10 +296,11 @@ class IndexerRunner
      */
     public function createPlaintextReport($content)
     {
-        $report = ' indexing report' . "\n\n";
-        $report .= 'Finishing time: ' . date($GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'] . ', H:i') . "\n\n";
+        $content = str_ireplace(['<span class="title">','<br />','<br>','<br/>','</span>'], LF, $content);
+        $report = LF;
+        $report .= 'Finishing time: ' . date($GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'] . ', H:i') . LF . LF;
         $report .= preg_replace('~[ ]{2,}~', '', strip_tags($content));
-        $report .= "\n\n" . 'Indexing process ran ' . $this->calculateAndFormatIndexingTime();
+        $report .= LF . LF . 'Indexing process ran ' . $this->calculateAndFormatIndexingTime();
 
         return $report;
     }
@@ -437,6 +473,7 @@ class IndexerRunner
             ->where($where)
             ->execute();
 
+        $content .= '<div class="summary infobox">';
         $content .= '<p><b>Index cleanup:</b><br />' . "\n";
         $content .= $count . ' entries deleted.<br />' . "\n";
         $this->logger->info('CleanUpIndex: ' . $count . ' entries deleted.');
@@ -447,6 +484,7 @@ class IndexerRunner
         // calculate duration of indexing process
         $duration = ceil((microtime(true) - $startMicrotime) * 1000);
         $content .= '<i>Cleanup process took ' . $duration . ' ms.</i></p>' . "\n";
+        $content .= '</div>';
 
         return $content;
     }

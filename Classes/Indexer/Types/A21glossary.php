@@ -148,13 +148,7 @@ class A21glossary extends IndexerBase
                 );
                 $indexedRecordsCounter++;
             }
-
-            $content = '<p><b>Indexer "' . $this->indexerConfig['title'] . '":</b><br />' . "\n"
-                . $indexedRecordsCounter . ' glossary records have been indexed.</p>' . "\n";
-
-            $content .= $this->showErrors();
-            $content .= $this->showTime();
         }
-        return $content;
+        return $indexedRecordsCounter . ' glossary records have been indexed.';
     }
 }

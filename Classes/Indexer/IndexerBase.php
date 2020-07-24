@@ -280,75 +280,6 @@ class IndexerBase
     }
 
     /**
-     * shows time used
-     *
-     * @author  Christian Buelter <buelter@kennziffer.com>
-     * @return  string
-     */
-    public function showTime()
-    {
-        // calculate duration of indexing process
-        $endMicrotime = microtime(true);
-        $duration = ceil(($endMicrotime - $this->startMicrotime) * 1000);
-
-        // show sec or ms?
-        if ($duration > 1000) {
-            $duration /= 1000;
-            $duration = intval($duration);
-            return '<p><i>Indexing process for "'
-            . $this->indexerConfig['title']
-            . '" took '
-            . $duration
-            . ' s.</i> </p>'
-            . "\n\n";
-        } else {
-            return '<p><i>Indexing process for "'
-            . $this->indexerConfig['title']
-            . '" took '
-            . $duration
-            . ' ms.</i> </p>'
-            . "\n\n";
-        }
-    }
-
-    /**
-     * Prints errors which occured while indexing.
-     *
-     * @return string
-     * @author Christian Bülter <buelter@kennziffer.com>
-     * @since 26.11.13
-     */
-    public function showErrors()
-    {
-        if (count($this->errors)) {
-            $messages = [];
-            $messages[] = GeneralUtility::makeInstance(
-                FlashMessage::class,
-                'There were errors. Check ke_search log for details.'. "\n",
-                '',
-                \TYPO3\CMS\Core\Messaging\FlashMessage::ERROR,
-                false
-            );
-            return $this->renderFlashMessages($messages);
-        } else {
-            return '';
-        }
-    }
-
-    /**
-     * Renders the flash message.
-     *
-     * @param array $flashMessages
-     * @return string The flash message as HTML.
-     */
-    protected function renderFlashMessages($flashMessages)
-    {
-        return GeneralUtility::makeInstance(FlashMessageRendererResolver::class)
-            ->resolve()
-            ->render($flashMessages);
-    }
-
-    /**
      * adds an error to the error array
      * @param string or array of strings $errorMessage
      * @author Christian Bülter <buelter@kennziffer.com>
@@ -377,6 +308,13 @@ class IndexerBase
         return $this->errors;
     }
 
+    /**
+     * @return int
+     */
+    public function getDuration()
+    {
+        return intval(ceil((microtime(true) - $this->startMicrotime) * 1000));
+    }
 
     /**
      * compile file metadata from file properties and add it to already given file content

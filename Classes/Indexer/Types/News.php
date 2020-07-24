@@ -315,14 +315,8 @@ class News extends IndexerBase
             $logMessage = 'Indexer "' . $this->indexerConfig['title'] . '" finished'
                 . ' ('.$indexedNewsCounter.' records processed)';
             $this->pObj->logger->info($logMessage);
-            $content = '<p><b>Indexer "' . $this->indexerConfig['title'] . '":</b><br />' . "\n"
-                . $indexedNewsCounter . ' News and ' . $this->fileCounter
-                . ' related files have been indexed.</p> ' . "\n";
-
-            $content .= $this->showErrors();
-            $content .= $this->showTime();
         }
-        return $content;
+        return $indexedNewsCounter . ' News and ' . $this->fileCounter . ' related files have been indexed.';
     }
 
 

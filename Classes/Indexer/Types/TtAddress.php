@@ -241,16 +241,6 @@ class TtAddress extends IndexerBase
             }
         }
 
-        $content = '<p><b>Indexer "'
-            . $this->indexerConfig['title']
-            . '": '
-            . count($result)
-            . ' address records have been indexed.</b></p>'
-            . "\n";
-
-        $content .= $this->showErrors();
-        $content .= $this->showTime();
-
-        return $content;
+        return count($result) . ' address records have been indexed.';
     }
 }

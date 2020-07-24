@@ -285,20 +285,12 @@ class Page extends IndexerBase
         }
 
         // show indexer content
-        $content = '<p>'
-            . '<b>Indexer "' . $this->indexerConfig['title'] . '": </b>'. "<br />\n"
-            . count($indexPids) . ' ' . $this->indexedElementsName . ' have been selected for indexing in the main language.' . "<br />\n"
-            . count($this->sysLanguages) . ' languages (' . $languageTitels . ') have been found.' . "<br />\n"
-            . $this->counter . ' ' . $this->indexedElementsName . ' have been indexed. '
-            . $this->counterWithoutContent . ' had no content or the content was not indexable.' . "<br />\n"
-            . $this->fileCounter . ' files have been indexed.' . "<br />\n"
-            . '</p>'
-            . "\n";
-
-        $content .= $this->showErrors();
-        $content .= $this->showTime();
-
-        return $content;
+        return
+            count($indexPids) . ' ' . $this->indexedElementsName . ' have been selected for indexing in the main language.' . LF
+            . count($this->sysLanguages) . ' languages (' . $languageTitels . ') have been found.' . LF
+            . $this->counter . ' ' . $this->indexedElementsName . ' have been indexed. ' . LF
+            . $this->counterWithoutContent . ' had no content or the content was not indexable.' . LF
+            . $this->fileCounter . ' files have been indexed.';
     }
 
     /**
