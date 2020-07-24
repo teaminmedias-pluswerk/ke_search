@@ -479,6 +479,16 @@ class Page extends IndexerBase
         // get content elements for this page
         $fields = 'uid, pid, header, bodytext, CType, sys_language_uid, header_layout, fe_group, file_collections, filelink_sorting';
 
+        // If EXT:gridelements is installed, add the field containing the gridelement to the list
+        if (ExtensionManagementUtility::isLoaded('gridelements')) {
+            $fields .= ', tt_content.tx_gridelements_container';
+        }
+
+        // If EXT:container is installed, add the field containing the container id to the list
+        if (ExtensionManagementUtility::isLoaded('container')) {
+            $fields .= ', tt_content.tx_container_parent';
+        }
+
         // hook to modify the page content fields
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyPageContentFields'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyPageContentFields'] as $_classRef) {
@@ -501,11 +511,6 @@ class Page extends IndexerBase
             )
         );
         $where[] = $this->whereClauseForCType;
-
-        // If gridelements is installed, add the uid of the container to the field list
-        if (ExtensionManagementUtility::isLoaded('gridelements')) {
-            $fields .= ', tt_content.tx_gridelements_container';
-        }
 
         // Get access restrictions for this page, this access restrictions apply to all
         // content elements of this pages. Individual access restrictions
@@ -535,36 +540,9 @@ class Page extends IndexerBase
         if (count($ttContentRows)) {
             foreach ($ttContentRows as $ttContentRow) {
 
-                // If gridelements is installed, check if the content element sits inside a gridelements container.
-                // If yes, check if the container is hidden or placed outsite the page (colPos: -2).
-                // this adds a query for each content element which may result in slow indexing. But simply
-                // joining the tt_content table to itself does not work either, since then all content elements which
-                // are not located inside a gridelement won't be indexed then.
-                if (ExtensionManagementUtility::isLoaded('gridelements') && $ttContentRow['tx_gridelements_container']) {
-                    $queryBuilder = Db::getQueryBuilder($table);
-                    $gridelementsContainer = $queryBuilder
-                        ->select(...['colPos','hidden'])
-                        ->from($table)
-                        ->where($queryBuilder->expr()->eq(
-                            'uid',
-                            $queryBuilder->createNamedParameter($ttContentRow['tx_gridelements_container'])
-                        )
-                        )
-                        ->execute()
-                        ->fetch();
-
-                    // If there's no gridelement container found, it means it is hidden or deleted or time restricted.
-                    // In this case, skip the content elements inside the gridelements container
-                    if ($gridelementsContainer === FALSE) {
-                        continue;
-                    } else {
-
-                        // If the colPos of the gridelement container is -2, it is not on the page, so skip it.
-                        if ($gridelementsContainer['colPos'] === -2) {
-                            continue;
-                        }
-
-                    }
+                // Skip content elements inside hidden containers and for other (custom) reasons
+                if (!$this->contentElementShouldBeIndexed($ttContentRow)) {
+                    continue;
                 }
 
                 $content = '';
@@ -699,6 +677,85 @@ class Page extends IndexerBase
         }
 
         return;
+    }
+
+    /**
+     * Checks if the given row from tt_content should really be indexed by checking if the content element
+     * sits inside a container (EXT:gridelements, EXT:container) and if this container is visible.
+     *
+     * @param $ttContentRow
+     * @return bool
+     */
+    public function contentElementShouldBeIndexed($ttContentRow)
+    {
+        $contentElementShouldBeIndexed = true;
+
+        // If gridelements is installed, check if the content element sits inside a gridelements container.
+        // If yes, check if the container is hidden or placed outside the page (colPos: -2).
+        // This adds a query for each content element which may result in slow indexing. But simply
+        // joining the tt_content table to itself does not work either, since then all content elements which
+        // are not located inside a gridelement won't be indexed then.
+        if (ExtensionManagementUtility::isLoaded('gridelements') && $ttContentRow['tx_gridelements_container']) {
+            $queryBuilder = Db::getQueryBuilder('tt_content');
+            $gridelementsContainer = $queryBuilder
+                ->select(...['colPos','hidden'])
+                ->from('tt_content')
+                ->where(
+                    $queryBuilder->expr()->eq(
+                        'uid',
+                        $queryBuilder->createNamedParameter($ttContentRow['tx_gridelements_container'])
+                    )
+                )
+                ->execute()
+                ->fetch();
+
+            // If there's no gridelement container found, it means it is hidden or deleted or time restricted.
+            // In this case, skip the content element.
+            if ($gridelementsContainer === FALSE) {
+                $contentElementShouldBeIndexed = false;
+            } else {
+
+                // If the colPos of the gridelement container is -2, it is not on the page, so skip it.
+                if ($gridelementsContainer['colPos'] === -2) {
+                    $contentElementShouldBeIndexed = false;
+                }
+
+            }
+        }
+
+        // If EXT:container is installed, check if the content element sits inside a container element
+        if (ExtensionManagementUtility::isLoaded('container') && $ttContentRow['tx_container_parent']) {
+            $queryBuilder = Db::getQueryBuilder('tt_content');
+            $container = $queryBuilder
+                ->select('uid')
+                ->from('tt_content')
+                ->where(
+                    $queryBuilder->expr()->eq(
+                        'uid',
+                        $queryBuilder->createNamedParameter($ttContentRow['tx_container_parent'])
+                    )
+                )
+                ->execute()
+                ->fetch();
+
+            // If there's no container found, it means it is hidden or deleted or time restricted.
+            // In this case, skip the content element.
+            $contentElementShouldBeIndexed = !($container === FALSE);
+        }
+
+        // hook to add custom check if this content element should be indexed
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['contentElementShouldBeIndexed'])) {
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['contentElementShouldBeIndexed'] as $_classRef) {
+                $_procObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($_classRef);
+                $contentElementShouldBeIndexed = $_procObj->contentElementShouldBeIndexed(
+                    $ttContentRow,
+                    $contentElementShouldBeIndexed,
+                    $this
+                );
+            }
+        }
+
+        return $contentElementShouldBeIndexed;
     }
 
     /**
