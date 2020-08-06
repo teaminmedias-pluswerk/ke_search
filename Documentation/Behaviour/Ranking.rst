@@ -59,5 +59,6 @@ top of the list, consider the premium version of ke_search which adds the featur
 and "boost keywords".
 
 More information
+
 * http://dev.kesearch.de/documentation/ke_search_premium/Index.html
 * https://www.typo3-macher.de/facettierte-suche-ke-search/premium/
