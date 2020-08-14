@@ -36,7 +36,7 @@ class Items
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['registerIndexerConfiguration'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['registerIndexerConfiguration'] as
                      $_classRef) {
-                $_procObj = &GeneralUtility::makeInstance($_classRef);
+                $_procObj = GeneralUtility::makeInstance($_classRef);
                 $_procObj->registerIndexerConfiguration($params, $pObj);
             }
         }
