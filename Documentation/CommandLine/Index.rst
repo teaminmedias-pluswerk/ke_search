@@ -16,7 +16,7 @@ Start the indexer
 
 .. code-block:: none
 
-	bin/typo3 ke_search:index
+	bin/typo3 ke_search:indexing
 
 .. image:: ../Images/CommandLine/cli-start-indexing.png
 

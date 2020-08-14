@@ -15,6 +15,7 @@ word appears in two different text elements on a page, you will get only one sea
 these two elements belong to.
 
 The page indexer indexes content elements of the following types:
+
 * text
 * text with image
 * bullet list
@@ -41,4 +42,4 @@ Advanced options:
 * Set the page types you want to index.
 * Set the content element types you want to index. You can add your own content element types for example those created with the extension "mask".
 * You can choose to add a tag to all index entries created by this indexer.
-* You can choos to add that tag also to files indexed by this indexer.
+* You can choose to add that tag also to files indexed by this indexer.

@@ -8,7 +8,7 @@
 Hooks
 =====
 
-ke_search includes a lot of hooks you can use to include your own code and custumize the behaviour of the extension.
+ke_search includes a lot of hooks you can use to include your own code and customize the behaviour of the extension.
 
 modifyPagesIndexEntry
 	Use this hook to modify the page data just before it will be saved into database.
@@ -35,7 +35,7 @@ customFilterRenderer
 	You can write your own filter rendering function using this hook. You will have to add your custom filter type to TCA options array. See chapter “Custom filter rendering” for further information.
 
 registerIndexerConfiguration
-	Use this hook for registering your custom indexer configuration in TCA. See chapter “Write your own custom indexer!” for further information.
+	Use this hook for registering your custom indexer configuration in TCA. See chapter “:ref:`Write your own custom indexer! <customIndexer>`” for further information.
 
 registerAdditionalFields
 	This hook is important if you have extended the indexer table with your own columns.

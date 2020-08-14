@@ -20,7 +20,7 @@ Example
 Example "Car Website"
 .....................
 
-You have a website that's about cars. On a some pages, your content is about tires, others are about "Accessories".
+You have a website that's about cars. On some pages, your content is about tires, others are about "Accessories".
 You can now create a filter named "Accessories" and filter option named "Tires". Now when your customer
 uses the search function, she or he can narrow down the search to all pages marked with "Tires". That does not
 mean, that "Tires" must be on that page as a word, but it's marked as "relevant for tires" in the backend.
