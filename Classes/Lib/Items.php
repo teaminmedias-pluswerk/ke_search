@@ -1,6 +1,7 @@
 <?php
 namespace TeaminmediasPluswerk\KeSearch\Lib;
 
+use TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /***************************************************************
@@ -32,11 +33,12 @@ class Items
 {
     public function fillIndexerConfig(&$params, $pObj)
     {
+        $indexerRunner = GeneralUtility::makeInstance(IndexerRunner::class);
         // hook for custom registration of further indexerConfigurations
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['registerIndexerConfiguration'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['registerIndexerConfiguration'] as
                      $_classRef) {
-                $_procObj = GeneralUtility::makeInstance($_classRef);
+                $_procObj = GeneralUtility::makeInstance($_classRef, $indexerRunner);
                 $_procObj->registerIndexerConfiguration($params, $pObj);
             }
         }
