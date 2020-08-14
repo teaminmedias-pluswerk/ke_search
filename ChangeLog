@@ -1,6 +1,8 @@
 ChangeLog
 
 Development version
+[DOC]     Improve documentation. Thanks to Chris Müller. https://github.com/teaminmedias-pluswerk/ke_search/pull/365
+
 Version 3.1.6, July 2020
 [FEATURE] Add support for EXT:container, https://github.com/teaminmedias-pluswerk/ke_search/issues/362
 [TASK]    Add hook for check if a content element should be indexed, https://github.com/teaminmedias-pluswerk/ke_search/issues/362

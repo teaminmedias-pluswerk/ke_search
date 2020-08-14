@@ -23,7 +23,7 @@ Configure the indexer configuration:
 
 The other indexer configurations options differ from type to type.
 
-Whenever the content in your website changes, the indexing process will have to be startet to reflect that changes in
+Whenever the content in your website changes, the indexing process will have to be started to reflect that changes in
 the search result.
 
 Manual indexing
