@@ -1,0 +1,30 @@
+<?php
+defined('TYPO3_MODE') || die();
+
+// add field tx_keasearch_filter
+TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
+    'sys_category',
+    [
+        'tx_kesearch_filter' => [
+            'exclude' => 1,
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:sys_category.tx_kesearch_filter',
+            'config' => array(
+                'default' => 0,
+                'type' => 'select',
+                'renderType' => 'selectMultipleSideBySide',
+                'foreign_table' => 'tx_kesearch_filters',
+                'foreign_table_where' => ' AND tx_kesearch_filters.sys_language_uid IN (-1,0)',
+                'size' => 10,
+                'minitems' => 0,
+                'maxitems' => 99,
+                'behaviour' => [
+                    'allowLanguageSynchronization' => true,
+                ],
+            )
+        ],
+    ]
+);
+TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
+    'sys_category',
+    '--div--;LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:pages.tx_kesearch_label,tx_kesearch_filter'
+);

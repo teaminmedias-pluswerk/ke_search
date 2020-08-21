@@ -58,6 +58,7 @@ return array(
                 'foreign_table' => 'tx_kesearch_filteroptions',
                 'foreign_table_where' => 'AND tx_kesearch_filteroptions.pid=###CURRENT_PID###'
                     . ' AND tx_kesearch_filteroptions.sys_language_uid IN (-1,0)',
+                'default' => 0,
             )
         ),
         'l10n_diffsource' => array(
