@@ -313,11 +313,11 @@ return array(
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => array(
-                    array('LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.fal_storage.dont_use_fal', -1),
+                    array('LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.fal_storage.dont_use_fal', 0),
                 ),
                 'size' => 1,
                 'maxitems' => 1,
-                'default' => -1,
+                'default' => 0,
                 'foreign_table' => 'sys_file_storage',
                 'allowNonIdValues' => 1
             )
