@@ -238,9 +238,20 @@ class SearchHelper
         $categories = SearchHelper::getCategories($uid, $tablename);
         if (count($categories['uid_list'])) {
             foreach ($categories['uid_list'] as $category_uid) {
-                SearchHelper::makeTags($tags, array('syscat' . $category_uid));
+                SearchHelper::makeTags($tags, array(SearchHelper::createTagnameFromSystemCategoryUid($category_uid)));
             }
         }
+    }
+
+    /**
+     * creates tags like "syscat123" ("syscat" + category uid).
+     *
+     * @param $uid integer
+     * @return string
+     */
+    public static function createTagnameFromSystemCategoryUid($uid)
+    {
+        return 'syscat' . $uid;
     }
 
     /**
