@@ -1,6 +1,8 @@
 ChangeLog
 
 Development version
+[!!!]     This version changes the database structure!
+[FEATURE] Allow system categories to be used as a filter option in ke_search without the need of adding any custom code
 [BUGFIX]  Fix too few arguments to function for custom indexers. https://github.com/teaminmedias-pluswerk/ke_search_hooks/issues/13
 [DOC]     Improve documentation. Thanks to Chris Müller. https://github.com/teaminmedias-pluswerk/ke_search/pull/365
 [BUGFIX]  Show option "Don't use FAL" again in file indexer configuration
