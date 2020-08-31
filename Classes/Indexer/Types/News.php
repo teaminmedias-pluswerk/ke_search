@@ -141,16 +141,16 @@ class News extends IndexerBase
                 // assigned that should be indexed.
                 // mode 1 means 'index all news no matter what category
                 // they have'
-                if ($this->indexerConfig['index_news_category_mode'] == '2') {
+                if ($this->indexerConfig['index_news_category_mode'] == '2' && $this->indexerConfig['index_extnews_category_selection']) {
+
+                    // load category configuratio
+                    $selectedCategoryUids = $this->getCategoryConfiguration($this->indexerConfig['uid']);
+
                     $isInList = false;
                     foreach ($categoryData['uid_list'] as $catUid) {
                         // if category was found in list, set isInList
                         // to true and break further processing.
-                        if (GeneralUtility::inList(
-                            $this->indexerConfig['index_extnews_category_selection'],
-                            $catUid
-                        )
-                        ) {
+                        if (in_array($catUid, $selectedCategoryUids)) {
                             $isInList = true;
                             break;
                         }
