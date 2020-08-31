@@ -41,6 +41,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class Pdf extends File implements FileIndexerInterface
 {
+    
     public $extConf = array(); // saves the configuration of extension ke_search_hooks
     public $app = array(); // saves the path to the executables
     public $isAppArraySet = false;
@@ -124,8 +125,7 @@ class Pdf extends File implements FileIndexerInterface
                 unlink($tempFileName);
             } else {
                 $errorMessage = 'Content for file ' . $file . ' could not be extracted. Maybe it is encrypted?';
-                $runner = GeneralUtility::makeInstance(IndexerRunner::class);
-                $runner->logger->error($errorMessage);
+                $this->pObj->logger->warning($errorMessage);
                 $this->addError($errorMessage);
 
                 // return empty string if no content was found
