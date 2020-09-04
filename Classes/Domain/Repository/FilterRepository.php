@@ -25,7 +25,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 /**
- * Hooks for ke_search
  * @author Christian Bülter
  * @package TYPO3
  * @subpackage ke_search
@@ -36,7 +35,11 @@ class FilterRepository {
      */
     protected $tableName = 'tx_kesearch_filters';
 
-    public function findByUid($uid)
+    /**
+     * @param int $uid
+     * @return mixed
+     */
+    public function findByUid(int $uid)
     {
         /** @var QueryBuilder $queryBuilder */
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
@@ -55,11 +58,33 @@ class FilterRepository {
     }
 
     /**
+     * @param int $l10n_parent
+     * @return mixed
+     */
+    public function findByL10nParent(int $l10n_parent)
+    {
+        /** @var QueryBuilder $queryBuilder */
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getQueryBuilderForTable($this->tableName);
+        return $queryBuilder
+            ->select('*')
+            ->from($this->tableName)
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'l10n_parent',
+                    $queryBuilder->createNamedParameter($l10n_parent, \PDO::PARAM_INT)
+                )
+            )
+            ->execute()
+            ->fetch();
+    }
+
+    /**
      * @param integer $uid
      * @param array $updateFields
      * @return mixed
      */
-    public function update($uid, $updateFields)
+    public function update(int $uid, array $updateFields)
     {
         /** @var QueryBuilder $queryBuilder */
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
@@ -81,10 +106,10 @@ class FilterRepository {
     /**
      * Fetches all filters which contain a given filter option
      *
-     * @param $filterOptionUid
+     * @param int $filterOptionUid
      * @return mixed[]
      */
-    public function findByAssignedFilterOption($filterOptionUid) {
+    public function findByAssignedFilterOption(int $filterOptionUid) {
         /** @var QueryBuilder $queryBuilder */
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getQueryBuilderForTable($this->tableName);
@@ -103,9 +128,9 @@ class FilterRepository {
 
     /**
      * remove filter option from filters where it is used
-     * @param $filterOptionUid
+     * @param int $filterOptionUid
      */
-    public function removeFilterOptionFromAllFilters($filterOptionUid)
+    public function removeFilterOptionFromAllFilters(int $filterOptionUid)
     {
         $filters = $this->findByAssignedFilterOption($filterOptionUid);
         if (!empty($filters)) {
@@ -118,7 +143,11 @@ class FilterRepository {
         }
     }
 
-    public function removeFilterOptionFromFilter($filterOptionUid, $filterUid)
+    /**
+     * @param int $filterOptionUid
+     * @param int $filterUid
+     */
+    public function removeFilterOptionFromFilter(int $filterOptionUid, int $filterUid)
     {
         $filter = $this->findByUid($filterUid);
         $updateFields = [

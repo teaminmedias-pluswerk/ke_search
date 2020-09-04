@@ -94,32 +94,87 @@ class FilterOptionHook
         $category = $this->getCategoryData($categoryUid);
         $tag = SearchHelper::createTagnameFromSystemCategoryUid($categoryUid);
 
-        // add filter options to selected filters
-        if (isset($category['tx_kesearch_filter']) && !$category['tx_kesearch_filter'] == '0') {
-            $filters = explode(',', $category['tx_kesearch_filter']);
-            foreach ($filters as $filterUid) {
-                $filterOptions = $filterOptionRepository->findByFilterUidAndTag($filterUid, $tag);
-                if (empty($filterOptions)) {
-                    $filterOption = [
-                        'title' => $category['title'],
-                        'tag' => $tag,
-                    ];
-                    $filterOptionRepository->createFilterOptionRecord($filterUid, $filterOption);
+        // If this category record is in default language, we need to create/update/delete the matching
+        // filter option records. If it is in a different language, we need to create/update/delete the translation
+        // for a filter option.
+
+        if (in_array($category['sys_language_uid'], [0,-1])) {
+            // add filter options to selected filters
+            if (isset($category['tx_kesearch_filter']) && !$category['tx_kesearch_filter'] == '0') {
+                $filters = explode(',', $category['tx_kesearch_filter']);
+                foreach ($filters as $filterUid) {
+                    $filterOptions = $filterOptionRepository->findByFilterUidAndTag($filterUid, $tag);
+                    if (empty($filterOptions)) {
+                        // create
+                        $filterOption = [
+                            'title' => $category['title'],
+                            'tag' => $tag,
+                        ];
+                        $filterOptionRepository->createFilterOptionRecord($filterUid, $filterOption);
+                    } else {
+                        // update
+                        foreach ($filterOptions as $filterOption){
+                            $filterOptionRepository->update(
+                                $filterOption['uid'],
+                                ['title' => $category['title']]
+                            );
+                        }
+                    }
                 }
             }
-        }
 
-        // Remove all matching filter options from other filters
-        $filterOptions = $filterOptionRepository->findByTag($tag);
-        if (!empty($filterOptions)) {
-            foreach ($filterOptions as $filterOption) {
-                $allFilters = $filterRepository->findByAssignedFilterOption($filterOption['uid']);
-                foreach ($allFilters as $filter) {
-                    if (!GeneralUtility::inList($category['tx_kesearch_filter'], $filter['uid'])) {
-                        $filterRepository->removeFilterOptionFromFilter(
-                            $filterOption['uid'],
-                            $filter['uid']
-                        );
+            // Remove all matching filter options from other filters
+            $filterOptions = $filterOptionRepository->findByTag($tag);
+            if (!empty($filterOptions)) {
+                foreach ($filterOptions as $filterOption) {
+                    $allFilters = $filterRepository->findByAssignedFilterOption($filterOption['uid']);
+                    foreach ($allFilters as $filter) {
+                        if (!GeneralUtility::inList($category['tx_kesearch_filter'], $filter['uid'])) {
+                            $filterRepository->removeFilterOptionFromFilter(
+                                $filterOption['uid'],
+                                $filter['uid']
+                            );
+                        }
+                    }
+                }
+            }
+        } else {
+            if ($category['l10n_parent']) {
+                if (isset($category['tx_kesearch_filter']) && !$category['tx_kesearch_filter'] == '0') {
+                    $origCategory = $this->getCategoryData($category['l10n_parent']);
+                    if ($origCategory) {
+                        $origTag = SearchHelper::createTagnameFromSystemCategoryUid($origCategory['uid']);
+                        $origFilterOptions = $filterOptionRepository->findByTagAndLanguage($origTag, 0);
+                        if (!empty($origFilterOptions)) {
+                            foreach ($origFilterOptions as $origFilterOption) {
+                                $localizedFilterOptions = $filterOptionRepository->findByL10nParent($origFilterOption['uid']);
+                                if (!$localizedFilterOptions) {
+                                    // create
+                                    $localizedFilterOption = [
+                                        'title' => $category['title'],
+                                        'tag' => $origTag,
+                                        'sys_language_uid' => $category['sys_language_uid'],
+                                        'l10n_parent' => $origFilterOption['uid'],
+                                    ];
+                                    $origFilters = explode(',', $category['tx_kesearch_filter']);
+                                    foreach ($origFilters as $origFilter) {
+                                        $localizedFilter = $filterRepository->findByL10nParent($origFilter);
+                                        $filterOptionRepository->createFilterOptionRecord(
+                                            $localizedFilter['uid'],
+                                            $localizedFilterOption
+                                        );
+                                    }
+                                } else {
+                                    // update
+                                    foreach ($localizedFilterOptions as $localizedFilterOption){
+                                        $filterOptionRepository->update(
+                                            $localizedFilterOption['uid'],
+                                            ['title' => $category['title']]
+                                        );
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }

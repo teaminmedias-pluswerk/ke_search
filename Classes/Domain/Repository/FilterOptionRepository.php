@@ -4,6 +4,7 @@ namespace TeaminmediasPluswerk\KeSearch\Domain\Repository;
 use Doctrine\DBAL\Driver\Statement;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /***************************************************************
@@ -26,7 +27,6 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 
 /**
- * Hooks for ke_search
  * @author Christian Bülter
  * @package TYPO3
  * @subpackage ke_search
@@ -75,6 +75,28 @@ class FilterOptionRepository {
             ->fetchAll();
     }
 
+    /**
+     * @param int $l10n_parent
+     * @return mixed[]
+     */
+    public function findByL10nParent(int $l10n_parent)
+    {
+        /** @var ConnectionPool $connectionPool */
+        $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
+        $queryBuilder = $connectionPool->getQueryBuilderForTable($this->tableName);
+        return $queryBuilder
+            ->select('*')
+            ->from($this->tableName)
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'l10n_parent',
+                    $queryBuilder->createNamedParameter($l10n_parent, \PDO::PARAM_STR)
+                )
+            )
+            ->execute()
+            ->fetchAll();
+    }
+
     public function findByTag($tag)
     {
         /** @var ConnectionPool $connectionPool */
@@ -87,6 +109,33 @@ class FilterOptionRepository {
                 $queryBuilder->expr()->eq(
                     'tag',
                     $queryBuilder->createNamedParameter($tag, \PDO::PARAM_STR)
+                )
+            )
+            ->execute()
+            ->fetchAll();
+    }
+
+    /**
+     * @param string $tag
+     * @param int $sys_language_uid
+     * @return mixed[]
+     */
+    public function findByTagAndLanguage(string $tag, int $sys_language_uid)
+    {
+        /** @var ConnectionPool $connectionPool */
+        $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
+        $queryBuilder = $connectionPool->getQueryBuilderForTable($this->tableName);
+        return $queryBuilder
+            ->select('*')
+            ->from($this->tableName)
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'tag',
+                    $queryBuilder->createNamedParameter($tag, \PDO::PARAM_STR)
+                ),
+                $queryBuilder->expr()->eq(
+                    'sys_language_uid',
+                    $queryBuilder->createNamedParameter($sys_language_uid, \PDO::PARAM_INT)
                 )
             )
             ->execute()
@@ -164,7 +213,7 @@ class FilterOptionRepository {
      * @param int $filterOptionUid
      * @return Statement|int
      */
-    public function deleteFilterOptionRecordByUid($filterOptionUid)
+    public function deleteFilterOptionRecordByUid(int $filterOptionUid)
     {
         /** @var FilterRepository $filterRepository */
         $filterRepository = GeneralUtility::makeInstance(FilterRepository::class);
@@ -188,7 +237,7 @@ class FilterOptionRepository {
     /**
      * @param string $tag
      */
-    public function deleteFilterOptionRecordsByTag($tag)
+    public function deleteFilterOptionRecordsByTag(string $tag)
     {
         $filterOptions = $this->findByTag($tag);
         if (!empty($filterOptions)) {
@@ -213,5 +262,29 @@ class FilterOptionRepository {
                 ->listTableColumns($this->tableName);
         }
         return $this->tableFields;
+    }
+
+    /**
+     * @param int $uid
+     * @param array $updateFields
+     * @return mixed
+     */
+    public function update(int $uid, array $updateFields)
+    {
+        /** @var QueryBuilder $queryBuilder */
+        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
+            ->getQueryBuilderForTable($this->tableName);
+        $queryBuilder
+            ->update($this->tableName)
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'uid',
+                    $queryBuilder->createNamedParameter($uid, \PDO::PARAM_INT)
+                )
+            );
+        foreach ($updateFields as $key => $value) {
+            $queryBuilder->set($key, $value);
+        }
+        return $queryBuilder->execute();
     }
 }
