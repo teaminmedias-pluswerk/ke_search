@@ -352,4 +352,38 @@ class IndexerBase
 
         return $fileContent;
     }
+
+    /**
+     * get the sys_category UIDs which are selected in the indexer configuration
+     *
+     * @param int $indexerConfigUid
+     * @return array $selectedCategories
+     */
+    public function getCategoryConfiguration(int $indexerConfigUid): array
+    {
+        $queryBuilder = Db::getQueryBuilder('sys_category_record_mm');
+        $selectedCategories = $queryBuilder
+            ->select('uid_local')
+            ->from('sys_category_record_mm')
+            ->where(
+                $queryBuilder->expr()->eq('uid_foreign', $queryBuilder->createNamedParameter($indexerConfigUid, \PDO::PARAM_INT)),
+                $queryBuilder->expr()->eq('tablenames', $queryBuilder->createNamedParameter('tx_kesearch_indexerconfig'))
+            )
+            ->execute()
+            ->fetchAll();
+        
+        if ($selectedCategories) {
+            // flatten the multidimensional array to only contain the category UIDs
+            $flattenSelectedCategories = [];
+            array_walk_recursive($selectedCategories, function ($a) use (&$flattenSelectedCategories) {
+                $flattenSelectedCategories[] = $a;
+            });
+            $selectedCategories = $flattenSelectedCategories;
+        } else {
+            // make sure to return an empty array in case the query returns NULL
+            $selectedCategories = [];
+        }
+        
+        return $selectedCategories;
+    }
 }
