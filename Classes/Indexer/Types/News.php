@@ -144,7 +144,7 @@ class News extends IndexerBase
                 if ($this->indexerConfig['index_news_category_mode'] == '2' && $this->indexerConfig['index_extnews_category_selection']) {
 
                     // load category configuratio
-                    $selectedCategoryUids = $this->getCategoryConfiguration($this->indexerConfig['uid']);
+                    $selectedCategoryUids = $this->getSelectedCategoriesUidList($this->indexerConfig['uid']);
 
                     $isInList = false;
                     foreach ($categoryData['uid_list'] as $catUid) {

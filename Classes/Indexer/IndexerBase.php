@@ -357,9 +357,9 @@ class IndexerBase
      * get the sys_category UIDs which are selected in the indexer configuration
      *
      * @param int $indexerConfigUid
-     * @return array $selectedCategories
+     * @return array $selectedCategories Array of UIDs of selected categories
      */
-    public function getCategoryConfiguration(int $indexerConfigUid): array
+    public function getSelectedCategoriesUidList(int $indexerConfigUid): array
     {
         $queryBuilder = Db::getQueryBuilder('sys_category_record_mm');
         $selectedCategories = $queryBuilder
