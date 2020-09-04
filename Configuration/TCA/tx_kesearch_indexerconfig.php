@@ -187,6 +187,7 @@ return array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_news_category_mode',
             'displayCond' => 'FIELD:type:IN:news',
+            'onChange' => 'reload',
             'config' => array(
                 'type' => 'select',
                 'renderType' => 'selectSingle',
@@ -233,7 +234,12 @@ return array(
         'index_extnews_category_selection' => array(
             'exclude' => 1,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_extnews_category_selection',
-            'displayCond' => 'FIELD:type:=:news',
+            'displayCond' => [
+                'AND' => [
+                    'FIELD:type:=:news',
+                    'FIELD:index_news_category_mode:=:2',
+                ]
+            ],
             'config' => array(
                 'type' => 'none',
                 'behaviour' => [

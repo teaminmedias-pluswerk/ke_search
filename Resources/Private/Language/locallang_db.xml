@@ -61,14 +61,14 @@
 			<label index="tx_kesearch_indexerconfig.index_content_with_restrictions">Index content elements with restrictions?</label>
 			<label index="tx_kesearch_indexerconfig.index_content_with_restrictions.I.0">Yes</label>
 			<label index="tx_kesearch_indexerconfig.index_content_with_restrictions.I.1">No</label>
-			<label index="tx_kesearch_indexerconfig.index_news_category_mode">Index only news of the following categories:</label>
-			<label index="tx_kesearch_indexerconfig.index_news_category_mode.I.1">All</label>
-			<label index="tx_kesearch_indexerconfig.index_news_category_mode.I.2">Only the following categories:</label>
+			<label index="tx_kesearch_indexerconfig.index_news_category_mode">Category mode</label>
+			<label index="tx_kesearch_indexerconfig.index_news_category_mode.I.1">Index all news records</label>
+			<label index="tx_kesearch_indexerconfig.index_news_category_mode.I.2">Index only news with selected categories</label>
 			<label index="tx_kesearch_indexerconfig.index_news_archived">Archived news settings</label>
 			<label index="tx_kesearch_indexerconfig.index_news_archived.I.0">Index all news</label>
 			<label index="tx_kesearch_indexerconfig.index_news_archived.I.1">Index only active news</label>
 			<label index="tx_kesearch_indexerconfig.index_news_archived.I.2">Index only archived news</label>
-			<label index="tx_kesearch_indexerconfig.index_news_category_selection">Categories:</label>
+			<label index="tx_kesearch_indexerconfig.index_news_category_selection">Categories</label>
 			<label index="tx_kesearch_indexerconfig.index_news_useHRDatesSingleWithoutDay">Use dates without day for single-view-URLs:</label>
 			<label index="tx_kesearch_indexerconfig.index_news_files_mode">Attached files should be handled as:</label>
 			<label index="tx_kesearch_indexerconfig.index_news_files_mode.I.0">Separate search result</label>
@@ -79,7 +79,7 @@
 			<label index="tx_kesearch_indexerconfig.index_page_doctypes">Page types which should be indexed (field:doktype, default: 1,2,5):</label>
 			<label index="tx_kesearch_indexerconfig.directories">Directories (comma-separated, e.g. fileadmin/my_directory/,fileadmin/my_other_directory or my_directory/,my_other_directory/ if you use FAL)</label>
 			<label index="tx_kesearch_indexerconfig.fileext">File indexer: Comma separated list of allowed file extensions (eg. pdf,ppt,doc,xls):</label>
-			<label index="tx_kesearch_indexerconfig.contenttypes">Content element types which should be indexed (default: text,textpic,bullets,table,html,header,uploads):</label>
+			<label index="tx_kesearch_indexerconfig.contenttypes">Content element types which should be indexed (default: text,textpic,bullets,table,html,header,uploads)</label>
 			<label index="tx_kesearch_indexerconfig.filteroption">Add tag to all indexed elements:</label>
 			<label index="tx_kesearch_indexerconfig.fal_storage">FAL Storage (IMPORTANT: backend user _cli_scheduler needs access to this storage!)</label>
 			<label index="tx_kesearch_indexerconfig.fal_storage.dont_use_fal">Dont' use FAL (write directories like 'fileadmin/user_upload/')</label>
