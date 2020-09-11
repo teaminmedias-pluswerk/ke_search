@@ -1,6 +1,6 @@
 ChangeLog
 
-Development version
+Version 3.2.0, September 2020
 [!!!]     This version changes the database structure!
 [FEATURE] Allow system categories to be used as a filter option in ke_search without the need of adding any custom code. Filter options will be created, updated or deleted whenever categories with an assigned filter are edited.
 [BUGFIX]  Fix too few arguments to function for custom indexers. https://github.com/teaminmedias-pluswerk/ke_search_hooks/issues/13
