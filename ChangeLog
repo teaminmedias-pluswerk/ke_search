@@ -9,6 +9,7 @@ Development version
 [DOC]     Improve documentation on file indexing
 [BUGFIX]  Fix news indexer, category selection doesn't contain category UIDs. Thanks to Patrick Crausaz. https://github.com/teaminmedias-pluswerk/ke_search/pull/368
 [BUGFIX]  Do not access protected logger in PDF indexer.
+[TASK]    Show first image instead of last for news records. Thanks to Robert Wolle. https://github.com/teaminmedias-pluswerk/ke_search/issues/355
 
 Version 3.1.6, July 2020
 [FEATURE] Add support for EXT:container, https://github.com/teaminmedias-pluswerk/ke_search/issues/362

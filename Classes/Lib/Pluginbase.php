@@ -870,7 +870,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                     $queryBuilder->quote($uid, \PDO::PARAM_INT)
                 )
             )
-            ->orderBy('sorting_foreign', 'desc')
+            ->orderBy('sorting_foreign', 'asc')
             ->setMaxResults(1)
             ->execute()
             ->fetch();
