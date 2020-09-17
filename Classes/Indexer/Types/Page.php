@@ -774,7 +774,7 @@ class Page extends IndexerBase
         if (!in_array($this->cachedPageRecords[$language_uid][$uid]['doktype'], $this->indexDokTypes)) {
             $index = false;
         }
-        
+
         if ((int) $language_uid === 0 && GeneralUtility::hideIfDefaultLanguage($this->cachedPageRecords[$language_uid][$uid]['l18n_cfg'])) {
             $index = false;
         }
@@ -858,8 +858,10 @@ class Page extends IndexerBase
         if (count($fileObjects) && $feGroups != DONOTINDEX) {
             // loop through files
             foreach ($fileObjects as $fileObject) {
+                $isHidden = false;
                 $isInList = false;
                 if ($fileObject instanceof FileInterface) {
+                    $isHidden = $fileObject->hasProperty('hidden') && $fileObject->getProperty('hidden') === 1;
                     $isInList = \TYPO3\CMS\Core\Utility\GeneralUtility::inList(
                         $this->indexerConfig['fileext'],
                         $fileObject->getExtension()
@@ -872,7 +874,7 @@ class Page extends IndexerBase
 
                 // check if the file extension fits in the list of extensions
                 // to index defined in the indexer configuration
-                if ($isInList) {
+                if (!$isHidden && $isInList) {
                     // get file path and URI
                     $filePath = $fileObject->getForLocalProcessing(false);
 
