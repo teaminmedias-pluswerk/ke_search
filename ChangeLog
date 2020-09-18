@@ -2,6 +2,7 @@ ChangeLog
 
 Upcoming version
 [BUGFIX]  Prevent hidden files from beeing indexed. Thanks to Andreas Hager. https://github.com/teaminmedias-pluswerk/ke_search/pull/371
+[BUGFIX]  Add missing parameter, fixes a error when running the indexer in debugOnly mode. Thanks to Samir Rachidi. https://github.com/teaminmedias-pluswerk/ke_search/pull/357
 
 Version 3.2.0, September 2020
 [!!!]     This version changes the database structure!
