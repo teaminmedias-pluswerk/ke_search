@@ -184,7 +184,7 @@ class Filterlist
                 if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilteroptionsForFlexforms'])) {
                     foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilteroptionsForFlexforms'] as
                              $_classRef) {
-                        $_procObj = &GeneralUtility::makeInstance($_classRef);
+                        $_procObj = GeneralUtility::makeInstance($_classRef);
                         $_procObj->modifyFilteroptionsForFlexforms($config, $rowFilter, $this);
                     }
                 }

@@ -79,7 +79,7 @@ class Filters
         // hook to modify filters
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilters'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilters'] as $_classRef) {
-                $_procObj = &GeneralUtility::makeInstance($_classRef);
+                $_procObj = GeneralUtility::makeInstance($_classRef);
                 $_procObj->modifyFilters($this->filters, $this);
             }
         }

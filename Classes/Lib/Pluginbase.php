@@ -192,7 +192,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         // hook: modifyFlexFormData
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFlexFormData'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFlexFormData'] as $_classRef) {
-                $_procObj = &GeneralUtility::makeInstance($_classRef);
+                $_procObj = GeneralUtility::makeInstance($_classRef);
                 $_procObj->modifyFlexFormData($this->conf, $this->cObj, $this->piVars);
             }
         }
@@ -517,7 +517,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         // modify filter options by hook
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptions'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFilterOptions'] as $_classRef) {
-                $_procObj = &GeneralUtility::makeInstance($_classRef);
+                $_procObj = GeneralUtility::makeInstance($_classRef);
                 $_procObj->modifyFilterOptions($filter, $checkboxOptions, $this);
             }
         }
@@ -647,7 +647,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         // hook to implement your own idea of a no result message
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['noResultsHandler'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['noResultsHandler'] as $_classRef) {
-                $_procObj = &GeneralUtility::makeInstance($_classRef);
+                $_procObj = GeneralUtility::makeInstance($_classRef);
                 $_procObj->noResultsHandler($noResultsText, $this);
             }
         }
@@ -712,7 +712,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                     // make curent row number available to hook
                     $this->currentRowNumber = $resultCount;
                     foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['additionalResultMarker'] as $_classRef) {
-                        $_procObj = &GeneralUtility::makeInstance($_classRef);
+                        $_procObj = GeneralUtility::makeInstance($_classRef);
                         $_procObj->additionalResultMarker($tempMarkerArray, $row, $this);
                     }
                     unset($this->currentRowNumber);
@@ -1008,7 +1008,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         // hook for additional markers in pagebrowser
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['pagebrowseAdditionalMarker'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['pagebrowseAdditionalMarker'] as $_classRef) {
-                $_procObj = &GeneralUtility::makeInstance($_classRef);
+                $_procObj = GeneralUtility::makeInstance($_classRef);
                 $_procObj->pagebrowseAdditionalMarker(
                     $markerArray,
                     $this

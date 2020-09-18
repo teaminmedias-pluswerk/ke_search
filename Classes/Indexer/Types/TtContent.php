@@ -198,7 +198,7 @@ class TtContent extends Page
                 if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyContentIndexEntry'])) {
                     foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyContentIndexEntry'] as
                              $_classRef) {
-                        $_procObj = &GeneralUtility::makeInstance($_classRef);
+                        $_procObj = GeneralUtility::makeInstance($_classRef);
                         $_procObj->modifyContentIndexEntry(
                             $row['header'],
                             $row,
