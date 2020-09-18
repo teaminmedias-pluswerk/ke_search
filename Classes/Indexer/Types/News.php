@@ -623,7 +623,7 @@ class News extends IndexerBase
             $filePath = $relatedFile->getForLocalProcessing(false);
             if (!file_exists($filePath)) {
                 $errorMessage = 'Could not index file ' . $filePath;
-                $errorMessage .= ' in news record #' . $newsUid . ' (file does not exist).';
+                $errorMessage .= ' in news record #' . $newsRecord['uid'] . ' (file does not exist).';
                 $this->pObj->logger->warning($errorMessage);
                 $this->addError($errorMessage);
             } else {
