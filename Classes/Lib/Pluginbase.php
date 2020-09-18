@@ -154,7 +154,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         // box plugin) since all the configuration is done there
         if (!empty($this->conf['loadFlexformsFromOtherCE'])) {
             $data = $this->pi_getRecord('tt_content', intval($this->conf['loadFlexformsFromOtherCE']));
-            $this->cObj->data = $data;
+            $this->cObj->data['pi_flexform'] = $data['pi_flexform'];
             $this->moveFlexFormDataToConf();
         }
 
