@@ -21,3 +21,4 @@ which control the frontend appearence.
 	Searchbox
 	Images
 	TemplateSelector
+	CustomValuesResultRow

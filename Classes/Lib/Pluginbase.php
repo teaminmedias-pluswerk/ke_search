@@ -20,6 +20,7 @@ namespace TeaminmediasPluswerk\KeSearch\Lib;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TeaminmediasPluswerk\KeSearch\Domain\Repository\GenericRepository;
 use TeaminmediasPluswerk\KeSearchPremium\KeSearchPremium;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
@@ -698,9 +699,12 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             foreach ($rows as $row) {
                 $this->searchResult->setRow($row);
 
+                /** @var GenericRepository $genericRepository */
+                $genericRepository = GeneralUtility::makeInstance(GenericRepository::class);
                 $tempMarkerArray = array(
                     'orig_uid' => $row['orig_uid'],
                     'orig_pid' => $row['orig_pid'],
+                    'orig_row' => $genericRepository->findByUidAndType($row['orig_uid'], $row['type']),
                     'title_text' => $row['title'],
                     'content_text' => $row['content'],
                     'title' => $this->searchResult->getTitle(),

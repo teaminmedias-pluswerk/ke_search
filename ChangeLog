@@ -1,6 +1,7 @@
 ChangeLog
 
 Upcoming version
+[FEATURE] Make original database row available in the result list fluid template.
 [BUGFIX]  Prevent hidden files from beeing indexed. Thanks to Andreas Hager. https://github.com/teaminmedias-pluswerk/ke_search/pull/371
 [BUGFIX]  Add missing parameter, fixes a error when running the indexer in debugOnly mode. Thanks to Samir Rachidi. https://github.com/teaminmedias-pluswerk/ke_search/pull/357
 [TASK]    Only copy the flexform configuration, not the whole content element. Thanks to ZYZ64738. https://github.com/teaminmedias-pluswerk/ke_search/issues/155
