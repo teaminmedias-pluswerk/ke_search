@@ -83,7 +83,7 @@ class TtAddress extends IndexerBase
 
         // no address records found
         if (!count($result)) {
-            $content = '<p>No address records found!</p>';
+            $content = 'No address records found!';
             return $content;
         } else {
             foreach ($result as $addressRow) {
