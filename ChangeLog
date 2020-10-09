@@ -10,6 +10,7 @@ Upcoming version
 [BUGFIX]  Fix tt_address records are only indexed from first storage pid. Thanks to Andreas Kießling. https://github.com/teaminmedias-pluswerk/ke_search/issues/374
 [BUGFIX]  Fix language overlay bug with filter options. Thanks to Andreas Hager. https://github.com/teaminmedias-pluswerk/ke_search/pull/373
 [DOC]     Add documentation on how to index custom content fields
+[TASK]    Log search query to logfile if configured in plugin settings. https://github.com/teaminmedias-pluswerk/ke_search/issues/321
 
 Version 3.2.0, September 2020
 [!!!]     This version changes the database structure!

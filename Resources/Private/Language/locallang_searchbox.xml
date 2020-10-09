@@ -57,7 +57,7 @@
 
 			<label index="ff.page.debug">Debug (Admin)</label>
 			<label index="ff.showTags">Show tags?</label>
-			<label index="ff.logQuery">Log query in backend (needs devLog extension)?</label>
+			<label index="ff.logQuery">Log query to log file (in var/log/)?</label>
 			<label index="ff.showTaggedContentOnly">Show tagged content only?</label>
 
 			<label index="ff.page.filter">Filter</label>
@@ -160,7 +160,7 @@
 
 			<label index="ff.page.debug">Debug (Admin)</label>
 			<label index="ff.showTags">Zeige Schlagworte?</label>
-			<label index="ff.logQuery">Logge Such-Query im Backend (benötigt devLog Extension)?</label>
+			<label index="ff.logQuery">Logge Such-Query in Logfile (in var/log/)?</label>
 			<label index="ff.showTaggedContentOnly">Nur Inhalte mit Schlagworten zeigen?</label>
 
 			<label index="ff.page.filter">Filtereinstellungen</label>
@@ -253,7 +253,7 @@
 			<label index="ff.showDate">Toon datum?</label>
 			<label index="ff.page.debug">Debug (Admin)</label>
 			<label index="ff.showTags">Toon labels?</label>
-			<label index="ff.logQuery">Toon query (backend devLog extension)?</label>
+			<label index="ff.logQuery">Toon query (logfile, var/log/)?</label>
 			<label index="ff.showTaggedContentOnly">Toon alleen gelabelde inhoud?</label>
 			<label index="ff.page.filter">Filter</label>
 			<label index="ff.filters">Filters</label>

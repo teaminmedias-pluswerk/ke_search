@@ -2,10 +2,13 @@
 
 namespace TeaminmediasPluswerk\KeSearch\Lib;
 
+use Psr\Log\LogLevel;
 use TeaminmediasPluswerk\KeSearch\Plugins\SearchboxPlugin;
 use TeaminmediasPluswerk\KeSearchPremium\KeSearchPremium;
 use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Log\Logger;
+use TYPO3\CMS\Core\Log\LogManager;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\MathUtility;
 use TYPO3\CMS\Frontend\Page\PageRepository;
@@ -115,13 +118,11 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
 
         // log query
         if ($this->conf['logQuery']) {
-            // @TODO use logging api https://docs.typo3.org/typo3cms/CoreApiReference/ApiOverview/Logging/Writers/Index.html
-            GeneralUtility::devLog(
-                'Search result query',
-                $this->pObj->extKey,
-                0,
-                array($resultQuery->getSQL())
-            );
+            /** @var LogManager */
+            $logManager = GeneralUtility::makeInstance(LogManager::class);
+            /** @var Logger $logger */
+            $logger = $logManager->getLogger(__CLASS__);
+            $logger->log(LogLevel::DEBUG, $resultQuery->getSQL());
         }
 
         $queryBuilder = self::getQueryBuilder('tx_kesearch_index');

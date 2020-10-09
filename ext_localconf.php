@@ -55,7 +55,7 @@ if (!defined('TYPO3_MODE')) {
         $loglevel = strtolower($loglevel);
     }
 
-    $GLOBALS['TYPO3_CONF_VARS']['LOG']['TeaminmediasPluswerk']['KeSearch']['Indexer']['writerConfiguration'] = [
+    $GLOBALS['TYPO3_CONF_VARS']['LOG']['TeaminmediasPluswerk']['KeSearch']['writerConfiguration'] = [
         $loglevel => [
             'TYPO3\\CMS\\Core\\Log\\Writer\\FileWriter' => [
                 'logFileInfix' => 'kesearch'
