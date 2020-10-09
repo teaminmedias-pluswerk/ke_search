@@ -8,6 +8,7 @@ Upcoming version
 [BUGFIX]  Fix "Only variables can be passed by reference"
 [BUGFIX]  Fix undefined variable in news indexer
 [BUGFIX]  Fix tt_address records are only indexed from first storage pid. Thanks to Andreas Kießling. https://github.com/teaminmedias-pluswerk/ke_search/issues/374
+[BUGFIX]  Fix language overlay bug with filter options. Thanks to Andreas Hager. https://github.com/teaminmedias-pluswerk/ke_search/pull/373
 
 Version 3.2.0, September 2020
 [!!!]     This version changes the database structure!
