@@ -18,7 +18,8 @@ namespace TeaminmediasPluswerk\KeSearch\Lib;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use \TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
  * Plugin 'Faceted search - searchbox and filters' for the 'ke_search' extension.
@@ -276,21 +277,24 @@ class Filters
      * @param string $table Define the table from where the records come from
      * @return array The localized records
      */
-    public function languageOverlay(array $rows, $table)
+    public function languageOverlay(array $rows, string $table): array
     {
+        $languageAspect = GeneralUtility::makeInstance(Context::class)->getAspect('language');
+
+        $LanguageUid = $languageAspect->getContentId();
+        $LanguageMode = $languageAspect->getLegacyLanguageMode();
 
         // see https://github.com/teaminmedias-pluswerk/ke_search/issues/128
-        $LanguageMode = $GLOBALS['TSFE']->sys_language_content;
-        if (\TYPO3\CMS\Core\Utility\GeneralUtility::hideIfNotTranslated($GLOBALS['TSFE']->page['l18n_cfg'])) {
+        if (GeneralUtility::hideIfNotTranslated($GLOBALS['TSFE']->page['l18n_cfg'])) {
             $LanguageMode = 'hideNonTranslated';
         }
         if (is_array($rows) && count($rows)) {
             foreach ($rows as $key => $row) {
-                if (is_array($row) && $GLOBALS['TSFE']->sys_language_content) {
+                if (is_array($row) && $LanguageUid > 0) {
                     $row = $GLOBALS['TSFE']->sys_page->getRecordOverlay(
                         $table,
                         $row,
-                        $GLOBALS['TSFE']->sys_language_content,
+                        $LanguageUid,
                         $LanguageMode
                     );
 
@@ -306,7 +310,7 @@ class Filters
             }
             return $rows;
         } else {
-            return array();
+            return [];
         }
     }
 
