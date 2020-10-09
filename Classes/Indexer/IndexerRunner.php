@@ -251,7 +251,11 @@ class IndexerRunner
         $content = '<div class="summary infobox">';
 
         // title
-        $title = $searchObj->indexerConfig['title'];
+        if (!empty($searchObj->indexerConfig['title'])) {
+            $title = $searchObj->indexerConfig['title'];
+        } else {
+            $title = get_class($searchObj);
+        }
         $content .= '<span class="title">' . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . '</span>';
 
         // message
