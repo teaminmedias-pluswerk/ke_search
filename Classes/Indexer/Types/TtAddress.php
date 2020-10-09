@@ -4,6 +4,7 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer\Types;
 
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /***************************************************************
@@ -73,9 +74,7 @@ class TtAddress extends IndexerBase
             ->where(
                 $queryBuilder->expr()->in(
                     'pid',
-                    $queryBuilder->createNamedParameter(
-                        implode(',', $indexPids), \PDO::PARAM_STR
-                    )
+                    $queryBuilder->createNamedParameter($indexPids, Connection::PARAM_INT_ARRAY)
                 )
             )
             ->execute()
