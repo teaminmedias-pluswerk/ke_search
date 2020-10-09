@@ -61,4 +61,5 @@ ke_search comes with indexers for the most important content types.
 	IndexerTypes/Addresses
 	IndexerTypes/Files
 	IndexerTypes/Custom
+	IndexerTypes/CustomContentFields
 
