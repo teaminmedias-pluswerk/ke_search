@@ -51,3 +51,7 @@ getLimit
 
 modifyResultList
 	Hook for adding new markers to the result list
+
+fileReferenceTypes
+	Hook for adding third party file previews
+
