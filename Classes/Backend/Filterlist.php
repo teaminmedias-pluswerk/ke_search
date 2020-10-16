@@ -48,21 +48,18 @@ class Filterlist
 
         // get filters
         $queryBuilder = Db::getQueryBuilder('tx_kesearch_filters');
-        $fields = '*';
-        $table = 'tx_kesearch_filters';
-        $where = $queryBuilder->expr()->in('pid', $pidList);
         $res = $queryBuilder
-            ->select($fields)
-            ->from($table)
-            ->where($where)
+            ->select('*')
+            ->from('tx_kesearch_filters')
+            ->where(
+                $queryBuilder->expr()->in('pid', $pidList),
+                $queryBuilder->expr()->in('sys_language_uid', '0,-1')
+            )
             ->execute();
-        $count = $res->rowCount();
 
-        if ($count) {
+        if ($res->rowCount()) {
             while ($row = $res->fetch()) {
-                if (!$row['l10n_parent']) {
-                    $config['items'][] = array($row['title'], $row['uid']);
-                }
+                $config['items'][] = array($row['title'], $row['uid']);
             }
         }
     }
@@ -111,18 +108,17 @@ class Filterlist
             ->where($where)
             ->execute();
 
-        $count = $res->rowCount();
-        if ($count) {
+        if ($res->rowCount()) {
             while ($row = $res->fetch()) {
                 if (!empty($row['options'])) {
                     $queryBuilder = Db::getQueryBuilder('tx_kesearch_filteroptions');
-                    $optionsFields = '*';
-                    $optionsTable = 'tx_kesearch_filteroptions';
-                    $optionsWhere = $queryBuilder->expr()->in('uid', $row['options']);
                     $options = $queryBuilder
-                        ->select($optionsFields)
-                        ->from($optionsTable)
-                        ->where($optionsWhere)
+                        ->select('*')
+                        ->from('tx_kesearch_filteroptions')
+                        ->where(
+                            $queryBuilder->expr()->in('uid', $row['options']),
+                            $queryBuilder->expr()->in('sys_language_uid', '0,-1')
+                        )
                         ->execute();
 
                     while ($optionRow = $options->fetch()) {
@@ -149,20 +145,17 @@ class Filterlist
         }
 
         // get filters
-        $fields = '*';
-        $table = 'tx_kesearch_filters';
-
         $queryBuilder = Db::getQueryBuilder('tx_kesearch_filters');
-        $where = $queryBuilder->expr()->in('pid', $pidList);
-
         $res = $queryBuilder
-            ->select($fields)
-            ->from($table)
-            ->where($where)
+            ->select('*')
+            ->from('tx_kesearch_filters')
+            ->where(
+                $queryBuilder->expr()->in('pid', $pidList),
+                $queryBuilder->expr()->in('sys_language_uid', '0,-1')
+            )
             ->execute();
 
-        $count = $res->rowCount();
-        if ($count) {
+        if ($res->rowCount()) {
             while ($rowFilter = $res->fetch()) {
                 if (!empty($rowFilter['options'])) {
                     // get filteroptions

@@ -12,6 +12,7 @@ Upcoming version
 [DOC]     Add documentation on how to index custom content fields
 [TASK]    Log search query to logfile if configured in plugin settings. https://github.com/teaminmedias-pluswerk/ke_search/issues/321
 [TASK]    Use class name in indexer report if title is not available.
+[TASK]    Show only filter option records for default language in localized pages. https://github.com/teaminmedias-pluswerk/ke_search/issues/367
 
 Version 3.2.0, September 2020
 [!!!]     This version changes the database structure!
