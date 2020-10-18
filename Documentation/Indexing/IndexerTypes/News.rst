@@ -41,6 +41,8 @@ For categories there will also be tags which are based on the string "syscat" an
 
 .. image:: ../../Images/Indexing/indexing-news-tags-2.png
 
+To automatically create and update filters for these tags, see :ref:`systemcategories`.
+
 In the indexer configuration you can set a target page. When a news appears in the result list, the link will go to
 that page. On that page there has to be a news plugin showing the detail view.
 
