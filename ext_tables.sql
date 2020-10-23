@@ -11,7 +11,8 @@ CREATE TABLE pages (
 # Table structure for table 'sys_category'
 #
 CREATE TABLE sys_category (
-	tx_kesearch_filter text
+	tx_kesearch_filter text,
+	tx_kesearch_filtersubcat text
 );
 
 

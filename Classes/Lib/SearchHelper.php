@@ -34,6 +34,7 @@ use TYPO3\CMS\Core\Utility\VersionNumberUtility;
  */
 class SearchHelper
 {
+    public static $systemCategoryPrefix = 'syscat';
 
     /**
      * get extension manager configuration for ke_search
@@ -251,7 +252,7 @@ class SearchHelper
      */
     public static function createTagnameFromSystemCategoryUid($uid)
     {
-        return 'syscat' . $uid;
+        return SearchHelper::$systemCategoryPrefix . $uid;
     }
 
     /**

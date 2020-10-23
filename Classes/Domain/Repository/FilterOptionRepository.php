@@ -2,6 +2,7 @@
 namespace TeaminmediasPluswerk\KeSearch\Domain\Repository;
 
 use Doctrine\DBAL\Driver\Statement;
+use PDO;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
@@ -46,6 +47,76 @@ class FilterOptionRepository {
     protected $tableName = 'tx_kesearch_filteroptions';
     protected $parentTableName = 'tx_kesearch_filters';
 
+    /**
+     * @return mixed
+     */
+    public function findAll()
+    {
+        /** @var ConnectionPool $connectionPool */
+        $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
+        $queryBuilder = $connectionPool->getQueryBuilderForTable($this->tableName);
+        return $queryBuilder
+            ->select('*')
+            ->from($this->tableName)
+            ->execute()
+            ->fetchAll();
+    }
+
+    /**
+     * @param string $tagPrefix
+     * @return mixed[]
+     */
+    public function findByTagPrefix(string $tagPrefix)
+    {
+        /** @var ConnectionPool $connectionPool */
+        $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
+        $queryBuilder = $connectionPool->getQueryBuilderForTable($this->tableName);
+        return $queryBuilder
+            ->select('*')
+            ->from($this->tableName)
+            ->where(
+                $queryBuilder->expr()->like(
+                    'tag',
+                    $queryBuilder->createNamedParameter($tagPrefix . '%', PDO::PARAM_STR)
+                )
+            )
+            ->execute()
+            ->fetchAll();
+    }
+
+    /**
+     * @param string $tagPrefix
+     * @param int $sys_language_uid
+     * @return mixed[]
+     */
+    public function findByTagPrefixAndLanguage(string $tagPrefix, int $sys_language_uid)
+    {
+        /** @var ConnectionPool $connectionPool */
+        $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
+        $queryBuilder = $connectionPool->getQueryBuilderForTable($this->tableName);
+        return $queryBuilder
+            ->select('*')
+            ->from($this->tableName)
+            ->where(
+                $queryBuilder->expr()->like(
+                    'tag',
+                    $queryBuilder->createNamedParameter($tagPrefix . '%', PDO::PARAM_STR)
+                ),
+                $queryBuilder->expr()->eq(
+                    'sys_language_uid',
+                    $queryBuilder->createNamedParameter($sys_language_uid, PDO::PARAM_INT)
+                )
+            )
+            ->execute()
+            ->fetchAll();
+    }
+
+    /**
+     * Returns all filter options for a given filter uid.
+     *
+     * @param $filterUid
+     * @return array|mixed[]
+     */
     public function findByFilterUid($filterUid)
     {
         /** @var ConnectionPool $connectionPool */
@@ -90,14 +161,18 @@ class FilterOptionRepository {
             ->where(
                 $queryBuilder->expr()->eq(
                     'l10n_parent',
-                    $queryBuilder->createNamedParameter($l10n_parent, \PDO::PARAM_STR)
+                    $queryBuilder->createNamedParameter($l10n_parent, PDO::PARAM_STR)
                 )
             )
             ->execute()
             ->fetchAll();
     }
 
-    public function findByTag($tag)
+    /**
+     * @param string $tag
+     * @return mixed[]
+     */
+    public function findByTag(string $tag)
     {
         /** @var ConnectionPool $connectionPool */
         $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
@@ -108,7 +183,7 @@ class FilterOptionRepository {
             ->where(
                 $queryBuilder->expr()->eq(
                     'tag',
-                    $queryBuilder->createNamedParameter($tag, \PDO::PARAM_STR)
+                    $queryBuilder->createNamedParameter($tag, PDO::PARAM_STR)
                 )
             )
             ->execute()
@@ -131,11 +206,11 @@ class FilterOptionRepository {
             ->where(
                 $queryBuilder->expr()->eq(
                     'tag',
-                    $queryBuilder->createNamedParameter($tag, \PDO::PARAM_STR)
+                    $queryBuilder->createNamedParameter($tag, PDO::PARAM_STR)
                 ),
                 $queryBuilder->expr()->eq(
                     'sys_language_uid',
-                    $queryBuilder->createNamedParameter($sys_language_uid, \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($sys_language_uid, PDO::PARAM_INT)
                 )
             )
             ->execute()
@@ -172,13 +247,13 @@ class FilterOptionRepository {
      * @param array $additionalFields
      * @return array
      */
-    public function createFilterOptionRecord(int $filterUid, array $additionalFields = [])
+    public function create(int $filterUid, array $additionalFields = [])
     {
         /** @var FilterRepository $filterRepository */
         $filterRepository = GeneralUtility::makeInstance(FilterRepository::class);
         $filter = $filterRepository->findByUid($filterUid);
 
-        $emptyRecord = [
+        $newRecord = [
             'pid' => $filter['pid'],
             'crdate' => $GLOBALS['EXEC_TIME'],
             'tstamp' => $GLOBALS['EXEC_TIME'],
@@ -186,15 +261,15 @@ class FilterOptionRepository {
             'l10n_diffsource' => ''
         ];
         $additionalFields = array_intersect_key($additionalFields, $this->getTableFields());
-        $emptyRecord = array_merge($emptyRecord, $additionalFields);
+        $newRecord = array_merge($newRecord, $additionalFields);
         $connection = GeneralUtility::makeInstance(ConnectionPool::class)
             ->getConnectionForTable($this->tableName);
         $connection->insert(
             $this->tableName,
-            $emptyRecord,
+            $newRecord,
             ['l10n_diffsource' => Connection::PARAM_LOB]
         );
-        $record = $emptyRecord;
+        $record = $newRecord;
         $record['uid'] = $connection->lastInsertId($this->tableName);
 
         // add the new filter record to
@@ -210,16 +285,17 @@ class FilterOptionRepository {
     }
 
     /**
+     * Removes the filter option with the given uid from all filters and deletes the record.
+     *
      * @param int $filterOptionUid
      * @return Statement|int
      */
-    public function deleteFilterOptionRecordByUid(int $filterOptionUid)
+    public function deleteByUid(int $filterOptionUid)
     {
         /** @var FilterRepository $filterRepository */
         $filterRepository = GeneralUtility::makeInstance(FilterRepository::class);
-        $filterRepository->removeFilterOptionFromAllFilters($filterOptionUid);
+        $filterRepository->removeFilterOptionFromFilter($filterOptionUid);
 
-        // delete the record
         /** @var ConnectionPool $connectionPool */
         $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
         $queryBuilder = $connectionPool->getQueryBuilderForTable($this->tableName);
@@ -228,25 +304,26 @@ class FilterOptionRepository {
             ->where(
                 $queryBuilder->expr()->eq(
                     'uid',
-                    $queryBuilder->createNamedParameter($filterOptionUid, \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($filterOptionUid, PDO::PARAM_INT)
                 )
             )
             ->execute();
     }
 
     /**
+     * Removes the filter options with the given tag from all filters and deletes the record.
+     *
      * @param string $tag
      */
-    public function deleteFilterOptionRecordsByTag(string $tag)
+    public function deleteByTag(string $tag)
     {
         $filterOptions = $this->findByTag($tag);
         if (!empty($filterOptions)) {
             foreach ($filterOptions as $filterOption) {
-                $this->deleteFilterOptionRecordByUid($filterOption['uid']);
+                $this->deleteByUid($filterOption['uid']);
             }
         }
     }
-
 
     /**
      * Gets the fields that are available in the table
@@ -279,7 +356,7 @@ class FilterOptionRepository {
             ->where(
                 $queryBuilder->expr()->eq(
                     'uid',
-                    $queryBuilder->createNamedParameter($uid, \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($uid, PDO::PARAM_INT)
                 )
             );
         foreach ($updateFields as $key => $value) {

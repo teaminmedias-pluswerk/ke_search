@@ -1,10 +1,11 @@
 <?php
+declare(strict_types=1);
 namespace TeaminmediasPluswerk\KeSearch\Hooks;
 
+use TeaminmediasPluswerk\KeSearch\Domain\Repository\CategoryRepository;
 use TeaminmediasPluswerk\KeSearch\Domain\Repository\FilterOptionRepository;
 use TeaminmediasPluswerk\KeSearch\Domain\Repository\FilterRepository;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
-use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -37,15 +38,15 @@ class FilterOptionHook
     /**
      * Create and update ke_search filter options tied to system categories
      *
-     * @param string $status status
+     * @param $status
      * @param string $table table name
-     * @param int $recordUid id of the record
+     * @param $recordUid id of the record
      * @param array $fields fieldArray
      * @param DataHandler $parentObject parent Object
      */
     public function processDatamap_afterDatabaseOperations(
         $status,
-        $table,
+        string $table,
         $recordUid,
         array $fields,
         DataHandler $parentObject
@@ -55,7 +56,12 @@ class FilterOptionHook
                 isset($parentObject->substNEWwithIDs[$recordUid])
                     ? $parentObject->substNEWwithIDs[$recordUid]
                     : $recordUid;
-            $this->updateFilterOptionsForCategory($recordUid);
+            // Create and update always if a category is edited
+            $this->updateFilterOptionsForCategoryAndSubCategories($recordUid);
+            // Cleanup (delete) filter options only only if something changed regarding the assigned filters
+            if (isset($fields['tx_kesearch_filter']) || isset($fields['tx_kesearch_filtersubcat'])) {
+                $this->cleanupFilterOptions($recordUid);
+            }
         }
     }
 
@@ -72,106 +78,160 @@ class FilterOptionHook
         if ($table === 'sys_category' && $command === 'delete') {
             /** @var FilterOptionRepository $filterOptionRepository */
             $filterOptionRepository = GeneralUtility::makeInstance(FilterOptionRepository::class);
-            $filterOptionRepository->deleteFilterOptionRecordsByTag(
+            $filterOptionRepository->deleteByTag(
                 SearchHelper::createTagnameFromSystemCategoryUid($id)
             );
         }
     }
 
     /**
-     * Creates and updates filter options connected with the given category
-     * removes all filter options with the matching tag in filters which are not connected to the category
-     *
-     * @param $categoryUid
+     * @param int $categoryUid
      */
-    public function updateFilterOptionsForCategory($categoryUid)
+    public function updateFilterOptionsForCategoryAndSubCategories(int $categoryUid)
+    {
+        /** @var CategoryRepository $categoryRepository */
+        $categoryRepository = GeneralUtility::makeInstance(CategoryRepository::class);
+        $category = $categoryRepository->findOneByUid($categoryUid);
+
+        if ($category['tx_kesearch_filter']) {
+            $filters = GeneralUtility::trimExplode(',', $category['tx_kesearch_filter']);
+            $this->createOrUpdateFilterOptions($filters, $category);
+        }
+        if ($category['tx_kesearch_filtersubcat']) {
+            $filters = GeneralUtility::trimExplode(',', $category['tx_kesearch_filtersubcat']);
+            $subCats = $categoryRepository->findAllSubcategoriesByParentUid($categoryUid);
+            if ($subCats) {
+                foreach ($subCats as $subCat) {
+                    $this->createOrUpdateFilterOptions($filters, $subCat);
+               }
+            }
+        }
+        if ($category['parent']) {
+            $parentCat = $categoryRepository->findOneByUid($category['parent']);
+            if ($parentCat['tx_kesearch_filtersubcat']) {
+                $filters = GeneralUtility::trimExplode(',', $parentCat['tx_kesearch_filtersubcat']);
+                $this->createOrUpdateFilterOptions($filters, $category);
+            }
+        }
+    }
+
+    /**
+     * Deletes orphaned filter options.
+     * Those will arise when the connection between a category and a filter  will be removed.
+     */
+    public function cleanupFilterOptions()
     {
         /** @var FilterOptionRepository $filterOptionRepository */
         $filterOptionRepository = GeneralUtility::makeInstance(FilterOptionRepository::class);
         /** @var FilterRepository $filterRepository */
         $filterRepository = GeneralUtility::makeInstance(FilterRepository::class);
+        /** @var CategoryRepository $categoryRepository */
+        $categoryRepository = GeneralUtility::makeInstance(CategoryRepository::class);
 
-        $category = $this->getCategoryData($categoryUid);
-        $tag = SearchHelper::createTagnameFromSystemCategoryUid($categoryUid);
-
-        // If this category record is in default language, we need to create/update/delete the matching
-        // filter option records. If it is in a different language, we need to create/update/delete the translation
-        // for a filter option.
-
-        if (in_array($category['sys_language_uid'], [0,-1])) {
-            // add filter options to selected filters
-            if (isset($category['tx_kesearch_filter']) && !$category['tx_kesearch_filter'] == '0') {
-                $filters = explode(',', $category['tx_kesearch_filter']);
-                foreach ($filters as $filterUid) {
-                    $filterOptions = $filterOptionRepository->findByFilterUidAndTag($filterUid, $tag);
-                    if (empty($filterOptions)) {
-                        // create
-                        $filterOption = [
-                            'title' => $category['title'],
-                            'tag' => $tag,
-                        ];
-                        $filterOptionRepository->createFilterOptionRecord($filterUid, $filterOption);
-                    } else {
-                        // update
-                        foreach ($filterOptions as $filterOption){
-                            $filterOptionRepository->update(
-                                $filterOption['uid'],
-                                ['title' => $category['title']]
-                            );
+        // get all filter options in default language which are connected to system categories
+        $filterOptions = $filterOptionRepository->findByTagPrefixAndLanguage(SearchHelper::$systemCategoryPrefix, 0);
+        if ($filterOptions) {
+            foreach ($filterOptions as $filterOption) {
+                $filterIsConnectedToCategory = false;
+                // get the category connected to this filter option
+                $category = $categoryRepository->findByTag($filterOption['tag']);
+                // get the filter this filter option is assigned to
+                $filter = $filterRepository->findByAssignedFilterOption($filterOption['uid']);
+                if ($filter) {
+                    // Check if this category has this filter assigned in field "tx_kesearch_filter"
+                    if (GeneralUtility::inList($category['tx_kesearch_filter'], $filter['uid'])) {
+                        $filterIsConnectedToCategory = true;
+                    }
+                    // Check if parent category has this filter assigned in field "tx_kesearch_filtersubcat"
+                    if ($category['parent']) {
+                        $parentCat = $categoryRepository->findOneByUid($category['parent']);
+                        if ($parentCat['tx_kesearch_filtersubcat']) {
+                            if (GeneralUtility::inList($parentCat['tx_kesearch_filtersubcat'], $filter['uid'])) {
+                                $filterIsConnectedToCategory = true;
+                            }
                         }
                     }
                 }
+                if (!$filterIsConnectedToCategory) {
+                    // deleting by tag will also delete localized tags
+                    $filterOptionRepository->deleteByTag($filterOption['tag']);
+                }
             }
+        }
+    }
 
-            // Remove all matching filter options from other filters
-            $filterOptions = $filterOptionRepository->findByTag($tag);
-            if (!empty($filterOptions)) {
-                foreach ($filterOptions as $filterOption) {
-                    $allFilters = $filterRepository->findByAssignedFilterOption($filterOption['uid']);
-                    foreach ($allFilters as $filter) {
-                        if (!GeneralUtility::inList($category['tx_kesearch_filter'], $filter['uid'])) {
-                            $filterRepository->removeFilterOptionFromFilter(
-                                $filterOption['uid'],
-                                $filter['uid']
-                            );
-                        }
+    /**
+     * Creates/updates filter options for given filters from the given category data
+     * removes all filter options with the matching tag in filters which are not connected to the category
+     *
+     * @param array $filters list of filter UIDs
+     * @param array $category
+     */
+    public function createOrUpdateFilterOptions(array $filters, array $category)
+    {
+        /** @var FilterOptionRepository $filterOptionRepository */
+        $filterOptionRepository = GeneralUtility::makeInstance(FilterOptionRepository::class);
+        /** @var FilterRepository $filterRepository */
+        $filterRepository = GeneralUtility::makeInstance(FilterRepository::class);
+        /** @var CategoryRepository $categoryRepository */
+        $categoryRepository = GeneralUtility::makeInstance(CategoryRepository::class);
+
+        // If this category record is in default language, we need to create/update the matching
+        // filter option records. If it is in a different language, we need to create/update the
+        // localized filter option.
+
+        if (in_array($category['sys_language_uid'], [0,-1])) {
+            $tag = SearchHelper::createTagnameFromSystemCategoryUid($category['uid']);
+            foreach ($filters as $filterUid) {
+                $filterOptions = $filterOptionRepository->findByFilterUidAndTag($filterUid, $tag);
+                if (empty($filterOptions)) {
+                    // create
+                    $filterOptionRepository->create(
+                        (int)$filterUid,
+                        ['title' => $category['title'], 'tag' => $tag]
+                    );
+                } else {
+                    // update
+                    foreach ($filterOptions as $filterOption){
+                        $filterOptionRepository->update(
+                            $filterOption['uid'],
+                            ['title' => $category['title']]
+                        );
                     }
                 }
             }
         } else {
             if ($category['l10n_parent']) {
-                if (isset($category['tx_kesearch_filter']) && !$category['tx_kesearch_filter'] == '0') {
-                    $origCategory = $this->getCategoryData($category['l10n_parent']);
-                    if ($origCategory) {
-                        $origTag = SearchHelper::createTagnameFromSystemCategoryUid($origCategory['uid']);
-                        $origFilterOptions = $filterOptionRepository->findByTagAndLanguage($origTag, 0);
-                        if (!empty($origFilterOptions)) {
-                            foreach ($origFilterOptions as $origFilterOption) {
-                                $localizedFilterOptions = $filterOptionRepository->findByL10nParent($origFilterOption['uid']);
-                                if (!$localizedFilterOptions) {
-                                    // create
-                                    $localizedFilterOption = [
-                                        'title' => $category['title'],
-                                        'tag' => $origTag,
-                                        'sys_language_uid' => $category['sys_language_uid'],
-                                        'l10n_parent' => $origFilterOption['uid'],
-                                    ];
-                                    $origFilters = explode(',', $category['tx_kesearch_filter']);
-                                    foreach ($origFilters as $origFilter) {
-                                        $localizedFilter = $filterRepository->findByL10nParent($origFilter);
-                                        $filterOptionRepository->createFilterOptionRecord(
-                                            $localizedFilter['uid'],
-                                            $localizedFilterOption
-                                        );
-                                    }
-                                } else {
-                                    // update
-                                    foreach ($localizedFilterOptions as $localizedFilterOption){
-                                        $filterOptionRepository->update(
-                                            $localizedFilterOption['uid'],
-                                            ['title' => $category['title']]
-                                        );
-                                    }
+                $l10nParentCategory = $categoryRepository->findOneByUid($category['l10n_parent']);
+                if ($l10nParentCategory) {
+                    $origTag = SearchHelper::createTagnameFromSystemCategoryUid($l10nParentCategory['uid']);
+                    $origFilterOptions = $filterOptionRepository->findByTagAndLanguage($origTag, 0);
+                    if (!empty($origFilterOptions)) {
+                        foreach ($origFilterOptions as $origFilterOption) {
+                            $localizedFilterOptions = $filterOptionRepository->findByL10nParent($origFilterOption['uid']);
+                            if (!$localizedFilterOptions) {
+                                // create
+                                $localizedFilterOption = [
+                                    'pid' => $origFilterOption['pid'],
+                                    'title' => $category['title'],
+                                    'tag' => $origTag,
+                                    'sys_language_uid' => $category['sys_language_uid'],
+                                    'l10n_parent' => $origFilterOption['uid'],
+                                ];
+                                foreach ($filters as $origFilter) {
+                                    $localizedFilter = $filterRepository->findByL10nParent((int)$origFilter);
+                                    $filterOptionRepository->create(
+                                        (int)$localizedFilter['uid'],
+                                        $localizedFilterOption
+                                    );
+                                }
+                            } else {
+                                // update
+                                foreach ($localizedFilterOptions as $localizedFilterOption){
+                                    $filterOptionRepository->update(
+                                        (int)$localizedFilterOption['uid'],
+                                        ['title' => $category['title']]
+                                    );
                                 }
                             }
                         }
@@ -179,29 +239,5 @@ class FilterOptionHook
                 }
             }
         }
-    }
-
-
-    /**
-     * @param $categoryUid
-     * @return mixed
-     */
-    public function getCategoryData($categoryUid)
-    {
-        // Get category data
-        /** @var ConnectionPool $connectionPool */
-        $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
-        $queryBuilder = $connectionPool->getQueryBuilderForTable('sys_category');
-        return $queryBuilder
-            ->select('*')
-            ->from('sys_category')
-            ->where(
-                $queryBuilder->expr()->eq(
-                    'uid',
-                    $queryBuilder->createNamedParameter($categoryUid, \PDO::PARAM_INT)
-                )
-            )
-            ->execute()
-            ->fetch();
     }
 }

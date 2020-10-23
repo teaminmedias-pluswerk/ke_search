@@ -10,7 +10,8 @@
 			<label index="pages.tx_kesearch_tags">Tags for faceted search</label>
 			<label index="pages.tx_kesearch_resultimage">Search result image</label>
 			<label index="pages.tx_kesearch_abstract">Abstract for search result</label>
-			<label index="sys_category.tx_kesearch_filter">Category acts as a filter option for these ke_search filters</label>
+			<label index="sys_category.tx_kesearch_filter">Category acts as a filter option for these filters</label>
+			<label index="sys_category.tx_kesearch_filtersubcat">Sub-Categories act as a filter options for these filters</label>
 			<label index="tt_content.list_type_pi1">Faceted search - Searchbox and Filters</label>
 			<label index="tt_content.list_type_pi2">Faceted search - Results</label>
 			<label index="tx_kesearch_filters">Filters</label>
@@ -91,6 +92,8 @@
 			<label index="pages.tx_kesearch_tags">Schlagworte für facettierte Suche</label>
 			<label index="pages.tx_kesearch_resultimage">Bild für Suchergebnis</label>
 			<label index="pages.tx_kesearch_abstract">Abstract für Suchergebnis</label>
+			<label index="sys_category.tx_kesearch_filter">Kategorie wird als Filteroption für diese Filter verwendet</label>
+			<label index="sys_category.tx_kesearch_filtersubcat">Unterkategorien werden als Filteroptionen für diese Filter verwendet</label>
 			<label index="tt_content.list_type_pi1">Facettierte Suche - Suchbox und Filter</label>
 			<label index="tt_content.list_type_pi2">Facettierte Suche - Ergebnisliste</label>
 			<label index="tx_kesearch_filters">Filter</label>

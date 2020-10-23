@@ -104,7 +104,7 @@ class FilterRepository {
     }
 
     /**
-     * Fetches all filters which contain a given filter option
+     * Returns the filter which has the given filter option assigned
      *
      * @param int $filterOptionUid
      * @return mixed[]
@@ -123,37 +123,22 @@ class FilterRepository {
                 )
             )
             ->execute()
-            ->fetchAll();
+            ->fetch();
     }
 
     /**
-     * remove filter option from filters where it is used
+     * remove filter option from the filter where it is used
+     *
      * @param int $filterOptionUid
      */
-    public function removeFilterOptionFromAllFilters(int $filterOptionUid)
+    public function removeFilterOptionFromFilter(int $filterOptionUid)
     {
-        $filters = $this->findByAssignedFilterOption($filterOptionUid);
-        if (!empty($filters)) {
-            foreach ($filters as $filter) {
-                $updateFields = [
-                    'options' => GeneralUtility::rmFromList($filterOptionUid, $filter['options'])
-                ];
-                $this->update($filter['uid'], $updateFields);
-            }
+        $filter = $this->findByAssignedFilterOption($filterOptionUid);
+        if (!empty($filter)) {
+            $updateFields = [
+                'options' => GeneralUtility::rmFromList($filterOptionUid, $filter['options'])
+            ];
+            $this->update($filter['uid'], $updateFields);
         }
     }
-
-    /**
-     * @param int $filterOptionUid
-     * @param int $filterUid
-     */
-    public function removeFilterOptionFromFilter(int $filterOptionUid, int $filterUid)
-    {
-        $filter = $this->findByUid($filterUid);
-        $updateFields = [
-            'options' => GeneralUtility::rmFromList($filterOptionUid, $filter['options'])
-        ];
-        $this->update($filter['uid'], $updateFields);
-    }
-
 }

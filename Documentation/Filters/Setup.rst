@@ -21,8 +21,8 @@ category you want to use in your faceted search in the frontend you will have to
 Create filter options
 .....................
 
-Add new Filter options. This is done using the IRRE technology: You can create new filter options inside the
-filter. For each option you want to display in the frontend you will have to add one filter option.
+Add new Filter options by adding them inside the filter record. For each option you want to display in the frontend you
+will have to add one filter option.
 
 .. image:: ../Images/Filters/filters-2.png
 
@@ -37,6 +37,8 @@ NOTES:
 * You may freely choose a tag name, they're only used for internal purposes. But make sure the
   tag you choose for each filter option is unique!
 * The tag has to be at least four characters long and must not contain a dot.
+* You must not use "syscat" as prefix for your tags names. This is reserverd for the automated generation of filter
+  options, see :ref:`systemcategories`.
 
 You have two possibilities assign tags to pages:
 
