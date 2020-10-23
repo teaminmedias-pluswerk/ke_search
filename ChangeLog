@@ -4,6 +4,7 @@ Upcoming version
 [!!!]     This version changes the database structure!
 [FEATURE] Make original database row available in the result list fluid template.
 [FEATURE] Allow system sub-categories to be used as a filter option. Filter options will be created, updated or deleted whenever categories with parent categories assigned to a filter are edited.
+[FEATURE] Add new hook for adding third party file previews. Thanks to Jonas Esser. https://github.com/teaminmedias-pluswerk/ke_search/pull/376
 [BUGFIX]  Prevent hidden files from beeing indexed. Thanks to Andreas Hager. https://github.com/teaminmedias-pluswerk/ke_search/pull/371
 [BUGFIX]  Add missing parameter, fixes a error when running the indexer in debugOnly mode. Thanks to Samir Rachidi. https://github.com/teaminmedias-pluswerk/ke_search/pull/357
 [TASK]    Only copy the flexform configuration, not the whole content element. Thanks to ZYZ64738. https://github.com/teaminmedias-pluswerk/ke_search/issues/155
@@ -15,7 +16,7 @@ Upcoming version
 [TASK]    Log search query to logfile if configured in plugin settings. https://github.com/teaminmedias-pluswerk/ke_search/issues/321
 [TASK]    Use class name in indexer report if title is not available.
 [TASK]    Show only filter option records for default language in localized pages. https://github.com/teaminmedias-pluswerk/ke_search/issues/367
-[DOC]     Add link to category filter options in news indexing. https://github.com/teaminmedias-pluswerk/ke_search/pull/377
+[DOC]     Add link to category filter options in news indexing. Thanks to okmiim. https://github.com/teaminmedias-pluswerk/ke_search/pull/377
 
 Version 3.2.0, September 2020
 [!!!]     This version changes the database structure!
