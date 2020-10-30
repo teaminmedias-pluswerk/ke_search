@@ -200,12 +200,13 @@ class SearchHelper
     /**
      * creates tags from category titles
      * removes characters: # , space ( ) _
-     * @param string $tags comma-list of tags, new tags will be added to this
+     * @param string|null $tags comma-list of tags, new tags will be added to this
      * @param array $categoryArray Array of Titles (eg. categories)
      */
-    public static function makeTags(string &$tags, array $categoryArray)
+    public static function makeTags(&$tags, array $categoryArray)
     {
         if (is_array($categoryArray) && count($categoryArray)) {
+            $tags = $tags ?? '';
             $extConf = SearchHelper::getExtConf();
 
             foreach ($categoryArray as $catTitle) {
@@ -230,12 +231,13 @@ class SearchHelper
      * finds the system categories for $uid in $tablename, creates
      * tags like "syscat123" ("syscat" + category uid).
      *
-     * @param string $tags
+     * @param string|null $tags
      * @param int $uid
      * @param string $tablename
      */
-    public static function makeSystemCategoryTags(string &$tags, int $uid, string $tablename)
+    public static function makeSystemCategoryTags(&$tags, int $uid, string $tablename)
     {
+        $tags = $tags ?? '';
         $categories = SearchHelper::getCategories($uid, $tablename);
         if (count($categories['uid_list'])) {
             foreach ($categories['uid_list'] as $category_uid) {

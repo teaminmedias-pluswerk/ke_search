@@ -1,5 +1,8 @@
 ChangeLog
 
+Version 3.3.1, October 2020
+[BUGFIX]  Allow tags to be empty in SearchHelper::makeTags and makeSystemCategoryTags, fixes regression from last version
+
 Version 3.3.0, October 2020
 [!!!]     This version changes the database structure!
 [FEATURE] Make original database row available in the result list fluid template.
