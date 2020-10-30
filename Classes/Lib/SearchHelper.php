@@ -20,6 +20,8 @@ namespace TeaminmediasPluswerk\KeSearch\Lib;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
+use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
 use TYPO3\CMS\Core\Resource\File;
@@ -41,13 +43,17 @@ class SearchHelper
     /**
      * get extension manager configuration for ke_search
      * and make it possible to override it with page ts setup
-     * @author Christian Bülter <buelter@kennziffer.com>
-     * @since 14.10.14
      * @return array
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
+     * @since 14.10.14
+     * @author Christian Bülter <buelter@kennziffer.com>
      */
     public static function getExtConf()
     {
-        $extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('ke_search');
+        /** @var ExtensionConfiguration $extensionConfigurationApi */
+        $extensionConfigurationApi = GeneralUtility::makeInstance(ExtensionConfiguration::class);
+        $extConf = $extensionConfigurationApi->get('ke_search');
 
         // Set the "tagChar"
         // sphinx has problems with # in query string.
@@ -79,15 +85,18 @@ class SearchHelper
      * get extension manager configuration for ke_search_premium
      * and make it possible to override it with page ts setup
      * @return array
+     * @throws ExtensionConfigurationExtensionNotConfiguredException
+     * @throws ExtensionConfigurationPathDoesNotExistException
      * @author Christian Bülter <buelter@kennziffer.com>
      * @since 14.10.14
      */
     public static function getExtConfPremium()
     {
+        /** @var ExtensionConfiguration $extensionConfigurationApi */
+        $extensionConfigurationApi = GeneralUtility::makeInstance(ExtensionConfiguration::class);
         $keSearchPremiumIsLoaded = ExtensionManagementUtility::isLoaded('ke_search_premium');
         if ($keSearchPremiumIsLoaded) {
-            $extConfPremium = GeneralUtility::makeInstance(ExtensionConfiguration::class)
-                ->get('ke_search_premium');
+            $extConfPremium = $extensionConfigurationApi->get('ke_search_premium');
             if (!$extConfPremium['prePostTagChar']) {
                 $extConfPremium['prePostTagChar'] = '_';
             }
