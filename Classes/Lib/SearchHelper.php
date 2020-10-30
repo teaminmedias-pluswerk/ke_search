@@ -21,6 +21,8 @@ namespace TeaminmediasPluswerk\KeSearch\Lib;
  ***************************************************************/
 
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
+use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -317,13 +319,15 @@ class SearchHelper
 
     /**
      * @param string $uid
-     * @return \TYPO3\CMS\Core\Resource\File|NULL
+     * @return File|NULL
      */
     public static function getFile($uid)
     {
         try {
-            $fileObject = ResourceFactory::getInstance()->getFileObject($uid);
-        } catch (\TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException $e) {
+            /** @var ResourceFactory $resourceFactory */
+            $resourceFactory = GeneralUtility::makeInstance(ResourceFactory::class);
+            $fileObject = $resourceFactory->getFileObject($uid);
+        } catch (FileDoesNotExistException $e) {
             $fileObject = null;
         }
 
