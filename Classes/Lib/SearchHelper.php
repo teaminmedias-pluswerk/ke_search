@@ -20,6 +20,7 @@ namespace TeaminmediasPluswerk\KeSearch\Lib;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use PDO;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
@@ -155,12 +156,12 @@ class SearchHelper
                         $table . '.uid',
                         $queryBuilder->createNamedParameter(
                             $uid,
-                            \PDO::PARAM_INT
+                            PDO::PARAM_INT
                         )
                     ),
                     $queryBuilder->expr()->eq(
                         'sys_category_record_mm.tablenames',
-                        $queryBuilder->quote($table, \PDO::PARAM_STR)
+                        $queryBuilder->quote($table, PDO::PARAM_STR)
                     )
                 )
                 ->orderBy('sys_category_record_mm.sorting')
