@@ -117,13 +117,13 @@ class SearchHelper
 
     /**
      * returns the list of assigned categories to a certain record in a certain table
-     * @param integer $uid
+     * @param int $uid
      * @param string $table
      * @author Christian Bülter <buelter@kennziffer.com>
      * @since 17.10.14
      * @return array
      */
-    public static function getCategories($uid, $table)
+    public static function getCategories(int $uid, string $table)
     {
         $categoryData = array(
             'uid_list' => array(),
@@ -182,13 +182,13 @@ class SearchHelper
      * Adds a tag to a given list of comma-separated tags.
      * Does not add the tag if it is already in the list.
      *
-     * @param $tagToAdd Tag without the "prePostTagChar" (normally #)
+     * @param string $tagToAdd Tag without the "prePostTagChar" (normally #)
      * @param string $tags
      * @author Christian Bülter <christian.buelter@web.de>
      * @since 11.04.2020
      * @return string
      */
-    public static function addTag($tagToAdd, $tags='')
+    public static function addTag(string $tagToAdd, $tags='')
     {
         if ($tagToAdd) {
             $extConf = SearchHelper::getExtConf();
@@ -212,7 +212,7 @@ class SearchHelper
      * @author Christian Bülter <buelter@kennziffer.com>
      * @since 17.10.14
      */
-    public static function makeTags(&$tags, $categoryArray)
+    public static function makeTags(string &$tags, array $categoryArray)
     {
         if (is_array($categoryArray) && count($categoryArray)) {
             $extConf = SearchHelper::getExtConf();
@@ -240,12 +240,12 @@ class SearchHelper
      * tags like "syscat123" ("syscat" + category uid).
      *
      * @param string $tags
-     * @param integer $uid
+     * @param int $uid
      * @param string $tablename
      * @author Christian Bülter <christian.buelter@inmedias.de>
      * @since 24.09.15
      */
-    public static function makeSystemCategoryTags(&$tags, $uid, $tablename)
+    public static function makeSystemCategoryTags(string &$tags, int $uid, string $tablename)
     {
         $categories = SearchHelper::getCategories($uid, $tablename);
         if (count($categories['uid_list'])) {
@@ -258,10 +258,10 @@ class SearchHelper
     /**
      * creates tags like "syscat123" ("syscat" + category uid).
      *
-     * @param $uid integer
+     * @param int $uid
      * @return string
      */
-    public static function createTagnameFromSystemCategoryUid($uid)
+    public static function createTagnameFromSystemCategoryUid(int $uid)
     {
         return SearchHelper::$systemCategoryPrefix . $uid;
     }
@@ -327,10 +327,10 @@ class SearchHelper
     }
 
     /**
-     * @param string $uid
+     * @param int $uid
      * @return File|NULL
      */
-    public static function getFile($uid)
+    public static function getFile(int $uid)
     {
         try {
             /** @var ResourceFactory $resourceFactory */

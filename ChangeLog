@@ -21,6 +21,7 @@ Upcoming version
 [TASK]    Use file linkhandler instead of publicUrl for links to files. Thanks to phil64. https://github.com/teaminmedias-pluswerk/ke_search/issues/331
 [TASK]    Remove usage of deprecated ResourceFactory::getInstance()
 [TASK]    Refactor access to extension configuration
+[TASK]    Add missing type declarations in SearchHelper
 
 Version 3.2.0, September 2020
 [!!!]     This version changes the database structure!
