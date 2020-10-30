@@ -35,7 +35,7 @@ class PluginBaseHelper
 
     /**
      * Contains the parent object
-     * @var txkesearchpi1
+     * @var Pluginbase
      */
     public $pObj;
 
