@@ -18,6 +18,7 @@ Upcoming version
 [TASK]    Show only filter option records for default language in localized pages. https://github.com/teaminmedias-pluswerk/ke_search/issues/367
 [DOC]     Add link to category filter options in news indexing. Thanks to okmiim. https://github.com/teaminmedias-pluswerk/ke_search/pull/377
 [BUGFIX]  Only use single_pid of news categories as a target page for news results if the page is reachable.
+[TASK]    Use file linkhandler instead of publicUrl for links to files. Thanks to phil64. https://github.com/teaminmedias-pluswerk/ke_search/issues/331
 
 Version 3.2.0, September 2020
 [!!!]     This version changes the database structure!

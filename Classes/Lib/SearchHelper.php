@@ -276,7 +276,7 @@ class SearchHelper
                 // render a link for files
                 // if we use FAL, we can use the API
                 if ($resultRow['orig_uid'] && ($fileObject = SearchHelper::getFile($resultRow['orig_uid']))) {
-                    $linkconf['parameter'] = $fileObject->getPublicUrl();
+                    $linkconf['parameter'] = 't3://file?uid=' . $resultRow['orig_uid'];
                 } else {
                     $linkconf['parameter'] = $resultRow['directory'] . rawurlencode($resultRow['title']);
                 }
