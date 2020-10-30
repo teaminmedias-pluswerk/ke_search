@@ -20,6 +20,7 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer\Types;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TeaminmediasPluswerk\KeSearch\Domain\Repository\PageRepository;
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
@@ -335,6 +336,9 @@ class News extends IndexerBase
      */
     private function getCategoryData($newsRecord)
     {
+        /** @var PageRepository $pageRepository */
+        $pageRepository = GeneralUtility::makeInstance(PageRepository::class);
+
         $categoryData = array(
             'single_pid' => 0,
             'uid_list' => array(),
@@ -377,7 +381,8 @@ class News extends IndexerBase
         while (($newsCat = $catRes->fetch())) {
             $categoryData['uid_list'][] = $newsCat['uid'];
             $categoryData['title_list'][] = $newsCat['title'];
-            if ($newsCat['single_pid'] && !$categoryData['single_pid']) {
+            // check if this category has a single_pid and if this page really is reachable (not deleted, hidden or time restricted)
+            if ($newsCat['single_pid'] && !$categoryData['single_pid'] && $pageRepository->findOneByUid($newsCat['single_pid'])) {
                 $categoryData['single_pid'] = $newsCat['single_pid'];
             }
         }
