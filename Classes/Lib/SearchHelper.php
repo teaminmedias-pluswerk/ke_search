@@ -47,8 +47,6 @@ class SearchHelper
      * @return array
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
-     * @since 14.10.14
-     * @author Christian Bülter <buelter@kennziffer.com>
      */
     public static function getExtConf()
     {
@@ -88,8 +86,6 @@ class SearchHelper
      * @return array
      * @throws ExtensionConfigurationExtensionNotConfiguredException
      * @throws ExtensionConfigurationPathDoesNotExistException
-     * @author Christian Bülter <buelter@kennziffer.com>
-     * @since 14.10.14
      */
     public static function getExtConfPremium()
     {
@@ -120,8 +116,6 @@ class SearchHelper
      * returns the list of assigned categories to a certain record in a certain table
      * @param int $uid
      * @param string $table
-     * @author Christian Bülter <buelter@kennziffer.com>
-     * @since 17.10.14
      * @return array
      */
     public static function getCategories(int $uid, string $table)
@@ -185,8 +179,6 @@ class SearchHelper
      *
      * @param string $tagToAdd Tag without the "prePostTagChar" (normally #)
      * @param string $tags
-     * @author Christian Bülter <christian.buelter@web.de>
-     * @since 11.04.2020
      * @return string
      */
     public static function addTag(string $tagToAdd, $tags='')
@@ -210,8 +202,6 @@ class SearchHelper
      * removes characters: # , space ( ) _
      * @param string $tags comma-list of tags, new tags will be added to this
      * @param array $categoryArray Array of Titles (eg. categories)
-     * @author Christian Bülter <buelter@kennziffer.com>
-     * @since 17.10.14
      */
     public static function makeTags(string &$tags, array $categoryArray)
     {
@@ -243,8 +233,6 @@ class SearchHelper
      * @param string $tags
      * @param int $uid
      * @param string $tablename
-     * @author Christian Bülter <christian.buelter@inmedias.de>
-     * @since 24.09.15
      */
     public static function makeSystemCategoryTags(string &$tags, int $uid, string $tablename)
     {
@@ -273,8 +261,6 @@ class SearchHelper
      * @param array $resultRow
      * @param string $targetDefault
      * @param string $targetFiles
-     * @author Christian Bülter <buelter@kennziffer.com>
-     * @since 31.10.14
      * @return array
      */
     public static function getResultLinkConfiguration(array $resultRow, $targetDefault = '', $targetFiles = '')
