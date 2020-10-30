@@ -141,12 +141,6 @@ class Searchphrase
                         $searchParts[$key] = '+' . ltrim($searchParts[$key], '+');
                     }
                 }
-
-                // make the words safe for the database
-                // Todo quotes
-//                $searchParts[$key] = Db::getQueryBuilder('tx_kesearch_index')
-//                    ->quote($searchParts[$key], \PDO::PARAM_STR);
-
             }
             return array_values($searchParts);
         }
