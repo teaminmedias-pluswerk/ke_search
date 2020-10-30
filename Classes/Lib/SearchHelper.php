@@ -265,9 +265,9 @@ class SearchHelper
      * @since 31.10.14
      * @return array
      */
-    public static function getResultLinkConfiguration($resultRow, $targetDefault = '', $targetFiles = '')
+    public static function getResultLinkConfiguration(array $resultRow, $targetDefault = '', $targetFiles = '')
     {
-        $linkconf = array();
+        $linkConf = array();
 
         list($type) = explode(':', $resultRow['type']);
 
@@ -276,20 +276,20 @@ class SearchHelper
                 // render a link for files
                 // if we use FAL, we can use the API
                 if ($resultRow['orig_uid'] && ($fileObject = SearchHelper::getFile($resultRow['orig_uid']))) {
-                    $linkconf['parameter'] = 't3://file?uid=' . $resultRow['orig_uid'];
+                    $linkConf['parameter'] = 't3://file?uid=' . $resultRow['orig_uid'];
                 } else {
-                    $linkconf['parameter'] = $resultRow['directory'] . rawurlencode($resultRow['title']);
+                    $linkConf['parameter'] = $resultRow['directory'] . rawurlencode($resultRow['title']);
                 }
-                $linkconf['fileTarget'] = $targetFiles;
+                $linkConf['fileTarget'] = $targetFiles;
                 break;
 
             case 'external':
                 // render a link for external results (provided by eg. ke_search_premium)
-                $linkconf['parameter'] = $resultRow['params'];
-                $linkconf['useCacheHash'] = false;
-                $linkconf['additionalParams'] = '';
+                $linkConf['parameter'] = $resultRow['params'];
+                $linkConf['useCacheHash'] = false;
+                $linkConf['additionalParams'] = '';
                 $extConfPremium = SearchHelper::getExtConfPremium();
-                $linkconf['extTarget'] = $extConfPremium['apiExternalResultTarget'] ?
+                $linkConf['extTarget'] = $extConfPremium['apiExternalResultTarget'] ?
                     $extConfPremium['apiExternalResultTarget'] : '_blank';
                 break;
 
@@ -297,11 +297,11 @@ class SearchHelper
                 // render a link for page targets
                 // if params are filled, add them to the link generation process
                 if (!empty($resultRow['params'])) {
-                    $linkconf['additionalParams'] = $resultRow['params'];
+                    $linkConf['additionalParams'] = $resultRow['params'];
                 }
-                $linkconf['parameter'] = $resultRow['targetpid'];
-                $linkconf['useCacheHash'] = true;
-                $linkconf['target'] = $targetDefault;
+                $linkConf['parameter'] = $resultRow['targetpid'];
+                $linkConf['useCacheHash'] = true;
+                $linkConf['target'] = $targetDefault;
                 break;
         }
 
@@ -309,10 +309,10 @@ class SearchHelper
             VersionNumberUtility::convertVersionNumberToInteger('10.0')
         ) {
             // Deprecated: Setting typolink.useCacheHash has no effect anymore
-            unset($linkconf['useCacheHash']);
+            unset($linkConf['useCacheHash']);
         }
 
-        return $linkconf;
+        return $linkConf;
     }
 
     /**
