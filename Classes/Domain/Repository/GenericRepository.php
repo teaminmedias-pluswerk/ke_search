@@ -38,12 +38,12 @@ class GenericRepository {
      * as the table name.
      * Returns the record with the given uid.
      *
-     * @param int $uid
+     * @param int|string $uid
      * @param string $type
      * @return false|mixed
      * @throws \Doctrine\DBAL\DBALException
      */
-    public function findByUidAndType(int $uid, string $type)
+    public function findByUidAndType($uid, string $type)
     {
         $row = false;
         $tableName = '';
@@ -73,7 +73,7 @@ class GenericRepository {
                 $tableName = $_procObj->getTableName($type);
             }
         }
-        if (!empty($tableName)) {
+        if (!empty($tableName) && is_int($uid)) {
             /** @var QueryBuilder $queryBuilder */
             $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
                 ->getQueryBuilderForTable($tableName);
