@@ -11,7 +11,7 @@ enablePartSearch = 1
 enableExplicitAnd = 0
 
 # cat=basic//50; type=boolean; label=If set to false no query is executed when loading a page with a result list and empty searches deliever no results.
-allowEmptySearch = 0
+allowEmptySearch = 1
 
 # cat=notification//10; type=boolean; label= Send notification when finished: If activated, a notification email will be sent when indexing process is finished in CLI / scheduler mode.
 finishNotification = 0
