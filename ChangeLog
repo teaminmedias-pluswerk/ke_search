@@ -1,5 +1,8 @@
 ChangeLog
 
+Upcoming Version
+[TASK]    Add string as datatype to uid param for findByUidAndType(). Thanks to escapevisual. https://github.com/teaminmedias-pluswerk/ke_search/pull/381
+
 Version 3.3.1, October 2020
 [BUGFIX]  Allow tags to be empty in SearchHelper::makeTags and makeSystemCategoryTags, fixes regression from last version
 
