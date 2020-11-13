@@ -265,7 +265,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
 
         // perform search at this point already if we need to calculate what
         // filters to display.
-        if ($this->conf['checkFilterCondition'] != 'none') {
+        if ($this->conf['checkFilterCondition'] != 'none' && !$this->allowEmptySearch()) {
             $this->db->getSearchResults();
         }
 
@@ -665,6 +665,10 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
      */
     public function getSearchResults()
     {
+        if($this->isEmptySearch() && !$this->allowEmptySearch()) {
+            return;
+        }
+
         // fetch the search results
         $limit = $this->db->getLimit();
         $rows = $this->db->getSearchResults();
@@ -1304,5 +1308,16 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         }
 
         $arr = $newArray;
+    }
+
+    private function allowEmptySearch()
+    {
+        /*
+         * check for inequality to null to maintain functionality even if unset
+         */
+        if ($this->extConf['allowEmptySearch'] != null && $this->extConf['allowEmptySearch'] == false) {
+            return false;
+        }
+        return true;
     }
 }
