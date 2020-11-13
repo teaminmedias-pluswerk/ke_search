@@ -10,7 +10,7 @@ enablePartSearch = 1
 # cat=basic//40; type=boolean; label=Enable explicit AND: By default, one or more searchwords are connected with "OR". If this option is enabled, two or more search words are connected with AND. If it is disabled, they are connected with OR, where results containing all the search words will get a higher relevance ranking. Enabling this function means, ke_search internally adds a "+" in front of each search word.
 enableExplicitAnd = 0
 
-# cat=basic//50; type=boolean; label=If set to false no query is executed when loading a page with a result list and empty searches deliever no results.
+# cat=basic//50; type=boolean; label=Allow empty search:If enabled, a search will be executed even if no searchword or filter is given. This will render a list of all records available in the index. Please note: There's also the setting "Show text instead of searchresults if no filter or searchword has been given" in the plugin settings which has to be disabled to see the full list of all index records. If set to false no query is executed when loading a page with a result list and an empty search, this will give a better performance.
 allowEmptySearch = 1
 
 # cat=notification//10; type=boolean; label= Send notification when finished: If activated, a notification email will be sent when indexing process is finished in CLI / scheduler mode.
