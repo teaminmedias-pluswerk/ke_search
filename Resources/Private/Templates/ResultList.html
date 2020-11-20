@@ -39,4 +39,9 @@ Settings are available via
 			</f:if>
 		</f:else>
 	</f:if>
+	<f:if condition="errors">
+		<f:for each="{errors}" as="error">
+			<div class="ke_search-error">{error}</div>
+		</f:for>
+	</f:if>
 </f:section>

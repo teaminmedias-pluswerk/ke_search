@@ -672,6 +672,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         // fetch the search results
         $limit = $this->db->getLimit();
         $rows = $this->db->getSearchResults();
+        $this->fluidTemplateVariables['errors'] = $this->db->getErrors();
 
         // TODO: Check how Sphinx handles this, seems to return full result set
         if (count($rows) > $limit[1]) {

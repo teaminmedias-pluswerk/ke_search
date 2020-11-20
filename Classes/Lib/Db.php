@@ -2,6 +2,7 @@
 
 namespace TeaminmediasPluswerk\KeSearch\Lib;
 
+use Doctrine\DBAL\Exception\DriverException;
 use Psr\Log\LogLevel;
 use TeaminmediasPluswerk\KeSearch\Plugins\SearchboxPlugin;
 use TeaminmediasPluswerk\KeSearchPremium\KeSearchPremium;
@@ -47,6 +48,7 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
     protected $searchResults = array();
     protected $numberOfResults = 0;
     protected $keSearchPremium = NULL;
+    protected $errors = [];
 
     /**
      * @var SearchboxPlugin
@@ -91,6 +93,11 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
      */
     public function getSearchResultByMySQL()
     {
+        /** @var LogManager */
+        $logManager = GeneralUtility::makeInstance(LogManager::class);
+        /** @var Logger $logger */
+        $logger = $logManager->getLogger(__CLASS__);
+
         $queryParts = $this->getQueryParts();
 
         // build query
@@ -114,26 +121,30 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
         }
 
         // execute query
-        $this->searchResults = $resultQuery->execute()->fetchAll();
+        try {
+            $this->searchResults = $resultQuery->execute()->fetchAll();
+        } catch (DriverException $driverException) {
+            $logger->log(LogLevel::ERROR, $driverException->getMessage() . ' ' . $driverException->getTraceAsString());
+            $this->addError('Could not fetch search results. Error #1605867846');
+            $this->searchResults = [];
+            $this->numberOfResults = 0;
+        }
 
         // log query
         if ($this->conf['logQuery']) {
-            /** @var LogManager */
-            $logManager = GeneralUtility::makeInstance(LogManager::class);
-            /** @var Logger $logger */
-            $logger = $logManager->getLogger(__CLASS__);
             $logger->log(LogLevel::DEBUG, $resultQuery->getSQL());
         }
 
-        $queryBuilder = self::getQueryBuilder('tx_kesearch_index');
-        $queryBuilder->getRestrictions()->removeAll();
-        $numRows = $queryBuilder
-            ->add('select', 'FOUND_ROWS()')
-            ->execute()
-            ->fetchColumn(0);
-
-        $this->numberOfResults = $numRows;
-
+        // fetch number of results
+        if (!empty($this->searchResults)) {
+            $queryBuilder = self::getQueryBuilder('tx_kesearch_index');
+            $queryBuilder->getRestrictions()->removeAll();
+            $numRows = $queryBuilder
+                ->add('select', 'FOUND_ROWS()')
+                ->execute()
+                ->fetchColumn(0);
+            $this->numberOfResults = $numRows;
+        }
     }
 
     /**
@@ -541,6 +552,22 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
     {
         $databaseConnection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($table);
         return $databaseConnection;
+    }
+
+    /**
+     * @param string $message
+     */
+    public function addError(string $message)
+    {
+        $this->errors[] = $message;
+    }
+
+    /**
+     * @return array
+     */
+    public function getErrors()
+    {
+        return $this->errors;
     }
 
 }
