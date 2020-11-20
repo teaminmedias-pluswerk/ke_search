@@ -1164,8 +1164,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
     public function isEmptySearch()
     {
         // check if searchword is emtpy or equal with default searchbox value
-        $emptySearchword = (empty($this->sword)
-            || $this->sword == $this->pi_getLL('searchbox_default_value')) ? true : false;
+        $emptySearchword = empty($this->sword) || $this->sword == $this->pi_getLL('searchbox_default_value');
 
         // check if filters are set
         $filters = $this->filters->getFilters();
