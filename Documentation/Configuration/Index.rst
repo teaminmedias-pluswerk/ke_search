@@ -19,5 +19,5 @@ The extension can be configured via the plugin settings (flexform), typoscript a
 	Sorting
 	HighlightedWord
 	ReducingFiltersBackend
+	OverrideRecordStoragePage
 	Notes
-
