@@ -5,6 +5,7 @@ Upcoming Version
 [FEATURE] Add add allowEmptySearch setting, by deactivating no query will be executed if no searchword or filter is set. Thanks to Marcel Tams. https://github.com/teaminmedias-pluswerk/ke_search/pull/382
 [TASK]    Catch error if MySQL KEYS are disabled during first indexing. https://github.com/teaminmedias-pluswerk/ke_search/issues/380
 [DOC]     Add documentation on how to override the record storage page with typoscript. https://github.com/teaminmedias-pluswerk/ke_search/issues/282
+[FEATURE] Add routing for TYPO3 9 and 10 (routeEnhancer example, custom routing aspect, template changes)
 
 Version 3.3.1, October 2020
 [BUGFIX]  Allow tags to be empty in SearchHelper::makeTags and makeSystemCategoryTags, fixes regression from last version
