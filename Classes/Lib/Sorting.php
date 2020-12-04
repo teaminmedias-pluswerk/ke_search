@@ -214,6 +214,7 @@ class Sorting
         $params = array();
         $params['sortByField'] = $field;
         $params['sortByDir'] = $sortByDir;
+        $params['page'] = '1';
 
         foreach ($params as $key => $value) {
             $params[$key] = $this->cObj->wrap($value, $this->pObj->prefixId . '[' . $key . ']=|');
@@ -222,7 +223,8 @@ class Sorting
         $conf = array();
         $conf['parameter'] = $GLOBALS['TSFE']->id;
         $conf['addQueryString'] = '1';
-        $conf['addQueryString.']['exclude'] = 'id,tx_kesearch_pi1[multi],cHash';
+        $conf['addQueryString.']['exclude'] = 'id,cHash';
+        $conf['addQueryString.']['method'] = 'GET';
         $conf['additionalParams'] = '&' . implode('&', $params);
 
         return $this->cObj->typoLink(
