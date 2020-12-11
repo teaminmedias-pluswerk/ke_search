@@ -9,6 +9,7 @@ Upcoming Version
 [DOC]     Add documentation on how to override the record storage page with typoscript. https://github.com/teaminmedias-pluswerk/ke_search/issues/282
 [FEATURE] Add routing for TYPO3 9 and 10 (routeEnhancer example, custom routing aspect, template changes)
 [TASK]    Add validation "alphanum" to filter option tags. Add upgrade wizard. Adjust makeTags function and documentation accordingly. https://github.com/teaminmedias-pluswerk/ke_search/issues/383
+[FEATURE] Add routing for TYPO3 9 and 10 (routeEnhancer example, custom routing aspect, template changes)
 
 Version 3.3.1, October 2020
 [BUGFIX]  Allow tags to be empty in SearchHelper::makeTags and makeSystemCategoryTags, fixes regression from last version
