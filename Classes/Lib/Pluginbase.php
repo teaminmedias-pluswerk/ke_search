@@ -338,8 +338,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         $this->fluidTemplateVariables['sortByDir'] = $this->piVars['sortByDir'];
 
         // get filters
-        $renderedFilters = $this->renderFilters();
-        $this->fluidTemplateVariables['filter'] = $renderedFilters;
+        $this->renderFilters();
 
         // set form action pid
         $this->fluidTemplateVariables['targetpage'] = $this->conf['resultPage'];
