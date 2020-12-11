@@ -35,15 +35,19 @@ tag name for each filter.
 NOTES:
 
 * You may freely choose a tag name, they're only used for internal purposes. But make sure the
-  tag you choose for each filter option is unique!
-* The tag has to be at least four characters long and must not contain a dot.
-* You must not use "syscat" as prefix for your tags names. This is reserverd for the automated generation of filter
+  tag you choose for each filter option is unique. If you decide to give the same tag to different filter options,
+  they will show the same search results. Although, this may be a desired behaviour in some cases.
+* The tag has to be at least four characters long and must contain only alphanumeric characters.
+  Up to version 3.3.1 it was possible to use dashes, colons, spaces and other non-alphanumeric characters
+  as tags. This behaviour has changed and you may need to re-index when tags have changed or adjust your custom
+  scripts if you set tags in your scripts.
+* You must not use "syscat" as prefix for your tag names. This is reserverd for the automated generation of filter
   options, see :ref:`systemcategories`.
 
-You have two possibilities assign tags to pages:
+You have two possibilities to assign tags to pages:
 
 1. Open the page properties and in the tab "Search" you find field "Tags for faceted search"
-2. Use the function "Set tag for all children of this page" in filter record itself.
+2. Use the function "Set tag for all children of this page" in the filter record itself.
 
 If you use the option "Set tag for all children of this page" the tag will be set automatically to
 the subpages of the page you set while indexing that pages (you can select multiple pages).

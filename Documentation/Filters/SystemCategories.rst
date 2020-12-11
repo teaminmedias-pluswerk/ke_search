@@ -38,7 +38,7 @@ For each assigned system category, two tags are created:
 
 1. The first tag uses this naming schema "syscat" + UID of the system category (eg. "syscat123"). This tag is used
    in the auto-created filter options.
-2. The second tag uses the title of the category. Spaces and the following characters will be removed: # , ( ) _ &
+2. The second tag uses the title of the category. Non-alphanumeric characters will be removed.
 
 If you use the tag derived from the category title, remember that this will change if the category title changes. It
 may be better to use the tag which relies on the uid of the category.

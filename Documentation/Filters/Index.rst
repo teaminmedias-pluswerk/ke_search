@@ -14,8 +14,8 @@ by using filters.
 You'll have to create "filters" and "filter options". Filter options appear in the searchbox in the frontend
 and at the same time you can set them as "tags" for pages (or other content) in the backend.
 
-Example
--------
+Examples
+--------
 
 Example "Car Website"
 .....................

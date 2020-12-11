@@ -198,27 +198,20 @@ class SearchHelper
     }
 
     /**
-     * creates tags from category titles
-     * removes characters: # , space ( ) _
+     * creates tags from an array of strings
+     * removes non-alphanumeric characters
+     *
      * @param string|null $tags comma-list of tags, new tags will be added to this
-     * @param array $categoryArray Array of Titles (eg. categories)
+     * @param array $tagTitles Array of Titles (eg. categories)
      */
-    public static function makeTags(&$tags, array $categoryArray)
+    public static function makeTags(&$tags, array $tagTitles)
     {
-        if (is_array($categoryArray) && count($categoryArray)) {
+        if (is_array($tagTitles) && count($tagTitles)) {
             $tags = $tags ?? '';
             $extConf = SearchHelper::getExtConf();
 
-            foreach ($categoryArray as $catTitle) {
-                $tag = $catTitle;
-                $tag = str_replace('#', '', $tag);
-                $tag = str_replace(',', '', $tag);
-                $tag = str_replace(' ', '', $tag);
-                $tag = str_replace('(', '', $tag);
-                $tag = str_replace(')', '', $tag);
-                $tag = str_replace('_', '', $tag);
-                $tag = str_replace('&', '', $tag);
-
+            foreach ($tagTitles as $title) {
+                $tag = preg_replace("/[^A-Za-z0-9]/", '', $title);
                 if (!empty($tags)) {
                     $tags .= ',';
                 }

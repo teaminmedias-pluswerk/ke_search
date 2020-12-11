@@ -68,4 +68,8 @@ if (!defined('TYPO3_MODE')) {
     ['ke_search-filter-option'] = \TeaminmediasPluswerk\KeSearch\Hooks\FilterOptionHook::class;
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']
     ['ke_search-filter-option'] = \TeaminmediasPluswerk\KeSearch\Hooks\FilterOptionHook::class;
+
+    // Upgrade Wizard
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['keSearchMakeTagsAlphanumericUpgradeWizard']
+        = \TeaminmediasPluswerk\KeSearch\Updates\MakeTagsAlphanumericUpgradeWizard::class;
 })();
