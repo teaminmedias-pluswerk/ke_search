@@ -8,7 +8,7 @@
     <ul id="options_{filter.id}" class="checkboxList">
         <f:for each="{filter.checkboxOptions}" as="option">
             <li class="optionCheckBox optionCheckBox{filter.uid} optionCheckBox{filter_uid}_{option.value}">
-                <input type="checkbox" name="{filter.name}[{option.key}]" id="{option.id}" value="{option.tag}" {f:if(condition: '{option.selected}', then: ' checked="checked"')} {f:if(condition: '{option.disabled}', then: 'disabled = "disabled"')} />
+                <input type="checkbox" name="{option.key}" id="{option.id}" value="{option.tag}" {f:if(condition: '{option.selected}', then: ' checked="checked"')} {f:if(condition: '{option.disabled}', then: 'disabled = "disabled"')} />
                 <label for="{option.id}">{option.title}<f:if condition="{option.results}"><f:if condition="{filter.shownumberofresults} && {option.results}"> ({option.results})</f:if></f:if></label>
             </li>
             <li class="clearer"></li>

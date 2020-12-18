@@ -72,4 +72,14 @@ if (!defined('TYPO3_MODE')) {
     // Upgrade Wizard
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['keSearchMakeTagsAlphanumericUpgradeWizard']
         = \TeaminmediasPluswerk\KeSearch\Updates\MakeTagsAlphanumericUpgradeWizard::class;
+
+    // register custom aspect for routing
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['routing']['aspects']['UrlEncodeMapper'] =
+        \TeaminmediasPluswerk\KeSearch\Routing\Aspect\UrlEncodeMapper::class;
+
+
+    // register custom aspect for routing
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['routing']['aspects']['UrlEncodeMapper'] =
+        \TeaminmediasPluswerk\KeSearch\Routing\Aspect\UrlEncodeMapper::class;
+
 })();

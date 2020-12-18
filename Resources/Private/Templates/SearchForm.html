@@ -5,10 +5,10 @@ Templates/SearchForm.html
 -->
 <f:section name="content">
 	<form method="get" id="form_kesearch_pi1" name="form_kesearch_pi1"  action="{f:uri.page(pageUid: targetpage)}">
+		<f:comment> // Replace the URL with the speaking URL </f:comment>
+		<f:format.raw><script type="text/javascript">history.replaceState(null,'','</f:format.raw>{f:uri.page(addQueryString:'1', addQueryStringMethod:'GET')}<f:format.raw>');</script></f:format.raw>
+
 		<fieldset class="kesearch_searchbox">
-			<f:if condition="{targetpage}">
-				<input type="hidden" name="id" value="{targetpage}" />
-			</f:if>
 			<f:if condition="{lparam}">
 				<input type="hidden" name="L" value="{lparam}" />
 			</f:if>
@@ -24,10 +24,16 @@ Templates/SearchForm.html
 				<div class="clearer">&nbsp;</div>
 			</div>
 
-			<input id="kesearchpagenumber" type="hidden" name="tx_kesearch_pi1[page]" value="{page}" />
+			<f:if condition="{page}">
+				<input id="kesearchpagenumber" type="hidden" name="tx_kesearch_pi1[page]" value="{page}" />
+			</f:if>
 			<input id="resetFilters" type="hidden" name="tx_kesearch_pi1[resetFilters]" value="0" />
-			<input id="sortByField" type="hidden" name="tx_kesearch_pi1[sortByField]" value="{sortByField}" />
-			<input id="sortByDir" type="hidden" name="tx_kesearch_pi1[sortByDir]" value="{sortByDir}" />
+            <f:if condition="{sortByField}">
+				<input id="sortByField" type="hidden" name="tx_kesearch_pi1[sortByField]" value="{sortByField}" />
+			</f:if>
+			<f:if condition="{sortByDir}">
+				<input id="sortByDir" type="hidden" name="tx_kesearch_pi1[sortByDir]" value="{sortByDir}" />
+			</f:if>
 
 			<f:if condition="{filters}">
 				<div id="kesearch_filters"><f:render partial="Filters" arguments="{conf: conf, numberofresults: numberofresults, resultrows: resultrows, filters: filters}" /></div>
