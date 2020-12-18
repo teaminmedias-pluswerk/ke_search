@@ -31,6 +31,8 @@ use TeaminmediasPluswerk\KeSearch\Plugins\txkesearchpi1;
  */
 class PluginBaseHelper
 {
+    public CONST PI_VARS = ['sword', 'sortByField', 'sortByDir', 'page', 'resetFilters', 'filter'];
+
     public $showShortMessage = false;
 
     /**
@@ -124,22 +126,25 @@ class PluginBaseHelper
 
     /**
      * Creates a link to the search result on the given page, flattens the piVars, resets given filters.
+     * If linkText is give, it renders a full a-tag, otherwise only the URL.
      *
-     * @param $parameter target page
+     * @param int $parameter target page
      * @param array $piVars
      * @param array $resetFilters filters to reset
-     * @return mixed
+     * @param string $linkText
+     * @return string
      */
-    public function searchLink($parameter, array $piVars=[], $resetFilters=[])
+    public function searchLink(int $parameter, array $piVars=[], $resetFilters=[], $linkText = ''): string
     {
-        $linkconf = [];
-        $linkconf['parameter'] = $parameter;
-        if (!empty($piVars['sword'])) {
-            $linkconf['additionalParams'] = '&tx_kesearch_pi1[sword]=' . $piVars['sword'];
-        }
-        if (!empty($resetFilters)) {
-            foreach ($resetFilters as $resetFilter) {
-                $linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter_' . $resetFilter . ']=';
+        $keepPiVars = self::PI_VARS;
+        $linkconf = [
+            'parameter' => $parameter,
+            'additionalParams' => ''
+        ];
+        unset($keepPiVars[array_search('filter', $keepPiVars)]);
+        foreach ($keepPiVars as $piVarKey) {
+            if (!empty($piVars[$piVarKey])) {
+                $linkconf['additionalParams'] .= '&tx_kesearch_pi1[' . $piVarKey . ']=' . $piVars[$piVarKey];
             }
         }
         if (is_array($piVars['filter']) && count($piVars['filter'])) {
@@ -155,7 +160,11 @@ class PluginBaseHelper
                 }
             }
         }
-        return $GLOBALS['TSFE']->cObj->typoLink_URL($linkconf);
+        if (empty($linkText)) {
+            return $GLOBALS['TSFE']->cObj->typoLink_URL($linkconf);
+        } else {
+            return $GLOBALS['TSFE']->cObj->typoLink($linkText, $linkconf);
+        }
     }
 
     /**
@@ -217,11 +226,6 @@ class PluginBaseHelper
                 case 'sortByField':
                 case 'orderByField':
                     $piVars[$key] = preg_replace('/[^a-zA-Z0-9]/', '', $piVars[$key]);
-                    break;
-
-                // integer value for redirect
-                case 'redirect':
-                    $piVars[$key] = intval($piVars[$key]);
                     break;
 
                 // "asc" or "desc"

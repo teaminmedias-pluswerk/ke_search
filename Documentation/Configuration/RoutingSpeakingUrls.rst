@@ -8,12 +8,29 @@
 Routing (Speaking URLs)
 =======================
 
-Speaking URLs (for TYPO3 9 and greater) can be achieved as follows.
+Speaking URLs (for TYPO3 9 and greater) can be achieved as shown in the example below.
 
 Adjust the values for the parameter "sortByField" as it fits your needs.
 
-Note: Routing for filters is currently not available because filters use multi-dimensional piVars which is not supported
-by the "Plugin" route enhancer.
+For filters of type "select" and "textlink" you need one rule *per filter*.
+
+* The rule is defined by using "filter" + "_" + the UID of the filter.
+
+For filters of type "checkbox" (multi-select filters) you need one rule *per filter option*.
+
+* The rules are defined by using filter + "_" + the UID of the filter + "_" + the UID of the filter option.
+
+Unfortunately this will render your URL very long if you have many filter options. Maybe there will be
+a better solution in the future.
+
+Search words will be url encoded (eg. "schön" will become "sch%25C3%25B6n").
+
+Example:
+
+*https://example.org/search/score/desc/0/1/page/syscat80///contentexample/search+word*
+
+
+("search" is the page slug, not part of the route enhancer for ke_search)
 
 Site configuration (config.yaml)
 ................................
@@ -25,19 +42,29 @@ Add this to your site configuration.
     routeEnhancers:
       KeSearch:
         type: Plugin
-        routePath: '{sortByField}/{sortByDir}/{resetFilters}/{page}/{sword}'
+        routePath: '{sortByField}/{sortByDir}/{resetFilters}/{page}/{filter_13}/{filter_14}/{filter_3_267}/{filter_3_273}/{filter_3_278}/{sword}'
         namespace: 'tx_kesearch_pi1'
         defaults:
           sortByField: 'score'
           sortByDir: 'desc'
           resetFilters: '0'
           page: '1'
+          filter_13: ''
+          filter_14: ''
+          filter_3_267: ''
+          filter_3_273: ''
+          filter_3_278: ''
           sword: ''
         requirements:
           sortByField: '(score|title|customranking)?'
           sortByDir: '(asc|desc)?'
           resetFilters: '[0-9]?'
           page: '\d+'
+          filter_13: '[0-9a-zA-Z]*'
+          filter_14: '[0-9a-zA-Z]*'
+          filter_3_267: '[0-9a-zA-Z]*'
+          filter_3_273: '[0-9a-zA-Z]*'
+          filter_3_278: '[0-9a-zA-Z]*'
         aspects:
           sortByField:
             type: 'StaticValueMapper'
@@ -58,6 +85,16 @@ Add this to your site configuration.
             type: 'StaticRangeMapper'
             start: '1'
             end: '99'
+          filter_13:
+            type: 'UrlEncodeMapper'
+          filter_14:
+            type: 'UrlEncodeMapper'
+          filter_3_267:
+            type: 'UrlEncodeMapper'
+          filter_3_273:
+            type: 'UrlEncodeMapper'
+          filter_3_278:
+            type: 'UrlEncodeMapper'
           sword:
             type: 'UrlEncodeMapper'
 

@@ -209,27 +209,18 @@ class Sorting
      * @param string $sortByDir
      * @return string The complete link as A-Tag
      */
-    public function generateSortingLink($field, $sortByDir)
+    public function generateSortingLink(string $field, string $sortByDir): string
     {
-        $params = array();
-        $params['sortByField'] = $field;
-        $params['sortByDir'] = $sortByDir;
-        $params['page'] = '1';
+        $localPiVars = $this->pObj->piVars;
+        $localPiVars['sortByField'] = $field;
+        $localPiVars['sortByDir'] = $sortByDir;
+        unset($localPiVars['page']);
 
-        foreach ($params as $key => $value) {
-            $params[$key] = $this->cObj->wrap($value, $this->pObj->prefixId . '[' . $key . ']=|');
-        }
-
-        $conf = array();
-        $conf['parameter'] = $GLOBALS['TSFE']->id;
-        $conf['addQueryString'] = '1';
-        $conf['addQueryString.']['exclude'] = 'id,cHash';
-        $conf['addQueryString.']['method'] = 'GET';
-        $conf['additionalParams'] = '&' . implode('&', $params);
-
-        return $this->cObj->typoLink(
-            $this->pObj->pi_getLL('orderlink_' . $field, $field),
-            $conf
+        return $this->pObj->div->searchLink(
+            $this->pObj->conf['resultPage'],
+            $localPiVars,
+            [],
+            $this->pObj->pi_getLL('orderlink_' . $field, $field)
         );
     }
 }

@@ -174,19 +174,12 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             }
         }
 
-        // set some default values (this part have to be after stdWrap!!!)
+        // set some default values (this part has to be after stdWrap!!!)
         if (!$this->conf['resultPage']) {
             $this->conf['resultPage'] = $GLOBALS['TSFE']->id;
         }
         if (!isset($this->piVars['page'])) {
             $this->piVars['page'] = 1;
-        } else {
-            // redirect ones after search submit to get nice looking url
-            if ($this->piVars['redirect'] === 0) {
-                $this->piVars['redirect'] = 1;
-                $red_url = $this->pi_linkTP_keepPIvars_url();
-                HttpUtility::redirect($red_url);
-            }
         }
         if (!empty($this->conf['additionalPathForTypeIcons'])) {
             $this->conf['additionalPathForTypeIcons'] = rtrim($this->conf['additionalPathForTypeIcons'], '/') . '/';
@@ -1010,8 +1003,9 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
 
     public function renderOrdering()
     {
+        /** @var Sorting $sortObj */
         $sortObj = GeneralUtility::makeInstance(Sorting::class, $this);
-        return $sortObj->renderSorting($this->fluidTemplateVariables);
+        $sortObj->renderSorting($this->fluidTemplateVariables);
     }
 
     /*
