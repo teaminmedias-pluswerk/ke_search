@@ -3,6 +3,7 @@ ChangeLog
 Upcoming Version
 [!!!]     The naming convention of tags has changed. Only alphanumeric characters are now allowed (no spaces, dashes, underscore or special characters anymore).
           Please run the provided upgrade wizard "keSearchMakeTagsAlphanumericUpgradeWizard" and re-index. You may need to adjust custom scripts if the create tags.
+[!!!]     Some templates have changed. See Documentation -> Configuration -> Routing (Speaking URLs).
 [TASK]    Add string as datatype to uid param for findByUidAndType(). Thanks to escapevisual. https://github.com/teaminmedias-pluswerk/ke_search/pull/381
 [FEATURE] Add add allowEmptySearch setting, by deactivating no query will be executed if no searchword or filter is set. Thanks to Marcel Tams. https://github.com/teaminmedias-pluswerk/ke_search/pull/382
 [TASK]    Catch error if MySQL KEYS are disabled during first indexing. https://github.com/teaminmedias-pluswerk/ke_search/issues/380
@@ -10,6 +11,7 @@ Upcoming Version
 [FEATURE] Add routing for TYPO3 9 and 10 (routeEnhancer example, custom routing aspect, template changes)
 [TASK]    Add validation "alphanum" to filter option tags. Add upgrade wizard. Adjust makeTags function and documentation accordingly. https://github.com/teaminmedias-pluswerk/ke_search/issues/383
 [FEATURE] Add routing for TYPO3 9 and 10 (routeEnhancer example, custom routing aspect, template changes)
+[TASK]    Flatten piVars in order make it possible to use aspects in routing and create speaking URLs.
 
 Version 3.3.1, October 2020
 [BUGFIX]  Allow tags to be empty in SearchHelper::makeTags and makeSystemCategoryTags, fixes regression from last version

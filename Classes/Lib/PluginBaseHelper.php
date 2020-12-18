@@ -99,6 +99,66 @@ class PluginBaseHelper
     }
 
     /**
+     * Explode flattened piVars to multi-dimensional array, eg.
+     * tx_kesearch_pi1[filter_3]=example --> tx_kesearch_pi1[filter][3]=example
+     * tx_kesearch_pi1[filter_3_1]=example --> tx_kesearch_pi1[filter][3][1]=example
+     *
+     * @param array $piVars
+     * @return array
+     */
+    public function explodePiVars(array $piVars)
+    {
+        foreach ($piVars as $key => $value) {
+            if (strstr($key, '_')) {
+                $newKeys = explode('_', $key,2);
+                if (strstr($newKeys[1], '_')) {
+                    $newKeys2 = explode('_', $newKeys[1], 2);
+                    $piVars[$newKeys[0]][$newKeys2[0]][$newKeys2[1]] = $value;
+                } else {
+                    $piVars[$newKeys[0]][$newKeys[1]] = $value;
+                }
+            }
+        }
+        return $piVars;
+    }
+
+    /**
+     * Creates a link to the search result on the given page, flattens the piVars, resets given filters.
+     *
+     * @param $parameter target page
+     * @param array $piVars
+     * @param array $resetFilters filters to reset
+     * @return mixed
+     */
+    public function searchLink($parameter, array $piVars=[], $resetFilters=[])
+    {
+        $linkconf = [];
+        $linkconf['parameter'] = $parameter;
+        if (!empty($piVars['sword'])) {
+            $linkconf['additionalParams'] = '&tx_kesearch_pi1[sword]=' . $piVars['sword'];
+        }
+        if (!empty($resetFilters)) {
+            foreach ($resetFilters as $resetFilter) {
+                $linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter_' . $resetFilter . ']=';
+            }
+        }
+        if (is_array($piVars['filter']) && count($piVars['filter'])) {
+            foreach ($piVars['filter'] as $filterUid => $filterValue) {
+                if (!in_array($filterUid, $resetFilters)) {
+                    if (!is_array($piVars['filter'][$filterUid])) {
+                        $linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter_' . $filterUid . ']=' . $filterValue;
+                    } else {
+                        foreach ($piVars['filter'][$filterUid] as $filterOptionUid => $filterOptionValue) {
+                            $linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter_' . $filterUid . '_' . $filterOptionUid . ']=' . $filterOptionValue;
+                        }
+                    }
+                }
+            }
+        }
+        return $GLOBALS['TSFE']->cObj->typoLink_URL($linkconf);
+    }
+
+    /**
      * function cleanPiVars
      * cleans piVars
      * sword is not cleaned at this point.

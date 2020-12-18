@@ -61,11 +61,11 @@ Add this to your site configuration.
           sword:
             type: 'UrlEncodeMapper'
 
-Templates
-.........
+Templates changes
+.................
 
-If you are upgrading from ke_search 3.3.1 or below and you added your own templates, you will have to to a few
-adjustments to the templates.
+If you are upgrading from ke_search 3.3.1 or below and you are using your own templates, you will have to do a few
+adjustments to the templates as shown below.
 
 Resources/Private/Templates/SearchForm.html
 -------------------------------------------
@@ -111,3 +111,13 @@ Resources/Private/Templates/Widget/Pagination.html
             <f:link.page additionalParams="{tx_kesearch_pi1: {page: pagination.next}}" addQueryString="1" addQueryStringMethod="GET" class="next">{f:translate(key: 'LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:pagebrowser_next')}</f:link.page>
         </li>
     </f:if>
+
+
+Resources/Private/Partials/Filters/Checkbox.html
+------------------------------------------------
+
+* Change the "name" attribute of the options
+
+.. code-block:: none
+
+    <input type="checkbox" name="{option.key}" id="{option.id}" value="{option.tag}" {f:if(condition: '{option.selected}', then: ' checked="checked"')} {f:if(condition: '{option.disabled}', then: 'disabled = "disabled"')} />

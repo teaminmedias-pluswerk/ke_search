@@ -26,7 +26,6 @@ use TYPO3\CMS\Core\Context\Context;
 use TYPO3\CMS\Core\TypoScript\TypoScriptService;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 use \TYPO3\CMS\Core\Utility\HttpUtility;
-use TYPO3\CMS\Core\Utility\VersionNumberUtility;
 use TYPO3\CMS\Frontend\Page\PageRepository;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Frontend\Resource\FilePathSanitizer;
@@ -158,6 +157,9 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             $this->cObj->data['pi_flexform'] = $data['pi_flexform'];
             $this->moveFlexFormDataToConf();
         }
+
+        // explode flattened piVars to multi-dimensional array
+        $this->piVars = $this->div->explodePiVars($this->piVars);
 
         // clean piVars
         $this->piVars = $this->div->cleanPiVars($this->piVars);
@@ -371,10 +373,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         }
 
         // set reset link
-        unset($linkconf);
-        $linkconf['parameter'] = $this->conf['resultPage'];
-        $resetUrl = $this->cObj->typoLink_URL($linkconf);
-        $this->fluidTemplateVariables['resetUrl'] = $resetUrl;
+        $this->fluidTemplateVariables['resetUrl'] = $this->div->searchLink($this->conf['resultPage']);
     }
 
     /**
@@ -411,22 +410,11 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             }
 
             // build link to reset this filter while keeping the others
-            unset($linkconf);
-            $linkconf['parameter'] = $GLOBALS['TSFE']->id;
-            $linkconf['additionalParams'] = '&tx_kesearch_pi1[sword]=' . $this->piVars['sword'];
-            $linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter][' . $filter['uid'] . ']=';
-            if (is_array($this->piVars['filter']) && count($this->piVars['filter'])) {
-                foreach ($this->piVars['filter'] as $key => $value) {
-                    if ($key != $filter['uid']) {
-                        $linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter][' . $key . ']=' . $value;
-                    }
-                }
-            }
-            $resetLink = $this->cObj->typoLink_URL($linkconf);
+            $resetLink= $this->div->searchLink($this->conf['resultPage'], $this->piVars, [$filter['uid']]);
 
             // set values for fluid template
             $filterData = $filter;
-            $filterData['name'] = 'tx_kesearch_pi1[filter][' . $filter['uid'] . ']';
+            $filterData['name'] = 'tx_kesearch_pi1[filter_' . $filter['uid'] . ']';
             $filterData['id'] = 'filter_' . $filter['uid'];
             $filterData['options'] = $options;
             $filterData['checkboxOptions'] = $this->compileCheckboxOptions($filter, $options);
@@ -474,7 +462,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         $checkboxOptions = array();
         if (is_array($allOptionsOfCurrentFilter)) {
             foreach ($allOptionsOfCurrentFilter as $key => $data) {
-                $data['key'] = $key;
+                $data['key'] = 'tx_kesearch_pi1[filter_' . $filter['uid'] . '_' . $key . ']';
 
                 // check if current option (of searchresults) is in array of all possible options
                 $isOptionInOptionArray = false;
@@ -538,27 +526,11 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         $optionsToDisplay = array();
 
         foreach ($filter['options'] as $option) {
-            // build link which selects this option and keeps all the other selected filters
-            unset($linkconf);
-            $linkconf['parameter'] = $GLOBALS['TSFE']->id;
-            $linkconf['additionalParams'] =
-                '&tx_kesearch_pi1[sword]=' . $this->piVars['sword']
-                . '&tx_kesearch_pi1[filter][' . $filter['uid'] . ']=' . $option['tag'];
 
-            if (VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) <
-                VersionNumberUtility::convertVersionNumberToInteger('10.0')
-            ) {
-                $linkconf['useCacheHash'] = false;
-            }
-
-            if (is_array($this->piVars['filter']) && count($this->piVars['filter'])) {
-                foreach ($this->piVars['filter'] as $key => $value) {
-                    if ($key != $filter['uid']) {
-                        $linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter][' . $key . ']=' . $value;
-                    }
-                }
-            }
-            $optionLink = $this->cObj->typoLink_URL($linkconf);
+            // build link which selects this option for this filter and keeps all the other filters
+            $localPiVars = $this->piVars;
+            $localPiVars['filter'][$filter['uid']] = $option['tag'];
+            $optionLink = $this->div->searchLink($this->conf['resultPage'], $localPiVars);
 
             // Should we check if the filter option is available in the current search result?
             // multi --> Check for each filter option if it has results - display it only if it has results!
