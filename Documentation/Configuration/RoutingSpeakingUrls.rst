@@ -8,9 +8,23 @@
 Routing (Speaking URLs)
 =======================
 
-Speaking URLs (for TYPO3 9 and greater) can be achieved as shown in the example below.
+Speaking URLs (for TYPO3 9 and greater) can be achieved by adding a routeEnhancer configuration to the site configuration
+as shown in the example below.
 
-Adjust the values for the parameter "sortByField" as it fits your needs.
+Speaking URLs can be configured for the search word, for filters, for the sorting and for the pagination.
+
+Example URL
+...........
+
+*https://example.org/search/score/desc/0/1/page/syscat80///contentexample/search+word*
+
+("search" in this example is the page slug, not part of the route enhancer for ke_search)
+
+Notes
+.....
+
+Adjust the values for the parameter "sortByField" as it fits your needs (you may have different fields to sort by in
+your website).
 
 For filters of type "select" and "textlink" you need one rule *per filter*.
 
@@ -25,17 +39,12 @@ a better solution in the future.
 
 Search words will be url encoded (eg. "schön" will become "sch%25C3%25B6n").
 
-Example:
 
-*https://example.org/search/score/desc/0/1/page/syscat80///contentexample/search+word*
+Example Site configuration (config.yaml)
+........................................
 
-
-("search" is the page slug, not part of the route enhancer for ke_search)
-
-Site configuration (config.yaml)
-................................
-
-Add this to your site configuration.
+This is an example for a site configuration. Please adjust the filter UIDs (like in "filter_13" where "13" is the UID
+of the filter) and the filter option UIDs (like in "filter_3_267" where "267" is the UID of the filter option).
 
 .. code-block:: none
 
