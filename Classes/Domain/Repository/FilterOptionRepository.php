@@ -46,6 +46,10 @@ class FilterOptionRepository {
      * @var string
      */
     protected $tableName = 'tx_kesearch_filteroptions';
+
+    /**
+     * @var string
+     */
     protected $parentTableName = 'tx_kesearch_filters';
 
     /**
