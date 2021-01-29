@@ -22,3 +22,4 @@ which control the frontend appearence.
 	Images
 	TemplateSelector
 	CustomValuesResultRow
+	LinkViewHelper

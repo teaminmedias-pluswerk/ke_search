@@ -61,6 +61,7 @@ CREATE TABLE tx_kesearch_filteroptions (
 	hidden tinyint(4) DEFAULT '0' NOT NULL,
 	title tinytext,
 	tag tinytext,
+    slug varchar(2048),
 	automated_tagging text,
 	automated_tagging_exclude text,
 	sorting int(11) DEFAULT '0' NOT NULL,

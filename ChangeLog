@@ -2,17 +2,20 @@ ChangeLog
 
 Upcoming Version
 [!!!]     The naming convention of tags has changed. Only alphanumeric characters are now allowed (no spaces, dashes, underscore or special characters anymore).
-          Please run the provided upgrade wizard "keSearchMakeTagsAlphanumericUpgradeWizard" and re-index. You may need to adjust custom scripts if the create tags.
-[!!!]     Some templates have changed. See Documentation -> Configuration -> Routing (Speaking URLs).
+          Please run the provided upgrade wizard "keSearchMakeTagsAlphanumericUpgradeWizard" and re-index. You may need to adjust custom scripts if they create tags.
+[!!!]     Filter options now have a "slug" field. Please run the provided upgrade wizard "keSearchPopulateFilterOptionsSlugsUpgradeWizard".
+[!!!]     Some templates have changed. See Configuration -> Routing in the documentation.
 [TASK]    Add string as datatype to uid param for findByUidAndType(). Thanks to escapevisual. https://github.com/teaminmedias-pluswerk/ke_search/pull/381
 [FEATURE] Add add allowEmptySearch setting, by deactivating no query will be executed if no searchword or filter is set. Thanks to Marcel Tams. https://github.com/teaminmedias-pluswerk/ke_search/pull/382
 [TASK]    Catch error if MySQL KEYS are disabled during first indexing. https://github.com/teaminmedias-pluswerk/ke_search/issues/380
 [DOC]     Add documentation on how to override the record storage page with typoscript. https://github.com/teaminmedias-pluswerk/ke_search/issues/282
-[FEATURE] Add routing for TYPO3 9 and 10 (routeEnhancer example, custom routing aspect, template changes)
+[FEATURE] Add routing for TYPO3 9 and 10 (custom routing aspects / mapper, configuration examples, template changes). https://github.com/teaminmedias-pluswerk/ke_search/issues/279
 [TASK]    Add validation "alphanum" to filter option tags. Add upgrade wizard. Adjust makeTags function and documentation accordingly. https://github.com/teaminmedias-pluswerk/ke_search/issues/383
 [TASK]    Flatten piVars in order make it possible to use aspects in routing and create speaking URLs.
 [TASK]    Remove "redirect" parameter, there's now a history.replaceState command in the SearchForm template
-[DOC]     Add example for speaking urls for filters
+[DOC]     Add example for speaking urls for filters (see Configuration --> Routing in the documentation)
+[TASK]    Add slug field and upgrade wizard for filter options.
+[FEATURE] Add viewhelper to link to search result pages (see Templating --> Link ViewHelper in the documentation)
 
 Version 3.3.1, October 2020
 [BUGFIX]  Allow tags to be empty in SearchHelper::makeTags and makeSystemCategoryTags, fixes regression from last version

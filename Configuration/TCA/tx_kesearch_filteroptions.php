@@ -24,7 +24,7 @@ return array(
             'disabled' => 'hidden',
         ),
         'iconfile' => 'EXT:ke_search/Resources/Public/Icons/table_icons/icon_tx_kesearch_filteroptions.gif',
-        'searchFields' => 'title,tag'
+        'searchFields' => 'title,tag,slug'
     ),
     'interface' => array(
         'showRecordFieldList' => 'sys_language_uid,l10n_parent,l10n_diffsource,hidden,title,tag'
@@ -93,6 +93,22 @@ return array(
                 'eval' => 'trim,required,alphanum,TeaminmediasPluswerk\KeSearch\UserFunction\CustomFieldValidation\FilterOptionTagValidator'
             )
         ),
+        'slug' => [
+            'exclude' => true,
+            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_filteroptions.slug',
+            'config' => [
+                'type' => 'slug',
+                'size' => 50,
+                'generatorOptions' => [
+                    'fields' => ['title'],
+                    'fieldSeparator' => '/',
+                    'prefixParentPageSlug' => false
+                ],
+                'fallbackCharacter' => '-',
+                'eval' => 'uniqueInSite',
+                'default' => ''
+            ]
+        ],
         'automated_tagging' => array(
             'exclude' => 1,
             'l10n_mode' => 'exclude',
@@ -122,6 +138,6 @@ return array(
     ),
     'types' => array(
         '0' => array('showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden,'
-            . ' title, tag, automated_tagging,automated_tagging_exclude')
+            . ' title, tag, slug, automated_tagging, automated_tagging_exclude')
     )
 );

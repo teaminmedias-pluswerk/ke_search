@@ -69,17 +69,15 @@ if (!defined('TYPO3_MODE')) {
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_tcemain.php']['processCmdmapClass']
     ['ke_search-filter-option'] = \TeaminmediasPluswerk\KeSearch\Hooks\FilterOptionHook::class;
 
-    // Upgrade Wizard
+    // Upgrade Wizards
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['keSearchMakeTagsAlphanumericUpgradeWizard']
         = \TeaminmediasPluswerk\KeSearch\Updates\MakeTagsAlphanumericUpgradeWizard::class;
+    $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['ext/install']['update']['keSearchPopulateFilterOptionsSlugsUpgradeWizard']
+        = \TeaminmediasPluswerk\KeSearch\Updates\PopulateFilterOptionSlugsUpgradeWizard::class;
 
-    // register custom aspect for routing
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['routing']['aspects']['UrlEncodeMapper'] =
-        \TeaminmediasPluswerk\KeSearch\Routing\Aspect\UrlEncodeMapper::class;
-
-
-    // register custom aspect for routing
-    $GLOBALS['TYPO3_CONF_VARS']['SYS']['routing']['aspects']['UrlEncodeMapper'] =
-        \TeaminmediasPluswerk\KeSearch\Routing\Aspect\UrlEncodeMapper::class;
-
+    // Custom aspects for routing
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['routing']['aspects']['KeSearchUrlEncodeMapper'] =
+        \TeaminmediasPluswerk\KeSearch\Routing\Aspect\KeSearchUrlEncodeMapper::class;
+    $GLOBALS['TYPO3_CONF_VARS']['SYS']['routing']['aspects']['KeSearchTagToSlugMapper'] =
+        \TeaminmediasPluswerk\KeSearch\Routing\Aspect\KeSearchTagToSlugMapper::class;
 })();
