@@ -3,6 +3,7 @@ namespace TeaminmediasPluswerk\KeSearch\Domain\Repository;
 
 use Doctrine\DBAL\Driver\Statement;
 use PDO;
+use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
 use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
@@ -272,7 +273,10 @@ class FilterOptionRepository {
         $record = $newRecord;
         $record['uid'] = $connection->lastInsertId($this->tableName);
 
-        // add the new filter record to
+        // Create slug
+        $this->update($record['uid'], ['slug'=> SearchHelper::createFilterOptionSlug($record)]);
+
+        // add the new filter option to the filter
         $updateFields = [
             'options' => $filter['options'],
         ];

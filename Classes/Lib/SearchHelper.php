@@ -24,6 +24,8 @@ use PDO;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationExtensionNotConfiguredException;
 use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExistException;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\DataHandling\Model\RecordStateFactory;
+use TYPO3\CMS\Core\DataHandling\SlugHelper;
 use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
@@ -397,6 +399,32 @@ class SearchHelper
         } else {
             return $GLOBALS['TSFE']->cObj->typoLink($linkText, $linkconf);
         }
+    }
+
+    /**
+     * @param $filterOptionRecord
+     * @return string
+     * @throws \TYPO3\CMS\Core\Exception\SiteNotFoundException
+     */
+    static public function createFilterOptionSlug($filterOptionRecord): string
+    {
+        /** @var SlugHelper $slugHelper */
+        $slugHelper = GeneralUtility::makeInstance(
+            SlugHelper::class,
+            'tx_kesearch_filteroptions',
+            'slug',
+            $GLOBALS['TCA']['tx_kesearch_filteroptions']['columns']['slug']['config']
+        );
+
+        $slug = $slugHelper->generate($filterOptionRecord, $filterOptionRecord['pid']);
+
+        $state = RecordStateFactory::forName('tx_kesearch_filteroptions')
+            ->fromArray($filterOptionRecord, $filterOptionRecord['pid'], $filterOptionRecord['uid']);
+        if (!$slugHelper->isUniqueInSite($slug, $state)) {
+            $slug = $slugHelper->buildSlugForUniqueInSite($slug, $state);
+        }
+
+        return $slug;
     }
 
 }
