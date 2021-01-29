@@ -52,10 +52,10 @@ class PageRepository {
     }
 
     /**
-     * @param $categoryUid
+     * @param $uid
      * @return mixed
      */
-    public function findOneByUid($categoryUid)
+    public function findOneByUid($uid)
     {
         /** @var ConnectionPool $connectionPool */
         $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
@@ -66,7 +66,7 @@ class PageRepository {
             ->where(
                 $queryBuilder->expr()->eq(
                     'uid',
-                    $queryBuilder->createNamedParameter($categoryUid, PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($uid, PDO::PARAM_INT)
                 )
             )
             ->execute()
