@@ -29,37 +29,9 @@ namespace TeaminmediasPluswerk\KeSearch\Routing\Aspect;
 use TYPO3\CMS\Core\Routing\Aspect\StaticMappableAspectInterface;
 
 /**
- * Mapper for having a static list of mapping them to value properties.
- *
- * routeEnhancers:
- *   MyBlogExample:
- *     type: Extbase
- *     extension: BlogExample
- *     plugin: Pi1
- *     routes:
- *       - { routePath: '/archive/{year}', _controller: 'Blog::archive' }
- *     defaultController: 'Blog::list'
- *     aspects:
- *       year:
- *         type: StaticValueMapper
- *         map:
- *           2k17: '2017'
- *           2k18: '2018'
- *           next: '2019'
- *         # (optional)
- *         localeMap:
- *           - locale: 'en_US.*|en_GB.*'
- *             map:
- *               twenty-seventeen: '2017'
- *               twenty-eighteen: '2018'
- *               next: '2019'
- *           - locale: 'fr_FR'
- *             map:
- *               vingt-dix-sept: '2017'
- *               vingt-dix-huit: '2018'
- *               prochain: '2019'
+ * Mapper for simply urlencod / decode the value
  */
-class UrlEncodeMapper implements StaticMappableAspectInterface
+class KeSearchUrlEncodeMapper implements StaticMappableAspectInterface
 {
     /**
      * @var array
