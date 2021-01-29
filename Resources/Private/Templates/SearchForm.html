@@ -1,3 +1,7 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+	  xmlns:kesearch="http://typo3.org/ns/TeaminmediasPluswerk\KeSearch\ViewHelpers"
+	  data-namespace-typo3-fluid="true">
+
 <f:layout name="General" />
 <!--
 =====================
@@ -6,7 +10,7 @@ Templates/SearchForm.html
 <f:section name="content">
 	<form method="get" id="form_kesearch_pi1" name="form_kesearch_pi1"  action="{f:uri.page(pageUid: targetpage)}">
 		<f:comment> // Replace the URL with the speaking URL </f:comment>
-		<f:format.raw><script type="text/javascript">history.replaceState(null,'','</f:format.raw>{f:uri.page(addQueryString:'1', addQueryStringMethod:'GET')}<f:format.raw>');</script></f:format.raw>
+		<f:format.raw><script type="text/javascript">history.replaceState(null,'','</f:format.raw><kesearch:link keepPiVars="1" uriOnly="1" /><f:format.raw>');</script></f:format.raw>
 
 		<fieldset class="kesearch_searchbox">
 			<f:if condition="{lparam}">
