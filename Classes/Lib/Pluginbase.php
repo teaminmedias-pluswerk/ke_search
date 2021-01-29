@@ -159,7 +159,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         }
 
         // explode flattened piVars to multi-dimensional array
-        $this->piVars = $this->div->explodePiVars($this->piVars);
+        $this->piVars = SearchHelper::explodePiVars($this->piVars);
 
         // clean piVars
         $this->piVars = $this->div->cleanPiVars($this->piVars);
@@ -366,7 +366,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         }
 
         // set reset link
-        $this->fluidTemplateVariables['resetUrl'] = $this->div->searchLink($this->conf['resultPage']);
+        $this->fluidTemplateVariables['resetUrl'] = SearchHelper::searchLink($this->conf['resultPage']);
     }
 
     /**
@@ -403,7 +403,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             }
 
             // build link to reset this filter while keeping the others
-            $resetLink= $this->div->searchLink($this->conf['resultPage'], $this->piVars, [$filter['uid']]);
+            $resetLink= SearchHelper::searchLink($this->conf['resultPage'], $this->piVars, [$filter['uid']]);
 
             // set values for fluid template
             $filterData = $filter;
@@ -523,7 +523,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
             // build link which selects this option for this filter and keeps all the other filters
             $localPiVars = $this->piVars;
             $localPiVars['filter'][$filter['uid']] = $option['tag'];
-            $optionLink = $this->div->searchLink($this->conf['resultPage'], $localPiVars);
+            $optionLink = SearchHelper::searchLink($this->conf['resultPage'], $localPiVars);
 
             // Should we check if the filter option is available in the current search result?
             // multi --> Check for each filter option if it has results - display it only if it has results!

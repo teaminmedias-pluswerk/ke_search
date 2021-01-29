@@ -216,7 +216,7 @@ class Sorting
         $localPiVars['sortByDir'] = $sortByDir;
         unset($localPiVars['page']);
 
-        return $this->pObj->div->searchLink(
+        return SearchHelper::searchLink(
             $this->pObj->conf['resultPage'],
             $localPiVars,
             [],

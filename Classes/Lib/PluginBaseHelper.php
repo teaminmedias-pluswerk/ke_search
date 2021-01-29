@@ -31,8 +31,6 @@ use TeaminmediasPluswerk\KeSearch\Plugins\txkesearchpi1;
  */
 class PluginBaseHelper
 {
-    public CONST PI_VARS = ['sword', 'sortByField', 'sortByDir', 'page', 'resetFilters', 'filter'];
-
     public $showShortMessage = false;
 
     /**
@@ -98,73 +96,6 @@ class PluginBaseHelper
     {
         $pageArray = explode(',', $pages);
         return intval($pageArray[0]);
-    }
-
-    /**
-     * Explode flattened piVars to multi-dimensional array, eg.
-     * tx_kesearch_pi1[filter_3]=example --> tx_kesearch_pi1[filter][3]=example
-     * tx_kesearch_pi1[filter_3_1]=example --> tx_kesearch_pi1[filter][3][1]=example
-     *
-     * @param array $piVars
-     * @return array
-     */
-    public function explodePiVars(array $piVars)
-    {
-        foreach ($piVars as $key => $value) {
-            if (strstr($key, '_')) {
-                $newKeys = explode('_', $key,2);
-                if (strstr($newKeys[1], '_')) {
-                    $newKeys2 = explode('_', $newKeys[1], 2);
-                    $piVars[$newKeys[0]][$newKeys2[0]][$newKeys2[1]] = $value;
-                } else {
-                    $piVars[$newKeys[0]][$newKeys[1]] = $value;
-                }
-            }
-        }
-        return $piVars;
-    }
-
-    /**
-     * Creates a link to the search result on the given page, flattens the piVars, resets given filters.
-     * If linkText is give, it renders a full a-tag, otherwise only the URL.
-     *
-     * @param int $parameter target page
-     * @param array $piVars
-     * @param array $resetFilters filters to reset
-     * @param string $linkText
-     * @return string
-     */
-    public function searchLink(int $parameter, array $piVars=[], $resetFilters=[], $linkText = ''): string
-    {
-        $keepPiVars = self::PI_VARS;
-        $linkconf = [
-            'parameter' => $parameter,
-            'additionalParams' => ''
-        ];
-        unset($keepPiVars[array_search('filter', $keepPiVars)]);
-        foreach ($keepPiVars as $piVarKey) {
-            if (!empty($piVars[$piVarKey])) {
-                $linkconf['additionalParams'] .= '&tx_kesearch_pi1[' . $piVarKey . ']=' . $piVars[$piVarKey];
-            }
-        }
-        if (is_array($piVars['filter']) && count($piVars['filter'])) {
-            foreach ($piVars['filter'] as $filterUid => $filterValue) {
-                if (!in_array($filterUid, $resetFilters)) {
-                    if (!is_array($piVars['filter'][$filterUid])) {
-                        $linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter_' . $filterUid . ']=' . $filterValue;
-                    } else {
-                        foreach ($piVars['filter'][$filterUid] as $filterOptionUid => $filterOptionValue) {
-                            $linkconf['additionalParams'] .= '&tx_kesearch_pi1[filter_' . $filterUid . '_' . $filterOptionUid . ']=' . $filterOptionValue;
-                        }
-                    }
-                }
-            }
-        }
-        if (empty($linkText)) {
-            return $GLOBALS['TSFE']->cObj->typoLink_URL($linkconf);
-        } else {
-            return $GLOBALS['TSFE']->cObj->typoLink($linkText, $linkconf);
-        }
     }
 
     /**
