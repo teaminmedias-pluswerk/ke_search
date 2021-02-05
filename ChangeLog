@@ -1,5 +1,8 @@
 ChangeLog
 
+Upcoming version
+[BUGFIX]  Fix ViewHelper requires $resetFilters as array. Thanks to Daniel Kruse and crealistiques. https://github.com/teaminmedias-pluswerk/ke_search/issues/391
+
 Version 3.4.0, January 2020
 [!!!]     The naming convention of tags has changed. Only alphanumeric characters are now allowed (no spaces, dashes, underscore or special characters anymore).
           Please run the provided upgrade wizard "keSearchMakeTagsAlphanumericUpgradeWizard" and re-index. You may need to adjust custom scripts if they create tags.

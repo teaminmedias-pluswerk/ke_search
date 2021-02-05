@@ -36,7 +36,7 @@ class LinkViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedV
     public function render(): string
     {
         $page = $this->arguments['page'] ?? $GLOBALS['TSFE']->id;
-        $resetFilters = $this->arguments['resetFilters'] ?? '';
+        $resetFilters = $this->arguments['resetFilters'] ?? [];
         $content = $this->arguments['content'] ?? '';
         $keepPiVars = !empty($this->arguments['keepPiVars']);
         $piVars = $this->arguments['piVars'] ?? [];
