@@ -562,7 +562,7 @@ class Page extends IndexerBase
                 }
 
                 // index the files found
-                if (!$pageAccessRestrictions['hidden']) {
+                if (!$pageAccessRestrictions['hidden'] && $this->checkIfpageShouldBeIndexed($uid, $this->pageRecords[intval($uid)]['sys_language_uid'])) {
                     $this->indexFiles($fileObjects, $ttContentRow, $pageAccessRestrictions['fe_group'], $tags);
                 }
 
