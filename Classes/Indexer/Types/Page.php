@@ -210,7 +210,9 @@ class Page extends IndexerBase
         if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) >=
             \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('10.0')
         ) {
-            $startingPoints = GeneralUtility::trimExplode(',', $this->indexerConfig['startingpoints_recursive'], true);
+            $startingPoints = [];
+            $startingPoints += GeneralUtility::trimExplode(',', $this->indexerConfig['startingpoints_recursive'], true);
+            $startingPoints += GeneralUtility::trimExplode(',', $this->indexerConfig['single_pages'], true);
             foreach ($startingPoints as $startingPoint) {
                 foreach ($translationProvider->getSystemLanguages($startingPoint) as $key => $lang) {
                     $this->sysLanguages[$key] = $lang;
