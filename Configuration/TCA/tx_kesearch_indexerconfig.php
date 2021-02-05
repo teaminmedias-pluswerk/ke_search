@@ -88,6 +88,11 @@ return array(
                         'cal',
                         'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_14.gif'
                     ),
+                    array(
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.2',
+                        'tt_news',
+                        'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_2.gif'
+                    ),
                 ),
                 'itemsProcFunc' => 'TeaminmediasPluswerk\KeSearch\Lib\Items->fillIndexerConfig',
                 'size' => 1,
@@ -125,7 +130,7 @@ return array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.startingpoints_recursive',
             'description' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.startingpoints_recursive.description',
-            'displayCond' => 'FIELD:type:IN:page,tt_content,tt_address,news,a21glossary,cal',
+            'displayCond' => 'FIELD:type:IN:page,tt_content,tt_address,news,a21glossary,cal,tt_news',
             'config' => array(
                 'type' => 'group',
                 'internal_type' => 'db',
@@ -152,7 +157,8 @@ return array(
         'sysfolder' => array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.sysfolder',
-            'displayCond' => 'FIELD:type:IN:tt_address,news,a21glossary,cal',
+            'description' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.sysfolder.description',
+            'displayCond' => 'FIELD:type:IN:tt_address,news,a21glossary,cal,tt_news',
             'config' => array(
                 'type' => 'group',
                 'internal_type' => 'db',
