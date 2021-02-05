@@ -98,6 +98,7 @@ return array(
         'storagepid' => array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.storagepid',
+            'description' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.storagepid.description',
             'config' => array(
                 'type' => 'group',
                 'internal_type' => 'db',
@@ -123,6 +124,7 @@ return array(
         'startingpoints_recursive' => array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.startingpoints_recursive',
+            'description' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.startingpoints_recursive.description',
             'displayCond' => 'FIELD:type:IN:page,tt_content,tt_address,news,a21glossary,cal',
             'config' => array(
                 'type' => 'group',
@@ -136,6 +138,7 @@ return array(
         'single_pages' => array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.single_pages',
+            'description' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.single_pages.description',
             'displayCond' => 'FIELD:type:IN:page,tt_content',
             'config' => array(
                 'type' => 'group',
