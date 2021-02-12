@@ -259,7 +259,7 @@ return array(
         'index_use_page_tags' => array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_use_page_tags',
-            'displayCond' => 'FIELD:type:IN:tt_address,news',
+            'displayCond' => 'FIELD:type:IN:tt_address,news,tt_news',
             'config' => array(
                 'type' => 'check',
                 'default' => '0'
