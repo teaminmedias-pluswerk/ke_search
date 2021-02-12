@@ -778,6 +778,14 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                 }
                 break;
 
+            case 'tt_news':
+                if ($this->conf['showNewsImages']) {
+                    return $this->getFirstFalRelationUid(
+                        'tt_news', 'image', $row['orig_uid']
+                    );
+                }
+                break;
+
             case 'news':
                 if ($this->conf['showNewsImages']) {
                     return $this->getFirstFalRelationUid(
@@ -785,6 +793,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                     );
                 }
                 break;
+
             default:
                 if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['fileReferenceTypes'])
                     && isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['fileReferenceTypes'][$type])) {

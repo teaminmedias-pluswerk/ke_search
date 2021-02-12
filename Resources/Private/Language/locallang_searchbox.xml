@@ -47,7 +47,7 @@
 			<label index="ff.showTypeIcon">Show result type icon?</label>
 			<label index="ff.showFilePreview">Show file preview instead of result icon if possible?</label>
 			<label index="ff.showPageImages">Show page image preview instead of result icon? (Images are taken from the page properties, field "search result image".)</label>
-			<label index="ff.showNewsImages">Show news (ext:news) image preview instead of result icon?</label>
+			<label index="ff.showNewsImages">Show news (ext:news / ext:tt_news) image preview instead of result icon?</label>
 
 			<label index="ff.page.pagebrowser">Pagebrowser</label>
 			<label index="ff.pagebrowserOnTop">Show pagebrowser on top of result list</label>
