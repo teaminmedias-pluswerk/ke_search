@@ -14,7 +14,7 @@ The following fields will be indexed: title, short, bodytext, author, author_ema
 
 Access limitations will be taken into account.
 
-An image will be shown in the result list, if you activate that setting in the ke_search searchbox plugin. The first assigned image will be shown.
+An image will be shown in the result list if you activate that setting in the ke_search searchbox plugin. The first assigned image will be shown.
 
 Configuration
 -------------
