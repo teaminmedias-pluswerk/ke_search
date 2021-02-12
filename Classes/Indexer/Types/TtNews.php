@@ -166,13 +166,16 @@ class TtNews extends IndexerBase
                     $tags = '';
                 }
 
-                // @todo
                 // add keywords from ext:tt_news as tags
-                //$tags = $this->addTagsFromNewsKeywords($tags, $newsRecord);
+                if (!empty($newsRecord['keywords'])) {
+                    $keywordsList = GeneralUtility::trimExplode(',', $newsRecord['keywords']);
+                    foreach ($keywordsList as $keyword) {
+                        SearchHelper::makeTags($tags, array($keyword));
+                    }
+                }
 
-                // @todo
                 // add categories from from ext:news as tags
-                //$tags = $this->addTagsFromNewsCategories($tags, $categoryData);
+                SearchHelper::makeTags($tags, $categoryData['title_list']);
 
                 // set additional fields
                 $additionalFields = array();

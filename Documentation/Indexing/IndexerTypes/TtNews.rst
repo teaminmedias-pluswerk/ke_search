@@ -50,3 +50,9 @@ separately, making them show up as a individual result.
 You can also specify which files should be indexed by defining a comma-separated list of file extensions. If you
 leave this field empty, no files will be indexed.
 
+Automated tagging
+-----------------
+Tags will be automatically generated from keywords and from assigned categories by applying the rules for tags
+(no spaces and special characters). For example, if you have category
+"Blue cars!", a tag named "Bluecars" will be assigned to the index record. You can use these tags to create
+filters. Just use the same tag ("Bluecars") as tag in the filter option you are creating.
