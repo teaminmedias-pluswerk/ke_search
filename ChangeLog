@@ -1,15 +1,15 @@
 ChangeLog
 
-Upcoming version
+Version 3.4.2, February 2021
 [BUGFIX]  Field orig_row in search result is never filled with row data. Thanks to hackmus. https://github.com/teaminmedias-pluswerk/ke_search/issues/392
 
-Version 3.4.1, February 2020
+Version 3.4.1, February 2021
 [BUGFIX]  Fix ViewHelper requires $resetFilters as array. Thanks to Daniel Kruse and crealistiques. https://github.com/teaminmedias-pluswerk/ke_search/issues/391
 [BUGFIX]  The page indexer does not respect 'singe_pages' in page translations. Thanks to Zellwerker and Markus Gerdes. https://github.com/teaminmedias-pluswerk/ke_search/issues/390 and https://github.com/teaminmedias-pluswerk/ke_search/issues/389.
 [DOC]     Improve labels in indexer configuration and documentation on multilingual setup.
 [BUGFIX]  Linked files on excluded page get indexed. Thanks to LuxEix. https://github.com/teaminmedias-pluswerk/ke_search/issues/388
 
-Version 3.4.0, January 2020
+Version 3.4.0, January 2021
 [!!!]     The naming convention of tags has changed. Only alphanumeric characters are now allowed (no spaces, dashes, underscore or special characters anymore).
           Please run the provided upgrade wizard "keSearchMakeTagsAlphanumericUpgradeWizard" and re-index. You may need to adjust custom scripts if they create tags.
 [!!!]     Filter options now have a "slug" field. Please run the provided upgrade wizard "keSearchPopulateFilterOptionsSlugsUpgradeWizard".
