@@ -45,6 +45,9 @@ class GenericRepository {
      */
     public function findByUidAndType($uid, string $type)
     {
+        $uid = intval($uid);
+        if ($uid<=0) return false;
+
         $row = false;
         $tableName = '';
         switch ($type) {
@@ -73,7 +76,7 @@ class GenericRepository {
                 $tableName = $_procObj->getTableName($type);
             }
         }
-        if (!empty($tableName) && is_int($uid)) {
+        if (!empty($tableName)) {
             /** @var QueryBuilder $queryBuilder */
             $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)
                 ->getQueryBuilderForTable($tableName);
