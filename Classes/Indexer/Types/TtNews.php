@@ -2,6 +2,7 @@
 
 namespace TeaminmediasPluswerk\KeSearch\Indexer\Types;
 
+use TeaminmediasPluswerk\KeSearch\Domain\Repository\PageRepository;
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase;
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
@@ -93,11 +94,9 @@ class TtNews extends IndexerBase
                     'pid' => $newsRecord['pid']
                 ]);
 
-                // @todo
                 // get category data for this news record (list of
                 // assigned categories and single view from category, if it exists)
-                $categoryData = [];
-                //$categoryData = $this->getCategoryData($newsRecord);
+                $categoryData = $this->getCategoryData($newsRecord);
 
                 // compile the information which should go into the index:
                 // title, teaser, bodytext
@@ -148,15 +147,11 @@ class TtNews extends IndexerBase
                 // make it possible to modify the indexerConfig via hook
                 $indexerConfig = $this->indexerConfig;
 
-                // create params and custom single view page
-                // @todo
                 // overwrite the targetpid if there is a category assigned
                 // which has its own single view page
-                /*
                 if ($categoryData['single_pid']) {
                     $indexerConfig['targetpid'] = $categoryData['single_pid'];
                 }
-                */
 
                 // create params for news single view, example:
                 // /tt-news-detail?tx_ttnews[tt_news]=1
@@ -234,6 +229,69 @@ class TtNews extends IndexerBase
             $this->pObj->logger->info($logMessage);
         }
         return $indexedNewsCounter . ' tt_news records and ' . $this->fileCounter . ' related files have been indexed.';
+    }
+
+    /**
+     * checks if there is a news category assigned to the $newsRecord which has
+     * its own single view page and if yes, returns the uid of the page
+     * in $catagoryData['single_pid'].
+     * It also compiles a list of all assigned categories and returns
+     * it as an array in $categoryData['uid_list']. The titles of the
+     * categories are returned in $categoryData['title_list'] (array)
+     *
+     * @param array $newsRecord
+     * @return array
+     */
+    private function getCategoryData($newsRecord)
+    {
+        /** @var PageRepository $pageRepository */
+        $pageRepository = GeneralUtility::makeInstance(PageRepository::class);
+
+        $categoryData = array(
+            'single_pid' => 0,
+            'uid_list' => array(),
+            'title_list' => array()
+        );
+
+        $queryBuilder = Db::getQueryBuilder('tt_news_cat');
+
+        $where = [];
+        $where[] = $queryBuilder->expr()->eq(
+            'tt_news.uid',
+            $queryBuilder->quoteIdentifier('tt_news_cat_mm.uid_local')
+        );
+        $where[] = $queryBuilder->expr()->eq(
+            'tt_news_cat.uid',
+            $queryBuilder->quoteIdentifier('tt_news_cat_mm.uid_foreign')
+        );
+        $where[] = $queryBuilder->expr()->eq(
+            'tt_news.uid',
+            $queryBuilder->createNamedParameter($newsRecord['uid'], \PDO::PARAM_INT)
+        );
+
+        $catRes = $queryBuilder
+            ->select(
+                'tt_news_cat.uid',
+                'tt_news_cat.single_pid',
+                'tt_news_cat.title'
+            )
+            ->from('tt_news_cat')
+            ->from('tt_news_cat_mm')
+            ->from('tt_news')
+            ->orderBy('tt_news_cat_mm.sorting')
+            ->where(...$where)
+            ->execute();
+
+        while (($newsCat = $catRes->fetch())) {
+            $categoryData['uid_list'][] = $newsCat['uid'];
+            $categoryData['title_list'][] = $newsCat['title'];
+            // check if this category has a single_pid and if this page really is reachable (not deleted, hidden or time restricted)
+            if ($newsCat['single_pid'] && !$categoryData['single_pid'] && $pageRepository->findOneByUid($newsCat['single_pid'])) {
+                $categoryData['single_pid'] = $newsCat['single_pid'];
+            }
+        }
+
+        return $categoryData;
     }
 
 }

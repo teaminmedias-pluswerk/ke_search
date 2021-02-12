@@ -26,3 +26,17 @@ In order to index news, create a new indexer configuration an configure it as fo
 * Pages/folders recursive/single: Sysfolders with news data to index.
 * Add tags of parent pages/folders: If you added a tag to the sysfolder containing news, these tags will be added to the news index entry.
 * Add tag to all indexed elements: You can select an already existing filter option / tag to add it to all indexed elements.
+
+Alternative single view page from category
+------------------------------------------
+
+If a news record has a news category assigned which has a "Single-view page for news from this category [single_pid]"
+set, this will be used as single view and will overwrite the setting "Target page" of the indexer configuration. This
+is the same behaviour as if the corresponding tt_news constant set.
+
+.. code-block:: none
+
+	plugin.tt_news.useSPidFromCategory = 1
+
+Note: This constant has no effect in ke_search. In ke_search this category is always used.
+
