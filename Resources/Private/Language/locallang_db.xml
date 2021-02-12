@@ -81,7 +81,7 @@
 			<label index="tx_kesearch_indexerconfig.index_news_files_mode.I.0">Separate search result</label>
 			<label index="tx_kesearch_indexerconfig.index_news_files_mode.I.1">Content of news record</label>
 			<label index="tx_kesearch_indexerconfig.index_extnews_category_selection">Categories</label>
-			<label index="tx_kesearch_indexerconfig.index_use_page_tags">Add tags of parent pages/sys-folders?</label>
+			<label index="tx_kesearch_indexerconfig.index_use_page_tags">Add tags of parent pages/folders?</label>
 			<label index="tx_kesearch_indexerconfig.index_use_page_tags_for_files">Add tags to files also?</label>
 			<label index="tx_kesearch_indexerconfig.index_page_doctypes">Page types which should be indexed (field:doktype, default: 1,2,5)</label>
 			<label index="tx_kesearch_indexerconfig.directories">Directories (comma-separated, e.g. fileadmin/my_directory/,fileadmin/my_other_directory or my_directory/,my_other_directory/ if you use FAL)</label>
@@ -165,7 +165,7 @@
 			<label index="tx_kesearch_indexerconfig.index_news_files_mode">Verknüpfte Dateien behandeln als</label>
 			<label index="tx_kesearch_indexerconfig.index_news_files_mode.I.0">Separates Suchergebnis</label>
 			<label index="tx_kesearch_indexerconfig.index_news_files_mode.I.1">Inhalt des News-Datensatzes</label>
-			<label index="tx_kesearch_indexerconfig.index_use_page_tags">Schlagworte der übergeordneten Seite/des Sys-Ordners übernehmen?</label>
+			<label index="tx_kesearch_indexerconfig.index_use_page_tags">Schlagworte der übergeordneten Seite/des Ordners übernehmen?</label>
 			<label index="tx_kesearch_indexerconfig.index_use_page_tags_for_files">Schlagworte auch für Dateien übernehmen?</label>
 			<label index="tx_kesearch_indexerconfig.index_page_doctypes">Seitentypen, die indexiert werden sollen (Feld:doktype, Standard: 1,2,5)</label>
 			<label index="tx_kesearch_indexerconfig.directories">Verzeichnisse (komma-getrennt, z. B. fileadmin/my_directory/,fileadmin/my_other_directory  oder my_directory/,my_other_directory/ bei FAL-Benutzung)</label>

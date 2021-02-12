@@ -58,6 +58,7 @@ ke_search comes with indexers for the most important content types.
 	IndexerTypes/Pages
 	IndexerTypes/ContentElements
 	IndexerTypes/News
+	IndexerTypes/TtNews
 	IndexerTypes/Addresses
 	IndexerTypes/Files
 	IndexerTypes/Custom

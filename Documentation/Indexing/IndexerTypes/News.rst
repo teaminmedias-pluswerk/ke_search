@@ -5,8 +5,9 @@
 
 .. _newsIndexer:
 
-News
-====
+News (EXT:news)
+===============
+
 With this indexer you can index news from the extension "news" (extension key "news", not "tt_news").
 
 The following fields will be indexed: title, teaser, content, author, author E-Mail, keywords.
