@@ -19,13 +19,14 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TeaminmediasPluswerk\KeSearch\Indexer\Types\File;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
 use TYPO3\CMS\Core\Database\QueryGenerator;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessageRendererResolver;
+use TYPO3\CMS\Core\Resource\FileReference;
+use TYPO3\CMS\Core\Resource\FileRepository;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /**
@@ -44,6 +45,9 @@ class IndexerBase
 
     // string which separates metadata from file content in the index record
     const METADATASEPARATOR = "\n";
+
+    /** @var int $fileCounter */
+    protected $fileCounter = 0;
 
     /**
      * @var IndexerRunner
@@ -385,5 +389,233 @@ class IndexerBase
         }
         
         return $selectedCategories;
+    }
+
+    /**
+     * Returns a list of files to be indexed for the given table, uid and language.
+     * Takes the "fileext" setting from the indexer configuration into account and returns only files with allowed
+     * file extensions.
+     *
+     * @param $table
+     * @param $fieldname
+     * @param $uid
+     * @param $language
+     * @return array An array of file references.
+     */
+    protected function getFilesToIndex($table, $fieldname,  $uid, $language): array
+    {
+        /** @var FileRepository $fileRepository  */
+        $fileRepository = GeneralUtility::makeInstance(FileRepository::class);
+        $filesToIndex = [];
+
+        $queryBuilder = Db::getQueryBuilder('sys_file');
+        $relatedFilesQuery = $queryBuilder
+            ->select('ref.uid')
+            ->from('sys_file', 'file')
+            ->from('sys_file_reference', 'ref')
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'ref.tablenames',
+                    $queryBuilder->createNamedParameter($table)
+                ),
+                $queryBuilder->expr()->eq(
+                    'ref.fieldname',
+                    $queryBuilder->createNamedParameter($fieldname)
+                ),
+                $queryBuilder->expr()->eq(
+                    'ref.uid_foreign',
+                    $queryBuilder->createNamedParameter($uid, \PDO::PARAM_INT)
+                ),
+                $queryBuilder->expr()->eq(
+                    'ref.uid_local',
+                    $queryBuilder->quoteIdentifier('file.uid')
+                ),
+                $queryBuilder->expr()->eq(
+                    'ref.sys_language_uid',
+                    $queryBuilder->createNamedParameter($language, \PDO::PARAM_INT)
+                )
+            )
+            ->orderBy('ref.sorting_foreign')
+            ->execute();
+
+
+        if ($relatedFilesQuery->rowCount()) {
+            $relatedFiles = $relatedFilesQuery->fetchAll();
+            foreach ($relatedFiles as $key => $relatedFile) {
+                $fileReference = $fileRepository->findFileReferenceByUid($relatedFile['uid']);
+                if (GeneralUtility::inList(
+                    $this->indexerConfig['fileext'],
+                    $fileReference->getExtension()
+                )) {
+                    $filesToIndex[] = $fileReference;
+                }
+            }
+        }
+
+        return $filesToIndex;
+    }
+
+    /**
+     * extract content from files
+     *
+     * @param array $fileReferences
+     * @return string
+     */
+    protected function getContentFromFiles(array $fileReferences): string
+    {
+        $fileContent = '';
+
+        /** @var FileReference $fileReference */
+        foreach ($fileReferences as $fileReference) {
+
+            /* @var $fileIndexerObject File */
+            $fileIndexerObject = GeneralUtility::makeInstance( File::class, $this->pObj);
+
+            if ($fileIndexerObject->fileInfo->setFile($fileReference)) {
+                $fileContent .= $fileIndexerObject->getFileContent($fileReference->getForLocalProcessing(false)) . "\n";
+                $this->pObj->logger->debug('File content has been fetched', [$fileReference->getPublicUrl()]);
+                $this->fileCounter++;
+            }
+        }
+
+        return $fileContent;
+    }
+
+    /**
+     * @param array $relatedFiles Array of file references
+     * @param array $parentRecord Expects an array with uid, sys_language_uid, starttime, endtime, fe_group
+     */
+    protected function indexFilesAsSeparateResults(array $relatedFiles, array $parentRecord)
+    {
+        /** @var FileReference $relatedFile */
+        foreach ($relatedFiles as $relatedFile) {
+            $filePath = $relatedFile->getForLocalProcessing(false);
+            if (!file_exists($filePath)) {
+                $errorMessage = 'Could not index file ' . $filePath;
+                $errorMessage .= ' from parent record #' . $parentRecord['uid'] . ' (file does not exist).';
+                $this->pObj->logger->warning($errorMessage);
+                $this->addError($errorMessage);
+            } else {
+                /* @var $fileIndexerObject File */
+                $fileIndexerObject = GeneralUtility::makeInstance(File::class, $this->pObj);
+
+                // add tag to identify this index record as file
+                SearchHelper::makeTags($tags, ['file']);
+
+                if ($fileIndexerObject->fileInfo->setFile($relatedFile)) {
+                    if (($content = $fileIndexerObject->getFileContent($filePath))) {
+                        $this->storeFileInIndex(
+                            $relatedFile,
+                            $content,
+                            $tags,
+                            $parentRecord['fe_group'],
+                            $parentRecord['pid'],
+                            $parentRecord['sys_language_uid'],
+                            $parentRecord['starttime'],
+                            $parentRecord['endtime']
+                        );
+                        $this->fileCounter++;
+                    } else {
+                        $this->addError($fileIndexerObject->getErrors());
+                        $errorMessage = 'Could not index file ' . $filePath . '.';
+                        $this->pObj->logger->warning($errorMessage);
+                        $this->addError($errorMessage);
+                    }
+                }
+            }
+        }
+        
+    }
+
+    /**
+     * Stores file content to the index. This function should be used when a parent record (eg. a news record)
+     * contains links to files and the content of these files should be stored in the index separately (not together
+     * with the parent record).
+     * Uses feGroups, starttime, enddtime, langauge and targetPage from the parent record.
+     * 
+     * @param FileReference $fileReference
+     * @param string $content
+     * @param string $tags
+     * @param string $feGroups
+     * @param int $targetPage
+     * @param int $sys_langauge_uid
+     * @param int $starttime
+     * @param int $endtime
+     * @param string $logMessage
+     */
+    protected function storeFileInIndex(
+        FileReference $fileReference,
+        string $content,
+        string $tags = '',
+        string $feGroups = '',
+        int $targetPage = 0,
+        int $sys_langauge_uid = 0,
+        int $starttime = 0,
+        int $endtime = 0,
+        string $logMessage = ''
+    )
+    {
+        /* @var $fileIndexerObject File */
+        $fileIndexerObject = GeneralUtility::makeInstance(File::class, $this->pObj);
+        $fileIndexerObject->fileInfo->setFile($fileReference);
+
+            // get metadata
+        $orig_uid = $fileReference->getOriginalFile()->getUid();
+        $fileProperties = $fileReference->getOriginalFile()->getProperties();
+
+        // respect given fe_groups from indexed record and from file metadata
+        if ($fileProperties['fe_groups']) {
+            if ($feGroups) {
+                $feGroupsContentArray = GeneralUtility::intExplode(',', $feGroups);
+                $feGroupsFileArray = GeneralUtility::intExplode(',', $fileProperties['fe_groups']);
+                $feGroups = implode(',', array_intersect($feGroupsContentArray, $feGroupsFileArray));
+            } else {
+                $feGroups = $fileProperties['fe_groups'];
+            }
+        }
+
+        // assign category titles as tags
+        $categories = SearchHelper::getCategories($fileProperties['uid'], 'sys_file_metadata');
+        SearchHelper::makeTags($tags, $categories['title_list']);
+
+        // assign categories as generic tags
+        SearchHelper::makeSystemCategoryTags($tags, $fileProperties['uid'], 'sys_file_metadata');
+
+        // index meta data from FAL: title, description, alternative
+        $content = $this->addFileMetata($fileProperties, $content);
+
+        // use file description as abstract
+        $abstract = '';
+        if ($fileProperties['description']) {
+            $abstract = $fileProperties['description'];
+        }
+
+        $additionalFields = [
+            'sortdate' => $fileIndexerObject->fileInfo->getModificationTime(),
+            'orig_uid' => $orig_uid,
+            'orig_pid' => 0,
+            'directory' => $fileIndexerObject->fileInfo->getRelativePath(),
+            'hash' => $fileIndexerObject->getUniqueHashForFile()
+        ];
+
+        // Store record in index table
+        $this->pObj->storeInIndex(
+            $this->indexerConfig['storagepid'],         // storage PID
+            $fileIndexerObject->fileInfo->getName(),    // file name
+            'file:' . $fileReference->getExtension(),   // content type
+            $targetPage,                                // target PID: where is the single view?
+            $content,                                   // indexed content
+            $tags,                                      // tags
+            '',                                         // typolink params for singleview
+            $abstract,                                  // abstract
+            $sys_langauge_uid,                          // language uid
+            $starttime,                                 // starttime
+            $endtime,                                   // endtime
+            $feGroups,                                  // fe_group
+            FALSE,                                      // debug only?
+            $additionalFields                           // additional fields added by hooks
+        );
+
+        $this->pObj->logger->debug(($logMessage ? $logMessage : 'File has been stored'),[$fileReference->getPublicUrl()]);
     }
 }

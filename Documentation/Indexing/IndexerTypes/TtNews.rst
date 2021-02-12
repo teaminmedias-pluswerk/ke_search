@@ -40,3 +40,13 @@ is the same behaviour as if the corresponding tt_news constant set.
 
 Note: This constant has no effect in ke_search. In ke_search this category is always used.
 
+File indexing
+-------------
+
+Files attached to news records will be indexed. You can specify in the indexer configuration wether to include the
+content of the files into the news record search result, that means they will appear as one result, or to index files
+separately, making them show up as a individual result.
+
+You can also specify which files should be indexed by defining a comma-separated list of file extensions. If you
+leave this field empty, no files will be indexed.
+

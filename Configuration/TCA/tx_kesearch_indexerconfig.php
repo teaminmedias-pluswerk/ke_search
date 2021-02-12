@@ -279,7 +279,7 @@ return array(
         'fileext' => array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.fileext',
-            'displayCond' => 'FIELD:type:IN:file,page,tt_content,news',
+            'displayCond' => 'FIELD:type:IN:file,page,tt_content,news,tt_news',
             'config' => array(
                 'type' => 'input',
                 'size' => '30',
@@ -361,7 +361,7 @@ return array(
         'index_news_files_mode' => [
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_news_files_mode',
-            'displayCond' => 'FIELD:type:IN:news',
+            'displayCond' => 'FIELD:type:IN:news,tt_news',
             'config' => array(
                 'type' => 'select',
                 'renderType' => 'selectSingle',

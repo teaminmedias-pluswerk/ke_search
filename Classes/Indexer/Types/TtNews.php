@@ -117,25 +117,24 @@ class TtNews extends IndexerBase
                     $content .= "\n" . $newsRecord['keywords'];
                 }
 
-                // @todo
                 // get related files if fileext is configured
-                /*
                 if (!empty($this->indexerConfig['fileext'])) {
-                    $relatedFiles = $this->getRelatedFiles($newsRecord);
-                    if (!empty($relatedFiles)) {
+                    $filesToIndex = $this->getFilesToIndex(
+                        'tt_news',
+                        'news_files',
+                        $newsRecord['uid'],
+                        $newsRecord['sys_language_uid']
+                    );
+                    if (!empty($filesToIndex)) {
                         if ($this->indexerConfig['index_news_files_mode'] === 1) {
                             // add file content to news index record
-                            $content .= $this->getContentFromRelatedFiles(
-                                $relatedFiles,
-                                $newsRecord['uid']
-                            );
+                            $content .= $this->getContentFromFiles($filesToIndex);
                         } else {
                             // index file as separate index record
-                            $this->indexFilesAsSeparateResults($relatedFiles, $newsRecord);
+                            $this->indexFilesAsSeparateResults($filesToIndex, $newsRecord);
                         }
                     }
                 }
-                */
 
                 // create content
                 $fullContent = '';
@@ -293,5 +292,4 @@ class TtNews extends IndexerBase
 
         return $categoryData;
     }
-
 }

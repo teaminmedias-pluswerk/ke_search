@@ -14,6 +14,22 @@ The following fields will be indexed: title, teaser, content, author, author E-M
 
 Access limitations will be taken into account. You can either index all news or news from certain categories.
 
+Configuration
+-------------
+
+In order to index news, create a new indexer configuration an configure it as follows:
+
+* Title: just for internal use
+* Storage: the folder all your search data is saved in.
+* Target page: The page your news detail view plugin is placed on.
+* Type: has to be "News (news)".
+* Record storage page(s) single/recursive: Folders with news data to index.
+* Category selection: Here you can define if you want to index all news or just news from selected categories. Important: This selection is not recursive. You have to select each category individually if you don't select "all".
+* Add tag(s) of parent folder: If you added a tag to the folder containing news, this / these tag(s) will be added to the news index entry.
+* File indexer: Define which extensions of related files will be indexed.
+* Attached files should be handled as: Define if the contents of related files will be indexed as separate index records or as content of the news index record.
+* Add tag to all indexed elements: You can select an already existing filter option / tag to add it to all indexed elements.
+
 Filtering with system categories
 --------------------------------
 
@@ -49,18 +65,12 @@ that page. On that page there has to be a news plugin showing the detail view.
 
 If a news has a category assigned to it which has an alternative single view page, this page will be used as target page.
 
-Configuration
+File indexing
 -------------
 
-In order to index news, create a new indexer configuration an configure it as follows:
+Files attached to news records will be indexed. You can specify in the indexer configuration wether to include the
+content of the files into the news record search result, that means they will appear as one result, or to index files
+separately, making them show up as a individual result.
 
-* title: just for internal use
-* record storage page: the sysfolder all your search data is saved on.
-* target page: The page your news detail view plugin is placed on.
-* type: has to be "News (news)".
-* record storage page(s) single/recursive: Sysfolders with news data to index.
-* Category selection: Here you can define if you want to index all news or just news from selected categories. Important: This selection is not recursive. You have to select each category individually if you don't select "all".
-* Add tag(s) of parent sysfolder: If you added a tag to the sysfolder containing news, this / these tag(s) will be added to the news index entry.
-* File indexer: Define which extensions of related files will be indexed.
-* Attached files should be handled as: Define if the contents of related files will be indexed as separate index records or as content of the news index record.
-* Add tag to all indexed elements: You can select an already existing filter option / tag to add it to all indexed elements.
+You can also specify which files should be indexed by defining a comma-separated list of file extensions. If you
+leave this field empty, no files will be indexed.
