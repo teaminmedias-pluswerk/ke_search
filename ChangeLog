@@ -1,5 +1,9 @@
 ChangeLog
 
+Upcoming Version
+[TASK]    Use uri.resource viewhelper instead of direct path to load the styles for the backend module. Thanks to Mike Street. https://github.com/teaminmedias-pluswerk/ke_search/issues/227#issuecomment-777476726
+
+
 Version 3.4.2, February 2021
 [BUGFIX]  Field orig_row in search result is never filled with row data. Thanks to hackmus. https://github.com/teaminmedias-pluswerk/ke_search/issues/392
 
