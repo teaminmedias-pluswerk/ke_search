@@ -27,7 +27,7 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer\Types;
 
 use TeaminmediasPluswerk\KeSearch\Indexer\Filetypes\FileIndexerInterface;
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase;
-use TeaminmediasPluswerk\KeSearch\Indexer\Lib\Fileinfo;
+use TeaminmediasPluswerk\KeSearch\Lib\Fileinfo;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
 use TYPO3\CMS\Core\Core\Environment;
