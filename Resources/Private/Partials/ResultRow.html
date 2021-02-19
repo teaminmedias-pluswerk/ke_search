@@ -23,7 +23,7 @@
 			<f:else>
 				<f:comment><!-- Default date rendering --></f:comment>
 				<f:if condition="{conf.showDate}">
-					<i>{f:translate(key: 'LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:label_date')}:</i> {resultrow.date}<br />
+					<i>{f:translate(key: 'LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:label_date')}:</i> <f:format.date>{resultrow.date_timestamp}</f:format.date><br />
 				</f:if>
 			</f:else>
 		</f:if>

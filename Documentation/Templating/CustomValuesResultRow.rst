@@ -20,6 +20,19 @@ The partial for a single result row is stored ad
 If you want to adapt your search result list to show other content than the indexed content, eg. the content of
 individual database fields, you have the following possibilities.
 
+Format date for different locales
+.................................
+
+The date of the search result will printed if the setting "Show date" is activated in the plugin settings. You will get
+the date as a unix timestamp and can use the f:format.date viewhelper to use different locales.
+
+Example:
+
+.. code-block:: none
+
+    <f:format.date format="%d. %B %Y">{resultrow.date_timestamp}</f:format.date>
+
+
 Accessing the original database row
 ...................................
 
