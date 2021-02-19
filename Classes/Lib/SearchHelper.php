@@ -26,6 +26,7 @@ use TYPO3\CMS\Core\Configuration\Exception\ExtensionConfigurationPathDoesNotExis
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\DataHandling\Model\RecordStateFactory;
 use TYPO3\CMS\Core\DataHandling\SlugHelper;
+use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\Resource\Exception\FileDoesNotExistException;
 use TYPO3\CMS\Core\Resource\File;
 use TYPO3\CMS\Core\Resource\ResourceFactory;
@@ -425,6 +426,19 @@ class SearchHelper
         }
 
         return $slug;
+    }
+
+    /**
+     * Returns the timestamp when the indexer has been started.
+     * Returns 0 if the indexer is not running.
+     *
+     * @return int
+     */
+    static public function getIndexerStartTime(): int
+    {
+        $registry = GeneralUtility::makeInstance(Registry::class);
+        $indexerStartTime = $registry->get('tx_kesearch', 'startTimeOfIndexer');
+        return $indexerStartTime ? $indexerStartTime : 0;
     }
 
 }

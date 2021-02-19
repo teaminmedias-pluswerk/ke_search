@@ -23,6 +23,7 @@ namespace TeaminmediasPluswerk\KeSearch\Controller;
 
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
+use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
@@ -143,13 +144,13 @@ class BackendModuleController extends AbstractBackendModuleController
 
         // check for index process lock in registry
         // remove lock if older than 12 hours
-        $lockTime = $this->registry->get('tx_kesearch', 'startTimeOfIndexer');
+        $lockTime = SearchHelper::getIndexerStartTime();
         $compareTime = time() - (60 * 60 * 12);
-        if ($lockTime !== null && $lockTime < $compareTime) {
+        if ($lockTime !== 0 && $lockTime < $compareTime) {
             // lock is older than 12 hours
             // remove lock and show "start index" button
             $this->registry->removeAllByNamespace('tx_kesearch');
-            $lockTime = null;
+            $lockTime = 0;
         }
 
         // show information about indexer configurations and number of records
@@ -160,7 +161,7 @@ class BackendModuleController extends AbstractBackendModuleController
         }
 
         // show "start indexing" or "remove lock" button
-        if ($lockTime !== null) {
+        if ($lockTime !== 0) {
             if (!$this->getBackendUser()->isAdmin()) {
                 // print warning message for non-admins
                 $content .= '<br /><p style="color: red; font-weight: bold;">WARNING!</p>';

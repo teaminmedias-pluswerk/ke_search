@@ -36,3 +36,12 @@ plugin.tx_kesearch_pi2 {
         }
     }
 }
+
+module.tx_dashboard {
+    view {
+        templateRootPaths {
+            1613733292 = EXT:ke_search/Resources/Private/Templates/
+            1613733293 = {$plugin.tx_kesearch.templateRootPath}
+        }
+    }
+}
