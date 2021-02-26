@@ -3,7 +3,7 @@
 .. --------------------------------------------------
 .. -*- coding: utf-8 -*- with BOM.
 
-.. _newsIndexer:
+.. _ttnewsIndexer:
 
 News (EXT:tt_news)
 ==================

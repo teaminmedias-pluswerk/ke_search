@@ -4,7 +4,8 @@ Upcoming Version
 [TASK]    Use uri.resource viewhelper instead of direct path to load the styles for the backend module. Thanks to Mike Street. https://github.com/teaminmedias-pluswerk/ke_search/issues/227#issuecomment-777476726
 [TASK]    Use resultrow.date_timestamp instead of resultrow.date in the default template. https://github.com/teaminmedias-pluswerk/ke_search/issues/44
 [TASK]    Refactor file indexing methods by moving them from the news indexer to IndexerBase
-[FEATURE] Add indexer for EXT:tt_news. Thanks for sponsoring to Michael Lackenberger.
+[FEATURE] Add indexer for EXT:tt_news. Thanks for sponsoring to Michael Lackenberger
+[DOC]     Add documentation about the storage engine for tx_kesearch_index
 
 Version 3.4.2, February 2021
 [BUGFIX]  Field orig_row in search result is never filled with row data. Thanks to hackmus. https://github.com/teaminmedias-pluswerk/ke_search/issues/392

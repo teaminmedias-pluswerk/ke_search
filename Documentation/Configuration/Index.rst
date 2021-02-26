@@ -22,3 +22,4 @@ The extension can be configured via the plugin settings (flexform), typoscript a
 	ReducingFiltersBackend
 	OverrideRecordStoragePage
 	Notes
+	StorageEngine
