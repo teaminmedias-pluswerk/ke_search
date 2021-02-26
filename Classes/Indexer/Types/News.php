@@ -38,13 +38,6 @@ use TYPO3\CMS\Core\Resource\FileRepository;
  */
 class News extends IndexerBase
 {
-
-    /** @var FileRepository $fileRepository  */
-    protected $fileRepository = NULL;
-
-    /** @var int $fileCounter */
-    protected $fileCounter = 0;
-
     /**
      * Initializes indexer for news
      *
@@ -54,7 +47,6 @@ class News extends IndexerBase
     {
         parent::__construct($pObj);
         $this->pObj = $pObj;
-        $this->fileRepository = GeneralUtility::makeInstance(FileRepository::class);
     }
 
     /**
@@ -534,249 +526,43 @@ class News extends IndexerBase
         return $content;
     }
 
-
     /**
      * get files related to current news record
      *
      * @param array $newsRecord
      * @return array list of files
      */
-    protected function getRelatedFiles($newsRecord)
+    protected function getRelatedFiles($newsRecord): array
     {
-
-        $relatedFiles = [];
-
-        $queryBuilder = Db::getQueryBuilder('sys_file');
-        $relatedFilesQuery = $queryBuilder
-            ->select('ref.uid')
-            ->from('sys_file', 'file')
-            ->from('sys_file_reference', 'ref')
-            ->where(
-                $queryBuilder->expr()->eq(
-                    'ref.tablenames',
-                    $queryBuilder->createNamedParameter(
-                        'tx_news_domain_model_news', \PDO::PARAM_STR
-                    )
-                ),
-                $queryBuilder->expr()->eq(
-                    'ref.fieldname',
-                    $queryBuilder->createNamedParameter(
-                        'fal_related_files', \PDO::PARAM_STR
-                    )
-                ),
-                $queryBuilder->expr()->eq(
-                    'ref.uid_foreign',
-                    $queryBuilder->createNamedParameter(
-                        $newsRecord['uid'], \PDO::PARAM_INT
-                    )
-                ),
-                $queryBuilder->expr()->eq(
-                    'ref.uid_local',
-                    $queryBuilder->quoteIdentifier('file.uid')
-                ),
-                $queryBuilder->expr()->eq(
-                    'ref.sys_language_uid',
-                    $queryBuilder->createNamedParameter(
-                        $newsRecord['sys_language_uid'], \PDO::PARAM_INT
-                    )
-                )
-            )
-            ->orderBy('ref.sorting_foreign')
-            ->execute();
-
-        if ($relatedFilesQuery->rowCount()) {
-            return $this->getFilesForIndexing($relatedFilesQuery->fetchAll(), $newsRecord['uid']);
-        }
-
-        return $relatedFiles;
+        return $this->getFilesToIndex(
+            'tx_news_domain_model_news',
+            'fal_related_files',
+            $newsRecord['uid'],
+            $newsRecord['sys_language_uid']
+        );
     }
-
-    /**
-     * get files matching configured extensions
-     *
-     * @param $relatedFiles
-     * @param int $newsUid
-     * @return array list of files
-     */
-    protected function getFilesForIndexing($relatedFiles, $newsUid)
-    {
-        $filesToIndex = [];
-
-        foreach ($relatedFiles as $key => $relatedFile) {
-            $fileReference = $this->fileRepository->findFileReferenceByUid($relatedFile['uid']);
-            if (GeneralUtility::inList(
-                $this->indexerConfig['fileext'],
-                $fileReference->getExtension()
-            )) {
-                $filesToIndex[] = $fileReference;
-            }
-        }
-
-        return $filesToIndex;
-    }
-
 
     /**
      * index related files as seperate file index records
+     *
      * @param array $files
      * @param array $newsRecord
      */
     protected function indexFilesAsSeparateResults($relatedFiles, $newsRecord)
     {
-        /** @var FileReference $relatedFile */
-        foreach ($relatedFiles as $relatedFile) {
-            $filePath = $relatedFile->getForLocalProcessing(false);
-            if (!file_exists($filePath)) {
-                $errorMessage = 'Could not index file ' . $filePath;
-                $errorMessage .= ' in news record #' . $newsRecord['uid'] . ' (file does not exist).';
-                $this->pObj->logger->warning($errorMessage);
-                $this->addError($errorMessage);
-            } else {
-                /* @var $fileIndexerObject File */
-                $fileIndexerObject = GeneralUtility::makeInstance(File::class, $this->pObj);
-
-                // add tag to identify this index record as file
-                SearchHelper::makeTags($tags, ['file']);
-
-                if ($fileIndexerObject->fileInfo->setFile($relatedFile)) {
-                    if (($content = $fileIndexerObject->getFileContent($filePath))) {
-                        $this->storeFileContentToIndex(
-                            $relatedFile,
-                            $content,
-                            $fileIndexerObject,
-                            $newsRecord['fe_group'],
-                            $tags,
-                            $newsRecord
-                        );
-                    } else {
-                        $this->addError($fileIndexerObject->getErrors());
-                        $errorMessage = 'Could not index file ' . $filePath . '.';
-                        $this->pObj->logger->warning($errorMessage);
-                        $this->addError($errorMessage);
-                    }
-                }
-            }
-        }
+        parent::indexFilesAsSeparateResults($relatedFiles, $newsRecord);
     }
-
-
-    /**
-     * Store the file content and additional information to the index
-     * @param FileReference $fileReference File reference object
-     * @param string $content file text content
-     * @param File $fileIndexerObject
-     * @param string $feGroups comma list of groups to assign
-     * @param array $newsRecord the news row the file was assigned to
-     */
-    public function storeFileContentToIndex(
-        $fileReference,
-        $content,
-        $fileIndexerObject,
-        $feGroups,
-        $tags,
-        $newsRecord
-    )
-    {
-        // get metadata
-        $orig_uid = $fileReference->getOriginalFile()->getUid();
-        $fileProperties = $fileReference->getOriginalFile()->getProperties();
-
-        // respect fe_groups from news record and from file metadata
-        if ($fileProperties['fe_groups']) {
-            if ($feGroups) {
-                $feGroupsContentArray = GeneralUtility::intExplode(',', $feGroups);
-                $feGroupsFileArray = GeneralUtility::intExplode(',', $fileProperties['fe_groups']);
-                $feGroups = implode(',', array_intersect($feGroupsContentArray, $feGroupsFileArray));
-            } else {
-                $feGroups = $fileProperties['fe_groups'];
-            }
-        }
-
-        // assign category titles as tags
-        $categories = SearchHelper::getCategories($fileProperties['uid'], 'sys_file_metadata');
-        SearchHelper::makeTags($tags, $categories['title_list']);
-
-        // assign categories as generic tags
-        SearchHelper::makeSystemCategoryTags($tags, $fileProperties['uid'], 'sys_file_metadata');
-
-        // index meta data from FAL: title, description, alternative
-        $content = $this->addFileMetata($fileProperties, $content);
-
-        // use file description as abstract
-        $abstract = '';
-        if ($fileProperties['description']) {
-            $abstract = $fileProperties['description'];
-        }
-
-        $additionalFields = [
-            'sortdate' => $fileIndexerObject->fileInfo->getModificationTime(),
-            'orig_uid' => $orig_uid,
-            'orig_pid' => 0,
-            'directory' => $fileIndexerObject->fileInfo->getRelativePath(),
-            'hash' => $fileIndexerObject->getUniqueHashForFile()
-        ];
-
-        // Store record in index table
-        $this->pObj->storeInIndex(
-            $this->indexerConfig['storagepid'],         // storage PID
-            $fileIndexerObject->fileInfo->getName(),    // file name
-            'file:' . $fileReference->getExtension(),   // content type
-            $newsRecord['pid'],                         // target PID: where is the single view?
-            $content,                                   // indexed content
-            $tags,                                      // tags
-            '',                                         // typolink params for singleview
-            $abstract,                                  // abstract
-            $newsRecord['sys_language_uid'],            // language uid
-            $newsRecord['starttime'],                   // starttime
-            $newsRecord['endtime'],                     // endtime
-            $feGroups,                                  // fe_group
-            FALSE,                                      // debug only?
-            $additionalFields                           // additional fields added by hooks
-        );
-
-        $this->pObj->logger->debug(
-            'related file was indexed for news #' . $newsRecord['uid'],
-            [$fileReference->getPublicUrl()]
-        );
-
-        $this->fileCounter++;
-    }
-
 
     /**
      * extract content from files to index
+     *
      * @param array $relatedFiles
      * @param int $newsUid
      * @return string
      */
-    protected function getContentFromRelatedFiles($relatedFiles, $newsUid)
+    protected function getContentFromRelatedFiles($relatedFiles, $newsUid): string
     {
-        $fileContent = '';
-
-        /** @var FileReference $relatedFile */
-        foreach ($relatedFiles as $relatedFile) {
-
-            /* @var $fileIndexerObject File */
-            $fileIndexerObject = GeneralUtility::makeInstance(
-                File::class,
-                $this->pObj
-            );
-
-            if ($fileIndexerObject->fileInfo->setFile($relatedFile)) {
-                $fileContent .= $fileIndexerObject->getFileContent(
-                        $relatedFile->getForLocalProcessing(false)
-                    ) . "\n";
-
-                $this->pObj->logger->debug(
-                    'related file was indexed for news #' . $newsUid,
-                    [$relatedFile->getPublicUrl()]
-                );
-
-                $this->fileCounter++;
-            }
-        }
-
-        return $fileContent;
+        return $this->getContentFromFiles($relatedFiles);
     }
 
 }
