@@ -515,9 +515,6 @@ class Page extends IndexerBase
         // add ke_search tags current page
         $tags = $this->pageRecords[intval($uid)]['tags'];
 
-        // add system categories as tags
-        SearchHelper::makeSystemCategoryTags($tags, $uid, $table);
-
         // Compile content for this page from individual content elements with
         // respect to the language.
         // While doing so, fetch also content from attached files and write
