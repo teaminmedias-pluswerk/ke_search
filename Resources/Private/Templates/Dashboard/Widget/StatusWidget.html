@@ -1,0 +1,16 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Widget/Widget"/>
+<f:section name="main">
+    <f:if condition="{indexerStartTime}">
+        <f:then>
+            Indexer is running since
+            <f:if condition="{indexerRunningTimeHMS.h}">{indexerRunningTimeHMS.h} h, </f:if>
+            <f:if condition="{indexerRunningTimeHMS.m}">{indexerRunningTimeHMS.m} m, </f:if>
+            <f:if condition="{indexerRunningTimeHMS.s}">{indexerRunningTimeHMS.s} s</f:if>
+        </f:then>
+        <f:else>Indexer is idle.</f:else>
+    </f:if>
+</f:section>
+<f:section name="footer">
+</f:section>
+</html>

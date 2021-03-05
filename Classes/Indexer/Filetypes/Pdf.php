@@ -26,7 +26,7 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer\Filetypes;
  * ************************************************************* */
 
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner;
-use TeaminmediasPluswerk\KeSearch\Indexer\Lib\Fileinfo;
+use TeaminmediasPluswerk\KeSearch\Lib\Fileinfo;
 use TeaminmediasPluswerk\KeSearch\Indexer\Types\File;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Core\Environment;

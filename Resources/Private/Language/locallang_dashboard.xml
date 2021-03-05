@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<T3locallang>
+	<data type="array">
+		<languageKey index="default" type="array">
+			<label index="widget_group.ke_search">ke_search</label>
+			<label index="widgets.keSearchStatus.title">Indexer Status</label>
+			<label index="widgets.keSearchStatus.description">Shows the current status of the ke_search indexer.</label>
+		</languageKey>
+		<languageKey index="de" type="array">
+			<label index="widgets.keSearchStatus.title">Indexer Status</label>
+			<label index="widgets.keSearchStatus.description">Zeigt den aktuellen Status des ke_search-Indexers an.</label>
+		</languageKey>
+	</data>
+</T3locallang>
