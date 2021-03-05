@@ -5,10 +5,10 @@
 
 <div class="list" id="list_{filter.uid}">
 	<span class="head">{filter.title}</span>
-	<ul id="options_{filter.id}" class="###LISTCSSCLASS###">
+	<ul id="options_{filter.id}">
 		<f:for each="{filter.options}" as="option">
 			<li {f:if(condition: '{option.selected}', then: ' class="selected"')}><a href="{option.link}">{option.title}<f:if condition="{option.selected} == ''"><f:if condition="{filter.shownumberofresults} && {option.results}"> ({option.results})</f:if></f:if></a></li>
 		</f:for>
-		<a href="{filter.resetLink}" class="kesGreyButt"><f:translate key="LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:reset_filter" /></a>
 	</ul>
+	<a href="{filter.resetLink}" class="kesGreyButt"><f:translate key="LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:reset_filter" /></a>
 </div>

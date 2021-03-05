@@ -64,14 +64,8 @@ span.kesGreyButt{
     border: 1px solid rgba(0, 0, 0, 0.1);
     border-radius: 2px;
     color: #444;
-    cursor: default;
     text-align: center;
     text-decoration: none;
-}
-
-span.submitbutt input,
-input.kesGreyButt,
-span.kesGreyButt{
 }
 
 /* fix firefox button size (line-height is not working in firefox submit button)*/
@@ -94,11 +88,8 @@ span.resetbutt a:hover,
 span.submitbutt input:hover,
 input.kesGreyButt:hover,
 span.kesGreyButt:hover{
-    color:#000;
     text-decoration: none;
     cursor: pointer;
-    background: #d1d1d1;
-
 	background-color: #f8f8f8;
     background-image: -moz-linear-gradient(center top , #f8f8f8, #f1f1f1);
     border: 1px solid #c6c6c6;
@@ -160,18 +151,17 @@ div.kesearchbox{
     margin: 0 0 10px 0;
 }
 #kesearch_filters .list {
+    border: 1px solid #cfcfcf;
     margin-bottom: 10px;
 }
 #kesearch_filters .list .head {
     display:block;
-    border: 1px solid #CFCFCF;
+    border-bottom: 1px solid #CFCFCF;
     padding: 5px;
 }
 #kesearch_filters .list ul {
     padding: 10px;
     margin: 0;
-    border: 1px solid #cfcfcf;
-    border-top: 0 none;
     list-style-type:none;
 }
 #kesearch_filters .list ul.expanded { display:block; }
@@ -185,6 +175,9 @@ div.kesearchbox{
 }
 #kesearch_filters .list li a{
     color: #444;
+}
+#kesearch_filters .list a.kesGreyButt {
+   margin-left: 10px;
 }
 #kesearch_filters .list li:hover,
 #kesearch_filters .list li a:hover{
