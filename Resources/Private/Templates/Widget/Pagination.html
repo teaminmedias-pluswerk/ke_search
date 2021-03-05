@@ -12,6 +12,7 @@
 <f:for each="{pagination.pages}" as="page">
     <li>
         <kesearch:link piVars="{page: page}" keepPiVars="1" class="{f:if(condition: '{page} == {pagination.currentPage}', then: 'current')}">{page}</kesearch:link>
+    </li>
 </f:for>
 <f:if condition="{pagination.next}">
     <li>
