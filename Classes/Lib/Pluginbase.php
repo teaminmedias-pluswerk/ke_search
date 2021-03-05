@@ -367,6 +367,9 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
 
         // set reset link
         $this->fluidTemplateVariables['resetUrl'] = SearchHelper::searchLink($this->conf['resultPage']);
+
+        // set isEmptySearch flag
+        $this->fluidTemplateVariables['isEmptySearch'] = $this->isEmptySearch;
     }
 
     /**
@@ -1145,7 +1148,6 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         $filters = $this->filters->getFilters();
         $filterSet = false;
         if (is_array($filters)) {
-            //TODO: piVars filter is a multidimensional array
             foreach ($filters as $filter) {
                 if (!empty($this->piVars['filter'][$filter['uid']])) {
                     $filterSet = true;

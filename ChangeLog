@@ -10,6 +10,7 @@ Upcoming Version
 [BUGFIX]  Fix missing closing li tags. Thanks to al-Iskandar. https://github.com/teaminmedias-pluswerk/ke_search/issues/398
 [BUGFIX]  Fix validation error, move a tag out of ul tag.
 [TASK]    Remove unnecessary script type in search form
+[BUGFIX]  Replace plain URL with speaking URL only if the search is not empty to prevent cutting off parameters on every page when the search plugin is inserted on every page. Thanks to christophbee. https://github.com/teaminmedias-pluswerk/ke_search/issues/399
 
 Version 3.4.2, February 2021
 [BUGFIX]  Field orig_row in search result is never filled with row data. Thanks to hackmus. https://github.com/teaminmedias-pluswerk/ke_search/issues/392

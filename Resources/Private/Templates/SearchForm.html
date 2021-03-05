@@ -9,8 +9,10 @@ Templates/SearchForm.html
 -->
 <f:section name="content">
 	<form method="get" id="form_kesearch_pi1" name="form_kesearch_pi1"  action="{f:uri.page(pageUid: targetpage)}">
-		<f:comment> // Replace the URL with the speaking URL </f:comment>
-		<f:format.raw><script>history.replaceState(null,'','</f:format.raw><kesearch:link keepPiVars="1" uriOnly="1" /><f:format.raw>');</script></f:format.raw>
+		<f:comment><!-- Replace the URL with the speaking URL --></f:comment>
+		<f:if condition="{isEmptySearch} == FALSE">
+			<f:format.raw><script>history.replaceState(null,'','</f:format.raw><kesearch:link keepPiVars="1" uriOnly="1" /><f:format.raw>');</script></f:format.raw>
+		</f:if>
 
 		<fieldset class="kesearch_searchbox">
 			<f:if condition="{lparam}">
