@@ -7,6 +7,7 @@ Upcoming Version
 [FEATURE] Add indexer for EXT:tt_news. Thanks for sponsoring to Michael Lackenberger
 [DOC]     Add documentation about the storage engine for tx_kesearch_index
 [BUGFIX]  Do not use tags set in tt_content elements as tags for pages which have by accident the the same UID
+[BUGFIX]  Fix missing closing li tags. Thanks to al-Iskandar. https://github.com/teaminmedias-pluswerk/ke_search/issues/398
 
 Version 3.4.2, February 2021
 [BUGFIX]  Field orig_row in search result is never filled with row data. Thanks to hackmus. https://github.com/teaminmedias-pluswerk/ke_search/issues/392
@@ -33,7 +34,6 @@ Version 3.4.0, January 2021
 [DOC]     Add example for speaking urls for filters (see Configuration --> Routing in the documentation)
 [TASK]    Add slug field and upgrade wizard for filter options.
 [FEATURE] Add viewhelper to link to search result pages (see Templating --> Link ViewHelper in the documentation)
-[BUGFIX]  Fix missing closing li tags. Thanks to al-Iskandar. https://github.com/teaminmedias-pluswerk/ke_search/issues/398
 
 Version 3.3.1, October 2020
 [BUGFIX]  Allow tags to be empty in SearchHelper::makeTags and makeSystemCategoryTags, fixes regression from last version
