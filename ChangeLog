@@ -9,6 +9,7 @@ Upcoming Version
 [BUGFIX]  Do not use tags set in tt_content elements as tags for pages which have by accident the the same UID
 [BUGFIX]  Fix missing closing li tags. Thanks to al-Iskandar. https://github.com/teaminmedias-pluswerk/ke_search/issues/398
 [BUGFIX]  Fix validation error, move a tag out of ul tag.
+[TASK]    Remove unnecessary script type in search form
 
 Version 3.4.2, February 2021
 [BUGFIX]  Field orig_row in search result is never filled with row data. Thanks to hackmus. https://github.com/teaminmedias-pluswerk/ke_search/issues/392
