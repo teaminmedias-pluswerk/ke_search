@@ -28,6 +28,7 @@ use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Utility\BackendUtility;
 use TYPO3\CMS\Core\Authentication\BackendUserAuthentication;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
@@ -469,18 +470,8 @@ class BackendModuleController extends AbstractBackendModuleController
      */
     public function getLatestRecordDate()
     {
-        $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
-        $latestDate = $queryBuilder
-            ->select('tstamp')
-            ->from('tx_kesearch_index')
-            ->orderBy('tstamp', 'desc')
-            ->setMaxResults(1)
-            ->execute();
-
-        while ($row = $latestDate->fetch()) {
-            return date($GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'], $row['tstamp']) . ' ' . date('H:i', $row['tstamp']);
-        }
-
+        $lastRun = $this->registry->get('tx_kesearch', 'lastRun');
+        return date($GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'], $lastRun['endTime']) . ' ' . date('H:i', $lastRun['endTime']);
     }
 
     /*

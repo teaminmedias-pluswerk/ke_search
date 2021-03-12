@@ -47,8 +47,26 @@ class IndexerRunner
     public $indexerConfig = array(); // saves the indexer configuration of current loop
     public $additionalFields = array();
     public $indexingErrors = array();
-    public $startTime;
-    public $currentRow = array(); // current row which have to be inserted/updated to database
+
+    /**
+     * @var int
+     */
+    public $startTime = 0;
+
+    /**
+     * @var int
+     */
+    public $endTime = 0;
+
+    /**
+     * current row which have to be inserted/updated to database
+     * @var array
+     */
+    public $currentRow = array();
+
+    /**
+     * @var Registry
+     */
     public $registry;
 
     /**
@@ -110,7 +128,7 @@ class IndexerRunner
             $compareTime = time() - (60 * 60 * 12);
             if ($lockTime < $compareTime) {
                 // lock is older than 12 hours - remove
-                $this->registry->removeAllByNamespace('tx_kesearch');
+                $this->registry->remove('tx_kesearch', 'startTimeOfIndexer');
                 $this->registry->set('tx_kesearch', 'startTimeOfIndexer', time());
                 $this->logger->notice('lock has been removed because it is older than 12 hours'. time());
             } else {
@@ -201,9 +219,18 @@ class IndexerRunner
         // create plaintext report
         $plaintextReport = $this->createPlaintextReport($content);
 
+        // set indexing end time
+        $this->endTime = time();
+
         // log finishing
-        $this->logger->info('Indexing finishing time: ' . date($GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'] . ', H:i'));
-        $this->logger->info('Indexing process ran ' . $this->calculateAndFormatIndexingTime());
+        $indexingTime = $this->endTime - $this->startTime;
+        $this->logger->info('Indexing finishing time: ' . date($GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'] . ', H:i', $this->endTime));
+        $this->logger->info('Indexing process ran ' . $this->formatTime($indexingTime));
+        $this->registry->set(
+            'tx_kesearch',
+            'lastRun',
+            ['startTime' => $this->startTime, 'endTime' => $this->endTime, 'indexingTime' => $indexingTime]
+        );
 
         // send notification in CLI mode
         if ($mode == 'CLI') {
@@ -304,7 +331,8 @@ class IndexerRunner
         $report = LF;
         $report .= 'Finishing time: ' . date($GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'] . ', H:i') . LF . LF;
         $report .= preg_replace('~[ ]{2,}~', '', strip_tags($content));
-        $report .= LF . LF . 'Indexing process ran ' . $this->calculateAndFormatIndexingTime();
+        $indexingTime = $this->endTime - $this->startTime;
+        $report .= LF . LF . 'Indexing process ran ' . $this->formatTime($indexingTime);
 
         return $report;
     }
@@ -312,27 +340,27 @@ class IndexerRunner
     /**
      * create human readable string for indexing time
      *
+     * @param $time int Indexing time in seconds
      * @return float|int|string
      */
-    protected function calculateAndFormatIndexingTime() {
-        $indexingTime = time() - $this->startTime;
-        if ($indexingTime > 3600) {
+    protected function formatTime($time) {
+        if ($time > 3600) {
             // format hours
-            $indexingTime = $indexingTime / 3600;
-            $indexingTime = number_format($indexingTime, 2, ',', '.');
-            $indexingTime .= ' hours';
+            $time = $time / 3600;
+            $time = number_format($time, 2, ',', '.');
+            $time .= ' hours';
         } else {
-            if ($indexingTime > 60) {
+            if ($time > 60) {
                 // format minutes
-                $indexingTime = $indexingTime / 60;
-                $indexingTime = number_format($indexingTime, 2, ',', '.');
-                $indexingTime .= ' minutes';
+                $time = $time / 60;
+                $time = number_format($time, 2, ',', '.');
+                $time .= ' minutes';
             } else {
-                $indexingTime .= ' seconds';
+                $time .= ' seconds';
             }
         }
 
-        return $indexingTime;
+        return $time;
     }
 
 
