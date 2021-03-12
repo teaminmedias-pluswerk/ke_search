@@ -21,6 +21,7 @@
 
 namespace TeaminmediasPluswerk\KeSearch\Controller;
 
+use TeaminmediasPluswerk\KeSearch\Domain\Repository\IndexRepository;
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
@@ -412,7 +413,9 @@ class BackendModuleController extends AbstractBackendModuleController
                 )
                 . ': ';
 
-            $results_per_type = $this->getNumberOfRecordsInIndexPerType();
+            /** @var IndexRepository $indexRepository */
+            $indexRepository = GeneralUtility::makeInstance(IndexRepository::class);
+            $results_per_type = $indexRepository->getNumberOfRecordsInIndexPerType();
             $first = true;
             foreach ($results_per_type as $type => $count) {
                 if (!$first) {
@@ -438,32 +441,6 @@ class BackendModuleController extends AbstractBackendModuleController
         }
 
         return $content;
-    }
-
-    /**
-     * returns number of records per type in an array
-     * @author Christian Bülter <buelter@kennziffer.com>
-     * @since 28.04.15
-     * @return array
-     */
-    public function getNumberOfRecordsInIndexPerType()
-    {
-        $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
-        $typeCount = $queryBuilder
-            ->select('type')
-            ->addSelectLiteral(
-                $queryBuilder->expr()->count('tx_kesearch_index.uid', 'count')
-            )
-            ->from('tx_kesearch_index')
-            ->groupBy('tx_kesearch_index.type')
-            ->execute();
-
-        $resultsPerType = [];
-        while ($row = $typeCount->fetch()) {
-            $resultsPerType[$row['type']] = $row['count'];
-        }
-
-        return $resultsPerType;
     }
 
     /*
@@ -506,7 +483,9 @@ class BackendModuleController extends AbstractBackendModuleController
             }
         }
 
-        $results_per_type = $this->getNumberOfRecordsInIndexPerType();
+        /** @var IndexRepository $indexRepository */
+        $indexRepository = GeneralUtility::makeInstance(IndexRepository::class);
+        $results_per_type = $indexRepository->getNumberOfRecordsInIndexPerType();
         if (count($results_per_type)) {
             foreach ($results_per_type as $type => $count) {
                 $content .= '<tr><td>' . $type . '</td><td>' . $count . '</td></tr>';

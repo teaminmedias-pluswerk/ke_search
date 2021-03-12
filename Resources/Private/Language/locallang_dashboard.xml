@@ -3,6 +3,7 @@
 	<data type="array">
 		<languageKey index="default" type="array">
 			<label index="widget_group.ke_search">ke_search</label>
+
 			<label index="widgets.keSearchStatus.title">Indexer Status</label>
 			<label index="widgets.keSearchStatus.description">Shows the current status of the ke_search indexer.</label>
 			<label index="widgets.keSearchStatus.running_since">Indexer is running since</label>
@@ -15,6 +16,9 @@
 			<label index="widgets.keSearchStatus.last_run_took">and took</label>
 			<label index="widgets.keSearchStatus.last_run_dateformat_day">m/d/y</label>
 			<label index="widgets.keSearchStatus.last_run_dateformat_time">H:i</label>
+
+			<label index="widgets.keSearchIndexOverview.title">Index Overview</label>
+			<label index="widgets.keSearchIndexOverview.description">Shows how many records of each type are currently in the index.</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="widgets.keSearchStatus.title">Indexer Status</label>
@@ -29,6 +33,9 @@
 			<label index="widgets.keSearchStatus.last_run_took">beendet und benötigte</label>
 			<label index="widgets.keSearchStatus.last_run_dateformat_day">d.m.y</label>
 			<label index="widgets.keSearchStatus.last_run_dateformat_time">H:i</label>
+
+			<label index="widgets.keSearchIndexOverview.title">Index Übersicht</label>
+			<label index="widgets.keSearchIndexOverview.description">Zeigt wie viele Einträge von welchem Typ derzeit im Index vorhanden sind.</label>
 		</languageKey>
 	</data>
 </T3locallang>
