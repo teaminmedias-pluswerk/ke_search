@@ -422,14 +422,18 @@ class BackendModuleController extends AbstractBackendModuleController
                 $first = false;
             }
             $content .= '.<br/>';
-            $content .=
-                LocalizationUtility::translate(
-                    'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:last_indexing',
-                    'KeSearch'
-                )
-                . ' '
-                . $this->getLatestRecordDate() . '.';
 
+            $lastRun = $this->registry->get('tx_kesearch', 'lastRun');
+            if ($lastRun) {
+                $content .=
+                    LocalizationUtility::translate(
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:last_indexing',
+                        'KeSearch'
+                    )
+                    . ' '
+                    . date($GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'], $lastRun['endTime']) . ' ' . date('H:i', $lastRun['endTime'])
+                    . '.';
+            }
             $content .= '</i></p>';
         }
 
@@ -460,18 +464,6 @@ class BackendModuleController extends AbstractBackendModuleController
         }
 
         return $resultsPerType;
-    }
-
-    /**
-     * returns the date of the lates record (formatted in a string)
-     * @author Christian Bülter <buelter@kennziffer.com>
-     * @since 28.04.15
-     * @return string
-     */
-    public function getLatestRecordDate()
-    {
-        $lastRun = $this->registry->get('tx_kesearch', 'lastRun');
-        return date($GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'], $lastRun['endTime']) . ' ' . date('H:i', $lastRun['endTime']);
     }
 
     /*
