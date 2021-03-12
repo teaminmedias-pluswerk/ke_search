@@ -1,16 +1,45 @@
-<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+      data-namespace-typo3-fluid="true">
 <f:layout name="Widget/Widget"/>
 <f:section name="main">
-    <f:if condition="{indexerStartTime}">
-        <f:then>
-            Indexer is running since
-            <f:if condition="{indexerRunningTimeHMS.h}">{indexerRunningTimeHMS.h} h, </f:if>
-            <f:if condition="{indexerRunningTimeHMS.m}">{indexerRunningTimeHMS.m} m, </f:if>
-            <f:if condition="{indexerRunningTimeHMS.s}">{indexerRunningTimeHMS.s} s</f:if>
-        </f:then>
-        <f:else>Indexer is idle.</f:else>
-    </f:if>
-</f:section>
-<f:section name="footer">
+    <div class="widget-number">
+        <div class="widget-number-icon">
+            <core:icon identifier="ext-kesearch-wizard-icon" size="large" alternativeMarkupIdentifier="inline"/>
+        </div>
+        <div class="widget-number-content">
+            <f:if condition="{indexerStartTime}">
+                <f:then>
+                    <div class="widget-number-title">
+                        <f:translate key="LLL:EXT:ke_search/Resources/Private/Language/locallang_dashboard.xml:widgets.keSearchStatus.running_since"/>
+                    </div>
+                    <div class="widget-number-number">
+                        <f:if condition="{indexerRunningTimeHMS.h}">{indexerRunningTimeHMS.h} <f:translate key="LLL:EXT:ke_search/Resources/Private/Language/locallang_dashboard.xml:widgets.keSearchStatus.h"/>, </f:if>
+                        <f:if condition="{indexerRunningTimeHMS.m}">{indexerRunningTimeHMS.m} <f:translate key="LLL:EXT:ke_search/Resources/Private/Language/locallang_dashboard.xml:widgets.keSearchStatus.m"/>, </f:if>
+                        <f:if condition="{indexerRunningTimeHMS.s}">{indexerRunningTimeHMS.s} <f:translate key="LLL:EXT:ke_search/Resources/Private/Language/locallang_dashboard.xml:widgets.keSearchStatus.s"/></f:if>
+                    </div>
+                </f:then>
+                <f:else>
+                    <div class="widget-number-title">
+                        <f:translate key="LLL:EXT:ke_search/Resources/Private/Language/locallang_dashboard.xml:widgets.keSearchStatus.not_running"/>
+                    </div>
+                </f:else>
+            </f:if>
+                <f:if condition="{lastRunEndTime}">
+                    <div class="widget-number-subtitle">
+                        <small>
+                            <f:translate key="LLL:EXT:ke_search/Resources/Private/Language/locallang_dashboard.xml:widgets.keSearchStatus.last_run_finished"/>
+                            <f:format.date date="{lastRunEndTime}" format="{f:translate(key: 'LLL:EXT:ke_search/Resources/Private/Language/locallang_dashboard.xml:widgets.keSearchStatus.last_run_dateformat_day')}"/>
+                            <f:translate key="LLL:EXT:ke_search/Resources/Private/Language/locallang_dashboard.xml:widgets.keSearchStatus.last_run_finished_at"/>
+                            <f:format.date date="{lastRunEndTime}" format="{f:translate(key: 'LLL:EXT:ke_search/Resources/Private/Language/locallang_dashboard.xml:widgets.keSearchStatus.last_run_dateformat_time')}"/>
+                            <f:translate key="LLL:EXT:ke_search/Resources/Private/Language/locallang_dashboard.xml:widgets.keSearchStatus.last_run_took"/>
+                            <f:if condition="{lastRunIndexingTimeHMS.h}">{lastRunIndexingTimeHMS.h} <f:translate key="LLL:EXT:ke_search/Resources/Private/Language/locallang_dashboard.xml:widgets.keSearchStatus.h"/>, </f:if>
+                            <f:if condition="{lastRunIndexingTimeHMS.m}">{lastRunIndexingTimeHMS.m} <f:translate key="LLL:EXT:ke_search/Resources/Private/Language/locallang_dashboard.xml:widgets.keSearchStatus.m"/>, </f:if>
+                            <f:if condition="{lastRunIndexingTimeHMS.s}">{lastRunIndexingTimeHMS.s} <f:translate key="LLL:EXT:ke_search/Resources/Private/Language/locallang_dashboard.xml:widgets.keSearchStatus.s"/></f:if>.
+                        </small>
+                    </div>
+                </f:if>
+        </div>
+    </div>
 </f:section>
 </html>

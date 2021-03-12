@@ -5,10 +5,30 @@
 			<label index="widget_group.ke_search">ke_search</label>
 			<label index="widgets.keSearchStatus.title">Indexer Status</label>
 			<label index="widgets.keSearchStatus.description">Shows the current status of the ke_search indexer.</label>
+			<label index="widgets.keSearchStatus.running_since">Indexer is running since</label>
+			<label index="widgets.keSearchStatus.not_running">Currently no indexing process is running</label>
+			<label index="widgets.keSearchStatus.h">h</label>
+			<label index="widgets.keSearchStatus.m">m</label>
+			<label index="widgets.keSearchStatus.s">s</label>
+			<label index="widgets.keSearchStatus.last_run_finished">Last run finished</label>
+			<label index="widgets.keSearchStatus.last_run_finished_at">at</label>
+			<label index="widgets.keSearchStatus.last_run_took">and took</label>
+			<label index="widgets.keSearchStatus.last_run_dateformat_day">m/d/y</label>
+			<label index="widgets.keSearchStatus.last_run_dateformat_time">H:i</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="widgets.keSearchStatus.title">Indexer Status</label>
 			<label index="widgets.keSearchStatus.description">Zeigt den aktuellen Status des ke_search-Indexers an.</label>
+			<label index="widgets.keSearchStatus.running_since">Indexer läuft seit</label>
+			<label index="widgets.keSearchStatus.not_running">Aktuell läuft kein Indexierungsvorgang</label>
+			<label index="widgets.keSearchStatus.h">Std.</label>
+			<label index="widgets.keSearchStatus.m">Min.</label>
+			<label index="widgets.keSearchStatus.s">Sek.</label>
+			<label index="widgets.keSearchStatus.last_run_finished">Der letzte Durchlauf wurde am</label>
+			<label index="widgets.keSearchStatus.last_run_finished_at">um</label>
+			<label index="widgets.keSearchStatus.last_run_took">beendet und benötigte</label>
+			<label index="widgets.keSearchStatus.last_run_dateformat_day">d.m.y</label>
+			<label index="widgets.keSearchStatus.last_run_dateformat_time">H:i</label>
 		</languageKey>
 	</data>
 </T3locallang>

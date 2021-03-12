@@ -21,13 +21,19 @@
 namespace TeaminmediasPluswerk\KeSearch\Widgets;
 
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
+use TYPO3\CMS\Core\Registry;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Dashboard\Widgets\WidgetConfigurationInterface;
 use TYPO3\CMS\Dashboard\Widgets\WidgetInterface;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
 class StatusWidget implements WidgetInterface
-
 {
+    /**
+     * @var Registry
+     */
+    public $registry;
+
     /**
      * @var WidgetConfigurationInterface
      */
@@ -44,6 +50,7 @@ class StatusWidget implements WidgetInterface
     ) {
         $this->configuration = $configuration;
         $this->view = $view;
+        $this->registry = GeneralUtility::makeInstance(Registry::class);
     }
 
     public function renderWidgetContent(): string
@@ -65,6 +72,25 @@ class StatusWidget implements WidgetInterface
             'indexerRunningTime' => $indexerRunningTime,
             'indexerRunningTimeHMS' => $indexerRunningTimeHMS,
         ]);
+
+        $lastRun = $this->registry->get('tx_kesearch', 'lastRun');
+        if (!empty($lastRun)) {
+            $lastRunIndexingTimeHMS =
+                $lastRun['indexingTime'] ?
+                [
+                    's' => round($lastRun['indexingTime'] / 3600),
+                    'm' => $lastRun['indexingTime'] / 60 % 60,
+                    's' => $lastRun['indexingTime'] % 60
+                ]
+                : [];
+            $this->view->assignMultiple([
+                'lastRunStartTime' => $lastRun['startTime'],
+                'lastRunEndTime' => $lastRun['endTime'],
+                'lastRunIndexingTime' => $lastRun['indexingTime'],
+                'lastRunIndexingTimeHMS' => $lastRunIndexingTimeHMS,
+            ]);
+        }
+
         return $this->view->render();
     }
 }
