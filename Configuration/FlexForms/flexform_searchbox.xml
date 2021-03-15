@@ -32,7 +32,6 @@
 							<label>LLL:EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml:ff.cssFile</label>
 							<config>
 								<type>input</type>
-								<default>EXT:ke_search/Resources/Public/Css/ke_search_pi1.css</default>
 								<eval>trim</eval>
 							</config>
 						</TCEforms>
