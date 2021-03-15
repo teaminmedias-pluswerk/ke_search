@@ -632,6 +632,9 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
      */
     public function getSearchResults()
     {
+        // set switch for too short words
+        $this->fluidTemplateVariables['wordsTooShort'] = $this->hasTooShortWords ? 1 : 0;
+
         if($this->isEmptySearch() && !$this->allowEmptySearch()) {
             return;
         }
@@ -658,9 +661,6 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         if ($this->numberOfResults == 0) {
             $this->setNoResultsText();
         }
-
-        // set switch for too short words
-        $this->fluidTemplateVariables['wordsTooShort'] = $this->hasTooShortWords ? 1 : 0;
 
         // init counter and loop through the search results
         $resultCount = 1;
