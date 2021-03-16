@@ -35,6 +35,7 @@ use TYPO3\CMS\Core\Resource\Index\MetaDataRepository;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\StorageRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Site\SiteFinder;
 
 /**
  * Plugin 'Faceted search' for the 'ke_search' extension.
@@ -337,6 +338,41 @@ class File extends IndexerBase
         } else {
             $fileProperties = false;
             $orig_uid = 0;
+        }
+
+        // get language of file from metadata field 'language' and set the language_uid
+        $sites = GeneralUtility::makeInstance(SiteFinder::class)->getAllSites();
+        $languages = [];
+        foreach ($sites as $site)
+        {
+            $siteLanguages = $site->getLanguages();
+            foreach ($siteLanguages as $sitelanguageId => $siteLanguage)
+            {
+                if ($siteLanguage->getLocale())
+                {
+                    $languages[strtolower($siteLanguage->getLocale())] = $sitelanguageId;
+                }
+                if ($siteLanguage->getTitle())
+                {
+                    $languages[strtolower($siteLanguage->getTitle())] = $sitelanguageId;
+                }
+                if ($siteLanguage->getHreflang())
+                {
+                    $languages[strtolower($siteLanguage->getHreflang())] = $sitelanguageId;
+                }
+                if ($siteLanguage->getTwoLetterIsoCode())
+                {
+                    $languages[strtolower($siteLanguage->getTwoLetterIsoCode())] = $sitelanguageId;
+                }
+            }
+        }
+
+        if (array_key_exists($fileProperties['language'], $languages))
+        {
+            $languageUid = $languages[$fileProperties['language']];
+        } else
+        {
+            $languageUid = -1;
         }
 
         $indexRecordValues = array(
