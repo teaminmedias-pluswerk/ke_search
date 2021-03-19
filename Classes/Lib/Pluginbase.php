@@ -265,7 +265,7 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         }
 
         // add cssTag to header if set
-        if ($this->conf['cssFile'] !== NULL) {
+        if (!empty($this->conf['cssFile'])) {
             $filePathSanitizer = GeneralUtility::makeInstance(FilePathSanitizer::class);
             $cssFile = $filePathSanitizer->sanitize($this->conf['cssFile']);
             if (!empty($cssFile)) {

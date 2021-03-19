@@ -17,8 +17,8 @@ plugin.tx_kesearch_pi1 {
             0 = EXT:ke_search/Resources/Private/Layouts/
             1 = {$plugin.tx_kesearch.layoutRootPath}
         }
-        cssFile = EXT:ke_search/Resources/Public/Css/ke_search_pi1.css
     }
+    cssFile = EXT:ke_search/Resources/Public/Css/ke_search_pi1.css
 }
 
 plugin.tx_kesearch_pi2 {
@@ -36,6 +36,7 @@ plugin.tx_kesearch_pi2 {
             1 = {$plugin.tx_kesearch.layoutRootPath}
         }
     }
+    cssFile = EXT:ke_search/Resources/Public/Css/ke_search_pi1.css
 }
 
 module.tx_dashboard {

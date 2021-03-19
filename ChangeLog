@@ -8,6 +8,7 @@ Upcoming version
 [TASK]    Refactor indexer end time calculation and make use of the registry
 [TASK]    Add section 'extra' in order to avoid of composer warning. Thanks to ste101. https://github.com/teaminmedias-pluswerk/ke_search/pull/400
 [BUGFIX]  wordsTooShort does not show up if option 'basic.allowEmptySearch' is set to false. Thanks to ste101. https://github.com/teaminmedias-pluswerk/ke_search/pull/403
+[TASK]    Move css file to typoscript configuration. Thanks to ste101. https://github.com/teaminmedias-pluswerk/ke_search/pull/404
 
 Version 3.5.0, March 2021
 [TASK]    Use uri.resource viewhelper instead of direct path to load the styles for the backend module. Thanks to Mike Street. https://github.com/teaminmedias-pluswerk/ke_search/issues/227#issuecomment-777476726
