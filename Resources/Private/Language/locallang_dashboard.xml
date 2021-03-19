@@ -19,6 +19,12 @@
 
 			<label index="widgets.keSearchIndexOverview.title">Index Overview</label>
 			<label index="widgets.keSearchIndexOverview.description">Shows how many records of each type are currently in the index.</label>
+
+			<label index="widgets.keSearchTrendingSearchphrases.title">Trending search phrases</label>
+			<label index="widgets.keSearchTrendingSearchphrases.description">Shows search phrases from the last 7 days.</label>
+			<label index="widgets.keSearchTrendingSearchphrases.phrase">Search phrase</label>
+			<label index="widgets.keSearchTrendingSearchphrases.number_of_usages">Number of usages</label>
+			<label index="widgets.keSearchTrendingSearchphrases.language">Language</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="widgets.keSearchStatus.title">Indexer Status</label>
@@ -36,6 +42,12 @@
 
 			<label index="widgets.keSearchIndexOverview.title">Index Übersicht</label>
 			<label index="widgets.keSearchIndexOverview.description">Zeigt wie viele Einträge von welchem Typ derzeit im Index vorhanden sind.</label>
+
+			<label index="widgets.keSearchTrendingSearchphrases.title">Am häufigsten verwendete Suchphrasen</label>
+			<label index="widgets.keSearchTrendingSearchphrases.description">Zeigt die am häufigsten verwendeten Suchphrasen der letzten 7 Tage.</label>
+			<label index="widgets.keSearchTrendingSearchphrases.phrase">Suchphrase</label>
+			<label index="widgets.keSearchTrendingSearchphrases.number_of_usages">Anzahl der Verwendungen</label>
+			<label index="widgets.keSearchTrendingSearchphrases.language">Sprache</label>
 		</languageKey>
 	</data>
 </T3locallang>

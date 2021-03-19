@@ -35,3 +35,18 @@ services:
         iconIdentifier: 'ext-kesearch-wizard-icon'
         height: 'medium'
         width: 'medium'
+
+  dashboard.widget.ke_search_trending_searchphrases:
+    class: 'TYPO3\CMS\Dashboard\Widgets\ListWidget'
+    arguments:
+      $dataProvider: '@TeaminmediasPluswerk\KeSearch\Widgets\Provider\TrendingSearchphrasesDataProvider'
+      $view: '@dashboard.views.widget'
+    tags:
+      - name: dashboard.widget
+        identifier: 'keSearchTrendingSearchphrases'
+        groupNames: 'ke_search'
+        title: 'LLL:EXT:ke_search/Resources/Private/Language/locallang_dashboard.xml:widgets.keSearchTrendingSearchphrases.title'
+        description: 'LLL:EXT:ke_search/Resources/Private/Language/locallang_dashboard.xml:widgets.keSearchTrendingSearchphrases.description'
+        iconIdentifier: 'ext-kesearch-wizard-icon'
+        height: 'medium'
+        width: 'medium'

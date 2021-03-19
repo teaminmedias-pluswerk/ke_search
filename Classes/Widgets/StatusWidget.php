@@ -55,7 +55,7 @@ class StatusWidget implements WidgetInterface
 
     public function renderWidgetContent(): string
     {
-        $this->view->setTemplate('Dashboard/Widget/StatusWidget');
+        $this->view->setTemplate('Widget/StatusWidget');
         $indexerStartTime = SearchHelper::getIndexerStartTime();
         $indexerRunningTime = $indexerStartTime ? (time() - $indexerStartTime) : 0;
         $indexerRunningTimeHMS =

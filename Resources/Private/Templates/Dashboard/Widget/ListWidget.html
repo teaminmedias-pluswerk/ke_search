@@ -1,0 +1,26 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers" data-namespace-typo3-fluid="true">
+<f:layout name="Widget/Widget" />
+<f:section name="main">
+
+    <f:if condition="{items}">
+        <table class="widget-table">
+            <tr>
+                <th><f:translate key="LLL:EXT:ke_search/Resources/Private/Language/locallang_dashboard.xml:widgets.keSearchTrendingSearchphrases.phrase"/></th>
+                <th><f:translate key="LLL:EXT:ke_search/Resources/Private/Language/locallang_dashboard.xml:widgets.keSearchTrendingSearchphrases.number_of_usages"/></th>
+                <th><f:translate key="LLL:EXT:ke_search/Resources/Private/Language/locallang_dashboard.xml:widgets.keSearchTrendingSearchphrases.language"/></th>
+            </tr>
+            <f:for each="{items}" as="item">
+                <tr>
+                    <td>{item.searchphrase}</td>
+                    <td>{item.num}</td>
+                    <td>{item.language}</td>
+                </tr>
+            </f:for>
+        </table>
+    </f:if>
+
+</f:section>
+<f:section name="footer">
+    <f:render partial="Widget/Button" arguments="{button: button}"/>
+</f:section>
+</html>
