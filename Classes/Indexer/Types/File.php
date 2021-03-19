@@ -332,6 +332,7 @@ class File extends IndexerBase
             // get file properties for this file, this information is merged from file record and meta information
             $fileProperties = $file->getProperties();
             $orig_uid = $file->getUid();
+            $language_uid = $this->detectLanguage($fileProperties);
 
             // get raw metadata for this file
             $metaDataRepository = GeneralUtility::makeInstance(MetaDataRepository::class);
@@ -339,6 +340,7 @@ class File extends IndexerBase
         } else {
             $fileProperties = false;
             $orig_uid = 0;
+            $language_uid = -1;
         }
 
         $indexRecordValues = array(
@@ -349,7 +351,7 @@ class File extends IndexerBase
             'tags' => $tags,
             'params' => '',
             'abstract' => '',
-            'language_uid' => $this->detectLanguage($fileProperties),
+            'language_uid' => $language_uid,
             'starttime' => 0,
             'endtime' => 0,
             'fe_group' => 0,
