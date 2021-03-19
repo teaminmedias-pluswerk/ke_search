@@ -268,6 +268,7 @@ return array(
         'directories' => array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.directories',
+            'description' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.directories.description',
             'displayCond' => 'FIELD:type:IN:file',
             'config' => array(
                 'type' => 'text',

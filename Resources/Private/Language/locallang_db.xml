@@ -84,11 +84,13 @@
 			<label index="tx_kesearch_indexerconfig.index_use_page_tags">Add tags of parent pages/folders?</label>
 			<label index="tx_kesearch_indexerconfig.index_use_page_tags_for_files">Add tags to files also?</label>
 			<label index="tx_kesearch_indexerconfig.index_page_doctypes">Page types which should be indexed (field:doktype, default: 1,2,5)</label>
-			<label index="tx_kesearch_indexerconfig.directories">Directories (comma-separated, e.g. my_directory/,my_other_directory/)</label>
+			<label index="tx_kesearch_indexerconfig.directories">Directories</label>
+			<label index="tx_kesearch_indexerconfig.directories.description">comma-separated, if FAL is used, name the directories as inside the file storage, e.g.: 'my_directory/,my_other_directory/'. If FAL is not used, you need to add the storage folder, e.g.: 'fileadmin/user_upload/,fileadmin/examples/'</label>
 			<label index="tx_kesearch_indexerconfig.fileext">File indexer: Comma separated list of allowed file extensions (eg. pdf,ppt,doc,xls)</label>
 			<label index="tx_kesearch_indexerconfig.contenttypes">Content element types which should be indexed (default: text,textpic,bullets,table,html,header,uploads)</label>
 			<label index="tx_kesearch_indexerconfig.filteroption">Add tag to all indexed elements</label>
-			<label index="tx_kesearch_indexerconfig.fal_storage">FAL Storage (IMPORTANT: backend user _cli_scheduler needs access to this storage!)</label>
+			<label index="tx_kesearch_indexerconfig.fal_storage">File storage (FAL)</label>
+			<label index="tx_kesearch_indexerconfig.fal_storage.dont_use_fal">Dont' use FAL but read files directly</label>
 			<label index="tx_kesearch_indexerconfig.cal_expired_events">Index expired events?</label>
 		</languageKey>
 		<languageKey index="de" type="array">
@@ -133,7 +135,7 @@
 			<label index="tx_kesearch_index.directory">Verzeichnis</label>
 			<label index="tx_kesearch_indexerconfig">Indexer Konfiguration</label>
 			<label index="tx_kesearch_indexerconfig.title">Titel</label>
-			<label index="tx_kesearch_indexerconfig.storagepid">Dateispeicher</label>
+			<label index="tx_kesearch_indexerconfig.storagepid">Speicher</label>
 			<label index="tx_kesearch_indexerconfig.storagepid.description">Ordner, in dem die indexierten Daten gespeichert werden (der Index)</label>
 			<label index="tx_kesearch_indexerconfig.targetpid">Zielseite für Erweiterungen</label>
 			<label index="tx_kesearch_indexerconfig.startingpoints_recursive">Seiten/Ordner rekursiv</label>
@@ -170,11 +172,13 @@
 			<label index="tx_kesearch_indexerconfig.index_use_page_tags">Schlagworte der übergeordneten Seite/des Ordners übernehmen?</label>
 			<label index="tx_kesearch_indexerconfig.index_use_page_tags_for_files">Schlagworte auch für Dateien übernehmen?</label>
 			<label index="tx_kesearch_indexerconfig.index_page_doctypes">Seitentypen, die indexiert werden sollen (Feld:doktype, Standard: 1,2,5)</label>
-			<label index="tx_kesearch_indexerconfig.directories">Verzeichnisse (komma-getrennt, z. B. my_directory/,my_other_directory/)</label>
+			<label index="tx_kesearch_indexerconfig.directories">Verzeichnisse</label>
+			<label index="tx_kesearch_indexerconfig.directories.description">komma-getrennt. Wenn FAL verwendet wird, die Verzeichnisse im Dateispeicher angeben, z. B.: 'my_directory/,my_other_directory/'. Wenn FAL nicht verwendet wird, das Verzeichnis des Dateispeichers mit angeben, z. B.: 'fileadmin/user_upload/,fileadmin/examples/'</label>
 			<label index="tx_kesearch_indexerconfig.fileext">Datei-Indexer: Komma-separierte Liste von zu indexierenden Dateiendungen (z.B. pdf,ppt,doc,xls)</label>
 			<label index="tx_kesearch_indexerconfig.contenttypes">Inhaltselement die indexiert werden sollen (Standard: text,textpic,bullets,table,html,header,uploads)</label>
 			<label index="tx_kesearch_indexerconfig.filteroption">Allen indexierten Elementen dieses Schlagwort hinzufügen</label>
-			<label index="tx_kesearch_indexerconfig.fal_storage">FAL Storage (Wichtig: backend user _cli_scheduler benötig Zugriff auf diesen Dateispeicher!)</label>
+			<label index="tx_kesearch_indexerconfig.fal_storage">Dateispeicher (FAL)</label>
+			<label index="tx_kesearch_indexerconfig.fal_storage.dont_use_fal">FAL nicht verwenden, sondern Dateien direkt indexieren</label>
 			<label index="tx_kesearch_indexerconfig.cal_expired_events">Abgelaufene Termine indexieren?</label>
 		</languageKey>
 		<languageKey index="nl" type="array">
