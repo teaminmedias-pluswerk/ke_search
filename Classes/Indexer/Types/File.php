@@ -34,6 +34,7 @@ use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Resource\Index\MetaDataRepository;
 use TYPO3\CMS\Core\Resource\ResourceStorage;
 use TYPO3\CMS\Core\Resource\StorageRepository;
+use TYPO3\CMS\Core\Site\Entity\Site;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Site\SiteFinder;
 
@@ -340,41 +341,6 @@ class File extends IndexerBase
             $orig_uid = 0;
         }
 
-        // get language of file from metadata field 'language' and set the language_uid
-        $sites = GeneralUtility::makeInstance(SiteFinder::class)->getAllSites();
-        $languages = [];
-        foreach ($sites as $site)
-        {
-            $siteLanguages = $site->getLanguages();
-            foreach ($siteLanguages as $sitelanguageId => $siteLanguage)
-            {
-                if ($siteLanguage->getLocale())
-                {
-                    $languages[strtolower($siteLanguage->getLocale())] = $sitelanguageId;
-                }
-                if ($siteLanguage->getTitle())
-                {
-                    $languages[strtolower($siteLanguage->getTitle())] = $sitelanguageId;
-                }
-                if ($siteLanguage->getHreflang())
-                {
-                    $languages[strtolower($siteLanguage->getHreflang())] = $sitelanguageId;
-                }
-                if ($siteLanguage->getTwoLetterIsoCode())
-                {
-                    $languages[strtolower($siteLanguage->getTwoLetterIsoCode())] = $sitelanguageId;
-                }
-            }
-        }
-
-        if (array_key_exists($fileProperties['language'], $languages))
-        {
-            $languageUid = $languages[$fileProperties['language']];
-        } else
-        {
-            $languageUid = -1;
-        }
-
         $indexRecordValues = array(
             'storagepid' => $this->indexerConfig['storagepid'],
             'title' => $this->fileInfo->getName(),
@@ -383,7 +349,7 @@ class File extends IndexerBase
             'tags' => $tags,
             'params' => '',
             'abstract' => '',
-            'language_uid' => -1,
+            'language_uid' => $this->detectLanguage($fileProperties),
             'starttime' => 0,
             'endtime' => 0,
             'fe_group' => 0,
@@ -459,5 +425,44 @@ class File extends IndexerBase
             $indexRecordValues['debug'],        // debug only?
             $additionalFields                    // additional fields added by hooks
         );
+    }
+
+    /**
+     * Tries to detect the language of file from metadata field 'language' and returns the language_uid.
+     * The field 'language' comes with the optional extension 'filemetadata'.
+     * Returns -1 ("all languages") language could not be determined.
+     *
+     * @param array $fileProperties
+     * @return int
+     */
+    protected function detectLanguage(array $fileProperties): int
+    {
+        $sites = GeneralUtility::makeInstance(SiteFinder::class)->getAllSites();
+        $languages = [];
+        /** @var Site $site */
+        foreach ($sites as $site) {
+            $siteLanguages = $site->getLanguages();
+            foreach ($siteLanguages as $siteLanguageId => $siteLanguage) {
+                if ($siteLanguage->getLocale()) {
+                    $languages[strtolower($siteLanguage->getLocale())] = $siteLanguageId;
+                }
+                if ($siteLanguage->getTitle()) {
+                    $languages[strtolower($siteLanguage->getTitle())] = $siteLanguageId;
+                }
+                if ($siteLanguage->getHreflang()) {
+                    $languages[strtolower($siteLanguage->getHreflang())] = $siteLanguageId;
+                }
+                if ($siteLanguage->getTwoLetterIsoCode()) {
+                    $languages[strtolower($siteLanguage->getTwoLetterIsoCode())] = $siteLanguageId;
+                }
+            }
+        }
+
+        if (array_key_exists($fileProperties['language'], $languages)) {
+            $languageUid = $languages[$fileProperties['language']];
+        } else {
+            $languageUid = -1;
+        }
+        return $languageUid;
     }
 }
