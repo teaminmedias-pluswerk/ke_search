@@ -51,6 +51,7 @@ ke_search
 	Introduction/Examples
 	QuickStart/Index
 	Indexing/Index
+	Backend/Index
 	Filters/Index
 	Templating/Index
 	Configuration/Index

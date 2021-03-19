@@ -13,10 +13,13 @@ by default but can be deactivated in the plugin configuration.
 
 .. image:: ../Images/Statistics/statistics-1.png
 
-You can see the statistics in the backend module by selecting "Searchword statistics".
+You can see the statistics in the backend module by selecting "Searchword statistics", or by using the dashboard widget.
 
-This function shows a simple statistic of the submitted searchwords of the last 10 days. The statistic shows the
-cumulative values for single searchwords yet. Maybe this will be extended in a later version.
+The dashboard widget shows the search phrases used in the last seven days for the whole system (ignoring the folders in
+which the data is stored).
+
+The backend module function shows a simple statistic of the submitted searchwords of the last 30 days. The statistic shows the
+cumulative values for single searchwords. Maybe this will be extended in a later version.
 
 .. image:: ../Images/Statistics/statistics-2.png
 
