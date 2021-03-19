@@ -4,6 +4,7 @@ Upcoming version
 [!!!] This version adds a language detection for files. It tries to detect the language of file from metadata field 'language'. The field 'language' comes with the optional extension 'filemetadata".
       This may change the behaviour in which languages files appear. Before this version all files would appear in all languages. Now if a langauge could be dermined, the file will only appear in that language.
 [!!!] The CSS file is now defined in the typoscript configuration and must be cleared via typoscript if you want to use your own. Before this version this the plugin configuration field had be cleared.
+[!!!] The search box is now of type "search" instead of "text". This may affect your styling and you man need to adjust your CSS.
 [TASK]    Change namespace of Fileinfo class to match with its path.
 [FEATURE] Add dashboard widget which shows the indexer status. https://github.com/teaminmedias-pluswerk/ke_search/issues/346
 [FEATURE] Add dashboard widget which shows the index overview. https://github.com/teaminmedias-pluswerk/ke_search/issues/346
@@ -13,6 +14,7 @@ Upcoming version
 [BUGFIX]  wordsTooShort does not show up if option 'basic.allowEmptySearch' is set to false. Thanks to ste101. https://github.com/teaminmedias-pluswerk/ke_search/pull/403
 [TASK]    Move css file to typoscript configuration. Thanks to ste101. https://github.com/teaminmedias-pluswerk/ke_search/pull/404
 [FEATURE] Add language detection for files. Thanks to ste101. https://github.com/teaminmedias-pluswerk/ke_search/pull/405
+[TASK]    Use type "search" instead of "text" for the search box, activate search field validation in the browser. Thanks to ste101. https://github.com/teaminmedias-pluswerk/ke_search/pull/407
 
 Version 3.5.0, March 2021
 [TASK]    Use uri.resource viewhelper instead of direct path to load the styles for the backend module. Thanks to Mike Street. https://github.com/teaminmedias-pluswerk/ke_search/issues/227#issuecomment-777476726
