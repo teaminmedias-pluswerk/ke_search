@@ -31,12 +31,12 @@
 			<label index="widgets.keSearchStatus.description">Zeigt den aktuellen Status des ke_search-Indexers an.</label>
 			<label index="widgets.keSearchStatus.running_since">Indexer läuft seit</label>
 			<label index="widgets.keSearchStatus.not_running">Aktuell läuft kein Indexierungsvorgang</label>
-			<label index="widgets.keSearchStatus.h">Std.</label>
-			<label index="widgets.keSearchStatus.m">Min.</label>
-			<label index="widgets.keSearchStatus.s">Sek.</label>
-			<label index="widgets.keSearchStatus.last_run_finished">Der letzte Durchlauf wurde am</label>
+			<label index="widgets.keSearchStatus.h">Std</label>
+			<label index="widgets.keSearchStatus.m">Min</label>
+			<label index="widgets.keSearchStatus.s">Sek</label>
+			<label index="widgets.keSearchStatus.last_run_finished">Der letzte Durchlauf wurde beendet am</label>
 			<label index="widgets.keSearchStatus.last_run_finished_at">um</label>
-			<label index="widgets.keSearchStatus.last_run_took">beendet und benötigte</label>
+			<label index="widgets.keSearchStatus.last_run_took">und benötigte</label>
 			<label index="widgets.keSearchStatus.last_run_dateformat_day">d.m.y</label>
 			<label index="widgets.keSearchStatus.last_run_dateformat_time">H:i</label>
 
