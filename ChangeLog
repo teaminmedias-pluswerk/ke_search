@@ -1,5 +1,8 @@
 ChangeLog
 
+Upcoming version
+[TASK]    Register widgets only if EXT:dashboard is available. https://github.com/teaminmedias-pluswerk/ke_search/issues/409
+
 Version 3.6.0, March 2021
 [!!!] This version adds a language detection for files. It tries to detect the language of file from metadata field 'language'. The field 'language' comes with the optional extension 'filemetadata".
       This may change the behaviour in which languages files appear. Before this version all files would appear in all languages. Now if a langauge could be dermined, the file will only appear in that language.
