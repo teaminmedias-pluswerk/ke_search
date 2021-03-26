@@ -86,6 +86,18 @@ class TtAddress extends IndexerBase
             return $content;
         } else {
             foreach ($result as $addressRow) {
+                $shouldBeIndexed = true;
+
+                if (!$this->recordIsLive($addressRow)) {
+                    $shouldBeIndexed = false;
+                }
+
+                if ($shouldBeIndexed) {
+                    $this->pObj->logger->debug('Indexing tt_address record UID ' . $addressRow['uid']);
+                } else {
+                    $this->pObj->logger->debug('Skipping tt_address record UID ' . $addressRow['uid']);
+                    continue;
+                }
 
                 $abstract = '';
                 $content = '';

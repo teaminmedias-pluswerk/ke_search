@@ -619,4 +619,28 @@ class IndexerBase
 
         $this->pObj->logger->debug(($logMessage ? $logMessage : 'File has been stored'),[$fileReference->getPublicUrl()]);
     }
+
+    /**
+     * Checks if the record is live by checking t3ver_state and t3ver_wsid (if set).
+     *
+     * @param array $record
+     * @return bool
+     */
+    protected function recordIsLive(array $record): bool
+    {
+        $recordIsLive = true;
+
+        // Versioning: Do not index records which have a t3ver_state set which means they are not live
+        // see https://docs.typo3.org/c/typo3/cms-workspaces/master/en-us//Administration/Versioning/Index.html
+        if (isset($record['t3ver_state']) && $record['t3ver_state'] !== 0) {
+            $recordIsLive = false;
+        }
+
+        // Versioning: Do not index records which do not live in the live workspace
+        if (isset($record['t3ver_wsid']) && $record['t3ver_wsid'] !== 0) {
+            $recordIsLive = false;
+        }
+
+        return $recordIsLive;
+    }
 }

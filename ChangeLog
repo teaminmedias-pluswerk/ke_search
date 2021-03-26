@@ -1,5 +1,8 @@
 ChangeLog
 
+Upcoming version
+[TASK]    Do not index initial placeholders and other records not in the live workspace. https://github.com/teaminmedias-pluswerk/ke_search/issues/220
+
 Version 3.6.1, March 2021
 [TASK]    Register widgets only if EXT:dashboard is available. https://github.com/teaminmedias-pluswerk/ke_search/issues/409
 [TASK]    Improve indexing time output in status widget

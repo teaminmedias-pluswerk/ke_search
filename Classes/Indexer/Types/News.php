@@ -119,11 +119,7 @@ class News extends IndexerBase
 
         if ($resCount) {
             while (($newsRecord = $res->fetch())) {
-
-                $this->pObj->logger->debug('Indexing news record "' . $newsRecord['title'] .'"', [
-                    'uid' => $newsRecord['uid'],
-                    'pid' => $newsRecord['pid']
-                ]);
+                $shouldBeIndexed = true;
 
                 // get category data for this news record (list of
                 // assigned categories and single view from category, if it exists)
@@ -136,24 +132,41 @@ class News extends IndexerBase
                 // they have'
                 if ($this->indexerConfig['index_news_category_mode'] == '2' && $this->indexerConfig['index_extnews_category_selection']) {
 
-                    // load category configuratio
+                    // load category configuration
                     $selectedCategoryUids = $this->getSelectedCategoriesUidList($this->indexerConfig['uid']);
 
                     $isInList = false;
                     foreach ($categoryData['uid_list'] as $catUid) {
-                        // if category was found in list, set isInList
-                        // to true and break further processing.
+                        // if category was found in list, set isInList to true and break further processing.
                         if (in_array($catUid, $selectedCategoryUids)) {
                             $isInList = true;
                             break;
                         }
                     }
 
-                    // if category was not fount stop further processing
-                    // and continue with next news record
+                    // if category was not found stop further processing and continue with next news record
                     if (!$isInList) {
-                        continue;
+                        $shouldBeIndexed = false;
                     }
+                }
+
+                if (!$this->recordIsLive($newsRecord)) {
+                    $shouldBeIndexed = false;
+                }
+
+                if ($shouldBeIndexed) {
+                    $this->pObj->logger->debug('Indexing news record "' . $newsRecord['title'] .'"', [
+                        'uid' => $newsRecord['uid'],
+                        'pid' => $newsRecord['pid'],
+                        'sys_language_uid' => $newsRecord['sys_language_uid'],
+                    ]);
+                } else {
+                    $this->pObj->logger->debug('Skipping news record "' . $newsRecord['title'] .'"', [
+                        'uid' => $newsRecord['uid'],
+                        'pid' => $newsRecord['pid'],
+                        'sys_language_uid' => $newsRecord['sys_language_uid'],
+                    ]);
+                    continue;
                 }
 
                 // compile the information which should go into the index:

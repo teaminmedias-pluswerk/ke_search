@@ -165,7 +165,7 @@ class IndexerRunner
                 $className .= GeneralUtility::underscoredToUpperCamelCase($this->indexerConfig['type']);
                 if (class_exists($className)) {
                     $this->logger->info(
-                        'indexer "' . $this->indexerConfig['title'] . '" started ',
+                        'Indexer "' . $this->indexerConfig['title'] . '" started ',
                         $this->indexerConfig
                     );
                     $searchObj = GeneralUtility::makeInstance($className, $this);
@@ -183,7 +183,7 @@ class IndexerRunner
                 foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customIndexer'] as $_classRef) {
                     $searchObj = GeneralUtility::makeInstance($_classRef, $this);
                     $this->logger->info(
-                        'custom indexer "' . $this->indexerConfig['title'] . '" started ',
+                        'Custom indexer "' . $this->indexerConfig['title'] . '" started ',
                         $this->indexerConfig
                     );
                     $message = $searchObj->customIndexer($indexerConfig, $this);

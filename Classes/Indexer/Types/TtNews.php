@@ -56,7 +56,6 @@ class TtNews extends IndexerBase
      */
     public function startIndexing()
     {
-        $content = '';
         $table = 'tt_news';
 
         // get the pages from where to index the news
@@ -88,11 +87,26 @@ class TtNews extends IndexerBase
 
         if ($resCount) {
             while (($newsRecord = $res->fetch())) {
+                $shouldBeIndexed = true;
 
-                $this->pObj->logger->debug('Indexing tt_news record "' . $newsRecord['title'] .'"', [
-                    'uid' => $newsRecord['uid'],
-                    'pid' => $newsRecord['pid']
-                ]);
+                if (!$this->recordIsLive($newsRecord)) {
+                    $shouldBeIndexed = false;
+                }
+
+                if ($shouldBeIndexed) {
+                    $this->pObj->logger->debug('Indexing tt_news record "' . $newsRecord['title'] .'"', [
+                        'uid' => $newsRecord['uid'],
+                        'pid' => $newsRecord['pid'],
+                        'sys_language_uid' => $newsRecord['sys_language_uid'],
+                    ]);
+                } else {
+                    $this->pObj->logger->debug('Skipping tt_news record "' . $newsRecord['title'] .'"', [
+                        'uid' => $newsRecord['uid'],
+                        'pid' => $newsRecord['pid'],
+                        'sys_language_uid' => $newsRecord['sys_language_uid'],
+                    ]);
+                    continue;
+                }
 
                 // get category data for this news record (list of
                 // assigned categories and single view from category, if it exists)

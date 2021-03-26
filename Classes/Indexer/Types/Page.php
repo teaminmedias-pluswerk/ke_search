@@ -251,9 +251,6 @@ class Page extends IndexerBase
         // create an array of cached page records which contains pages in
         // default and all other languages registered in the system
         foreach ($this->pageRecords as $pageRecord) {
-            $this->pObj->logger->debug('Indexing page record "' . $pageRecord['title'] . '"', [
-                'uid' => $pageRecord['uid']
-            ]);
             $this->addLocalizedPagesToCache($pageRecord);
         }
 
@@ -621,8 +618,9 @@ class Page extends IndexerBase
         // store record in index table
         if (count($pageContent)) {
             foreach ($pageContent as $language_uid => $content) {
-
+                $pageTitle = $this->cachedPageRecords[$language_uid][$uid]['title'] ?? '[empty title]';
                 if (!$pageAccessRestrictions['hidden'] && $this->checkIfpageShouldBeIndexed($uid, $language_uid)) {
+                    $this->pObj->logger->debug('Indexing page ' . $pageTitle . ' (UID ' . $uid . ', L ' . $language_uid . ')');
                     // overwrite access restrictions with language overlay values
                     $accessRestrictionsLanguageOverlay = $pageAccessRestrictions;
                     $pageAccessRestrictions['fe_group'] = $indexEntryDefaultValues['feGroupsPages'];
@@ -663,11 +661,11 @@ class Page extends IndexerBase
                         $additionalFields                                           // additional fields added by hooks
                     );
                     $this->counter++;
+                } else {
+                    $this->pObj->logger->debug('Skipping page ' . $pageTitle . ' (UID ' . $uid . ', L ' . $language_uid . ')');
                 }
             }
         }
-
-        return;
     }
 
     /**
@@ -750,8 +748,9 @@ class Page extends IndexerBase
     }
 
     /**
-     * checks wether the given page should go to the index.
-     * Checks the doktype and wethe the "hidden" or "no_index" flags
+     * Checks if the given page should go to the index.
+     * Checks the doktype and flags like "hidden", "no_index" and versioning.
+     *
      * are set.
      *
      * @param integer $uid
@@ -775,6 +774,10 @@ class Page extends IndexerBase
         }
 
         if ((int) $language_uid === 0 && GeneralUtility::hideIfDefaultLanguage($this->cachedPageRecords[$language_uid][$uid]['l18n_cfg'])) {
+            $index = false;
+        }
+
+        if (!empty($this->cachedPageRecords[$language_uid][$uid]) && !$this->recordIsLive($this->cachedPageRecords[$language_uid][$uid])) {
             $index = false;
         }
 
