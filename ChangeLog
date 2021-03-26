@@ -1,6 +1,6 @@
 ChangeLog
 
-Upcoming version
+Version 3.6.1, March 2021
 [TASK]    Register widgets only if EXT:dashboard is available. https://github.com/teaminmedias-pluswerk/ke_search/issues/409
 [TASK]    Improve indexing time output in status widget
 
