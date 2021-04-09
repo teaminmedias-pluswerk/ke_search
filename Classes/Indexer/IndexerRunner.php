@@ -216,9 +216,6 @@ class IndexerRunner
         // clean up process after indezing to free memory
         $this->cleanUpProcessAfterIndexing();
 
-        // create plaintext report
-        $plaintextReport = $this->createPlaintextReport($content);
-
         // set indexing end time
         $this->endTime = time();
 
@@ -232,17 +229,27 @@ class IndexerRunner
             ['startTime' => $this->startTime, 'endTime' => $this->endTime, 'indexingTime' => $indexingTime]
         );
 
+        // create plaintext report
+        $plaintextReport = $this->createPlaintextReport($content);
+
         // send notification in CLI mode
         if ($mode == 'CLI') {
             // send finishNotification
             $isValidEmail = GeneralUtility::validEmail($this->extConf['notificationRecipient']);
             if ($this->extConf['finishNotification'] && $isValidEmail) {
                 // send the notification message
+                /** @var MailMessage $mail */
                 $mail = GeneralUtility::makeInstance(MailMessage::class);
                 $mail->setFrom(array($this->extConf['notificationSender']));
                 $mail->setTo(array($this->extConf['notificationRecipient']));
                 $mail->setSubject($this->extConf['notificationSubject']);
-                $mail->setBody($plaintextReport);
+                if (\TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger(TYPO3_branch) >=
+                    \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('10.0')
+                ) {
+                    $mail->text($plaintextReport);
+                } else {
+                    $mail->setBody($plaintextReport);
+                }
                 $mail->send();
             }
         }

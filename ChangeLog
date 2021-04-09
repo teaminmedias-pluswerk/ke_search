@@ -7,6 +7,7 @@ Upcoming version
 [TASK]    Remove a21glossary indexer. https://github.com/teaminmedias-pluswerk/ke_search/issues/252
 [TASK]    Remove unused database field tvpath
 [TASK]    Remove cal indexer. https://github.com/teaminmedias-pluswerk/ke_search/issues/251
+[TASK]    Support sending notification mail in TYPO3 10
 
 Version 3.6.1, March 2021
 [TASK]    Register widgets only if EXT:dashboard is available. https://github.com/teaminmedias-pluswerk/ke_search/issues/409
