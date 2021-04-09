@@ -62,7 +62,6 @@
 			<label index="tx_kesearch_indexerconfig.type.I.6">Content records (tt_content)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.7">Files</label>
 			<label index="tx_kesearch_indexerconfig.type.I.12">News (news)</label>
-			<label index="tx_kesearch_indexerconfig.type.I.14">Calendar Base (cal)</label>
 			<label index="tx_kesearch_indexerconfig.type">Type</label>
 			<label index="tx_kesearch_indexerconfig.index_content_with_restrictions">Index content elements with restrictions?</label>
 			<label index="tx_kesearch_indexerconfig.index_content_with_restrictions.I.0">Yes</label>
@@ -90,7 +89,6 @@
 			<label index="tx_kesearch_indexerconfig.filteroption">Add tag to all indexed elements</label>
 			<label index="tx_kesearch_indexerconfig.fal_storage">File storage (FAL)</label>
 			<label index="tx_kesearch_indexerconfig.fal_storage.dont_use_fal">Dont' use FAL but read files directly</label>
-			<label index="tx_kesearch_indexerconfig.cal_expired_events">Index expired events?</label>
 		</languageKey>
 		<languageKey index="de" type="array">
 			<label index="pages.tx_kesearch_label">Suche</label>
@@ -144,11 +142,11 @@
 			<label index="tx_kesearch_indexerconfig.sysfolder">Einzelne Ordner</label>
 			<label index="tx_kesearch_indexerconfig.sysfolder.description">Ordner mit zu indexierenden Daten (nicht rekursiv)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.0">Seiten</label>
+			<label index="tx_kesearch_indexerconfig.type.I.2">Nachrichten (tt_news)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.5">Adressen (tt_address)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.6">Inhaltselemente (tt_content)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.7">Dateien</label>
 			<label index="tx_kesearch_indexerconfig.type.I.12">Nachrichten (news)</label>
-			<label index="tx_kesearch_indexerconfig.type.I.14">Calendar Base (cal)</label>
 			<label index="tx_kesearch_indexerconfig.type">Typ</label>
 			<label index="tx_kesearch_indexerconfig.index_content_with_restrictions">Indiziere Content-Elemente mit eingeschränkter Zugänglichkeit?</label>
 			<label index="tx_kesearch_indexerconfig.index_content_with_restrictions.I.0">Ja</label>
@@ -177,7 +175,6 @@
 			<label index="tx_kesearch_indexerconfig.filteroption">Allen indexierten Elementen dieses Schlagwort hinzufügen</label>
 			<label index="tx_kesearch_indexerconfig.fal_storage">Dateispeicher (FAL)</label>
 			<label index="tx_kesearch_indexerconfig.fal_storage.dont_use_fal">FAL nicht verwenden, sondern Dateien direkt indexieren</label>
-			<label index="tx_kesearch_indexerconfig.cal_expired_events">Abgelaufene Termine indexieren?</label>
 		</languageKey>
 		<languageKey index="nl" type="array">
 			<label index="pages.tx_kesearch_tags">Labels voor Facet Zoeken</label>
@@ -226,7 +223,6 @@
 			<label index="tx_kesearch_indexerconfig.index_content_with_restrictions.I.1">Nee</label>
 			<label index="tx_kesearch_indexerconfig.directories">Mappen (fileadmin/my_directory/,fileadmin/my_other_directory)</label>
 			<label index="tx_kesearch_indexerconfig.fileext">Door komma's gescheiden lijst van toegestane bestandsextensies (bijv. pdf,ppt,doc,xls)</label>
-			<label index="tx_kesearch_indexerconfig.cal_expired_events">Index expired events?</label>
 		</languageKey>
 	</data>
 </T3locallang>

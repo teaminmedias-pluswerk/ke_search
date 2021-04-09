@@ -79,11 +79,6 @@ return array(
                         'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_7.gif'
                     ),
                     array(
-                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.14',
-                        'cal',
-                        'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_14.gif'
-                    ),
-                    array(
                         'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.2',
                         'tt_news',
                         'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_2.gif'
@@ -125,7 +120,7 @@ return array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.startingpoints_recursive',
             'description' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.startingpoints_recursive.description',
-            'displayCond' => 'FIELD:type:IN:page,tt_content,tt_address,news,cal,tt_news',
+            'displayCond' => 'FIELD:type:IN:page,tt_content,tt_address,news,tt_news',
             'config' => array(
                 'type' => 'group',
                 'internal_type' => 'db',
@@ -153,7 +148,7 @@ return array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.sysfolder',
             'description' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.sysfolder.description',
-            'displayCond' => 'FIELD:type:IN:tt_address,news,cal,tt_news',
+            'displayCond' => 'FIELD:type:IN:tt_address,news,tt_news',
             'config' => array(
                 'type' => 'group',
                 'internal_type' => 'db',
@@ -345,15 +340,6 @@ return array(
                 'default' => 'text,textmedia,textpic,bullets,table,html,header,uploads'
             )
         ),
-        'cal_expired_events' => array(
-            'exclude' => 0,
-            'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.cal_expired_events',
-            'displayCond' => 'FIELD:type:IN:cal',
-            'config' => array(
-                'type' => 'check',
-                'default' => '0'
-            )
-        ),
         'index_news_files_mode' => [
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.index_news_files_mode',
@@ -382,6 +368,6 @@ return array(
             . 'index_news_archived,index_news_category_mode,index_extnews_category_selection,'
             . 'index_use_page_tags,fal_storage,directories,fileext,index_page_doctypes,contenttypes,'
             . 'index_news_files_mode,'
-            . 'filteroption,index_use_page_tags_for_files,cal_expired_events')
+            . 'filteroption,index_use_page_tags_for_files')
     )
 );
