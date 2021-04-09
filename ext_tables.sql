@@ -139,7 +139,6 @@ CREATE TABLE tx_kesearch_indexerconfig (
 	directories text,
 	fileext tinytext,
 	filteroption int(11) DEFAULT '0' NOT NULL,
-	tvpath varchar(255) DEFAULT '' NOT NULL,
 	fal_storage int(11) DEFAULT '0' NOT NULL,
 	contenttypes text,
 	cal_expired_events tinyint(3) DEFAULT '0' NOT NULL,
