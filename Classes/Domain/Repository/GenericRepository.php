@@ -50,12 +50,16 @@ class GenericRepository {
 
         $row = false;
         $tableName = '';
+        $type = (substr($type, 0, 4) == 'file') ? 'file' : $type;
         switch ($type) {
             case 'page':
                 $tableName = 'pages';
                 break;
             case 'news':
                 $tableName = 'tx_news_domain_model_news';
+                break;
+            case 'file':
+                $tableName = 'sys_file';
                 break;
             default:
                 // check if a table exists that matches the type name
