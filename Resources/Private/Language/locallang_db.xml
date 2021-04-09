@@ -62,7 +62,6 @@
 			<label index="tx_kesearch_indexerconfig.type.I.6">Content records (tt_content)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.7">Files</label>
 			<label index="tx_kesearch_indexerconfig.type.I.12">News (news)</label>
-			<label index="tx_kesearch_indexerconfig.type.I.13">Glossary (a21glossary)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.14">Calendar Base (cal)</label>
 			<label index="tx_kesearch_indexerconfig.type">Type</label>
 			<label index="tx_kesearch_indexerconfig.index_content_with_restrictions">Index content elements with restrictions?</label>
@@ -149,7 +148,6 @@
 			<label index="tx_kesearch_indexerconfig.type.I.6">Inhaltselemente (tt_content)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.7">Dateien</label>
 			<label index="tx_kesearch_indexerconfig.type.I.12">Nachrichten (news)</label>
-			<label index="tx_kesearch_indexerconfig.type.I.13">Glossar (a21glossary)</label>
 			<label index="tx_kesearch_indexerconfig.type.I.14">Calendar Base (cal)</label>
 			<label index="tx_kesearch_indexerconfig.type">Typ</label>
 			<label index="tx_kesearch_indexerconfig.index_content_with_restrictions">Indiziere Content-Elemente mit eingeschränkter Zugänglichkeit?</label>

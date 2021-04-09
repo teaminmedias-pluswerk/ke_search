@@ -79,11 +79,6 @@ return array(
                         'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_7.gif'
                     ),
                     array(
-                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.13',
-                        'a21glossary',
-                        'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_13.gif'
-                    ),
-                    array(
                         'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.type.I.14',
                         'cal',
                         'EXT:ke_search/Resources/Public/Icons/types_backend/selicon_tx_kesearch_indexerconfig_type_14.gif'
@@ -130,7 +125,7 @@ return array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.startingpoints_recursive',
             'description' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.startingpoints_recursive.description',
-            'displayCond' => 'FIELD:type:IN:page,tt_content,tt_address,news,a21glossary,cal,tt_news',
+            'displayCond' => 'FIELD:type:IN:page,tt_content,tt_address,news,cal,tt_news',
             'config' => array(
                 'type' => 'group',
                 'internal_type' => 'db',
@@ -158,7 +153,7 @@ return array(
             'exclude' => 0,
             'label' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.sysfolder',
             'description' => 'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tx_kesearch_indexerconfig.sysfolder.description',
-            'displayCond' => 'FIELD:type:IN:tt_address,news,a21glossary,cal,tt_news',
+            'displayCond' => 'FIELD:type:IN:tt_address,news,cal,tt_news',
             'config' => array(
                 'type' => 'group',
                 'internal_type' => 'db',
