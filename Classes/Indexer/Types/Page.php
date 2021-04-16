@@ -29,6 +29,7 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer\Types;
  * @author Christian Bülter <buelter@kennziffer.com>
  */
 
+use TeaminmediasPluswerk\KeSearch\Domain\Repository\ContentRepository;
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
@@ -257,6 +258,17 @@ class Page extends IndexerBase
         // create a new list of allowed pids
         $indexPids = array_keys($this->pageRecords);
 
+        // Remove unmodified pages in incremental mode
+        if ($this->indexingMode == self::INDEXING_MODE_INCREMENTAL) {
+            $this->removeUnmodifiedPageRecords($indexPids, $this->pageRecords, $this->cachedPageRecords);
+        }
+
+        if ($this->indexingMode == self::INDEXING_MODE_INCREMENTAL && empty($indexPids)) {
+            $logMessage = 'Skipping this indexer (no modified pages found).';
+            $this->pObj->logger->info($logMessage);
+            return $logMessage;
+        }
+
         // add tags to pages of doktype standard, advanced, shortcut and "not in menu"
         // add tags also to subpages of sysfolders (254), since we don't want them to be
         // excluded (see: http://forge.typo3.org/issues/49435)
@@ -290,6 +302,15 @@ class Page extends IndexerBase
             . $this->counter . ' ' . $this->indexedElementsName . ' have been indexed. ' . LF
             . $this->counterWithoutContent . ' had no content or the content was not indexable.' . LF
             . $this->fileCounter . ' files have been indexed.';
+    }
+
+    /**
+     * @return string
+     */
+    public function startIncrementalIndexing(): string
+    {
+        $this->indexingMode = self::INDEXING_MODE_INCREMENTAL;
+        return $this->startIndexing();
     }
 
     /**
@@ -382,6 +403,48 @@ class Page extends IndexerBase
 
                 if ($pageOverlay) {
                     $this->cachedPageRecords[$sysLang['uid']][$pageRow['uid']] = $pageOverlay + $pageRow;
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Remove page records from $indexPids, $pageRecords and $cachedPageRecords which have not been modified since
+     * last index run
+     */
+    public function removeUnmodifiedPageRecords(& $indexPids, & $pageRecords, & $cachedPageRecords)
+    {
+        foreach ($indexPids as $uid) {
+            $modified = false;
+
+            // check page timestamp
+            foreach ($this->sysLanguages as $sysLang) {
+                if (
+                    !empty($cachedPageRecords[$sysLang['uid']][$uid])
+                    && $cachedPageRecords[$sysLang['uid']][$uid]['tstamp'] > $this->lastRunStartTime
+                ) {
+                    $modified = true;
+                }
+            }
+
+            // check content elements timestamp
+            /** @var ContentRepository $contentRepository */
+            $contentRepository = GeneralUtility::makeInstance(ContentRepository::class);
+            $newestContentElement = $contentRepository->findNewestByPid($uid);
+            if ( !empty($newestContentElement) && $newestContentElement['tstamp'] > $this->lastRunStartTime) {
+                $modified = true;
+            }
+
+            // remove unmodified pages
+            if (!$modified) {
+                unset($pageRecords[$uid]);
+                foreach ($this->sysLanguages as $sysLang) {
+                    unset($cachedPageRecords[$sysLang['uid']][$uid]);
+                }
+                $key = array_search($uid, $indexPids);
+                if (false !== $key) {
+                    unset($indexPids[$key]);
                 }
             }
         }
