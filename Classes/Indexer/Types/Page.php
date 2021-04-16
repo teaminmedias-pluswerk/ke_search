@@ -639,7 +639,7 @@ class Page extends IndexerBase
                         }
                     }
 
-                    // use new "tx_kesearch_abstract" field instead of "abstract" if set
+                    // use tx_kesearch_abstract instead of "abstract" if set
                     $abstract = $this->cachedPageRecords[$language_uid][$uid]['tx_kesearch_abstract'] ?
                         $this->cachedPageRecords[$language_uid][$uid]['tx_kesearch_abstract'] :
                         $this->cachedPageRecords[$language_uid][$uid]['abstract'];
@@ -794,14 +794,14 @@ class Page extends IndexerBase
      */
     public function getCombinedFeGroupsForContentElement($feGroupsPages, $feGroupsContentElement)
     {
-        // combine frontend groups from page(s) and content elemenet as follows
+        // combine frontend groups from page(s) and content element as follows
         // 1. if page has no groups, but ce has groups, use ce groups
-        // 2. if ce has no groups, but page has grooups, use page groups
+        // 2. if ce has no groups, but page has groups, use page groups
         // 3. if page has "show at any login" (-2) and ce has groups, use ce groups
         // 4. if ce has "show at any login" (-2) and page has groups, use page groups
         // 5. if page and ce have explicit groups (not "hide at login" (-1), merge them (use only groups both have)
         // 6. if page or ce has "hide at login" and the other
-        // has an expclicit group the element will never be shown and we must not index it.
+        // has an explicit group the element will never be shown and we must not index it.
         // So which group do we set here? Let's use a constant for that and check in the calling function for that.
 
         if (!$feGroupsPages && $feGroupsContentElement) {
@@ -854,7 +854,7 @@ class Page extends IndexerBase
      */
     public function indexFiles($fileObjects, $ttContentRow, $feGroupsPages, $tags)
     {
-        // combine group access restrictons from page(s) and content element
+        // combine group access restrictions from page(s) and content element
         $feGroups = $this->getCombinedFeGroupsForContentElement($feGroupsPages, $ttContentRow['fe_group']);
 
         if (count($fileObjects) && $feGroups != DONOTINDEX) {
