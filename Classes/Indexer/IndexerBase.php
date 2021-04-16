@@ -26,6 +26,7 @@ use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
 use TYPO3\CMS\Core\Database\QueryGenerator;
+use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Resource\FileRepository;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -41,6 +42,9 @@ use \TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class IndexerBase
 {
+    public const INDEXING_MODE_FULL = 0;
+    public const INDEXING_MODE_INCREMENTAL = 1;
+
     public $startMicrotime = 0;
     public $indexerConfig = array(); // current indexer configuration
 
@@ -57,6 +61,7 @@ class IndexerBase
 
     /**
      * needed to get all recursive pids
+     * @var QueryGenerator queryGen
      */
     public $queryGen;
 
@@ -71,16 +76,37 @@ class IndexerBase
     public $pageRecords;
 
     /**
+     * @var int
+     */
+    protected $lastRunStartTime = 0;
+
+    /**
+     * @var int
+     */
+    protected $indexingMode;
+
+    /**
+     * @var Registry
+     */
+    private $registry;
+
+    /**
      * Constructor of this object
      * @param $pObj
      */
     public function __construct($pObj)
     {
+        $this->queryGen = GeneralUtility::makeInstance(QueryGenerator::class);
+        $this->registry = GeneralUtility::makeInstance(Registry::class);
+
         $this->startMicrotime = microtime(true);
         $this->pObj = $pObj;
         $this->indexerConfig = $this->pObj->indexerConfig;
-        /** @var QueryGenerator queryGen */
-        $this->queryGen = GeneralUtility::makeInstance(QueryGenerator::class);
+        $lastRun = $this->registry->get('tx_kesearch', 'lastRun');
+        if (!empty($lastRun) && !empty($lastRun['startTime']) ) {
+            $this->lastRunStartTime = $lastRun['startTime'];
+        }
+        $this->indexingMode = self::INDEXING_MODE_FULL;
     }
 
 
@@ -319,6 +345,14 @@ class IndexerBase
     public function getDuration()
     {
         return intval(ceil((microtime(true) - $this->startMicrotime) * 1000));
+    }
+
+    /**
+     * @return int
+     */
+    public function getIndexingMode(): int
+    {
+        return $this->indexingMode;
     }
 
     /**
