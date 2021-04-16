@@ -106,10 +106,13 @@ class IndexerRunner
      * @param $verbose boolean if set, information about the indexing process is returned, otherwise processing is quiet
      * @param $extConf array extension config array from EXT Manager
      * @param $mode string "CLI" if called from command line, otherwise empty
+     * @param int $indexingMode integer full or incremental indexing (possible values: IndexerBase::INDEXING_MODE_FULL or IndexerBase::INDEXING_MODE_INCREMENTAL)
      * @return string output is done only if param $verbose is true
      */
-    public function startIndexing($verbose = true, $extConf = array(), $mode = '')
+    public function startIndexing($verbose = true, $extConf = array(), $mode = '', $indexingMode = IndexerBase::INDEXING_MODE_FULL)
     {
+        // TODO provide switch in CLI, GUI and scheduler
+        $indexingMode = IndexerBase::INDEXING_MODE_INCREMENTAL;
         $content = '';
 
         // write starting timestamp into registry
@@ -169,7 +172,16 @@ class IndexerRunner
                         $this->indexerConfig
                     );
                     $searchObj = GeneralUtility::makeInstance($className, $this);
-                    $message = $searchObj->startIndexing();
+                    if ($indexingMode == IndexerBase::INDEXING_MODE_FULL) {
+                        $message = $searchObj->startIndexing();
+                    } else {
+                        if (method_exists($searchObj, 'startIncrementalIndexing')) {
+                            $message = $searchObj->startIncrementalIndexing();
+                        } else {
+                            $message = 'Incremental indexing is not available for this indexer, starting full indexing. <br />';
+                            $message .= $searchObj->startIndexing();
+                        }
+                    }
                     $content .= $this->renderIndexingReport($searchObj, $message);
                 } else {
                     $errorMessage = 'Could not find class ' . $className;
@@ -195,8 +207,7 @@ class IndexerRunner
         }
 
         // process index cleanup
-        $this->logger->info('CleanUpIndex started');
-        $content .= $this->cleanUpIndex();
+        $content .= $this->cleanUpIndex($indexingMode);
 
         // count index records
         $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
@@ -213,7 +224,7 @@ class IndexerRunner
         $this->logger->info('Index contains ' . $count . ' entries');
 
 
-        // clean up process after indezing to free memory
+        // clean up process after indexing to free memory
         $this->cleanUpProcessAfterIndexing();
 
         // set indexing end time
@@ -291,6 +302,15 @@ class IndexerRunner
             $title = get_class($searchObj);
         }
         $content .= '<span class="title">' . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . '</span>';
+
+        // indexing mode
+        if (is_subclass_of($searchObj, '\TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase')) {
+            if (method_exists($searchObj, 'getIndexingMode')) {
+                if ($searchObj->getIndexingMode() == IndexerBase::INDEXING_MODE_INCREMENTAL) {
+                    $content .= '<span class="indexingMode">Incremental mode</span><br />';
+                }
+            }
+        }
 
         // message
         $message = str_ireplace(['<br />','<br>','<br/>','</span>'], "\n", $message);
@@ -475,56 +495,61 @@ class IndexerRunner
      * Delete all index elements that are older than starting timestamp in registry
      * @return string content for BE
      */
-    public function cleanUpIndex()
+    public function cleanUpIndex(int $indexingMode)
     {
-        $content = '';
-        $startMicrotime = microtime(true);
-        $table = 'tx_kesearch_index';
+        $content = '<div class="summary infobox">';
+        if ($indexingMode == IndexerBase::INDEXING_MODE_FULL) {
+            $this->logger->info('Cleanup started');
+            $startMicrotime = microtime(true);
+            $table = 'tx_kesearch_index';
 
-        // select all index records older than the beginning of the indexing process
-        $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
-        $where = $queryBuilder->expr()->lt(
-            'tstamp',
-            $queryBuilder->quote(
-                $this->registry->get('tx_kesearch','startTimeOfIndexer'),
-                PDO::PARAM_INT
-            )
-        );
+            // select all index records older than the beginning of the indexing process
+            $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
+            $where = $queryBuilder->expr()->lt(
+                'tstamp',
+                $queryBuilder->quote(
+                    $this->registry->get('tx_kesearch','startTimeOfIndexer'),
+                    PDO::PARAM_INT
+                )
+            );
 
-        // hook for cleanup
-        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['cleanup'])) {
-            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['cleanup'] as $_classRef) {
-                $_procObj = GeneralUtility::makeInstance($_classRef);
-                $content .= $_procObj->cleanup($where, $this);
+            // hook for cleanup
+            if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['cleanup'])) {
+                foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['cleanup'] as $_classRef) {
+                    $_procObj = GeneralUtility::makeInstance($_classRef);
+                    $content .= $_procObj->cleanup($where, $this);
+                }
             }
+
+            // count and delete old index records
+            $count = $queryBuilder
+                ->count('*')
+                ->from($table)
+                ->where($where)
+                ->execute()
+                ->fetchColumn(0);
+
+            $queryBuilder
+                ->delete($table)
+                ->where($where)
+                ->execute();
+
+            $content .= '<p class="title">Cleanup</p>';
+            $content .= $count . ' entries deleted.<br />' . "\n";
+            $this->logger->info('CleanUpIndex: ' . $count . ' entries deleted.');
+
+            // rotate Sphinx Index (ke_search_premium function)
+            $content .= $this->rotateSphinxIndex();
+
+            // calculate duration of indexing process
+            $duration = ceil((microtime(true) - $startMicrotime) * 1000);
+            $content .= '<i>Cleanup process took ' . $duration . ' ms.</i></p>' . "\n";
+        } else {
+            $message = 'Skipping cleanup in incremental mode';
+            $this->logger->info($message);
+            $content .= $message;
         }
-
-        // count and delete old index records
-        $count = $queryBuilder
-            ->count('*')
-            ->from($table)
-            ->where($where)
-            ->execute()
-            ->fetchColumn(0);
-
-        $queryBuilder
-            ->delete($table)
-            ->where($where)
-            ->execute();
-
-        $content .= '<div class="summary infobox">';
-        $content .= '<p><b>Index cleanup:</b><br />' . "\n";
-        $content .= $count . ' entries deleted.<br />' . "\n";
-        $this->logger->info('CleanUpIndex: ' . $count . ' entries deleted.');
-
-        // rotate Sphinx Index (ke_search_premium function)
-        $content .= $this->rotateSphinxIndex();
-
-        // calculate duration of indexing process
-        $duration = ceil((microtime(true) - $startMicrotime) * 1000);
-        $content .= '<i>Cleanup process took ' . $duration . ' ms.</i></p>' . "\n";
         $content .= '</div>';
-
         return $content;
     }
 
