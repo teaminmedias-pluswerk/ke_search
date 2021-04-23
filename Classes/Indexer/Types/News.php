@@ -80,6 +80,11 @@ class News extends IndexerBase
         $where = [];
         $where[] = $queryBuilder->expr()->in('pid', implode(',', $indexPids));
 
+        // in incremental mode get only news which have been modified since last indexing time
+        if ($this->indexingMode == self::INDEXING_MODE_INCREMENTAL) {
+            $where[] = $queryBuilder->expr()->gte('tstamp', $this->lastRunStartTime);
+        }
+
         // index archived news
         // 0: index all news
         // 1: index only active (not archived) news
@@ -321,10 +326,20 @@ class News extends IndexerBase
             $logMessage = 'Indexer "' . $this->indexerConfig['title'] . '" finished'
                 . ' ('.$indexedNewsCounter.' records processed)';
             $this->pObj->logger->info($logMessage);
+        } else {
+            $this->pObj->logger->info('No news records found for indexing.');
         }
         return $indexedNewsCounter . ' News and ' . $this->fileCounter . ' related files have been indexed.';
     }
 
+    /**
+     * @return string
+     */
+    public function startIncrementalIndexing(): string
+    {
+        $this->indexingMode = self::INDEXING_MODE_INCREMENTAL;
+        return $this->startIndexing();
+    }
 
     /**
      * checks if there is a category assigned to the $newsRecord which has
