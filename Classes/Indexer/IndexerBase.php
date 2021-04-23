@@ -83,7 +83,7 @@ class IndexerBase
     /**
      * @var int
      */
-    protected $indexingMode;
+    protected $indexingMode = self::INDEXING_MODE_FULL;
 
     /**
      * Constructor of this object
@@ -96,7 +96,6 @@ class IndexerBase
         $this->pObj = $pObj;
         $this->indexerConfig = $this->pObj->indexerConfig;
         $this->lastRunStartTime = SearchHelper::getIndexerLastRunTime();
-        $this->indexingMode = self::INDEXING_MODE_FULL;
     }
 
 
