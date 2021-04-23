@@ -310,7 +310,54 @@ class Page extends IndexerBase
     public function startIncrementalIndexing(): string
     {
         $this->indexingMode = self::INDEXING_MODE_INCREMENTAL;
-        return $this->startIndexing();
+        $content = $this->startIndexing();
+        $content .= $this->finishIncrementalIndexing();
+        return $content;
+    }
+
+    /**
+     * Finishes the incremental indexing by removing deleted records
+     *
+     * @return string
+     */
+    public function finishIncrementalIndexing(): string
+    {
+        // get all pages (including deleted)
+        $indexPids = $this->getPagelist(
+            $this->indexerConfig['startingpoints_recursive'],
+            $this->indexerConfig['single_pages'],
+            true
+        );
+
+        // fetch only deleted pages
+        $queryBuilder = Db::getQueryBuilder('pages');
+        $queryBuilder->getRestrictions()->removeAll();
+        $pageQuery = $queryBuilder
+            ->select('*')
+            ->from('pages')
+            ->where(
+                $queryBuilder->expr()->in('uid', implode(',', $indexPids)),
+                $queryBuilder->expr()->eq('deleted', 1)
+            )
+            ->execute();
+        $this->pageRecords = [];
+        while ($row = $pageQuery->fetch()) {
+            $this->pageRecords[$row['uid']] = $row;
+        }
+
+        // create an array of cached page records which contains pages in
+        // default and all other languages registered in the system
+        foreach ($this->pageRecords as $pageRecord) {
+            $this->addLocalizedPagesToCache($pageRecord, true);
+        }
+
+        // create a new list of allowed pids
+        $indexPids = array_keys($this->pageRecords);
+
+        $this->removeUnmodifiedPageRecords($indexPids, $this->pageRecords, $this->cachedPageRecords);
+        // TODO Delete pages in $this->pageRecords from index
+        //debug($this->pageRecords);
+        return '';
     }
 
     /**
@@ -349,9 +396,10 @@ class Page extends IndexerBase
      * add localized page records to a cache/globalArray
      * This is much faster than requesting the DB for each tt_content-record
      * @param array $pageRow
+     * @param bool $removeRestrictions
      * @return void
      */
-    public function addLocalizedPagesToCache($pageRow)
+    public function addLocalizedPagesToCache($pageRow, $removeRestrictions = false)
     {
         // create entry in cachedPageRecods for default language
         $this->cachedPageRecords[0][$pageRow['uid']] = $pageRow;
@@ -366,6 +414,9 @@ class Page extends IndexerBase
                     \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('9.0')
                 ) {
                     $queryBuilder = Db::getQueryBuilder('pages');
+                    if ($removeRestrictions) {
+                        $queryBuilder->getRestrictions()->removeAll();
+                    }
                     list($pageOverlay) = $queryBuilder
                         ->select('*')
                         ->from('pages')
@@ -384,6 +435,9 @@ class Page extends IndexerBase
                 } else {
                     // use fallback for translated pages in "pages_language_overlay"
                     $queryBuilder = Db::getQueryBuilder('pages_language_overlay');
+                    if ($removeRestrictions) {
+                        $queryBuilder->getRestrictions()->removeAll();
+                    }
                     list($pageOverlay) = $queryBuilder
                         ->select('*')
                         ->from('pages_language_overlay')
@@ -411,9 +465,13 @@ class Page extends IndexerBase
 
     /**
      * Remove page records from $indexPids, $pageRecords and $cachedPageRecords which have not been modified since
-     * last index run
+     * last index run.
+     *
+     * @param array $indexPids
+     * @param array $pageRecords
+     * @param array $cachedPageRecords
      */
-    public function removeUnmodifiedPageRecords(& $indexPids, & $pageRecords, & $cachedPageRecords)
+    public function removeUnmodifiedPageRecords(array & $indexPids, & $pageRecords = [], & $cachedPageRecords = [])
     {
         foreach ($indexPids as $uid) {
             $modified = false;
@@ -431,7 +489,7 @@ class Page extends IndexerBase
             // check content elements timestamp
             /** @var ContentRepository $contentRepository */
             $contentRepository = GeneralUtility::makeInstance(ContentRepository::class);
-            $newestContentElement = $contentRepository->findNewestByPid($uid);
+            $newestContentElement = $contentRepository->findNewestByPid($uid, true);
             if ( !empty($newestContentElement) && $newestContentElement['tstamp'] > $this->lastRunStartTime) {
                 $modified = true;
             }

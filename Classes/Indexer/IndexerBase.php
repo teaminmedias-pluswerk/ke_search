@@ -24,6 +24,7 @@ use TeaminmediasPluswerk\KeSearch\Indexer\Types\File;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
 use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Database\Query\QueryHelper;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
@@ -97,9 +98,10 @@ class IndexerBase
      * regardless if we need them or if they are sysfolders, links or what ever
      * @param string $startingPointsRecursive comma-separated list of pids of recursive start-points
      * @param string $singlePages comma-separated list of pids of single pages
+     * @param bool $includeDeletedPages Include deleted pages?
      * @return array List of page UIDs
      */
-    public function getPagelist($startingPointsRecursive = '', $singlePages = '')
+    public function getPagelist($startingPointsRecursive = '', $singlePages = '', $includeDeletedPages = false)
     {
         // make array from list
         $pidsRecursive = GeneralUtility::trimExplode(',', $startingPointsRecursive, true);
@@ -108,7 +110,7 @@ class IndexerBase
         // add recursive pids
         $pageList = '';
         foreach ($pidsRecursive as $pid) {
-            $pageList .= $this->getTreeList($pid, 99, 0, '1=1') . ',';
+            $pageList .= $this->getTreeList($pid, 99, 0, '1=1', $includeDeletedPages) . ',';
         }
 
         // add non-recursive pids
@@ -179,7 +181,9 @@ class IndexerBase
 
 
     /**
-     * get a list of pids
+     * Creates the list of page which should be indexed and returns it as an array page UIDs.
+     * Also fills the Array $this->pageRecords with full page records.
+     *
      * @param string $startingPointsRecursive
      * @param string $singlePages
      * @param string $table
@@ -668,9 +672,10 @@ class IndexerBase
      * @param int $depth
      * @param int $begin
      * @param string $permClause
+     * @param bool $includeDeletedPages
      * @return string comma separated list of descendant pages
      */
-    public function getTreeList($id, $depth, $begin = 0, $permClause = '')
+    public function getTreeList($id, $depth, $begin = 0, $permClause = '', $includeDeletedPages = false)
     {
         $depth = (int)$depth;
         $begin = (int)$begin;
@@ -684,8 +689,14 @@ class IndexerBase
             $theList = '';
         }
         if ($id && $depth > 0) {
+            /** @var QueryBuilder $queryBuilder */
             $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
-            $queryBuilder->getRestrictions()->removeAll()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+            $queryBuilder->getRestrictions()->removeAll();
+            if (!$includeDeletedPages) {
+                $queryBuilder->getRestrictions()->removeAll()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+            } else {
+                $queryBuilder->getRestrictions()->removeAll();
+            }
             $queryBuilder->select('uid')
                 ->from('pages')
                 ->where(
