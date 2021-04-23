@@ -30,6 +30,7 @@ use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Registry;
 use TYPO3\CMS\Core\Utility\DebugUtility;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * Plugin 'Faceted search' for the 'ke_search' extension.
@@ -111,20 +112,23 @@ class IndexerRunner
      */
     public function startIndexing($verbose = true, $extConf = array(), $mode = '', $indexingMode = IndexerBase::INDEXING_MODE_FULL)
     {
-        // TODO provide switch in CLI, GUI and scheduler
-        $indexingMode = IndexerBase::INDEXING_MODE_INCREMENTAL;
-        $content = '';
+        $content = '<div class="summary infobox">';
+        $message = 'Running indexing process in '
+            . LocalizationUtility::translate('backend.indexingMode_' . $indexingMode, 'ke_search')
+            .  ' mode';
+        if ($indexingMode == IndexerBase::INDEXING_MODE_INCREMENTAL) {
+            $message .= ', last run was ' . SearchHelper::formatTimestamp(SearchHelper::getIndexerLastRunTime());
+        }
+        $message .= '.';
+        $content .= $message;
+        $this->logger->notice('Indexing process started: ' . $message);
+        $content .= '</div>';
 
         // write starting timestamp into registry
         // this is a helper to delete all records which are older than starting timestamp in registry
         // this also prevents starting the indexer twice
         if ($this->registry->get('tx_kesearch', 'startTimeOfIndexer') === null) {
             $this->registry->set('tx_kesearch', 'startTimeOfIndexer', time());
-            $this->logger->notice(
-                "\n============================\n"
-                . "= Indexing process started =\n"
-                . "============================"
-            );
         } else {
             // check lock time
             $lockTime = $this->registry->get('tx_kesearch', 'startTimeOfIndexer');
@@ -179,6 +183,7 @@ class IndexerRunner
                             $message = $searchObj->startIncrementalIndexing();
                         } else {
                             $message = 'Incremental indexing is not available for this indexer, starting full indexing. <br />';
+                            $this->logger->info(strip_tags($message));
                             $message .= $searchObj->startIndexing();
                         }
                     }
@@ -195,7 +200,7 @@ class IndexerRunner
                 foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['customIndexer'] as $_classRef) {
                     $searchObj = GeneralUtility::makeInstance($_classRef, $this);
                     $this->logger->info(
-                        'Custom indexer "' . $this->indexerConfig['title'] . '" started ',
+                        'Custom indexer "' . $this->indexerConfig['title'] . '" started',
                         $this->indexerConfig
                     );
                     $message = $searchObj->customIndexer($indexerConfig, $this);
@@ -218,12 +223,6 @@ class IndexerRunner
             ->execute()
             ->fetchColumn(0);
 
-        $content .= '<div class="summary infobox">';
-        $content .= 'Index contains ' . $count . ' entries.';
-        $content .= '</div>';
-        $this->logger->info('Index contains ' . $count . ' entries');
-
-
         // clean up process after indexing to free memory
         $this->cleanUpProcessAfterIndexing();
 
@@ -232,8 +231,18 @@ class IndexerRunner
 
         // log finishing
         $indexingTime = $this->endTime - $this->startTime;
-        $this->logger->info('Indexing finishing time: ' . date($GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'] . ', H:i', $this->endTime));
-        $this->logger->info('Indexing process ran ' . $this->formatTime($indexingTime));
+        $content .= '<div class="summary infobox">';
+
+        $message = 'Indexing finished at ' . SearchHelper::formatTimestamp($this->endTime) . ' (took ' . $this->formatTime($indexingTime) . ').';
+        $content .=  $message . '<br />';
+        $this->logger->info($message);
+
+        $message = 'Index contains ' . $count . ' entries.';
+        $content .=  $message . '<br />';
+        $this->logger->info($message);
+
+        $content .= '</div>';
+
         $this->registry->set(
             'tx_kesearch',
             'lastRun',
@@ -354,13 +363,8 @@ class IndexerRunner
      */
     public function createPlaintextReport($content)
     {
-        $content = str_ireplace(['<span class="title">','<br />','<br>','<br/>','</span>'], LF, $content);
-        $report = LF;
-        $report .= 'Finishing time: ' . date($GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'] . ', H:i') . LF . LF;
-        $report .= preg_replace('~[ ]{2,}~', '', strip_tags($content));
-        $indexingTime = $this->endTime - $this->startTime;
-        $report .= LF . LF . 'Indexing process ran ' . $this->formatTime($indexingTime);
-
+        $content = str_ireplace(['<span class="title">','<br />','<br>','<br/>','</span>','</p>'], LF, $content);
+        $report = preg_replace('~[ ]{2,}~', '', strip_tags($content));
         return $report;
     }
 

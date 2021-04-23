@@ -86,26 +86,16 @@ class IndexerBase
     protected $indexingMode;
 
     /**
-     * @var Registry
-     */
-    private $registry;
-
-    /**
      * Constructor of this object
      * @param $pObj
      */
     public function __construct($pObj)
     {
         $this->queryGen = GeneralUtility::makeInstance(QueryGenerator::class);
-        $this->registry = GeneralUtility::makeInstance(Registry::class);
-
         $this->startMicrotime = microtime(true);
         $this->pObj = $pObj;
         $this->indexerConfig = $this->pObj->indexerConfig;
-        $lastRun = $this->registry->get('tx_kesearch', 'lastRun');
-        if (!empty($lastRun) && !empty($lastRun['startTime']) ) {
-            $this->lastRunStartTime = $lastRun['startTime'];
-        }
+        $this->lastRunStartTime = SearchHelper::getIndexerLastRunTime();
         $this->indexingMode = self::INDEXING_MODE_FULL;
     }
 
