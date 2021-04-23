@@ -263,8 +263,10 @@ class Page extends IndexerBase
             $this->removeUnmodifiedPageRecords($indexPids, $this->pageRecords, $this->cachedPageRecords);
         }
 
+        // Stop if no pages for indexing have been found. Proceeding here would result in an error because we cannot
+        // fetch an empty list of pages.
         if ($this->indexingMode == self::INDEXING_MODE_INCREMENTAL && empty($indexPids)) {
-            $logMessage = 'Skipping this indexer (no modified pages found).';
+            $logMessage = 'Skipping this indexer, because no modified pages have been found.';
             $this->pObj->logger->info($logMessage);
             return $logMessage;
         }
@@ -279,9 +281,7 @@ class Page extends IndexerBase
 
         // loop through pids and collect page content and tags
         foreach ($indexPids as $uid) {
-            if ($uid) {
-                $this->getPageContent($uid);
-            }
+            $this->getPageContent($uid);
         }
 
         $logMessage = 'Indexer "' . $this->indexerConfig['title'] . '" finished'
@@ -289,16 +289,16 @@ class Page extends IndexerBase
         $this->pObj->logger->info($logMessage);
 
         // compile title of languages
-        $languageTitels = '';
+        $languageTitles = '';
         foreach ($this->sysLanguages as $language) {
-            if (strlen($languageTitels)) $languageTitels .= ', ';
-            $languageTitels .= $language['title'];
+            if (strlen($languageTitles)) $languageTitles .= ', ';
+            $languageTitles .= $language['title'];
         }
 
         // show indexer content
         return
             count($indexPids) . ' ' . $this->indexedElementsName . ' have been selected for indexing in the main language.' . LF
-            . count($this->sysLanguages) . ' languages (' . $languageTitels . ') have been found.' . LF
+            . count($this->sysLanguages) . ' languages (' . $languageTitles . ') have been found.' . LF
             . $this->counter . ' ' . $this->indexedElementsName . ' have been indexed. ' . LF
             . $this->counterWithoutContent . ' had no content or the content was not indexable.' . LF
             . $this->fileCounter . ' files have been indexed.';
