@@ -8,6 +8,10 @@ Upcoming version
 [TASK]    Remove unused database field tvpath
 [TASK]    Remove cal indexer. https://github.com/teaminmedias-pluswerk/ke_search/issues/251
 [TASK]    Support sending notification mail in TYPO3 10
+[FEATURE] Add incremental indexing feature
+[FEATURE] Add incremental indexing for pages
+[TASK]    Move dateformat definition from locallang_dashboard.xml to locallang.xlf
+[TASK]    Use dateformat from locallang.xlf in backend module
 
 Version 3.6.1, March 2021
 [TASK]    Register widgets only if EXT:dashboard is available. https://github.com/teaminmedias-pluswerk/ke_search/issues/409

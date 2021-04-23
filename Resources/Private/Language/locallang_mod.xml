@@ -18,7 +18,6 @@
 			<label index="function5">Clear search index</label>
 			<label index="function6">Last indexing report</label>
 			<label index="select_a_page">Please select a page.</label>
-			<label index="start_indexer">Start Indexer</label>
 			<label index="not_allowed_remove_indexer_lock">You are not allowed to remove the indexer lock! This is for admins only!</label>
 			<label index="no_indexer_configurations">No indexer configurations have been found. Please create an indexer configuration record first!</label>
 			<label index="index_contains">The index currently contains</label>

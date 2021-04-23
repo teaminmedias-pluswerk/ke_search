@@ -33,6 +33,7 @@ use TYPO3\CMS\Core\Resource\ResourceFactory;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\VersionNumberUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * helper functions
@@ -438,7 +439,37 @@ class SearchHelper
     {
         $registry = GeneralUtility::makeInstance(Registry::class);
         $indexerStartTime = $registry->get('tx_kesearch', 'startTimeOfIndexer');
-        return $indexerStartTime ? $indexerStartTime : 0;
+        return $indexerStartTime ?: 0;
     }
 
+    /**
+     * Returns the timstamp when the indexer hast been started the last time.
+     * Returns 0 if the indexer has never been started.
+     *
+     * @return int
+     */
+    static public function getIndexerLastRunTime(): int
+    {
+        $registry = GeneralUtility::makeInstance(Registry::class);
+        $lastRun = $registry->get('tx_kesearch', 'lastRun');
+        if (!empty($lastRun) && !empty($lastRun['startTime']) ) {
+            $lastRunStartTime = $lastRun['startTime'];
+        } else {
+            $lastRunStartTime = 0;
+        }
+        return $lastRunStartTime;
+    }
+
+    /**
+     * @param int $timestamp
+     * @return string
+     */
+    static public function formatTimestamp(int $timestamp): string
+    {
+        return date(
+            LocalizationUtility::translate('backend.date.format.day', 'ke_search')
+            . ', ' . LocalizationUtility::translate('backend.date.format.time', 'ke_search'),
+            $timestamp
+        );
+    }
 }
