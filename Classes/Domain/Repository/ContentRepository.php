@@ -74,14 +74,20 @@ class ContentRepository {
     }
 
     /**
-     * @param $uid
+     * Returns the newest content element for page $pid.
+     * Optionally also fetches deleted and hidden and time restricted elements (set $removeRestrictions to true)
+     * @param $pid
+     * @param bool $removeRestrictions
      * @return mixed
      */
-    public function findNewestByPid($pid)
+    public function findNewestByPid($pid, $removeRestrictions = false)
     {
         /** @var ConnectionPool $connectionPool */
         $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
         $queryBuilder = $connectionPool->getQueryBuilderForTable($this->tableName);
+        if ($removeRestrictions) {
+            $queryBuilder->getRestrictions()->removeAll();
+        }
         return $queryBuilder
             ->select('*')
             ->from($this->tableName)
