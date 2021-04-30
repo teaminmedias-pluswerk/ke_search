@@ -203,7 +203,11 @@ class IndexerRunner
                         'Custom indexer "' . $this->indexerConfig['title'] . '" started',
                         $this->indexerConfig
                     );
-                    $message = $searchObj->customIndexer($indexerConfig, $this);
+                    if ($indexingMode == IndexerBase::INDEXING_MODE_FULL || !method_exists($searchObj, 'startIncrementalIndexing')) {
+                        $message = $searchObj->customIndexer($indexerConfig, $this);
+                    } else {
+                        $message = $searchObj->startIncrementalIndexing($indexerConfig, $this);
+                    }
                     if ($message) {
                         $content .= $this->renderIndexingReport($searchObj, $message);
                     }
