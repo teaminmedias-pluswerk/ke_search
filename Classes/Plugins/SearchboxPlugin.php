@@ -50,9 +50,10 @@ class SearchboxPlugin extends Pluginbase
         $this->ms = GeneralUtility::milliseconds();
 
         $typoScriptService = GeneralUtility::makeInstance(TypoScriptService::class);
-        $this->conf = $typoScriptService->convertTypoScriptArrayToPlainArray($conf);
+        $this->conf = $conf;
         $this->pi_setPiVarDefaults();
-        $this->pi_loadLL();
+        $this->pi_loadLL('EXT:ke_search/Resources/Private/Language/locallang_searchbox.xml');
+        $this->conf = $typoScriptService->convertTypoScriptArrayToPlainArray($conf);
 
         // Configuring so caching is not expected. This value means that no cHash params are ever set.
         // We do this, because it's a USER_INT object!
@@ -61,7 +62,7 @@ class SearchboxPlugin extends Pluginbase
         // initializes plugin configuration
         $this->init();
 
-        // init template for pi1
+        // init template for search box
         $this->initFluidTemplate();
 
         // hook for initials
