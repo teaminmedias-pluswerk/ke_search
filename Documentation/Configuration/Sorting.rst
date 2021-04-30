@@ -34,6 +34,9 @@ If you want other sorting options than relevance, date or title, you will have t
 * Register your sorting fields by hook „registerAdditionalFields“, so that they are written to the database.
 * Write your own indexer or extend an existing one that fills your new field during the indexing process.
 
+Note: If you add an "additional field" to the index **every** indexer must set this field. So make sure you use the
+provided hooks for every indexer you use.
+
 You can find an example in the extension ke_search_hooks: https://github.com/teaminmedias-pluswerk/ke_search_hooks
 
 .. code-block:: none
