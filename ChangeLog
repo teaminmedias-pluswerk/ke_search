@@ -5,6 +5,7 @@ Upcomming version
 [FEATURE] Add incremental indexing for pages, ext:news
 [TASK]    Move dateformat definition from locallang_dashboard.xml to locallang.xlf
 [TASK]    Use dateformat from locallang.xlf in backend module
+[TASK]    Make "start indexing" command schedulable. Make scheduler task deprecated. Use symfony command instead.
 
 Version 3.7.0, April 2021
 [!!!]     This version changes the database structure!

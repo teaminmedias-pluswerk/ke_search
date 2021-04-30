@@ -23,6 +23,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  ***************************************************************/
 
 
+/**
+ * Class IndexerTask
+ * @deprecated Use console command instead (TeaminmediasPluswerk\KeSearch\Command\StartIndexerCommand)
+ * @package TeaminmediasPluswerk\KeSearch\Scheduler
+ */
 class IndexerTask extends \TYPO3\CMS\Scheduler\Task\AbstractTask
 {
 
