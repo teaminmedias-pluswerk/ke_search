@@ -1,5 +1,11 @@
 ChangeLog
 
+Upcomming version
+[FEATURE] Add incremental indexing feature
+[FEATURE] Add incremental indexing for pages, ext:news
+[TASK]    Move dateformat definition from locallang_dashboard.xml to locallang.xlf
+[TASK]    Use dateformat from locallang.xlf in backend module
+
 Version 3.7.1, May 2021
 [TASK]    Provide url and label for the sorting links instead of a pre-rendered a-tag which cannot be customized.
 [TASK]    Highlights hits inside words if ke_search_premium and "in word search" is used.
