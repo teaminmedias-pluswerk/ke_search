@@ -23,8 +23,10 @@ namespace TeaminmediasPluswerk\KeSearch\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase;
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -47,6 +49,14 @@ class StartIndexerCommand extends Command
                 'ke_search:indexing',
                 'kesearch:indexing'
             ]);
+
+        $this->addOption(
+            'indexingMode',
+            'm',
+            InputOption::VALUE_OPTIONAL,
+            'Indexing mode, either "full" (default) or "incremental".',
+            'full'
+        );
     }
 
     /**
@@ -57,12 +67,15 @@ class StartIndexerCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $io->title('Start ke_search indexer process');
 
+        $indexingMode =
+            (strtolower($input->getOption('indexingMode')) == 'incremental')
+                ? IndexerBase::INDEXING_MODE_INCREMENTAL
+                : IndexerBase::INDEXING_MODE_FULL;
+
         /** @var IndexerRunner $indexerRunner */
         $indexerRunner = GeneralUtility::makeInstance(IndexerRunner::class);
         $indexerRunner->logger->log('notice', 'Indexer process started by command.');
-        $indexerResponse = $indexerRunner->startIndexing(
-            true, [], 'CLI'
-        );
+        $indexerResponse = $indexerRunner->startIndexing(true, [], 'CLI', $indexingMode);
         $indexerResponse = $indexerRunner->createPlaintextReport($indexerResponse);
 
         if (strstr($indexerResponse, 'You can\'t start the indexer twice')) {
