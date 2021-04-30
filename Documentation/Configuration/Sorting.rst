@@ -30,15 +30,34 @@ Adding your own sorting options
 
 If you want other sorting options than relevance, date or title, you will have to
 
-* Extend the table “tx_kesearch_index” by the fields you want to use for sorting (for example “mysortfield”).
-* Write your own indexer or extend an existing one that fills your new index field during the indexing process.
-* Register your sorting fields by hook „registerAdditionalFields“, so that they are written to db when indexing
+* Extend the table “tx_kesearch_index” by the fields you want to use for sorting (for example “mysortfield”) (ext_tables.sql, TCA configuration).
+* Register your sorting fields by hook „registerAdditionalFields“, so that they are written to the database.
+* Write your own indexer or extend an existing one that fills your new field during the indexing process.
+
+You can find an example in the extension ke_search_hooks: https://github.com/teaminmedias-pluswerk/ke_search_hooks
 
 .. code-block:: none
 
-	public function registerAdditionalFields(&$additionalFields) {
-	  $additionalFields[] = 'mysortfield';
-	}
+    in ext_localconf.php:
+
+    // Register hook to register additional fields in the index table
+    $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['registerAdditionalFields'][] =
+    \TeaminmediasPluswerk\KeSearchHooks\AdditionalIndexerFields::class;
+
+.. code-block:: none
+
+    <?php
+    namespace TeaminmediasPluswerk\KeSearchHooks;
+
+    /**
+     * Class AdditionalIndexerFields
+     * @package TeaminmediasPluswerk\KeSearchHooks
+     */
+    class AdditionalIndexerFields {
+        public function registerAdditionalFields(&$additionalFields) {
+            $additionalFields[] = 'mysorting';
+        }
+    }
 
 Your new database field will automatically appear in the backend selection of sorting fields!
 
@@ -48,7 +67,7 @@ You will have to add a locallang-value to your typoscript setup:
 
 	plugin.tx_kesearch_pi2 {
 		_LOCAL_LANG.default {
-			orderlink_mysortfield = My sort field label
+			orderlink_mysorting = My sort field label
 		}
 	}
 
