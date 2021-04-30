@@ -1,6 +1,6 @@
 ChangeLog
 
-Upcoming version
+Version 3.7.0, April 2021
 [!!!]     This version changes the database structure!
 [TASK]    Do not index initial placeholders and other records not in the live workspace. https://github.com/teaminmedias-pluswerk/ke_search/issues/220
 [TASK]    Add file information to resultrow (including filesize). Thanks to ste101. https://github.com/teaminmedias-pluswerk/ke_search/issues/408
@@ -8,6 +8,7 @@ Upcoming version
 [TASK]    Remove unused database field tvpath
 [TASK]    Remove cal indexer. https://github.com/teaminmedias-pluswerk/ke_search/issues/251
 [TASK]    Support sending notification mail in TYPO3 10
+[BUGFIX]  Fix Typoscript language overlay trough _LOCAL_LANG doesn't work in pi2. Thanks to Kay Röseler. https://github.com/teaminmedias-pluswerk/ke_search/issues/137
 
 Version 3.6.1, March 2021
 [TASK]    Register widgets only if EXT:dashboard is available. https://github.com/teaminmedias-pluswerk/ke_search/issues/409
@@ -28,7 +29,6 @@ Version 3.6.0, March 2021
 [TASK]    Move css file to typoscript configuration. Thanks to ste101. https://github.com/teaminmedias-pluswerk/ke_search/pull/404
 [FEATURE] Add language detection for files. Thanks to ste101. https://github.com/teaminmedias-pluswerk/ke_search/pull/405
 [TASK]    Use type "search" instead of "text" for the search box, activate search field validation in the browser. Thanks to ste101. https://github.com/teaminmedias-pluswerk/ke_search/pull/407
-[BUGFIX]  Fix Typoscript language overlay trough _LOCAL_LANG doesn't work in pi2. Thanks to Kay Röseler. https://github.com/teaminmedias-pluswerk/ke_search/issues/137
 
 Version 3.5.0, March 2021
 [TASK]    Use uri.resource viewhelper instead of direct path to load the styles for the backend module. Thanks to Mike Street. https://github.com/teaminmedias-pluswerk/ke_search/issues/227#issuecomment-777476726
