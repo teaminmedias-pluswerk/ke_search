@@ -232,10 +232,13 @@ class Searchresult
             foreach ($wordArray as $word) {
                 $word = preg_quote($word, '/');
                 $word = htmlspecialchars($word);
-                // Todo: Highlight hits within words when using ke_seaarch_premium
-                // Todo: option "in word search" by removing the \b parameter
-                //$content = preg_replace('/(' . $word . ')/iu', $highlightedWord, $content);
-                $content = preg_replace('/\b(' . $word . ')/iu', $highlightedWord, $content);
+                // Highlight hits within words when using ke_seaarch_premium "in word search"
+                if (intval($this->pObj->extConfPremium['enableSphinxSearch']) && intval($this->pObj->extConfPremium['enableInWordSearch'])) {
+                    $pattern = '/(' . $word . ')/iu';
+                } else {
+                    $pattern = '/\b(' . $word . ')/iu';
+                }
+                $content = preg_replace($pattern, $highlightedWord, $content);
             }
         }
         return $content;

@@ -2,6 +2,7 @@ ChangeLog
 
 Upcoming version
 [TASK]    Provide url and label for the sorting links instead of a pre-rendered a-tag which cannot be customized.
+[TASK]    Highlights hits inside words if ke_search_premium and "in word search" is used.
 
 Version 3.7.0, April 2021
 [!!!]     This version changes the database structure!
