@@ -116,13 +116,12 @@ class Sorting
                         $sortByDir = $this->changeOrdering($sortByDir);
                     }
 
-                    $url = $this->generateSortingLink($field, $sortByDir);
-                    $classname = $this->getClassNameForUpDownArrow($field, $dbOrdering);
-
                     $fluidTemplateVariables['sortingLinks'][] = array(
                         'field' => $field,
-                        'url' => $url,
-                        'class' => $classname
+                        'url' => $this->generateSortingLink($field, $sortByDir),
+                        'urlOnly' => $this->generateSortingLink($field, $sortByDir, true),
+                        'class' => $this->getClassNameForUpDownArrow($field, $dbOrdering),
+                        'label' => $this->pObj->pi_getLL('orderlink_' . $field, $field),
                     );
                 }
             }
@@ -204,23 +203,34 @@ class Sorting
 
 
     /**
-     * generate the link for the given sorting value
+     * Generate the link for the given sorting value.
+     * Returns the complete link as a-tag if $urlOnly is set to false.
+     * Returns the url if $urlOnly is set to true.
+     *
      * @param string $field
      * @param string $sortByDir
-     * @return string The complete link as A-Tag
+     * @param bool $urlOnly
+     * @return string
      */
-    public function generateSortingLink(string $field, string $sortByDir): string
+    public function generateSortingLink(string $field, string $sortByDir, bool $urlOnly=false): string
     {
         $localPiVars = $this->pObj->piVars;
         $localPiVars['sortByField'] = $field;
         $localPiVars['sortByDir'] = $sortByDir;
         unset($localPiVars['page']);
 
-        return SearchHelper::searchLink(
-            $this->pObj->conf['resultPage'],
-            $localPiVars,
-            [],
-            $this->pObj->pi_getLL('orderlink_' . $field, $field)
-        );
+        if ($urlOnly) {
+            return SearchHelper::searchLink(
+                $this->pObj->conf['resultPage'],
+                $localPiVars
+            );
+        } else {
+            return SearchHelper::searchLink(
+                $this->pObj->conf['resultPage'],
+                $localPiVars,
+                [],
+                $this->pObj->pi_getLL('orderlink_' . $field, $field)
+            );
+        }
     }
 }

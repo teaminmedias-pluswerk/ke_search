@@ -361,7 +361,7 @@ class SearchHelper
 
     /**
      * Creates a link to the search result on the given page, flattens the piVars, resets given filters.
-     * If linkText is give, it renders a full a-tag, otherwise only the URL.
+     * If linkText is given, it renders a full a-tag, otherwise only the URL.
      *
      * @param int $parameter target page
      * @param array $piVars

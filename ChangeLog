@@ -1,5 +1,8 @@
 ChangeLog
 
+Upcoming version
+[TASK]    Provide url and label for the sorting links instead of a pre-rendered a-tag which cannot be customized.
+
 Version 3.7.0, April 2021
 [!!!]     This version changes the database structure!
 [TASK]    Do not index initial placeholders and other records not in the live workspace. https://github.com/teaminmedias-pluswerk/ke_search/issues/220
