@@ -20,10 +20,6 @@ Version 3.7.0, April 2021
 [TASK]    Remove cal indexer. https://github.com/teaminmedias-pluswerk/ke_search/issues/251
 [TASK]    Support sending notification mail in TYPO3 10
 [BUGFIX]  Fix Typoscript language overlay trough _LOCAL_LANG doesn't work in pi2. Thanks to Kay Röseler. https://github.com/teaminmedias-pluswerk/ke_search/issues/137
-[FEATURE] Add incremental indexing feature
-[FEATURE] Add incremental indexing for pages, ext:news
-[TASK]    Move dateformat definition from locallang_dashboard.xml to locallang.xlf
-[TASK]    Use dateformat from locallang.xlf in backend module
 
 Version 3.6.1, March 2021
 [TASK]    Register widgets only if EXT:dashboard is available. https://github.com/teaminmedias-pluswerk/ke_search/issues/409
