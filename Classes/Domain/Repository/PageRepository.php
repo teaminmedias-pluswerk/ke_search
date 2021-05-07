@@ -3,6 +3,7 @@ declare(strict_types=1);
 namespace TeaminmediasPluswerk\KeSearch\Domain\Repository;
 
 use PDO;
+use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -71,5 +72,33 @@ class PageRepository {
             )
             ->execute()
             ->fetch();
+    }
+
+    /**
+     * @param array $uidList
+     * @param int $tstamp
+     * @return mixed[]
+     */
+    public function findAllDeletedByUidListAndTimestampInAllLanguages(array $uidList, int $tstamp)
+    {
+        /** @var ConnectionPool $connectionPool */
+        $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
+        $queryBuilder = $connectionPool->getQueryBuilderForTable($this->tableName);
+        $queryBuilder->getRestrictions()->removeAll();
+        return $queryBuilder
+            ->select('*')
+            ->from($this->tableName)
+            ->where(
+                $queryBuilder->expr()->in('uid', $queryBuilder->createNamedParameter($uidList,Connection::PARAM_INT_ARRAY))
+            )
+            ->orWhere(
+                $queryBuilder->expr()->in('l10n_parent', $queryBuilder->createNamedParameter($uidList,Connection::PARAM_INT_ARRAY))
+            )
+            ->andWhere(
+                $queryBuilder->expr()->eq('deleted', 1),
+                $queryBuilder->expr()->gte('tstamp', $queryBuilder->createNamedParameter($tstamp,PDO::PARAM_INT))
+            )
+            ->execute()
+            ->fetchAll();
     }
 }

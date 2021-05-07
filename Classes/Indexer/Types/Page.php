@@ -30,6 +30,8 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer\Types;
  */
 
 use TeaminmediasPluswerk\KeSearch\Domain\Repository\ContentRepository;
+use TeaminmediasPluswerk\KeSearch\Domain\Repository\IndexRepository;
+use TeaminmediasPluswerk\KeSearch\Domain\Repository\PageRepository;
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
@@ -322,6 +324,12 @@ class Page extends IndexerBase
      */
     public function finishIncrementalIndexing(): string
     {
+        /** @var IndexRepository $indexRepository */
+        $indexRepository = GeneralUtility::makeInstance(IndexRepository::class);
+
+        /** @var PageRepository $pageRepository */
+        $pageRepository = GeneralUtility::makeInstance(PageRepository::class);
+
         // get all pages (including deleted)
         $indexPids = $this->getPagelist(
             $this->indexerConfig['startingpoints_recursive'],
@@ -329,35 +337,25 @@ class Page extends IndexerBase
             true
         );
 
-        // fetch only deleted pages
-        $queryBuilder = Db::getQueryBuilder('pages');
-        $queryBuilder->getRestrictions()->removeAll();
-        $pageQuery = $queryBuilder
-            ->select('*')
-            ->from('pages')
-            ->where(
-                $queryBuilder->expr()->in('uid', implode(',', $indexPids)),
-                $queryBuilder->expr()->eq('deleted', 1)
-            )
-            ->execute();
-        $this->pageRecords = [];
-        while ($row = $pageQuery->fetch()) {
-            $this->pageRecords[$row['uid']] = $row;
+        // Fetch all pages which have been deleted since the last indexing
+        $pageRecords = $pageRepository->findAllDeletedByUidListAndTimestampInAllLanguages($indexPids, $this->lastRunStartTime);
+
+        // and finally remove the corresponding index entries
+        if (!empty($pageRecords)) {
+            foreach ($pageRecords as $pageRecord) {
+                $origUid =  ($pageRecord['sys_language_uid'] > 0) ? $pageRecord['l10n_parent'] : $pageRecord['uid'];
+                $indexRepository->deleteByUniqueProperties(
+                    $origUid,
+                    $this->indexerConfig['storagepid'],
+                    'page',
+                    $pageRecord['sys_language_uid']
+                );
+            }
+            $message = LF . 'Found ' . count($pageRecords) . ' deleted page(s) and removed them from the index.';
+        } else {
+            $message = '';
         }
-
-        // create an array of cached page records which contains pages in
-        // default and all other languages registered in the system
-        foreach ($this->pageRecords as $pageRecord) {
-            $this->addLocalizedPagesToCache($pageRecord, true);
-        }
-
-        // create a new list of allowed pids
-        $indexPids = array_keys($this->pageRecords);
-
-        $this->removeUnmodifiedPageRecords($indexPids, $this->pageRecords, $this->cachedPageRecords);
-        // TODO Delete pages in $this->pageRecords from index
-        //debug($this->pageRecords);
-        return '';
+        return $message;
     }
 
     /**
