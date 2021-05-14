@@ -268,7 +268,7 @@ class Page extends IndexerBase
         // Stop if no pages for indexing have been found. Proceeding here would result in an error because we cannot
         // fetch an empty list of pages.
         if ($this->indexingMode == self::INDEXING_MODE_INCREMENTAL && empty($indexPids)) {
-            $logMessage = 'Skipping this indexer, because no modified pages have been found.';
+            $logMessage = 'No modified pages have been found, no indexing needed.';
             $this->pObj->logger->info($logMessage);
             return $logMessage;
         }
@@ -318,7 +318,7 @@ class Page extends IndexerBase
     }
 
     /**
-     * Removes index records for the content records which have been deleted since the last indexing.
+     * Removes index records for the page records which have been deleted since the last indexing.
      * Only needed in incremental indexing mode since there is a dedicated "cleanup" step in full indexing mode.
      *
      * @return string
@@ -339,23 +339,12 @@ class Page extends IndexerBase
         );
 
         // Fetch all pages which have been deleted since the last indexing
-        $pageRecords = $pageRepository->findAllDeletedByUidListAndTimestampInAllLanguages($indexPids, $this->lastRunStartTime);
+        $records = $pageRepository->findAllDeletedByUidListAndTimestampInAllLanguages($indexPids, $this->lastRunStartTime);
 
-        // and finally remove the corresponding index entries
-        if (!empty($pageRecords)) {
-            foreach ($pageRecords as $pageRecord) {
-                $origUid =  ($pageRecord['sys_language_uid'] > 0) ? $pageRecord['l10n_parent'] : $pageRecord['uid'];
-                $indexRepository->deleteByUniqueProperties(
-                    $origUid,
-                    $this->indexerConfig['storagepid'],
-                    'page',
-                    $pageRecord['sys_language_uid']
-                );
-            }
-            $message = LF . 'Found ' . count($pageRecords) . ' deleted page(s) and removed them from the index.';
-        } else {
-            $message = '';
-        }
+        // and remove the corresponding index entries
+        $count = $indexRepository->deleteCorrespondingIndexRecords('page', $records, $this->indexerConfig);
+        $message = LF . 'Found ' . $count . ' deleted page(s).';
+
         return $message;
     }
 

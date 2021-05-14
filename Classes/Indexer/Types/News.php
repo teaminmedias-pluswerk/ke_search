@@ -20,6 +20,8 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer\Types;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TeaminmediasPluswerk\KeSearch\Domain\Repository\IndexRepository;
+use TeaminmediasPluswerk\KeSearch\Domain\Repository\NewsRepository;
 use TeaminmediasPluswerk\KeSearch\Domain\Repository\PageRepository;
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
@@ -338,11 +340,42 @@ class News extends IndexerBase
     public function startIncrementalIndexing(): string
     {
         $this->indexingMode = self::INDEXING_MODE_INCREMENTAL;
-        return $this->startIndexing();
+        $content = $this->startIndexing();
+        $content .= $this->removeDeleted();
+        return $content;
     }
 
     /**
-     * checks if there is a category assigned to the $newsRecord which has
+     * Removes index records for the records which have been deleted since the last indexing.
+     * Only needed in incremental indexing mode since there is a dedicated "cleanup" step in full indexing mode.
+     *
+     * @return string
+     */
+    public function removeDeleted(): string
+    {
+        /** @var IndexRepository $indexRepository */
+        $indexRepository = GeneralUtility::makeInstance(IndexRepository::class);
+
+        /** @var NewsRepository $newsRepository */
+        $newsRepository = GeneralUtility::makeInstance(NewsRepository::class);
+
+        // get the pages from where to index the news
+        $folders = $this->getPagelist(
+            $this->indexerConfig['startingpoints_recursive'],
+            $this->indexerConfig['sysfolder']
+        );
+
+        // Fetch all records which have been deleted since the last indexing
+        $records = $newsRepository->findAllDeletedByPidListAndTimestampInAllLanguages($folders, $this->lastRunStartTime);
+
+        // and remove the corresponding index entries
+        $count = $indexRepository->deleteCorrespondingIndexRecords('news', $records, $this->indexerConfig);
+        $message = LF . 'Found ' . $count . ' deleted record(s).';
+        return $message;
+    }
+
+/**
+ * checks if there is a category assigned to the $newsRecord which has
      * its own single view page and if yes, returns the uid of the page
      * in $catagoryData['single_pid'].
      * It also compiles a list of all assigned categories and returns

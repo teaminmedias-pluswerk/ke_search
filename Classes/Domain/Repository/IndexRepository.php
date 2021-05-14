@@ -156,4 +156,33 @@ class IndexRepository {
             )
             ->execute();
     }
+
+    /**
+     * Deletes the corresponding index records for a record which has been indexed.
+     *
+     * @param string $type type as stored in the index table, eg. "page", "news", "file", "tt_address" etc.
+     * @param array $record array of the record rows
+     * @param array $indexerConfig the indexerConfig for which the index record should be removed
+     */
+    public function deleteCorrespondingIndexRecords(string $type, array $records, array $indexerConfig)
+    {
+        $count = 0;
+        if (!empty($records)) {
+            foreach ($records as $record) {
+                if ($type == 'page') {
+                    $origUid = ($record['sys_language_uid'] > 0) ? $record['l10n_parent'] : $record['uid'];
+                } else {
+                    $origUid = $record['uid'];
+                }
+                $this->deleteByUniqueProperties(
+                    $origUid,
+                    $indexerConfig['storagepid'],
+                    $type,
+                    $record['sys_language_uid']
+                );
+                $count++;
+            }
+        }
+        return $count;
+    }
 }
