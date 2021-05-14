@@ -70,22 +70,17 @@ class ClearIndexCommand extends Command
             ->fetchColumn(0);
 
         if ($countIndex > 0) {
-            // ask for confirmation before processing
-            $question = 'WARNING!' . chr(10);
-            $question .= ' This will clear the whole index. Do you want to proceed?';
-            if ($io->confirm($question, true)) {
-                try {
-                    $io->text($countIndex . ' index records found');
-                    $databaseConnection = Db::getDatabaseConnection('tx_kesearch_index');
-                    $databaseConnection->truncate('tx_kesearch_index');
-                    $io->success('ke_search index table was truncated');
-                    $logMessage = 'Index table was cleared';
-                    $logMessage .= ' (' . $countIndex . ' records deleted)';
-                    $indexerRunner->logger->log('notice', $logMessage);
-                } catch (\Exception $e) {
-                    $io->error($e->getMessage());
-                    $indexerRunner->logger->log('error', $e->getMessage());
-                }
+            try {
+                $io->text($countIndex . ' index records found');
+                $databaseConnection = Db::getDatabaseConnection('tx_kesearch_index');
+                $databaseConnection->truncate('tx_kesearch_index');
+                $io->success('ke_search index table was truncated');
+                $logMessage = 'Index table was cleared';
+                $logMessage .= ' (' . $countIndex . ' records deleted)';
+                $indexerRunner->logger->log('notice', $logMessage);
+            } catch (\Exception $e) {
+                $io->error($e->getMessage());
+                $indexerRunner->logger->log('error', $e->getMessage());
             }
         } else {
             $io->note('There are no entries in ke_search index table.');
