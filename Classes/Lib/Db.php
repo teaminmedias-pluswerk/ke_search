@@ -488,6 +488,14 @@ class Db implements \TYPO3\CMS\Core\SingletonInterface
             }
         }
 
+        // hook for third party extensions to modify the sorting
+        if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['getOrdering'])) {
+            foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['getOrdering'] as $_classRef) {
+                $_procObj = GeneralUtility::makeInstance($_classRef);
+                $_procObj->getOrdering($orderBy, $this);
+            }
+        }
+
         return $orderBy;
     }
 

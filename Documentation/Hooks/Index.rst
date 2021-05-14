@@ -46,6 +46,9 @@ renderPagebrowserInit
 pagebrowseAdditionalMarker
 	Hook for additional markers in pagebrowse.
 
+getOrdering
+	Hook for third party extensions to modify the sorting.
+
 getLimit
 	Hook for third party pagebrowsers or for modification $this->pObj->piVars['page'] parameter.
 
