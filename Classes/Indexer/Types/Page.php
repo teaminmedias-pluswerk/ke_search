@@ -966,9 +966,13 @@ class Page extends IndexerBase
         foreach ($blockSplit as $k => $v) {
             list($attributes) = $rteHtmlParser->get_tag_attributes($rteHtmlParser->getFirstTag($v), true);
             if (!empty($attributes['href'])) {
-                $hrefInformation = $linkService->resolve($attributes['href']);
-                if ($hrefInformation['type'] === \TYPO3\CMS\Core\LinkHandling\LinkService::TYPE_FILE) {
-                    $fileObjects[] = $hrefInformation['file'];
+                try {
+                    $hrefInformation = $linkService->resolve($attributes['href']);
+                    if ($hrefInformation['type'] === \TYPO3\CMS\Core\LinkHandling\LinkService::TYPE_FILE) {
+                        $fileObjects[] = $hrefInformation['file'];
+                    }
+                } catch (\Exception $exception) {
+                    $this->pObj->logger->error($exception->getMessage());
                 }
             }
         }

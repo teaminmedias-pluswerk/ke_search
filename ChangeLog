@@ -3,6 +3,7 @@ ChangeLog
 Upcoming version
 [TASK]    Add hook "getOrdering" to allow thirt-party extensions to modify the sorting.
 [TASK]    Do not ask for confirmation in "clear index" command anymore since this breaks execution in the scheduler. Thanks to Christian Hackl. https://github.com/teaminmedias-pluswerk/ke_search/issues/419
+[TASK]    Catch exception when fetching links to files in content elements. Thanks to medarob. https://github.com/teaminmedias-pluswerk/ke_search/issues/417
 
 Version 3.7.1, May 2021
 [TASK]    Provide url and label for the sorting links instead of a pre-rendered a-tag which cannot be customized.
