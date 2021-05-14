@@ -313,16 +313,17 @@ class Page extends IndexerBase
     {
         $this->indexingMode = self::INDEXING_MODE_INCREMENTAL;
         $content = $this->startIndexing();
-        $content .= $this->finishIncrementalIndexing();
+        $content .= $this->removeDeleted();
         return $content;
     }
 
     /**
-     * Finishes the incremental indexing by removing deleted records
+     * Removes index records for the content records which have been deleted since the last indexing.
+     * Only needed in incremental indexing mode since there is a dedicated "cleanup" step in full indexing mode.
      *
      * @return string
      */
-    public function finishIncrementalIndexing(): string
+    public function removeDeleted(): string
     {
         /** @var IndexRepository $indexRepository */
         $indexRepository = GeneralUtility::makeInstance(IndexRepository::class);
