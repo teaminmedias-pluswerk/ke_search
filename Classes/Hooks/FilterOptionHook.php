@@ -67,6 +67,7 @@ class FilterOptionHook
 
     /**
      * Deletes matching filter options when a category is deleted
+     * CAUTION: Will also delete filter options which have been created manually with the "syscat" prefix as tag.
      *
      * @param $command
      * @param $table
@@ -117,7 +118,8 @@ class FilterOptionHook
 
     /**
      * Deletes orphaned filter options.
-     * Those will arise when the connection between a category and a filter  will be removed.
+     * Those will arise when the connection between a category and a filter has been removed.
+     * CAUTION: Will also delete filter options which have been created manually with the "syscat" prefix as tag.
      */
     public function cleanupFilterOptions()
     {
@@ -153,7 +155,7 @@ class FilterOptionHook
                     }
                 }
                 if (!$filterIsConnectedToCategory) {
-                    // deleting by tag will also delete localized tags
+                    // deleting by tag will also delete localized filter options
                     $filterOptionRepository->deleteByTag($filterOption['tag']);
                 }
             }
