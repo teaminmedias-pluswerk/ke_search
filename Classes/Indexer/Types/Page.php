@@ -29,10 +29,12 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer\Types;
  * @author Christian Bülter <buelter@kennziffer.com>
  */
 
+use Exception;
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TYPO3\CMS\Core\Html\RteHtmlParser;
+use TYPO3\CMS\Core\LinkHandling\LinkService;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Resource\FileRepository;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -227,10 +229,10 @@ class Page extends IndexerBase
         $this->fileRepository = GeneralUtility::makeInstance(FileRepository::class);
 
         // make cObj
-        $this->cObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(ContentObjectRenderer::class);
+        $this->cObj = GeneralUtility::makeInstance(ContentObjectRenderer::class);
 
         // make filesProcessor
-        $this->filesProcessor = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(FilesProcessor::class);
+        $this->filesProcessor = GeneralUtility::makeInstance(FilesProcessor::class);
     }
 
     /**
@@ -483,7 +485,7 @@ class Page extends IndexerBase
         // hook to modify the page content fields
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyPageContentFields'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyPageContentFields'] as $_classRef) {
-                $_procObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($_classRef);
+                $_procObj = GeneralUtility::makeInstance($_classRef);
                 $_procObj->modifyPageContentFields(
                     $fields,
                     $this
@@ -600,7 +602,7 @@ class Page extends IndexerBase
         // hook for custom modifications of the indexed data, e. g. the tags
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyPagesIndexEntry'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyPagesIndexEntry'] as $_classRef) {
-                $_procObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($_classRef);
+                $_procObj = GeneralUtility::makeInstance($_classRef);
                 $_procObj->modifyPagesIndexEntry(
                     $uid,
                     $pageContent,
@@ -735,7 +737,7 @@ class Page extends IndexerBase
         // hook to add custom check if this content element should be indexed
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['contentElementShouldBeIndexed'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['contentElementShouldBeIndexed'] as $_classRef) {
-                $_procObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($_classRef);
+                $_procObj = GeneralUtility::makeInstance($_classRef);
                 $contentElementShouldBeIndexed = $_procObj->contentElementShouldBeIndexed(
                     $ttContentRow,
                     $contentElementShouldBeIndexed,
@@ -821,7 +823,7 @@ class Page extends IndexerBase
         }
 
         if ($feGroupsPages && $feGroupsContentElement && $feGroupsPages != '-1' && $feGroupsContentElement != '-1') {
-            $feGroupsContentElementArray = \TYPO3\CMS\Core\Utility\GeneralUtility::intExplode(
+            $feGroupsContentElementArray = GeneralUtility::intExplode(
                 ',',
                 $feGroupsContentElement
             );
@@ -864,7 +866,7 @@ class Page extends IndexerBase
                 $isInList = false;
                 if ($fileObject instanceof FileInterface) {
                     $isHidden = $fileObject->hasProperty('hidden') && $fileObject->getProperty('hidden') === 1;
-                    $isInList = \TYPO3\CMS\Core\Utility\GeneralUtility::inList(
+                    $isInList = GeneralUtility::inList(
                         $this->indexerConfig['fileext'],
                         $fileObject->getExtension()
                     );
@@ -957,21 +959,21 @@ class Page extends IndexerBase
     {
         $fileObjects = array();
         // check if there are links to files in the rte text
-        /* @var $rteHtmlParser \TYPO3\CMS\Core\Html\RteHtmlParser */
-        $rteHtmlParser = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(RteHtmlParser::class);
+        /* @var $rteHtmlParser RteHtmlParser */
+        $rteHtmlParser = GeneralUtility::makeInstance(RteHtmlParser::class);
 
-        /** @var \TYPO3\CMS\Core\LinkHandling\LinkService $linkService */
-        $linkService = GeneralUtility::makeInstance(\TYPO3\CMS\Core\LinkHandling\LinkService::class);
+        /** @var LinkService $linkService */
+        $linkService = GeneralUtility::makeInstance(LinkService::class);
         $blockSplit = $rteHtmlParser->splitIntoBlock('A', $ttContentRow['bodytext'], 1);
         foreach ($blockSplit as $k => $v) {
             list($attributes) = $rteHtmlParser->get_tag_attributes($rteHtmlParser->getFirstTag($v), true);
             if (!empty($attributes['href'])) {
                 try {
                     $hrefInformation = $linkService->resolve($attributes['href']);
-                    if ($hrefInformation['type'] === \TYPO3\CMS\Core\LinkHandling\LinkService::TYPE_FILE) {
+                    if ($hrefInformation['type'] === LinkService::TYPE_FILE) {
                         $fileObjects[] = $hrefInformation['file'];
                     }
-                } catch (\Exception $exception) {
+                } catch (Exception $exception) {
                     $this->pObj->logger->error($exception->getMessage());
                 }
             }
@@ -1061,7 +1063,7 @@ class Page extends IndexerBase
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFileIndexEntryFromContentIndexer'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyFileIndexEntryFromContentIndexer'] as
                      $_classRef) {
-                $_procObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($_classRef);
+                $_procObj = GeneralUtility::makeInstance($_classRef);
                 $_procObj->modifyFileIndexEntryFromContentIndexer(
                     $fileObject,
                     $content,
@@ -1135,7 +1137,7 @@ class Page extends IndexerBase
         if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyContentFromContentElement'])) {
             foreach ($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['modifyContentFromContentElement'] as
                      $_classRef) {
-                $_procObj = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance($_classRef);
+                $_procObj = GeneralUtility::makeInstance($_classRef);
                 $_procObj->modifyContentFromContentElement(
                     $bodytext,
                     $ttContentRow,
