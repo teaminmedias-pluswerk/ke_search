@@ -1,8 +1,9 @@
 ChangeLog
 
 Upcomming version
+[!!!]     Scheduler task "Indexing process for ke_search" is deprecated now. Please use "Execute console commands" -> "ke_search:indexing" instead.
 [FEATURE] Add incremental indexing feature
-[FEATURE] Add incremental indexing for pages, ext:news
+[FEATURE] Add incremental indexing for pages and ext:news
 [TASK]    Move dateformat definition from locallang_dashboard.xml to locallang.xlf
 [TASK]    Use dateformat from locallang.xlf in backend module
 [TASK]    Make "start indexing" command schedulable. Make scheduler task deprecated. Use symfony command instead.
