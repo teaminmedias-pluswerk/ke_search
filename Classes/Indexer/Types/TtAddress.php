@@ -2,6 +2,8 @@
 
 namespace TeaminmediasPluswerk\KeSearch\Indexer\Types;
 
+use TeaminmediasPluswerk\KeSearch\Domain\Repository\IndexRepository;
+use TeaminmediasPluswerk\KeSearch\Domain\Repository\TtAddressRepository;
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TYPO3\CMS\Core\Database\Connection;
@@ -67,25 +69,27 @@ class TtAddress extends IndexerBase
         }
 
         $queryBuilder = Db::getQueryBuilder($table);
+        $where = [];
+        $where[] = $queryBuilder->expr()->in('pid', $queryBuilder->createNamedParameter($indexPids, Connection::PARAM_INT_ARRAY));
 
-        $result = $queryBuilder
+        // in incremental mode get only rows which have been modified since last indexing time
+        if ($this->indexingMode == self::INDEXING_MODE_INCREMENTAL) {
+            $where[] = $queryBuilder->expr()->gte('tstamp', $this->lastRunStartTime);
+        }
+
+        $addressRows = $queryBuilder
             ->select($fields)
             ->from($table)
-            ->where(
-                $queryBuilder->expr()->in(
-                    'pid',
-                    $queryBuilder->createNamedParameter($indexPids, Connection::PARAM_INT_ARRAY)
-                )
-            )
+            ->where(...$where)
             ->execute()
             ->fetchAll();
 
         // no address records found
-        if (!count($result)) {
+        if (!count($addressRows)) {
             $content = 'No address records found!';
             return $content;
         } else {
-            foreach ($result as $addressRow) {
+            foreach ($addressRows as $addressRow) {
                 $shouldBeIndexed = true;
 
                 if (!$this->recordIsLive($addressRow)) {
@@ -207,7 +211,7 @@ class TtAddress extends IndexerBase
 
                 // add some fields which you may set in your own hook
                 $customfields = array(
-                    'sys_language_uid' => -1,
+                    'sys_language_uid' => $addressRow['sys_language_uid'],
                     'starttime' => 0,
                     'endtime' => 0,
                     'fe_group' => ''
@@ -252,6 +256,46 @@ class TtAddress extends IndexerBase
             }
         }
 
-        return count($result) . ' address records have been indexed.';
+        return count($addressRows) . ' address records have been indexed.';
+    }
+
+    /**
+     * @return string
+     */
+    public function startIncrementalIndexing(): string
+    {
+        $this->indexingMode = self::INDEXING_MODE_INCREMENTAL;
+        $content = $this->startIndexing();
+        $content .= $this->removeDeleted();
+        return $content;
+    }
+
+    /**
+     * Removes index records for the records which have been deleted since the last indexing.
+     * Only needed in incremental indexing mode since there is a dedicated "cleanup" step in full indexing mode.
+     *
+     * @return string
+     */
+    public function removeDeleted(): string
+    {
+        /** @var IndexRepository $indexRepository */
+        $indexRepository = GeneralUtility::makeInstance(IndexRepository::class);
+
+        /** @var TtAddressRepository $ttAddressRepository */
+        $ttAddressRepository = GeneralUtility::makeInstance(TtAddressRepository::class);
+
+        // get the pages from where to index the tt_address records
+        $folders = $this->getPagelist(
+            $this->indexerConfig['startingpoints_recursive'],
+            $this->indexerConfig['sysfolder']
+        );
+
+        // Fetch all records which have been deleted since the last indexing
+        $records = $ttAddressRepository->findAllDeletedByPidListAndTimestampInAllLanguages($folders, $this->lastRunStartTime);
+
+        // and remove the corresponding index entries
+        $count = $indexRepository->deleteCorrespondingIndexRecords('tt_address', $records, $this->indexerConfig);
+        $message = LF . 'Found ' . $count . ' deleted record(s).';
+        return $message;
     }
 }

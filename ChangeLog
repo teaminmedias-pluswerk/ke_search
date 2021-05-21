@@ -3,10 +3,11 @@ ChangeLog
 Upcomming version
 [!!!]     Scheduler task "Indexing process for ke_search" is deprecated now. Please use "Execute console commands" -> "ke_search:indexing" instead.
 [FEATURE] Add incremental indexing feature
-[FEATURE] Add incremental indexing for pages and ext:news
+[FEATURE] Add incremental indexing support indexers pages, ext:news, ext:tt_address
 [TASK]    Move dateformat definition from locallang_dashboard.xml to locallang.xlf
 [TASK]    Use dateformat from locallang.xlf in backend module
 [TASK]    Make "start indexing" command schedulable. Make scheduler task deprecated. Use symfony command instead.
+[TASK]    Take sys_language_uid from tt_address record instead of using -1 because tt_address supports localization.
 
 Version 3.7.2, May 2021
 [TASK]    Add hook "getOrdering" to allow thirt-party extensions to modify the sorting.
