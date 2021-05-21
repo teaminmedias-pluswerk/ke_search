@@ -78,7 +78,7 @@ class News extends IndexerBase
         // access restrictions or time (start / stop) restrictions.
         // Copy those restrictions to the index.
         $fields = '*';
-        $queryBuilder = Db::getQueryBuilder('tx_kesearch_index');
+        $queryBuilder = Db::getQueryBuilder($table);
         $where = [];
         $where[] = $queryBuilder->expr()->in('pid', implode(',', $indexPids));
 

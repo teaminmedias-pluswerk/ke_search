@@ -60,6 +60,8 @@ Therefore it is recommended to run the full indexing process once in a while (li
 the incremental indexer more often (like once an hour). You can do so by creating two scheduler tasks, one for the full
 indexing and one for the incremental indexing.
 
+After adding or removing an indexer configuration you should always run a full indexing process.
+
 Starting the indexing process manually
 ......................................
 

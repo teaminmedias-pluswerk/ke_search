@@ -31,11 +31,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package TYPO3
  * @subpackage ke_search
  */
-class TtAddressRepository {
+class TtNewsRepository {
     /**
      * @var string
      */
-    protected $tableName = 'tt_address';
+    protected $tableName = 'tt_news';
 
     /**
      * @return mixed

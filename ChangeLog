@@ -3,7 +3,7 @@ ChangeLog
 Upcomming version
 [!!!]     Scheduler task "Indexing process for ke_search" is deprecated now. Please use "Execute console commands" -> "ke_search:indexing" instead.
 [FEATURE] Add incremental indexing feature
-[FEATURE] Add incremental indexing support indexers pages, ext:news, ext:tt_address
+[FEATURE] Add incremental indexing support for page indexer and these extension indexers: news, tt_news, tt_address
 [TASK]    Move dateformat definition from locallang_dashboard.xml to locallang.xlf
 [TASK]    Use dateformat from locallang.xlf in backend module
 [TASK]    Make "start indexing" command schedulable. Make scheduler task deprecated. Use symfony command instead.
@@ -15,7 +15,7 @@ Version 3.7.2, May 2021
 [TASK]    Catch exception when fetching links to files in content elements. Thanks to medarob. https://github.com/teaminmedias-pluswerk/ke_search/issues/417
 
 Version 3.7.1, May 2021
-[TASK]    Provide url and label for the sorting links instead of a pre-rendered a-tag which cannot be customized.
+[TASK]    Provide url and label for the sorting links to the fluid template instead of a pre-rendered a-tag which cannot be customized.
 [TASK]    Highlights hits inside words if ke_search_premium and "in word search" is used.
 
 Version 3.7.0, April 2021

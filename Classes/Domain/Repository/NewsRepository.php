@@ -91,9 +91,6 @@ class NewsRepository {
             ->where(
                 $queryBuilder->expr()->in('pid', $queryBuilder->createNamedParameter($pidList,Connection::PARAM_INT_ARRAY))
             )
-            ->orWhere(
-                $queryBuilder->expr()->in('l10n_parent', $queryBuilder->createNamedParameter($pidList,Connection::PARAM_INT_ARRAY))
-            )
             ->andWhere(
                 $queryBuilder->expr()->eq('deleted', 1),
                 $queryBuilder->expr()->gte('tstamp', $queryBuilder->createNamedParameter($tstamp,PDO::PARAM_INT))

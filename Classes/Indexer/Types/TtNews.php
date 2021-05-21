@@ -2,7 +2,9 @@
 
 namespace TeaminmediasPluswerk\KeSearch\Indexer\Types;
 
+use TeaminmediasPluswerk\KeSearch\Domain\Repository\IndexRepository;
 use TeaminmediasPluswerk\KeSearch\Domain\Repository\PageRepository;
+use TeaminmediasPluswerk\KeSearch\Domain\Repository\TtNewsRepository;
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase;
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
@@ -76,10 +78,18 @@ class TtNews extends IndexerBase
         // access restrictions or time (start / stop) restrictions.
         // Copy those restrictions to the index.
         $queryBuilder = Db::getQueryBuilder($table);
+        $where = [];
+        $where[] = $queryBuilder->expr()->in('pid', implode(',', $indexPids));
+
+        // in incremental mode get only news which have been modified since last indexing time
+        if ($this->indexingMode == self::INDEXING_MODE_INCREMENTAL) {
+            $where[] = $queryBuilder->expr()->gte('tstamp', $this->lastRunStartTime);
+        }
+
         $res = $queryBuilder
             ->select('*')
             ->from($table)
-            ->where($queryBuilder->expr()->in('pid', implode(',', $indexPids)))
+            ->where(...$where)
             ->execute();
 
         $indexedNewsCounter = 0;
@@ -308,5 +318,45 @@ class TtNews extends IndexerBase
         }
 
         return $categoryData;
+    }
+
+    /**
+     * @return string
+     */
+    public function startIncrementalIndexing(): string
+    {
+        $this->indexingMode = self::INDEXING_MODE_INCREMENTAL;
+        $content = $this->startIndexing();
+        $content .= $this->removeDeleted();
+        return $content;
+    }
+
+    /**
+     * Removes index records for the records which have been deleted since the last indexing.
+     * Only needed in incremental indexing mode since there is a dedicated "cleanup" step in full indexing mode.
+     *
+     * @return string
+     */
+    public function removeDeleted(): string
+    {
+        /** @var IndexRepository $indexRepository */
+        $indexRepository = GeneralUtility::makeInstance(IndexRepository::class);
+
+        /** @var TtNewsRepository $ttNewsRepository */
+        $ttNewsRepository = GeneralUtility::makeInstance(TtNewsRepository::class);
+
+        // get the pages from where to index the news
+        $folders = $this->getPagelist(
+            $this->indexerConfig['startingpoints_recursive'],
+            $this->indexerConfig['sysfolder']
+        );
+
+        // Fetch all records which have been deleted since the last indexing
+        $records = $ttNewsRepository->findAllDeletedByPidListAndTimestampInAllLanguages($folders, $this->lastRunStartTime);
+
+        // and remove the corresponding index entries
+        $count = $indexRepository->deleteCorrespondingIndexRecords('tt_news', $records, $this->indexerConfig);
+        $message = LF . 'Found ' . $count . ' deleted record(s).';
+        return $message;
     }
 }
