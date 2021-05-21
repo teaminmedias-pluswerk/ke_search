@@ -22,6 +22,7 @@
 namespace TeaminmediasPluswerk\KeSearch\Controller;
 
 use TeaminmediasPluswerk\KeSearch\Domain\Repository\IndexRepository;
+use TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase;
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerRunner;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
@@ -55,6 +56,11 @@ class BackendModuleController extends AbstractBackendModuleController
     protected $do;
 
     /**
+     * @var int
+     */
+    private $indexingMode;
+
+    /**
      * @var \TYPO3\CMS\Core\Page\PageRenderer
      * @TYPO3\CMS\Extbase\Annotation\Inject
      */
@@ -81,6 +87,12 @@ class BackendModuleController extends AbstractBackendModuleController
         $this->extConf = GeneralUtility::makeInstance(ExtensionConfiguration::class)->get('ke_search');
 
         $this->do = GeneralUtility::_GET('do');
+
+        if (!empty(GeneralUtility::_GET('indexingMode')) && intval(GeneralUtility::_GET('indexingMode')) == IndexerBase::INDEXING_MODE_INCREMENTAL) {
+            $this->indexingMode = IndexerBase::INDEXING_MODE_INCREMENTAL;
+        } else {
+            $this->indexingMode = IndexerBase::INDEXING_MODE_FULL;
+        }
 
         $this->perms_clause = $this->getBackendUser()->getPagePermsClause(1);
         $this->pageinfo = BackendUtility::readPageAccess($this->id, $this->perms_clause);
@@ -125,7 +137,7 @@ class BackendModuleController extends AbstractBackendModuleController
         // action: start indexer or remove lock
         if ($this->do == 'startindexer') {
             // start indexing in verbose mode with cleanup process
-            $content .= $indexer->startIndexing(true, $this->extConf);
+            $content .= $indexer->startIndexing(true, $this->extConf, '', $this->indexingMode);
         } else {
             if ($this->do == 'rmLock') {
                 // remove lock from registry - admin only!
@@ -193,11 +205,18 @@ class BackendModuleController extends AbstractBackendModuleController
                     ]
                 );
                 $content .= '<br /><a class="index-button" href="' . $moduleUrl . '">'
-                    .
-                    LocalizationUtility::translate(
-                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:start_indexer',
-                        'KeSearch'
-                    )
+                    . LocalizationUtility::translate('backend.start_indexer_full', 'ke_search')
+                    . '</a>';
+                $moduleUrl = $uriBuilder->buildUriFromRoute(
+                    'web_KeSearchBackendModule',
+                    [
+                        'id' => $this->id,
+                        'do' => 'startindexer',
+                        'indexingMode' => IndexerBase::INDEXING_MODE_INCREMENTAL
+                    ]
+                );
+                $content .= '<br /><a class="index-button" href="' . $moduleUrl . '">'
+                    . LocalizationUtility::translate('backend.start_indexer_incremental', 'ke_search')
                     . '</a>';
             } else {
                 $content .=
@@ -434,7 +453,7 @@ class BackendModuleController extends AbstractBackendModuleController
                         'KeSearch'
                     )
                     . ' '
-                    . date($GLOBALS['TYPO3_CONF_VARS']['SYS']['ddmmyy'], $lastRun['endTime']) . ' ' . date('H:i', $lastRun['endTime'])
+                    . SearchHelper::formatTimestamp($lastRun['endTime'])
                     . '.';
             }
             $content .= '</i></p>';

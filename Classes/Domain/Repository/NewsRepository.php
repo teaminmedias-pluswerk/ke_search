@@ -9,7 +9,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /***************************************************************
  *  Copyright notice
- *  (c) 2020 Christian Bülter
+ *  (c) 2021 Christian Bülter
  *  All rights reserved
  *  This script is part of the TYPO3 project. The TYPO3 project is
  *  free software; you can redistribute it and/or modify
@@ -31,11 +31,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package TYPO3
  * @subpackage ke_search
  */
-class PageRepository {
+class NewsRepository {
     /**
      * @var string
      */
-    protected $tableName = 'pages';
+    protected $tableName = 'tx_news_domain_model_news';
 
     /**
      * @return mixed
@@ -75,11 +75,11 @@ class PageRepository {
     }
 
     /**
-     * @param array $uidList
+     * @param array $pidList
      * @param int $tstamp
      * @return mixed[]
      */
-    public function findAllDeletedByUidListAndTimestampInAllLanguages(array $uidList, int $tstamp)
+    public function findAllDeletedByPidListAndTimestampInAllLanguages(array $pidList, int $tstamp)
     {
         /** @var ConnectionPool $connectionPool */
         $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
@@ -89,10 +89,10 @@ class PageRepository {
             ->select('*')
             ->from($this->tableName)
             ->where(
-                $queryBuilder->expr()->in('uid', $queryBuilder->createNamedParameter($uidList,Connection::PARAM_INT_ARRAY))
+                $queryBuilder->expr()->in('pid', $queryBuilder->createNamedParameter($pidList,Connection::PARAM_INT_ARRAY))
             )
             ->orWhere(
-                $queryBuilder->expr()->in('l10n_parent', $queryBuilder->createNamedParameter($uidList,Connection::PARAM_INT_ARRAY))
+                $queryBuilder->expr()->in('l10n_parent', $queryBuilder->createNamedParameter($pidList,Connection::PARAM_INT_ARRAY))
             )
             ->andWhere(
                 $queryBuilder->expr()->eq('deleted', 1),

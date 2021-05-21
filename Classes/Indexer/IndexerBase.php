@@ -23,9 +23,11 @@ use PDO;
 use TeaminmediasPluswerk\KeSearch\Indexer\Types\File;
 use TeaminmediasPluswerk\KeSearch\Lib\Db;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
+use TYPO3\CMS\Core\Database\ConnectionPool;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\Database\Query\QueryHelper;
 use TYPO3\CMS\Core\Database\Query\Restriction\DeletedRestriction;
 use TYPO3\CMS\Core\Database\Query\Restriction\HiddenRestriction;
-use TYPO3\CMS\Core\Database\QueryGenerator;
 use TYPO3\CMS\Core\Resource\FileReference;
 use TYPO3\CMS\Core\Resource\FileRepository;
 use \TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -41,6 +43,9 @@ use \TYPO3\CMS\Core\Utility\GeneralUtility;
  */
 class IndexerBase
 {
+    public const INDEXING_MODE_FULL = 0;
+    public const INDEXING_MODE_INCREMENTAL = 1;
+
     public $startMicrotime = 0;
     public $indexerConfig = array(); // current indexer configuration
 
@@ -56,11 +61,6 @@ class IndexerBase
     public $pObj;
 
     /**
-     * needed to get all recursive pids
-     */
-    public $queryGen;
-
-    /**
      * @var array
      */
     protected $errors = array();
@@ -71,6 +71,16 @@ class IndexerBase
     public $pageRecords;
 
     /**
+     * @var int
+     */
+    protected $lastRunStartTime = 0;
+
+    /**
+     * @var int
+     */
+    protected $indexingMode = self::INDEXING_MODE_FULL;
+
+    /**
      * Constructor of this object
      * @param $pObj
      */
@@ -79,8 +89,7 @@ class IndexerBase
         $this->startMicrotime = microtime(true);
         $this->pObj = $pObj;
         $this->indexerConfig = $this->pObj->indexerConfig;
-        /** @var QueryGenerator queryGen */
-        $this->queryGen = GeneralUtility::makeInstance(QueryGenerator::class);
+        $this->lastRunStartTime = SearchHelper::getIndexerLastRunTime();
     }
 
 
@@ -89,9 +98,10 @@ class IndexerBase
      * regardless if we need them or if they are sysfolders, links or what ever
      * @param string $startingPointsRecursive comma-separated list of pids of recursive start-points
      * @param string $singlePages comma-separated list of pids of single pages
+     * @param bool $includeDeletedPages Include deleted pages?
      * @return array List of page UIDs
      */
-    public function getPagelist($startingPointsRecursive = '', $singlePages = '')
+    public function getPagelist($startingPointsRecursive = '', $singlePages = '', $includeDeletedPages = false)
     {
         // make array from list
         $pidsRecursive = GeneralUtility::trimExplode(',', $startingPointsRecursive, true);
@@ -100,7 +110,7 @@ class IndexerBase
         // add recursive pids
         $pageList = '';
         foreach ($pidsRecursive as $pid) {
-            $pageList .= $this->queryGen->getTreeList($pid, 99, 0, '1=1') . ',';
+            $pageList .= $this->getTreeList($pid, 99, 0, '1=1', $includeDeletedPages) . ',';
         }
 
         // add non-recursive pids
@@ -171,7 +181,9 @@ class IndexerBase
 
 
     /**
-     * get a list of pids
+     * Creates the list of page which should be indexed and returns it as an array page UIDs.
+     * Also fills the Array $this->pageRecords with full page records.
+     *
      * @param string $startingPointsRecursive
      * @param string $singlePages
      * @param string $table
@@ -273,7 +285,7 @@ class IndexerBase
             foreach ($automated_tagging_arr as $key => $value) {
                 $tmpPageList = GeneralUtility::trimExplode(
                     ',',
-                    $this->queryGen->getTreeList($value, 99, 0, $whereRow)
+                    $this->getTreeList($value, 99, 0, $whereRow)
                 );
                 $pageList = array_merge($tmpPageList, $pageList);
             }
@@ -319,6 +331,14 @@ class IndexerBase
     public function getDuration()
     {
         return intval(ceil((microtime(true) - $this->startMicrotime) * 1000));
+    }
+
+    /**
+     * @return int
+     */
+    public function getIndexingMode(): int
+    {
+        return $this->indexingMode;
     }
 
     /**
@@ -642,5 +662,65 @@ class IndexerBase
         }
 
         return $recordIsLive;
+    }
+
+    /**
+     * Recursively fetch all descendants of a given page
+     * Originally taken from class QueryGenerator (deprecated for v11)
+     *
+     * @param int $id uid of the page
+     * @param int $depth
+     * @param int $begin
+     * @param string $permClause
+     * @param bool $includeDeletedPages
+     * @return string comma separated list of descendant pages
+     */
+    public function getTreeList($id, $depth, $begin = 0, $permClause = '', $includeDeletedPages = false)
+    {
+        $depth = (int)$depth;
+        $begin = (int)$begin;
+        $id = (int)$id;
+        if ($id < 0) {
+            $id = abs($id);
+        }
+        if ($begin === 0) {
+            $theList = $id;
+        } else {
+            $theList = '';
+        }
+        if ($id && $depth > 0) {
+            /** @var QueryBuilder $queryBuilder */
+            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('pages');
+            $queryBuilder->getRestrictions()->removeAll();
+            if (!$includeDeletedPages) {
+                $queryBuilder->getRestrictions()->removeAll()->add(GeneralUtility::makeInstance(DeletedRestriction::class));
+            } else {
+                $queryBuilder->getRestrictions()->removeAll();
+            }
+            $queryBuilder->select('uid')
+                ->from('pages')
+                ->where(
+                    $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($id, \PDO::PARAM_INT)),
+                    $queryBuilder->expr()->eq('sys_language_uid', 0)
+                )
+                ->orderBy('uid');
+            if ($permClause !== '') {
+                $queryBuilder->andWhere(QueryHelper::stripLogicalOperatorPrefix($permClause));
+            }
+            $statement = $queryBuilder->execute();
+            while ($row = $statement->fetch()) {
+                if ($begin <= 0) {
+                    $theList .= ',' . $row['uid'];
+                }
+                if ($depth > 1) {
+                    $theSubList = $this->getTreeList($row['uid'], $depth - 1, $begin - 1, $permClause);
+                    if (!empty($theList) && !empty($theSubList) && ($theSubList[0] !== ',')) {
+                        $theList .= ',';
+                    }
+                    $theList .= $theSubList;
+                }
+            }
+        }
+        return $theList;
     }
 }

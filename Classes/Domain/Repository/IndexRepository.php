@@ -1,6 +1,8 @@
 <?php
 namespace TeaminmediasPluswerk\KeSearch\Domain\Repository;
 
+use Doctrine\DBAL\Driver\Statement;
+use PDO;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -50,7 +52,7 @@ class IndexRepository {
             ->where(
                 $queryBuilder->expr()->eq(
                     'uid',
-                    $queryBuilder->createNamedParameter($uid, \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($uid, PDO::PARAM_INT)
                 )
             )
             ->execute()
@@ -72,7 +74,7 @@ class IndexRepository {
             ->where(
                 $queryBuilder->expr()->eq(
                     'uid',
-                    $queryBuilder->createNamedParameter($uid, \PDO::PARAM_INT)
+                    $queryBuilder->createNamedParameter($uid, PDO::PARAM_INT)
                 )
             );
         foreach ($updateFields as $key => $value) {
@@ -106,5 +108,81 @@ class IndexRepository {
         }
 
         return $resultsPerType;
+    }
+
+    /**
+     * @param int $filterOptionUid
+     * @return Statement|int
+     */
+    public function deleteByUid(int $uid)
+    {
+        /** @var ConnectionPool $connectionPool */
+        $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
+        $queryBuilder = $connectionPool->getQueryBuilderForTable($this->tableName);
+        return $queryBuilder
+            ->delete($this->tableName)
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'uid',
+                    $queryBuilder->createNamedParameter($uid, PDO::PARAM_INT)
+                )
+            )
+            ->execute();
+    }
+
+
+    /**
+     * Deletes records from the index which can be clearly identified by the properties $orig_uid, $pid, $type and $language.
+     * Uses the same properties as IndexerRunner->checkIfRecordWasIndexed()
+     *
+     * @param int $origUid
+     * @param int $pid
+     * @param string $type
+     * @param int $language
+     * @return Statement|int
+     */
+    public function deleteByUniqueProperties(int $origUid, int $pid, string $type, int $language)
+    {
+        /** @var ConnectionPool $connectionPool */
+        $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
+        $queryBuilder = $connectionPool->getQueryBuilderForTable($this->tableName);
+        return $queryBuilder
+            ->delete($this->tableName)
+            ->where(
+                $queryBuilder->expr()->eq('orig_uid', $queryBuilder->createNamedParameter($origUid, PDO::PARAM_INT)),
+                $queryBuilder->expr()->eq('pid', $queryBuilder->createNamedParameter($pid, PDO::PARAM_INT)),
+                $queryBuilder->expr()->eq('type', $queryBuilder->createNamedParameter($type, PDO::PARAM_STR)),
+                $queryBuilder->expr()->eq('language', $queryBuilder->createNamedParameter($language, PDO::PARAM_INT))
+            )
+            ->execute();
+    }
+
+    /**
+     * Deletes the corresponding index records for a record which has been indexed.
+     *
+     * @param string $type type as stored in the index table, eg. "page", "news", "file", "tt_address" etc.
+     * @param array $record array of the record rows
+     * @param array $indexerConfig the indexerConfig for which the index record should be removed
+     */
+    public function deleteCorrespondingIndexRecords(string $type, array $records, array $indexerConfig)
+    {
+        $count = 0;
+        if (!empty($records)) {
+            foreach ($records as $record) {
+                if ($type == 'page') {
+                    $origUid = ($record['sys_language_uid'] > 0) ? $record['l10n_parent'] : $record['uid'];
+                } else {
+                    $origUid = $record['uid'];
+                }
+                $this->deleteByUniqueProperties(
+                    $origUid,
+                    $indexerConfig['storagepid'],
+                    $type,
+                    $record['sys_language_uid']
+                );
+                $count++;
+            }
+        }
+        return $count;
     }
 }

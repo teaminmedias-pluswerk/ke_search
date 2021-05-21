@@ -3,7 +3,7 @@
 return [
     'ke_search:indexing' => [
         'class' => \TeaminmediasPluswerk\KeSearch\Command\StartIndexerCommand::class,
-        'schedulable' => false,
+        'schedulable' => true,
     ],
     'ke_search:clearindex' => [
         'class' => \TeaminmediasPluswerk\KeSearch\Command\ClearIndexCommand::class,

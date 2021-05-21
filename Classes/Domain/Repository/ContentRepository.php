@@ -3,7 +3,6 @@ declare(strict_types=1);
 namespace TeaminmediasPluswerk\KeSearch\Domain\Repository;
 
 use PDO;
-use TYPO3\CMS\Core\Database\Connection;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 
@@ -31,11 +30,11 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package TYPO3
  * @subpackage ke_search
  */
-class PageRepository {
+class ContentRepository {
     /**
      * @var string
      */
-    protected $tableName = 'pages';
+    protected $tableName = 'tt_content';
 
     /**
      * @return mixed
@@ -75,30 +74,31 @@ class PageRepository {
     }
 
     /**
-     * @param array $uidList
-     * @param int $tstamp
-     * @return mixed[]
+     * Returns the newest content element for page $pid.
+     * Optionally also fetches deleted and hidden and time restricted elements (set $removeRestrictions to true)
+     * @param $pid
+     * @param bool $removeRestrictions
+     * @return mixed
      */
-    public function findAllDeletedByUidListAndTimestampInAllLanguages(array $uidList, int $tstamp)
+    public function findNewestByPid($pid, $removeRestrictions = false)
     {
         /** @var ConnectionPool $connectionPool */
         $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
         $queryBuilder = $connectionPool->getQueryBuilderForTable($this->tableName);
-        $queryBuilder->getRestrictions()->removeAll();
+        if ($removeRestrictions) {
+            $queryBuilder->getRestrictions()->removeAll();
+        }
         return $queryBuilder
             ->select('*')
             ->from($this->tableName)
             ->where(
-                $queryBuilder->expr()->in('uid', $queryBuilder->createNamedParameter($uidList,Connection::PARAM_INT_ARRAY))
+                $queryBuilder->expr()->eq(
+                    'pid',
+                    $queryBuilder->createNamedParameter($pid, PDO::PARAM_INT)
+                )
             )
-            ->orWhere(
-                $queryBuilder->expr()->in('l10n_parent', $queryBuilder->createNamedParameter($uidList,Connection::PARAM_INT_ARRAY))
-            )
-            ->andWhere(
-                $queryBuilder->expr()->eq('deleted', 1),
-                $queryBuilder->expr()->gte('tstamp', $queryBuilder->createNamedParameter($tstamp,PDO::PARAM_INT))
-            )
+            ->orderBy('tstamp', 'DESC')
             ->execute()
-            ->fetchAll();
+            ->fetch();
     }
 }

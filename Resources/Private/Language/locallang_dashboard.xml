@@ -14,8 +14,6 @@
 			<label index="widgets.keSearchStatus.last_run_finished">Last run finished</label>
 			<label index="widgets.keSearchStatus.last_run_finished_at">at</label>
 			<label index="widgets.keSearchStatus.last_run_took">and took</label>
-			<label index="widgets.keSearchStatus.last_run_dateformat_day">m/d/y</label>
-			<label index="widgets.keSearchStatus.last_run_dateformat_time">H:i</label>
 
 			<label index="widgets.keSearchIndexOverview.title">Index Overview</label>
 			<label index="widgets.keSearchIndexOverview.description">Shows how many records of each type are currently in the index.</label>
@@ -37,8 +35,6 @@
 			<label index="widgets.keSearchStatus.last_run_finished">Der letzte Durchlauf wurde beendet am</label>
 			<label index="widgets.keSearchStatus.last_run_finished_at">um</label>
 			<label index="widgets.keSearchStatus.last_run_took">und benötigte</label>
-			<label index="widgets.keSearchStatus.last_run_dateformat_day">d.m.y</label>
-			<label index="widgets.keSearchStatus.last_run_dateformat_time">H:i</label>
 
 			<label index="widgets.keSearchIndexOverview.title">Index Übersicht</label>
 			<label index="widgets.keSearchIndexOverview.description">Zeigt wie viele Einträge von welchem Typ derzeit im Index vorhanden sind.</label>

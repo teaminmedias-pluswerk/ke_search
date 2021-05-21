@@ -50,7 +50,7 @@ step 2 (our example: 'Search data').
 
 .. image:: ../Images/QuickStart/plugins-3.png
 
-NOTE: It is useful to give the Plug-In "Searchbox and Filters" a Header (our example: 'Searchbox').
+Note: It is useful to give the Plugin "Searchbox and Filters" a header (our example: *Searchbox*, can also set to *hidden*).
 That makes it easier to identify the correct content element in the next step.
 
 .. image:: ../Images/QuickStart/plugins-2.png

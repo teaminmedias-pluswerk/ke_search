@@ -43,8 +43,8 @@ if (!defined('TYPO3_MODE')) {
     $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['scheduler']['tasks'][\TeaminmediasPluswerk\KeSearch\Scheduler\IndexerTask::class]
         = array(
         'extension' => 'ke_search',
-        'title' => 'Indexing process for ke_search',
-        'description' => 'This task updates the ke_search index'
+        'title' => 'Indexing process for ke_search (DEPRECATED, please use "Execute console commands" --> "ke_search:indexing" instead)',
+        'description' => 'This task updates the ke_search index (DEPRECATED, please use "Execute console commands" --> "ke_search:indexing" instead)'
     );
 
     /** @var \TYPO3\CMS\Core\Imaging\IconRegistry $iconRegistry */

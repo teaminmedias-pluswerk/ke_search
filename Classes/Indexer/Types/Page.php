@@ -29,6 +29,9 @@ namespace TeaminmediasPluswerk\KeSearch\Indexer\Types;
  * @author Christian Bülter <buelter@kennziffer.com>
  */
 
+use TeaminmediasPluswerk\KeSearch\Domain\Repository\ContentRepository;
+use TeaminmediasPluswerk\KeSearch\Domain\Repository\IndexRepository;
+use TeaminmediasPluswerk\KeSearch\Domain\Repository\PageRepository;
 use Exception;
 use TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase;
 use TeaminmediasPluswerk\KeSearch\Lib\SearchHelper;
@@ -259,6 +262,19 @@ class Page extends IndexerBase
         // create a new list of allowed pids
         $indexPids = array_keys($this->pageRecords);
 
+        // Remove unmodified pages in incremental mode
+        if ($this->indexingMode == self::INDEXING_MODE_INCREMENTAL) {
+            $this->removeUnmodifiedPageRecords($indexPids, $this->pageRecords, $this->cachedPageRecords);
+        }
+
+        // Stop if no pages for indexing have been found. Proceeding here would result in an error because we cannot
+        // fetch an empty list of pages.
+        if ($this->indexingMode == self::INDEXING_MODE_INCREMENTAL && empty($indexPids)) {
+            $logMessage = 'No modified pages have been found, no indexing needed.';
+            $this->pObj->logger->info($logMessage);
+            return $logMessage;
+        }
+
         // add tags to pages of doktype standard, advanced, shortcut and "not in menu"
         // add tags also to subpages of sysfolders (254), since we don't want them to be
         // excluded (see: http://forge.typo3.org/issues/49435)
@@ -269,9 +285,7 @@ class Page extends IndexerBase
 
         // loop through pids and collect page content and tags
         foreach ($indexPids as $uid) {
-            if ($uid) {
-                $this->getPageContent($uid);
-            }
+            $this->getPageContent($uid);
         }
 
         $logMessage = 'Indexer "' . $this->indexerConfig['title'] . '" finished'
@@ -279,19 +293,61 @@ class Page extends IndexerBase
         $this->pObj->logger->info($logMessage);
 
         // compile title of languages
-        $languageTitels = '';
+        $languageTitles = '';
         foreach ($this->sysLanguages as $language) {
-            if (strlen($languageTitels)) $languageTitels .= ', ';
-            $languageTitels .= $language['title'];
+            if (strlen($languageTitles)) $languageTitles .= ', ';
+            $languageTitles .= $language['title'];
         }
 
         // show indexer content
         return
             count($indexPids) . ' ' . $this->indexedElementsName . ' have been selected for indexing in the main language.' . LF
-            . count($this->sysLanguages) . ' languages (' . $languageTitels . ') have been found.' . LF
+            . count($this->sysLanguages) . ' languages (' . $languageTitles . ') have been found.' . LF
             . $this->counter . ' ' . $this->indexedElementsName . ' have been indexed. ' . LF
             . $this->counterWithoutContent . ' had no content or the content was not indexable.' . LF
             . $this->fileCounter . ' files have been indexed.';
+    }
+
+    /**
+     * @return string
+     */
+    public function startIncrementalIndexing(): string
+    {
+        $this->indexingMode = self::INDEXING_MODE_INCREMENTAL;
+        $content = $this->startIndexing();
+        $content .= $this->removeDeleted();
+        return $content;
+    }
+
+    /**
+     * Removes index records for the page records which have been deleted since the last indexing.
+     * Only needed in incremental indexing mode since there is a dedicated "cleanup" step in full indexing mode.
+     *
+     * @return string
+     */
+    public function removeDeleted(): string
+    {
+        /** @var IndexRepository $indexRepository */
+        $indexRepository = GeneralUtility::makeInstance(IndexRepository::class);
+
+        /** @var PageRepository $pageRepository */
+        $pageRepository = GeneralUtility::makeInstance(PageRepository::class);
+
+        // get all pages (including deleted)
+        $indexPids = $this->getPagelist(
+            $this->indexerConfig['startingpoints_recursive'],
+            $this->indexerConfig['single_pages'],
+            true
+        );
+
+        // Fetch all pages which have been deleted since the last indexing
+        $records = $pageRepository->findAllDeletedByUidListAndTimestampInAllLanguages($indexPids, $this->lastRunStartTime);
+
+        // and remove the corresponding index entries
+        $count = $indexRepository->deleteCorrespondingIndexRecords('page', $records, $this->indexerConfig);
+        $message = LF . 'Found ' . $count . ' deleted page(s).';
+
+        return $message;
     }
 
     /**
@@ -330,9 +386,10 @@ class Page extends IndexerBase
      * add localized page records to a cache/globalArray
      * This is much faster than requesting the DB for each tt_content-record
      * @param array $pageRow
+     * @param bool $removeRestrictions
      * @return void
      */
-    public function addLocalizedPagesToCache($pageRow)
+    public function addLocalizedPagesToCache($pageRow, $removeRestrictions = false)
     {
         // create entry in cachedPageRecods for default language
         $this->cachedPageRecords[0][$pageRow['uid']] = $pageRow;
@@ -347,6 +404,9 @@ class Page extends IndexerBase
                     \TYPO3\CMS\Core\Utility\VersionNumberUtility::convertVersionNumberToInteger('9.0')
                 ) {
                     $queryBuilder = Db::getQueryBuilder('pages');
+                    if ($removeRestrictions) {
+                        $queryBuilder->getRestrictions()->removeAll();
+                    }
                     list($pageOverlay) = $queryBuilder
                         ->select('*')
                         ->from('pages')
@@ -365,6 +425,9 @@ class Page extends IndexerBase
                 } else {
                     // use fallback for translated pages in "pages_language_overlay"
                     $queryBuilder = Db::getQueryBuilder('pages_language_overlay');
+                    if ($removeRestrictions) {
+                        $queryBuilder->getRestrictions()->removeAll();
+                    }
                     list($pageOverlay) = $queryBuilder
                         ->select('*')
                         ->from('pages_language_overlay')
@@ -384,6 +447,52 @@ class Page extends IndexerBase
 
                 if ($pageOverlay) {
                     $this->cachedPageRecords[$sysLang['uid']][$pageRow['uid']] = $pageOverlay + $pageRow;
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Remove page records from $indexPids, $pageRecords and $cachedPageRecords which have not been modified since
+     * last index run.
+     *
+     * @param array $indexPids
+     * @param array $pageRecords
+     * @param array $cachedPageRecords
+     */
+    public function removeUnmodifiedPageRecords(array & $indexPids, & $pageRecords = [], & $cachedPageRecords = [])
+    {
+        foreach ($indexPids as $uid) {
+            $modified = false;
+
+            // check page timestamp
+            foreach ($this->sysLanguages as $sysLang) {
+                if (
+                    !empty($cachedPageRecords[$sysLang['uid']][$uid])
+                    && $cachedPageRecords[$sysLang['uid']][$uid]['tstamp'] > $this->lastRunStartTime
+                ) {
+                    $modified = true;
+                }
+            }
+
+            // check content elements timestamp
+            /** @var ContentRepository $contentRepository */
+            $contentRepository = GeneralUtility::makeInstance(ContentRepository::class);
+            $newestContentElement = $contentRepository->findNewestByPid($uid, true);
+            if ( !empty($newestContentElement) && $newestContentElement['tstamp'] > $this->lastRunStartTime) {
+                $modified = true;
+            }
+
+            // remove unmodified pages
+            if (!$modified) {
+                unset($pageRecords[$uid]);
+                foreach ($this->sysLanguages as $sysLang) {
+                    unset($cachedPageRecords[$sysLang['uid']][$uid]);
+                }
+                $key = array_search($uid, $indexPids);
+                if (false !== $key) {
+                    unset($indexPids[$key]);
                 }
             }
         }
@@ -641,7 +750,7 @@ class Page extends IndexerBase
                         }
                     }
 
-                    // use new "tx_kesearch_abstract" field instead of "abstract" if set
+                    // use tx_kesearch_abstract instead of "abstract" if set
                     $abstract = $this->cachedPageRecords[$language_uid][$uid]['tx_kesearch_abstract'] ?
                         $this->cachedPageRecords[$language_uid][$uid]['tx_kesearch_abstract'] :
                         $this->cachedPageRecords[$language_uid][$uid]['abstract'];
@@ -796,14 +905,14 @@ class Page extends IndexerBase
      */
     public function getCombinedFeGroupsForContentElement($feGroupsPages, $feGroupsContentElement)
     {
-        // combine frontend groups from page(s) and content elemenet as follows
+        // combine frontend groups from page(s) and content element as follows
         // 1. if page has no groups, but ce has groups, use ce groups
-        // 2. if ce has no groups, but page has grooups, use page groups
+        // 2. if ce has no groups, but page has groups, use page groups
         // 3. if page has "show at any login" (-2) and ce has groups, use ce groups
         // 4. if ce has "show at any login" (-2) and page has groups, use page groups
         // 5. if page and ce have explicit groups (not "hide at login" (-1), merge them (use only groups both have)
         // 6. if page or ce has "hide at login" and the other
-        // has an expclicit group the element will never be shown and we must not index it.
+        // has an explicit group the element will never be shown and we must not index it.
         // So which group do we set here? Let's use a constant for that and check in the calling function for that.
 
         if (!$feGroupsPages && $feGroupsContentElement) {
@@ -856,7 +965,7 @@ class Page extends IndexerBase
      */
     public function indexFiles($fileObjects, $ttContentRow, $feGroupsPages, $tags)
     {
-        // combine group access restrictons from page(s) and content element
+        // combine group access restrictions from page(s) and content element
         $feGroups = $this->getCombinedFeGroupsForContentElement($feGroupsPages, $ttContentRow['fe_group']);
 
         if (count($fileObjects) && $feGroups != DONOTINDEX) {

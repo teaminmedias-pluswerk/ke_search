@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file source-language="en" datatype="plaintext" original="EXT:ke_search/Resources/Private/Language/locallang.xlf" product-name="ke_search">
+        <header/>
+        <body>
+            <trans-unit id="backend.date.format.day" resname="backend.date.format.day">
+                <source>m/d/y</source>
+            </trans-unit>
+            <trans-unit id="backend.date.format.time" resname="backend.date.format.time">
+                <source>H:i:s</source>
+            </trans-unit>
+
+            <!-- Backend module -->
+            <trans-unit id="backend.start_indexer_full" resname="backend.start_indexer_full">
+                <source>Start full indexing</source>
+            </trans-unit>
+            <trans-unit id="backend.start_indexer_incremental" resname="backend.start_indexer_incremental">
+                <source>Start incremental indexing</source>
+            </trans-unit>
+            <trans-unit id="backend.indexingMode_0" resname="backend.indexingMode_0">
+                <source>full</source>
+            </trans-unit>
+            <trans-unit id="backend.indexingMode_1" resname="backend.indexingMode_1">
+                <source>incremental</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
