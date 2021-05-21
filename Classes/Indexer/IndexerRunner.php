@@ -117,7 +117,12 @@ class IndexerRunner
             . LocalizationUtility::translate('backend.indexingMode_' . $indexingMode, 'ke_search')
             .  ' mode';
         if ($indexingMode == IndexerBase::INDEXING_MODE_INCREMENTAL) {
-            $message .= ', last run was ' . SearchHelper::formatTimestamp(SearchHelper::getIndexerLastRunTime());
+            if (SearchHelper::getIndexerLastRunTime() == 0) {
+                $message .= ', but last run time is not available. Switching to full mode.';
+                $indexingMode = IndexerBase::INDEXING_MODE_FULL;
+            } else {
+                $message .= ', last run was ' . SearchHelper::formatTimestamp(SearchHelper::getIndexerLastRunTime());
+            }
         }
         $message .= '.';
         $content .= $message;
