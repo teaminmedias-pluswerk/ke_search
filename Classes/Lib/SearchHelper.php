@@ -372,6 +372,12 @@ class SearchHelper
      */
     static public function searchLink(int $parameter, array $piVars=[], $resetFilters=[], $linkText = ''): string
     {
+        // If no cObj is available we cannot render the link.
+        // This might be the case if the current request is headless (ke_search_premium feature).
+        if (!$GLOBALS['TSFE']->cObj) {
+            return '';
+        }
+
         $keepPiVars = self::PI_VARS;
         $linkconf = [
             'parameter' => $parameter,

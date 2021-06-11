@@ -110,6 +110,14 @@ class ResultlistPlugin extends Pluginbase
             }
         }
 
+        if (class_exists('\TeaminmediasPluswerk\KeSearchPremium\Headless\HeadlessApi')) {
+            /** @var \TeaminmediasPluswerk\KeSearchPremium\Headless\HeadlessApi $headlessApi */
+            $headlessApi = GeneralUtility::makeInstance(\TeaminmediasPluswerk\KeSearchPremium\Headless\HeadlessApi::class);
+            if ($headlessApi->getHeadlessMode()) {
+                return json_encode($this->fluidTemplateVariables);
+            }
+        }
+
         // generate HTML output
         $this->resultListView->assignMultiple($this->fluidTemplateVariables);
         $htmlOutput = $this->resultListView->render();

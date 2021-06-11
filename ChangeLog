@@ -1,5 +1,8 @@
 ChangeLog
 
+Upcoming version
+[TASK]    Return JSON if in headless mode (ke_search_premium feature)
+
 Version 3.8.0, May 2021
 [!!!]     Scheduler task "Indexing process for ke_search" is deprecated now. Please use "Execute console commands" -> "ke_search:indexing" instead.
 [FEATURE] Add incremental indexing feature
