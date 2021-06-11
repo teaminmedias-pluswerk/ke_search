@@ -178,12 +178,16 @@ class BackendModuleController extends AbstractBackendModuleController
         if ($lockTime !== 0) {
             if (!$this->getBackendUser()->isAdmin()) {
                 // print warning message for non-admins
-                $content .= '<br /><p style="color: red; font-weight: bold;">WARNING!</p>';
+                $content .= '<div class="alert alert-danger">';
+                $content .= '<p>WARNING!</p>';
                 $content .= '<p>The indexer is already running and can not be started twice.</p>';
+                $content .= '</div>';
             } else {
                 // show 'remove lock' button for admins
-                $content .= '<br /><p>The indexer is already running and can not be started twice.</p>';
-                $content .= '<p>The indexing process was started at ' . strftime('%c', $lockTime) . '.</p>';
+                $content .= '<div class="alert alert-info">';
+                $content .= '<p>The indexer is already running and can not be started twice.</p>';
+                $content .= '</div>';
+                $content .= '<p>The indexing process was started at <strong>' . strftime('%c', $lockTime) . '.</p></strong>';
                 $content .= '<p>You can remove the lock by clicking the following button.</p>';
                 $moduleUrl = $uriBuilder->buildUriFromRoute(
                     'web_KeSearchBackendModule',
@@ -192,7 +196,7 @@ class BackendModuleController extends AbstractBackendModuleController
                         'do' => 'rmLock'
                     ]
                 );
-                $content .= '<br /><a class="lock-button" href="' . $moduleUrl . '">RemoveLock</a>';
+                $content .= '<p><a class="btn btn-danger" href="' . $moduleUrl . '">Remove Lock</a></p>';
             }
         } else {
             // no lock set - show "start indexer" link if indexer configurations have been found
@@ -204,9 +208,9 @@ class BackendModuleController extends AbstractBackendModuleController
                         'do' => 'startindexer'
                     ]
                 );
-                $content .= '<br /><a class="index-button" href="' . $moduleUrl . '">'
+                $content .= '<a class="btn btn-primary" href="' . $moduleUrl . '">'
                     . LocalizationUtility::translate('backend.start_indexer_full', 'ke_search')
-                    . '</a>';
+                    . '</a> ';
                 $moduleUrl = $uriBuilder->buildUriFromRoute(
                     'web_KeSearchBackendModule',
                     [
@@ -215,7 +219,7 @@ class BackendModuleController extends AbstractBackendModuleController
                         'indexingMode' => IndexerBase::INDEXING_MODE_INCREMENTAL
                     ]
                 );
-                $content .= '<br /><a class="index-button" href="' . $moduleUrl . '">'
+                $content .= '<a class="btn btn-default" href="' . $moduleUrl . '">'
                     . LocalizationUtility::translate('backend.start_indexer_incremental', 'ke_search')
                     . '</a>';
             } else {
@@ -379,29 +383,27 @@ class BackendModuleController extends AbstractBackendModuleController
      */
     public function printIndexerConfigurations($indexerConfigurations)
     {
-        $content = '';
+        $content = '<h2>Indexers</h2>';
         // show indexer names
         if ($indexerConfigurations) {
-            $content .= '<ol class="orderedlist">';
+            $content .= '<table class="table table-striped table-hover">';
+            $content .= '<colgroup><col><col width="100"><col width="100"><col width="100"></colgroup>';
+            $content .= '<tr><th></th><th>Type</th><th>UID</th><th>PID</th></tr>';
             foreach ($indexerConfigurations as $indexerConfiguration) {
-                $content .= '<li class="summary infobox">'
-                    . '<span class="title">' . htmlspecialchars($indexerConfiguration['title'], ENT_QUOTES, 'UTF-8') . '</span>'
-
-                    . ' <span class="tagsmall">'
+                $content .= '<tr>'
+                    . '<th>' . htmlspecialchars($indexerConfiguration['title'], ENT_QUOTES, 'UTF-8') . '</th>'
+                    . '<td>'
                     . $indexerConfiguration['type']
-                    . '</span>'
-
-                    . ' <span class="tagsmall">'
-                    . 'UID ' . $indexerConfiguration['uid'] . '</span>'
-                    . '</span>'
-
-                    . ' <span class="tagsmall">'
-                    . 'PID ' . $indexerConfiguration['pid'] . '</span>'
-                    . '</span>'
-
-                    . '</li>';
+                    . '</td>'
+                    . '<td>'
+                    . $indexerConfiguration['uid']
+                    . '</td>'
+                    . '<td>'
+                    . $indexerConfiguration['pid']
+                    . '</td>'
+                    . '</tr>';
             }
-            $content .= '</ol>';
+            $content .= '</table>';
         }
 
         return $content;
@@ -414,49 +416,50 @@ class BackendModuleController extends AbstractBackendModuleController
      */
     public function printNumberOfRecords()
     {
-        $content = '';
+        $content = '<h2>Index statistics</h2>';
         $numberOfRecords = $this->getNumberOfRecordsInIndex();
+
         if ($numberOfRecords) {
             $content .=
-                '<p class="box infobox"><i>'
+                '<p>'
                 . LocalizationUtility::translate(
                     'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:index_contains',
                     'KeSearch'
                 )
-                . ' '
+                . ' <strong>'
                 . $numberOfRecords
-                . ' '
+                . '</strong> '
                 . LocalizationUtility::translate(
                     'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:records',
                     'KeSearch'
                 )
-                . ': ';
+                . '</p>';
+
+            $lastRun = $this->registry->get('tx_kesearch', 'lastRun');
+            if ($lastRun) {
+                $content .= '<p>'
+                    . LocalizationUtility::translate(
+                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:last_indexing',
+                        'KeSearch'
+                    )
+                    . ' '
+                    . SearchHelper::formatTimestamp($lastRun['endTime'])
+                    . '.</p>';
+            }
+
+            $content .= '<table class="table table-striped table-hover">';
+            $content .= '<colgroup><col><col width="100"></colgroup>';
+            $content .= '<tr><th>Type</th><th>Count</th></tr>';
 
             /** @var IndexRepository $indexRepository */
             $indexRepository = GeneralUtility::makeInstance(IndexRepository::class);
             $results_per_type = $indexRepository->getNumberOfRecordsInIndexPerType();
             $first = true;
             foreach ($results_per_type as $type => $count) {
-                if (!$first) {
-                    $content .= ', ';
-                }
-                $content .= $type . ' (' . $count . ')';
-                $first = false;
+                $content .= '<tr><td>' . $type . '</td><td>' . $count . '</td></tr>';
             }
-            $content .= '.<br/>';
 
-            $lastRun = $this->registry->get('tx_kesearch', 'lastRun');
-            if ($lastRun) {
-                $content .=
-                    LocalizationUtility::translate(
-                        'LLL:EXT:ke_search/Resources/Private/Language/locallang_mod.xml:last_indexing',
-                        'KeSearch'
-                    )
-                    . ' '
-                    . SearchHelper::formatTimestamp($lastRun['endTime'])
-                    . '.';
-            }
-            $content .= '</i></p>';
+            $content .= '</table>';
         }
 
         return $content;
@@ -482,23 +485,25 @@ class BackendModuleController extends AbstractBackendModuleController
                 $completeLength = $this->formatFilesize($row['Data_length'] + $row['Index_length']);
 
                 $content .= '
-					<table class="statistics">
-						<tr>
-							<td class="infolabel">Records: </td>
-							<td>' . $row['Rows'] . '</td>
-						</tr>
-						<tr>
-							<td class="infolabel">Data size: </td>
-							<td>' . $dataLength . '</td>
-						</tr>
-						<tr>
-							<td class="infolabel">Index size: </td>
-							<td>' . $indexLength . '</td>
-						</tr>
-						<tr>
-							<td class="infolabel">Complete table size: </td>
-							<td>' . $completeLength . '</td>
-						</tr>';
+                    <table class="table table-striped table-hover">
+                    <colgroup><col><col width="100"></colgroup>
+                        <tr>
+                            <th>Records: </th>
+                            <td>' . $row['Rows'] . '</td>
+                        </tr>
+                        <tr>
+                            <th>Data size: </th>
+                            <td>' . $dataLength . '</td>
+                        </tr>
+                        <tr>
+                            <th>Index size: </th>
+                            <td>' . $indexLength . '</td>
+                        </tr>
+                        <tr>
+                            <th>Complete table size: </th>
+                            <td>' . $completeLength . '</td>
+                        </tr>
+                    </table>';
             }
         }
 
@@ -506,11 +511,13 @@ class BackendModuleController extends AbstractBackendModuleController
         $indexRepository = GeneralUtility::makeInstance(IndexRepository::class);
         $results_per_type = $indexRepository->getNumberOfRecordsInIndexPerType();
         if (count($results_per_type)) {
+            $content .= '<table class="table table-striped table-hover">';
+            $content .= '<colgroup><col><col width="100"></colgroup>';
             foreach ($results_per_type as $type => $count) {
-                $content .= '<tr><td>' . $type . '</td><td>' . $count . '</td></tr>';
+                $content .= '<tr><th>' . $type . '</th><td>' . $count . '</td></tr>';
             }
+            $content .= '</table>';
         }
-        $content .= '</table>';
 
         return $content;
     }
@@ -664,7 +671,7 @@ class BackendModuleController extends AbstractBackendModuleController
         $content = '';
         if (!count($languageResult)) {
             $statisticData['error'] =
-                'No statistic data found! Please select the sysfolder 
+                'No statistic data found! Please select the sysfolder
                 where your index is stored or the page where your search plugin is placed.';
             return $statisticData;
         }

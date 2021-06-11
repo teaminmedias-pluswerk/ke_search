@@ -17,20 +17,25 @@
     <f:for each="{data}" as="language" key="languageId">
         <div style="clear: both;">
             <h3>Language "{languages.{languageId}}"</h3>
-            <f:for each="{language}" as="stats" key="type">
-                <table class="statistics" style="float:left;">
-                    <tr>
-                        <th>{type}</th>
-                        <th>counter</th>
-                    </tr>
-                    <f:for each="{stats}" as="stat">
-                        <tr>
-                            <td>{stat.searchphrase}{stat.word}</td>
-                            <td class="times">{stat.num}</td>
-                        </tr>
-                    </f:for>
-                </table>
-            </f:for>
+            <div class="row">
+                <f:for each="{language}" as="stats" key="type">
+                    <div class="col-sm-6">
+                        <table class="table table-striped table-hover col-sm-6">
+                            <colgroup><col><col width="100"></colgroup>
+                            <tr>
+                                <th>{type}</th>
+                                <th>counter</th>
+                            </tr>
+                            <f:for each="{stats}" as="stat">
+                                <tr>
+                                    <td>{stat.searchphrase}{stat.word}</td>
+                                    <td class="times">{stat.num}</td>
+                                </tr>
+                            </f:for>
+                        </table>
+                    </div>
+                </f:for>
+            </div>
         </div>
     </f:for>
 
