@@ -244,12 +244,14 @@ class BackendModuleController extends AbstractBackendModuleController
     {
         if ($this->id) {
             // page is selected: get indexed content
-            $content = '<h2>Index content for page ' . $this->id . '</h2>';
-            $content .= $GLOBALS['LANG']->sL('LLL:EXT:lang/locallang_core.xml:labels.path')
+            $content = '<h3>Index content for PID ' . $this->id;
+            $content .= '<span class="small">' . $GLOBALS['LANG']->sL('LLL:EXT:lang/locallang_core.xml:labels.path')
                 . ': '
                 .
-                GeneralUtility::fixed_lgd_cs($this->pageinfo['_thePath'], -50);
+                GeneralUtility::fixed_lgd_cs($this->pageinfo['_thePath'], -50) . '</span></h3>';
+            $content .= '<div class="table-fit-wrap">';
             $content .= $this->getIndexedContent($this->id);
+            $content .= '</div>';
         } else {
             // no page selected: show message
             $content = '<div class="alert alert-info">'
@@ -566,52 +568,80 @@ class BackendModuleController extends AbstractBackendModuleController
             )
             ->execute();
 
-        $content = '';
+        $content = '<table class="table table-hover">'
+            . '<thead>'
+                . '<tr>'
+                    . '<th>Title</th>'
+                    . '<th>Type</th>'
+                    . '<th>Language</th>'
+                    . '<th>Words</th>'
+                    . '<th>Created</th>'
+                    . '<th>Modified</th>'
+                    . '<th>Target Page</th>'
+                    . '<th>URL Params</th>'
+                    . '<th></th>'
+                . '</tr>'
+            . '</thead>';
         while ($row = $contentRows->fetch()) {
             // build tag table
-            $tagTable = '<div class="tags">';
+            $tagTable = '';
             $tags = GeneralUtility::trimExplode(',', $row['tags'], true);
             foreach ($tags as $tag) {
-                $tagTable .= '<span class="tag">' . htmlspecialchars($tag, ENT_QUOTES, 'UTF-8') . '</span>';
+                $tagTable .= '<span class="label label-primary">' . htmlspecialchars($tag, ENT_QUOTES, 'UTF-8') . '</span> ';
             }
-            $tagTable .= '</div>';
 
             // build content
             $timeformat = '%d.%m.%Y %H:%M';
             $content .=
-                '<div class="summary">'
-                . '<span class="title">' . htmlspecialchars($row['title'], ENT_QUOTES, 'UTF-8') . '</span>'
-                . '<div class="clearer">&nbsp;</div>'
-                . $this->renderFurtherInformation('Type', $row['type'])
-                . $this->renderFurtherInformation('Words', str_word_count($row['content']))
-                . $this->renderFurtherInformation('Language', $row['language'])
-                . $this->renderFurtherInformation('Created', strftime($timeformat, $row['crdate']))
-                . $this->renderFurtherInformation('Modified', strftime($timeformat, $row['tstamp']))
-                . $this->renderFurtherInformation(
-                    'Sortdate',
-                    ($row['sortdate'] ? strftime($timeformat, $row['sortdate']) : '')
-                )
-                . $this->renderFurtherInformation(
-                    'Starttime',
-                    ($row['starttime'] ? strftime($timeformat, $row['starttime']) : '')
-                )
-                . $this->renderFurtherInformation(
-                    'Endtime',
-                    ($row['endtime'] ? strftime($timeformat, $row['endtime']) : '')
-                )
-                . $this->renderFurtherInformation('FE Group', $row['fe_group'])
-                . $this->renderFurtherInformation('Target Page', $row['targetpid'])
-                . $this->renderFurtherInformation('URL Params', $row['params'])
-                . $this->renderFurtherInformation('Original PID', $row['orig_pid'])
-                . $this->renderFurtherInformation('Original UID', $row['orig_uid'])
-                . $this->renderFurtherInformation('Path', $row['directory'])
-                . '<div class="clearer">&nbsp;</div>'
-                . '<div class="box"><div class="headline">Abstract</div><div class="content">'
-                . nl2br(htmlspecialchars($row['abstract'], ENT_QUOTES, 'UTF-8')) . '</div></div>'
-                . '<div class="box"><div class="headline">Content</div><div class="content">'
-                . nl2br(htmlspecialchars($row['content'], ENT_QUOTES, 'UTF-8')) . '</div></div>'
-                . '<div class="box"><div class="headline">Tags</div><div class="content">' . $tagTable . '</div></div>'
-                . '</div>';
+                '<tr>'
+                    . '<td>' . $this->truncateMiddle(htmlspecialchars($row['title'], ENT_QUOTES, 'UTF-8'), 100) . '</td>'
+                    . '<td><span class="label label-primary">' . htmlspecialchars($row['type'], ENT_QUOTES, 'UTF-8') . '</span></td>'
+                    . '<td>' . htmlspecialchars($row['language'], ENT_QUOTES, 'UTF-8') . '</td>'
+                    . '<td>' . htmlspecialchars(str_word_count($row['content']), ENT_QUOTES, 'UTF-8') . '</td>'
+                    . '<td>' . htmlspecialchars(strftime($timeformat, $row['crdate']), ENT_QUOTES, 'UTF-8') . '</td>'
+                    . '<td>' . htmlspecialchars(strftime($timeformat, $row['tstamp']), ENT_QUOTES, 'UTF-8') . '</td>'
+                    . '<td>' . htmlspecialchars($row['targetpid'], ENT_QUOTES, 'UTF-8') . '</td>'
+                    . '<td>' . htmlspecialchars($row['params'], ENT_QUOTES, 'UTF-8') . '</td>'
+                    . '<td><a class="btn btn-default" data-action="expand" data-toggle="collapse" data-target="#ke' . $row['uid'] . '" title="Expand record"><span class="t3js-icon icon icon-size-small icon-state-default icon-actions-document-info" data-identifier="actions-document-info"><span class="icon-markup"><img src="/typo3/sysext/core/Resources/Public/Icons/T3Icons/actions/actions-document-info.svg" width="16" height="16"></span></span></a></td>'
+                . '</tr>'
+                . '<tr class="collapse" id="ke' . $row['uid'] . '">'
+                    . '<td colspan="9">'
+                        . '<table class="table">'
+                            . '<thead>'
+                                . '<tr>'
+                                    . '<th>Original PID</th>'
+                                    . '<th>Original UID</th>'
+                                    . '<th>FE Group</th>'
+                                    . '<th>Sort Date</th>'
+                                    . '<th>Start Date</th>'
+                                    . '<th>End Date</th>'
+                                    . '<th>Tags</th>'
+                                . '</tr>'
+                            . '</thead>'
+                            . '<tr>'
+                                . '<td>' . htmlspecialchars($row['orig_pid'], ENT_QUOTES, 'UTF-8') . '</td>'
+                                . '<td>' . htmlspecialchars($row['orig_uid'], ENT_QUOTES, 'UTF-8') . '</td>'
+                                . '<td>' . htmlspecialchars($row['fe_group'], ENT_QUOTES, 'UTF-8') . '</td>'
+                                . '<td>' . htmlspecialchars($row['sortdate'] ? strftime($timeformat, $row['sortdate']) : '', ENT_QUOTES, 'UTF-8') . '</td>'
+                                . '<td>' . htmlspecialchars($row['starttime'] ? strftime($timeformat, $row['starttime']) : '', ENT_QUOTES, 'UTF-8') . '</td>'
+                                . '<td>' . htmlspecialchars($row['endtime'] ? strftime($timeformat, $row['endtime']) : '', ENT_QUOTES, 'UTF-8') . '</td>'
+                                . '<td>' . $tagTable . '</td>'
+                            . '</tr>'
+                            . '<tr>'
+                                . '<td colspan="7">'
+                                    . ((trim($row['abstract'])) ? (
+                                        '<p><strong>Abstract</strong></p>'
+                                        . '<p>' . nl2br(htmlspecialchars($row['abstract'], ENT_QUOTES, 'UTF-8')) . '</p>'
+                                    ) : '')
+                                    . ((trim($row['content'])) ? (
+                                        '<p><strong>Content</strong></p>'
+                                        . '<p>' . nl2br(htmlspecialchars($row['content'], ENT_QUOTES, 'UTF-8')) . '</p>'
+                                    ) : '')
+                                . '</td>'
+                            . '</tr>'
+                        . '</table>'
+                    . '</td>'
+                . '</tr>';
         }
 
         return $content;
@@ -795,5 +825,35 @@ class BackendModuleController extends AbstractBackendModuleController
 
         return $languages;
     }
+
+    /**
+     * Removes characters from the middle of the string to ensure it is no more
+     * than $maxLength characters long.
+     *
+     * Removed characters are replaced with "..."
+     *
+     * This method will give priority to the right-hand side of the string when
+     * data is truncated.
+     *
+     * @param $string
+     * @param $maxLength
+     * @return string
+     */
+    protected function truncateMiddle($string, $maxLength) {
+        // Early exit if no truncation necessary
+        if (strlen($string) <= $maxLength) {
+            return $string;
+        }
+
+        $numRightChars = ceil($maxLength * 0.7);
+        $numLeftChars = floor($maxLength * 0.3) - 5; // to accommodate the "..."
+
+        return sprintf(
+            "%s[...]%s",
+            substr($string, 0, intval($numLeftChars)),
+            substr($string, intval(0 - $numRightChars))
+        );
+    }
+
 
 }
