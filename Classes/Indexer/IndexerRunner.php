@@ -112,7 +112,8 @@ class IndexerRunner
      */
     public function startIndexing($verbose = true, $extConf = array(), $mode = '', $indexingMode = IndexerBase::INDEXING_MODE_FULL)
     {
-        $content = '<div class="summary infobox">';
+        $content = '<div class="row"><div class="col-md-6">';
+        $content .= '<div class="alert alert-info">';
         $message = 'Running indexing process in '
             . LocalizationUtility::translate('backend.indexingMode_' . $indexingMode, 'ke_search')
             .  ' mode';
@@ -167,6 +168,8 @@ class IndexerRunner
         // set some prepare statements
         $this->prepareStatements();
 
+        $content .= '<table class="table table-striped table-hover">';
+        $content .= '<tr><th>Indexer</th><th>Mode</th><th>Info</th><th>Time</th></tr>';
         foreach ($configurations as $indexerConfig) {
 
             $this->indexerConfig = $indexerConfig;
@@ -196,7 +199,7 @@ class IndexerRunner
                 } else {
                     $errorMessage = 'Could not find class ' . $className;
                     $this->logger->error($errorMessage);
-                    $content .= '<div class="error">' . $errorMessage . '</div>' . "\n";
+                    $content .= '<div class="alert alert-error">' . $errorMessage . '</div>' . "\n";
                 }
             }
 
@@ -219,6 +222,7 @@ class IndexerRunner
                 }
             }
         }
+        $content .= '</table>';
 
         // process index cleanup
         $content .= $this->cleanUpIndex($indexingMode);
@@ -240,17 +244,20 @@ class IndexerRunner
 
         // log finishing
         $indexingTime = $this->endTime - $this->startTime;
-        $content .= '<div class="summary infobox">';
+        $content .= '<div class="card">';
+        $content .= '<div class="card-content">';
 
         $message = 'Indexing finished at ' . SearchHelper::formatTimestamp($this->endTime) . ' (took ' . $this->formatTime($indexingTime) . ').';
-        $content .=  $message . '<br />';
+        $content .=  '<p>' . $message . '</p>';
         $this->logger->info($message);
 
         $message = 'Index contains ' . $count . ' entries.';
-        $content .=  $message . '<br />';
+        $content .=  '<p>' . $message . '</p>';
         $this->logger->info($message);
 
         $content .= '</div>';
+        $content .= '</div>';
+        $content .= '</div></div>';
 
         $this->registry->set(
             'tx_kesearch',
@@ -311,7 +318,7 @@ class IndexerRunner
      */
     public function renderIndexingReport($searchObj, $message='')
     {
-        $content = '<div class="summary infobox">';
+        $content = '<tr>';
 
         // title
         if (!empty($searchObj->indexerConfig['title'])) {
@@ -319,27 +326,40 @@ class IndexerRunner
         } else {
             $title = get_class($searchObj);
         }
-        $content .= '<span class="title">' . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . '</span>';
+        $content .= '<td><span class="title">' . htmlspecialchars($title, ENT_QUOTES, 'UTF-8') . '</span></td>';
 
         // indexing mode
+        $content .= '<td>';
         if (is_subclass_of($searchObj, '\TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase')) {
             if (method_exists($searchObj, 'getIndexingMode')) {
                 if ($searchObj->getIndexingMode() == IndexerBase::INDEXING_MODE_INCREMENTAL) {
-                    $content .= '<span class="indexingMode">Incremental mode</span><br />';
+                    $content .= '<span class="indexingMode">Incremental mode</span>';
                 }
             }
         }
+        $content .= '</td>';
 
         // message
         $message = str_ireplace(['<br />','<br>','<br/>','</span>'], "\n", $message);
         $message = strip_tags($message);
+        $content .= '<td>';
         $content .= nl2br(htmlspecialchars($message, ENT_QUOTES, 'UTF-8'));
 
+        // errors
+        if (is_subclass_of($searchObj, '\TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase')) {
+            $errors = method_exists($searchObj, 'getErrors') ? $searchObj->getErrors() : [];
+            if (count($errors)) {
+                $content .= '<p class="badge badge-warning">Warning: There have been errors. Please refer to the error log (typically in var/log/)</p>';
+            }
+        }
+
+        $content .= '</td>';
+
         // duration, show sec or ms
+        $content .= '<td>';
         if (is_subclass_of($searchObj, '\TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase')) {
             $duration = method_exists($searchObj, 'getDuration') ? $searchObj->getDuration() : 0;
             if ($duration > 0) {
-                $content .= '<br />';
                 $content .= '<i>Indexing process took ';
                 if ($duration > 1000) {
                     $duration /= 1000;
@@ -348,20 +368,12 @@ class IndexerRunner
                 } else {
                     $content .= $duration . ' ms.';
                 }
-                $content .= '</i><br />';
+                $content .= '</i>';
             }
         }
+        $content .= '</td>';
 
-        // errors
-        if (is_subclass_of($searchObj, '\TeaminmediasPluswerk\KeSearch\Indexer\IndexerBase')) {
-            $errors = method_exists($searchObj, 'getErrors') ? $searchObj->getErrors() : [];
-            if (count($errors)) {
-                $content .= '<br />';
-                $content .= '<b>Warning: There have been errors. Please refer to the error log (typically in var/log/)</b>.';
-            }
-        }
-
-        $content .= '</div>';
+        $content .= '</tr>';
         return $content;
     }
 
@@ -510,7 +522,9 @@ class IndexerRunner
      */
     public function cleanUpIndex(int $indexingMode)
     {
-        $content = '<div class="summary infobox">';
+        $content = '<div class="card">';
+        $content .= '<div class="card-content">';
+        $content .= '<h3 class="card-title">Cleanup</h3>';
         if ($indexingMode == IndexerBase::INDEXING_MODE_FULL) {
             $this->logger->info('Cleanup started');
             $startMicrotime = microtime(true);
@@ -547,8 +561,7 @@ class IndexerRunner
                 ->where($where)
                 ->execute();
 
-            $content .= '<p class="title">Cleanup</p>';
-            $content .= $count . ' entries deleted.<br />' . "\n";
+            $content .= '<p><strong>' . $count . '</strong> entries deleted.</p>' . "\n";
             $this->logger->info('CleanUpIndex: ' . $count . ' entries deleted.');
 
             // rotate Sphinx Index (ke_search_premium function)
@@ -556,12 +569,13 @@ class IndexerRunner
 
             // calculate duration of indexing process
             $duration = ceil((microtime(true) - $startMicrotime) * 1000);
-            $content .= '<i>Cleanup process took ' . $duration . ' ms.</i></p>' . "\n";
+            $content .= '<p><i>Cleanup process took ' . $duration . ' ms.</i></p>' . "\n";
         } else {
             $message = 'Skipping cleanup in incremental mode';
             $this->logger->info($message);
-            $content .= $message;
+            $content .= '<p>' . $message . '</p>';
         }
+        $content .= '</div>';
         $content .= '</div>';
         return $content;
     }
