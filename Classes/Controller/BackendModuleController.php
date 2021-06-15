@@ -594,7 +594,7 @@ class BackendModuleController extends AbstractBackendModuleController
             $timeformat = '%d.%m.%Y %H:%M';
             $content .=
                 '<tr>'
-                    . '<td>' . $this->truncateMiddle($this->encode($row['title']), 100) . '</td>'
+                    . '<td>' . $this->encode($row['title']) . '</td>'
                     . '<td><span class="label label-primary">' . $this->encode($row['type']) . '</span></td>'
                     . '<td>' . $this->encode($row['language']) . '</td>'
                     . '<td>' . $this->encode(str_word_count($row['content'])) . '</td>'
@@ -820,35 +820,4 @@ class BackendModuleController extends AbstractBackendModuleController
 
         return $languages;
     }
-
-    /**
-     * Removes characters from the middle of the string to ensure it is no more
-     * than $maxLength characters long.
-     *
-     * Removed characters are replaced with "..."
-     *
-     * This method will give priority to the right-hand side of the string when
-     * data is truncated.
-     *
-     * @param $string
-     * @param $maxLength
-     * @return string
-     */
-    protected function truncateMiddle($string, $maxLength) {
-        // Early exit if no truncation necessary
-        if (strlen($string) <= $maxLength) {
-            return $string;
-        }
-
-        $numRightChars = ceil($maxLength * 0.7);
-        $numLeftChars = floor($maxLength * 0.3) - 5; // to accommodate the "..."
-
-        return sprintf(
-            "%s[...]%s",
-            substr($string, 0, intval($numLeftChars)),
-            substr($string, intval(0 - $numRightChars))
-        );
-    }
-
-
 }
