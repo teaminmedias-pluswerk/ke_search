@@ -394,9 +394,9 @@ class BackendModuleController extends AbstractBackendModuleController
             $content .= '<tr><th></th><th>Type</th><th>UID</th><th>PID</th></tr>';
             foreach ($indexerConfigurations as $indexerConfiguration) {
                 $content .= '<tr>'
-                    . '<th>' . htmlspecialchars($indexerConfiguration['title'], ENT_QUOTES, 'UTF-8') . '</th>'
+                    . '<th>' . $this->encode($indexerConfiguration['title']) . '</th>'
                     . '<td>'
-                    . $indexerConfiguration['type']
+                    . '<span class="label label-primary">' . $indexerConfiguration['type'] . '</span>'
                     . '</td>'
                     . '<td>'
                     . $indexerConfiguration['uid']
@@ -461,7 +461,7 @@ class BackendModuleController extends AbstractBackendModuleController
             $results_per_type = $indexRepository->getNumberOfRecordsInIndexPerType();
             $first = true;
             foreach ($results_per_type as $type => $count) {
-                $content .= '<tr><td>' . $type . '</td><td>' . $count . '</td></tr>';
+                $content .= '<tr><td><span class="label label-primary">' . $type . '</span></td><td>' . $count . '</td></tr>';
             }
 
             $content .= '</table>';
@@ -525,7 +525,7 @@ class BackendModuleController extends AbstractBackendModuleController
             $content .= '<table class="table table-striped table-hover">';
             $content .= '<colgroup><col><col width="100"></colgroup>';
             foreach ($results_per_type as $type => $count) {
-                $content .= '<tr><th>' . $type . '</th><td>' . $count . '</td></tr>';
+                $content .= '<tr><th><span class="label label-primary">' . $type . '</span></th><td>' . $count . '</td></tr>';
             }
             $content .= '</table>';
             $content .= '</div></div>';
@@ -587,21 +587,21 @@ class BackendModuleController extends AbstractBackendModuleController
             $tagTable = '';
             $tags = GeneralUtility::trimExplode(',', $row['tags'], true);
             foreach ($tags as $tag) {
-                $tagTable .= '<span class="label label-primary">' . htmlspecialchars($tag, ENT_QUOTES, 'UTF-8') . '</span> ';
+                $tagTable .= '<span class="badge badge-info">' . $this->encode($tag) . '</span> ';
             }
 
             // build content
             $timeformat = '%d.%m.%Y %H:%M';
             $content .=
                 '<tr>'
-                    . '<td>' . $this->truncateMiddle(htmlspecialchars($row['title'], ENT_QUOTES, 'UTF-8'), 100) . '</td>'
-                    . '<td><span class="label label-primary">' . htmlspecialchars($row['type'], ENT_QUOTES, 'UTF-8') . '</span></td>'
-                    . '<td>' . htmlspecialchars($row['language'], ENT_QUOTES, 'UTF-8') . '</td>'
-                    . '<td>' . htmlspecialchars(str_word_count($row['content']), ENT_QUOTES, 'UTF-8') . '</td>'
-                    . '<td>' . htmlspecialchars(strftime($timeformat, $row['crdate']), ENT_QUOTES, 'UTF-8') . '</td>'
-                    . '<td>' . htmlspecialchars(strftime($timeformat, $row['tstamp']), ENT_QUOTES, 'UTF-8') . '</td>'
-                    . '<td>' . htmlspecialchars($row['targetpid'], ENT_QUOTES, 'UTF-8') . '</td>'
-                    . '<td>' . htmlspecialchars($row['params'], ENT_QUOTES, 'UTF-8') . '</td>'
+                    . '<td>' . $this->truncateMiddle($this->encode($row['title']), 100) . '</td>'
+                    . '<td><span class="label label-primary">' . $this->encode($row['type']) . '</span></td>'
+                    . '<td>' . $this->encode($row['language']) . '</td>'
+                    . '<td>' . $this->encode(str_word_count($row['content'])) . '</td>'
+                    . '<td>' . $this->encode(strftime($timeformat, $row['crdate'])) . '</td>'
+                    . '<td>' . $this->encode(strftime($timeformat, $row['tstamp'])) . '</td>'
+                    . '<td>' . $this->encode($row['targetpid']) . '</td>'
+                    . '<td>' . $this->encode($row['params']) . '</td>'
                     . '<td><a class="btn btn-default" data-action="expand" data-toggle="collapse" data-target="#ke' . $row['uid'] . '" title="Expand record"><span class="t3js-icon icon icon-size-small icon-state-default icon-actions-document-info" data-identifier="actions-document-info"><span class="icon-markup"><img src="/typo3/sysext/core/Resources/Public/Icons/T3Icons/actions/actions-document-info.svg" width="16" height="16"></span></span></a></td>'
                 . '</tr>'
                 . '<tr class="collapse" id="ke' . $row['uid'] . '">'
@@ -619,23 +619,23 @@ class BackendModuleController extends AbstractBackendModuleController
                                 . '</tr>'
                             . '</thead>'
                             . '<tr>'
-                                . '<td>' . htmlspecialchars($row['orig_pid'], ENT_QUOTES, 'UTF-8') . '</td>'
-                                . '<td>' . htmlspecialchars($row['orig_uid'], ENT_QUOTES, 'UTF-8') . '</td>'
-                                . '<td>' . htmlspecialchars($row['fe_group'], ENT_QUOTES, 'UTF-8') . '</td>'
-                                . '<td>' . htmlspecialchars($row['sortdate'] ? strftime($timeformat, $row['sortdate']) : '', ENT_QUOTES, 'UTF-8') . '</td>'
-                                . '<td>' . htmlspecialchars($row['starttime'] ? strftime($timeformat, $row['starttime']) : '', ENT_QUOTES, 'UTF-8') . '</td>'
-                                . '<td>' . htmlspecialchars($row['endtime'] ? strftime($timeformat, $row['endtime']) : '', ENT_QUOTES, 'UTF-8') . '</td>'
+                                . '<td>' . $this->encode($row['orig_pid']) . '</td>'
+                                . '<td>' . $this->encode($row['orig_uid']) . '</td>'
+                                . '<td>' . $this->encode($row['fe_group']) . '</td>'
+                                . '<td>' . $this->encode($row['sortdate'] ? strftime($timeformat, $row['sortdate']) : '') . '</td>'
+                                . '<td>' . $this->encode($row['starttime'] ? strftime($timeformat, $row['starttime']) : '') . '</td>'
+                                . '<td>' . $this->encode($row['endtime'] ? strftime($timeformat, $row['endtime']) : '') . '</td>'
                                 . '<td>' . $tagTable . '</td>'
                             . '</tr>'
                             . '<tr>'
                                 . '<td colspan="7">'
                                     . ((trim($row['abstract'])) ? (
                                         '<p><strong>Abstract</strong></p>'
-                                        . '<p>' . nl2br(htmlspecialchars($row['abstract'], ENT_QUOTES, 'UTF-8')) . '</p>'
+                                        . '<p>' . nl2br($this->encode($row['abstract'])) . '</p>'
                                     ) : '')
                                     . ((trim($row['content'])) ? (
                                         '<p><strong>Content</strong></p>'
-                                        . '<p>' . nl2br(htmlspecialchars($row['content'], ENT_QUOTES, 'UTF-8')) . '</p>'
+                                        . '<p>' . nl2br($this->encode($row['content'])) . '</p>'
                                     ) : '')
                                 . '</td>'
                             . '</tr>'
@@ -652,14 +652,9 @@ class BackendModuleController extends AbstractBackendModuleController
      * @param string $content
      * @return string
      */
-    public function renderFurtherInformation($label, $content)
+    public function encode($input)
     {
-        return
-            '<div class="info"><span class="infolabel">'
-            . $label
-            . ': </span><span class="value">'
-            . htmlspecialchars($content, ENT_QUOTES, 'UTF-8')
-            . '</span></div>';
+        return htmlspecialchars($input, ENT_QUOTES, 'UTF-8');
     }
 
     /**
