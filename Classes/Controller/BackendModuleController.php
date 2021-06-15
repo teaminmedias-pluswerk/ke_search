@@ -386,6 +386,7 @@ class BackendModuleController extends AbstractBackendModuleController
         $content = '<h2>Indexers</h2>';
         // show indexer names
         if ($indexerConfigurations) {
+            $content .= '<div class="row"><div class="col-md-6">';
             $content .= '<table class="table table-striped table-hover">';
             $content .= '<colgroup><col><col width="100"><col width="100"><col width="100"></colgroup>';
             $content .= '<tr><th></th><th>Type</th><th>UID</th><th>PID</th></tr>';
@@ -404,6 +405,7 @@ class BackendModuleController extends AbstractBackendModuleController
                     . '</tr>';
             }
             $content .= '</table>';
+            $content .= '</div></div>';
         }
 
         return $content;
@@ -447,6 +449,7 @@ class BackendModuleController extends AbstractBackendModuleController
                     . '.</p>';
             }
 
+            $content .= '<div class="row"><div class="col-md-6">';
             $content .= '<table class="table table-striped table-hover">';
             $content .= '<colgroup><col><col width="100"></colgroup>';
             $content .= '<tr><th>Type</th><th>Count</th></tr>';
@@ -460,6 +463,7 @@ class BackendModuleController extends AbstractBackendModuleController
             }
 
             $content .= '</table>';
+            $content .= '</div></div>';
         }
 
         return $content;
@@ -485,25 +489,29 @@ class BackendModuleController extends AbstractBackendModuleController
                 $completeLength = $this->formatFilesize($row['Data_length'] + $row['Index_length']);
 
                 $content .= '
-                    <table class="table table-striped table-hover">
-                    <colgroup><col><col width="100"></colgroup>
-                        <tr>
-                            <th>Records: </th>
-                            <td>' . $row['Rows'] . '</td>
-                        </tr>
-                        <tr>
-                            <th>Data size: </th>
-                            <td>' . $dataLength . '</td>
-                        </tr>
-                        <tr>
-                            <th>Index size: </th>
-                            <td>' . $indexLength . '</td>
-                        </tr>
-                        <tr>
-                            <th>Complete table size: </th>
-                            <td>' . $completeLength . '</td>
-                        </tr>
-                    </table>';
+                <div class="row">
+                    <div class="col-md-6">
+                        <table class="table table-striped table-hover">
+                            <colgroup><col><col width="100"></colgroup>
+                            <tr>
+                                <th>Records: </th>
+                                <td>' . $row['Rows'] . '</td>
+                            </tr>
+                            <tr>
+                                <th>Data size: </th>
+                                <td>' . $dataLength . '</td>
+                            </tr>
+                            <tr>
+                                <th>Index size: </th>
+                                <td>' . $indexLength . '</td>
+                            </tr>
+                            <tr>
+                                <th>Complete table size: </th>
+                                <td>' . $completeLength . '</td>
+                            </tr>
+                        </table>
+                    </div>
+              </div>';
             }
         }
 
@@ -511,12 +519,14 @@ class BackendModuleController extends AbstractBackendModuleController
         $indexRepository = GeneralUtility::makeInstance(IndexRepository::class);
         $results_per_type = $indexRepository->getNumberOfRecordsInIndexPerType();
         if (count($results_per_type)) {
+            $content .= '<div class="row"><div class="col-md-6">';
             $content .= '<table class="table table-striped table-hover">';
             $content .= '<colgroup><col><col width="100"></colgroup>';
             foreach ($results_per_type as $type => $count) {
                 $content .= '<tr><th>' . $type . '</th><td>' . $count . '</td></tr>';
             }
             $content .= '</table>';
+            $content .= '</div></div>';
         }
 
         return $content;
@@ -559,7 +569,7 @@ class BackendModuleController extends AbstractBackendModuleController
         $content = '';
         while ($row = $contentRows->fetch()) {
             // build tag table
-            $tagTable = '<div class="tags" >';
+            $tagTable = '<div class="tags">';
             $tags = GeneralUtility::trimExplode(',', $row['tags'], true);
             foreach ($tags as $tag) {
                 $tagTable .= '<span class="tag">' . htmlspecialchars($tag, ENT_QUOTES, 'UTF-8') . '</span>';
