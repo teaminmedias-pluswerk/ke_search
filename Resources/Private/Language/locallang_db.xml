@@ -31,7 +31,7 @@
 			<label index="tx_kesearch_filteroptions.title">Title</label>
 			<label index="tx_kesearch_filteroptions.tag">Tag</label>
 			<label index="tx_kesearch_filteroptions.slug">URL Segment (Slug)</label>
-			<label index="tx_kesearch_filteroptions.automated_tagging">Set tag for all children of this page</label>
+			<label index="tx_kesearch_filteroptions.automated_tagging">Set tag for this page and all children</label>
 			<label index="tx_kesearch_filteroptions.automated_tagging_exclude">Exclude tag for all children of this page</label>
 			<label index="tx_kesearch_index">Index</label>
 			<label index="tx_kesearch_index.relevance">Relevance</label>
@@ -116,8 +116,8 @@
 			<label index="tx_kesearch_filteroptions.title">Titel</label>
 			<label index="tx_kesearch_filteroptions.tag">Schlagwort</label>
 			<label index="tx_kesearch_filteroptions.slug">URL-Segment (Slug)</label>
-			<label index="tx_kesearch_filteroptions.automated_tagging">Schlagwort automatisch für Unterseiten dieser Seite setzen</label>
-			<label index="tx_kesearch_filteroptions.automated_tagging_exclude">Schlagwort nicht automatisch für Unterseiten dieser Seite setzen</label>
+			<label index="tx_kesearch_filteroptions.automated_tagging">Schlagwort für diese Seite und alle Unterseiten setzen</label>
+			<label index="tx_kesearch_filteroptions.automated_tagging_exclude">Schlagwort nicht für Unterseiten dieser Seite setzen</label>
 			<label index="tx_kesearch_index">Index</label>
 			<label index="tx_kesearch_index.relevance">Relevanz</label>
 			<label index="tx_kesearch_index.targetpid">Zielseite</label>
@@ -193,7 +193,7 @@
 			<label index="tx_kesearch_filteroptions">Filter opties</label>
 			<label index="tx_kesearch_filteroptions.title">Titel</label>
 			<label index="tx_kesearch_filteroptions.tag">Label</label>
-			<label index="tx_kesearch_filteroptions.automated_tagging">Stel label in voor alle kinderen van deze pagina</label>
+			<label index="tx_kesearch_filteroptions.automated_tagging">Stel label in voor deze pagina en alle kinderen van deze pagina</label>
 			<label index="tx_kesearch_index">Index</label>
 			<label index="tx_kesearch_index.relevance">Relevantie</label>
 			<label index="tx_kesearch_index.targetpid">Doel PID</label>
