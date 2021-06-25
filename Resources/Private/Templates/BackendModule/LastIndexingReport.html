@@ -7,22 +7,13 @@
         </h2>
         <f:if condition="{logEntry.0}">
             <f:then>
-                <table class="report">
-                    <tr>
-                        <td><b>log time</b></td>
-                        <td><b>details</b></td>
-                    </tr>
-                    <tr valign="top">
-                        <td>
-                            <f:format.date format="Y-m-d" >{logEntry.0.tstamp}</f:format.date><br />
-                            <f:format.date format="H:i:s" >{logEntry.0.tstamp}</f:format.date>
-                        </td>
-                        <td><pre>{logEntry.0.details}</pre></td>
-                    </tr>
-                </table>
+                <h3>Log Time</h3>
+                <p><f:format.date format="Y-m-d" >{logEntry.0.tstamp}</f:format.date> <f:format.date format="H:i:s" >{logEntry.0.tstamp}</f:format.date>
 
+                <h3>Details</h3>
+                <div><pre>{logEntry.0.details}</pre></div>
             </f:then>
-            <f:else>No report found.</f:else>
+            <f:else><p>No report found.</p></f:else>
         </f:if>
     </div>
 </f:section>
