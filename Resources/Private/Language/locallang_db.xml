@@ -14,6 +14,7 @@
 			<label index="sys_category.tx_kesearch_filtersubcat">Sub-Categories act as a filter options for these filters</label>
 			<label index="tt_content.list_type_pi1">Faceted search - Searchbox and Filters</label>
 			<label index="tt_content.list_type_pi2">Faceted search - Results</label>
+			<label index="tt_content.list_type_pi3">Faceted search - Simple Searchbox (cachable)</label>
 			<label index="tx_kesearch_filters">Filters</label>
 			<label index="tx_kesearch_filters.title">Title</label>
 			<label index="tx_kesearch_filters.rendertype">Rendering type</label>
