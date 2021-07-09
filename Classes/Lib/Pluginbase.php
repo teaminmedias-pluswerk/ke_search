@@ -801,7 +801,9 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
                 if (is_array($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['fileReferenceTypes'])
                     && isset($GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['fileReferenceTypes'][$type])) {
                     return $this->getFirstFalRelationUid(
-                        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['fileReferenceTypes'][$type]['table'], $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['fileReferenceTypes'][$type]['field'], $row['orig_uid']
+                        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['fileReferenceTypes'][$type]['table'],
+                        $GLOBALS['TYPO3_CONF_VARS']['EXTCONF']['ke_search']['fileReferenceTypes'][$type]['field'],
+                        $row['orig_uid']
                     );
                 }
                 break;
