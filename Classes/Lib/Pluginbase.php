@@ -638,6 +638,9 @@ class Pluginbase extends \TYPO3\CMS\Frontend\Plugin\AbstractPlugin
         if($this->isEmptySearch() && !$this->allowEmptySearch()) {
             return;
         }
+        
+        // get filters
+        $this->renderFilters();
 
         // fetch the search results
         $limit = $this->db->getLimit();
