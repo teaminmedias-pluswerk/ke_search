@@ -33,7 +33,7 @@ class Searchphrase
     /**
      * @var Pluginbase
      */
-    protected $pObj;
+    public $pObj;
 
     /**
      * initializes this object
