@@ -21,6 +21,14 @@ if (!defined('TYPO3_MODE')) {
         'plugin.tx_kesearch_pi2.userFunc = TeaminmediasPluswerk\KeSearch\Plugins\ResultlistPlugin->main'
     );
 
+    // add cachable Searchbox Plugin, override class name with namespace
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPItoST43('ke_search', '', '_pi3', 'list_type', 1);
+    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTypoScript(
+        'tx_kesearch',
+        'setup',
+        'plugin.tx_kesearch_pi3.userFunc = TeaminmediasPluswerk\KeSearch\Plugins\SearchboxPlugin->main'
+    );
+
     // add page TSconfig (Content element wizard icons, hide index table)
     \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig(
         '<INCLUDE_TYPOSCRIPT: source="FILE:EXT:ke_search/Configuration/TSconfig/Page/pageTSconfig.txt">'

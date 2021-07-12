@@ -39,6 +39,24 @@ plugin.tx_kesearch_pi2 {
     cssFile = EXT:ke_search/Resources/Public/Css/ke_search_pi1.css
 }
 
+plugin.tx_kesearch_pi3 {
+    view {
+        templateRootPaths {
+            0 = EXT:ke_search/Resources/Private/Templates/
+            1 = {$plugin.tx_kesearch.templateRootPath}
+        }
+        partialRootPaths {
+            0 = EXT:ke_search/Resources/Private/Partials/
+            1 = {$plugin.tx_kesearch.partialRootPath}
+        }
+        layoutRootPaths {
+            0 = EXT:ke_search/Resources/Private/Layouts/
+            1 = {$plugin.tx_kesearch.layoutRootPath}
+        }
+    }
+    cssFile = EXT:ke_search/Resources/Public/Css/ke_search_pi1.css
+}
+
 module.tx_dashboard {
     view {
         templateRootPaths {

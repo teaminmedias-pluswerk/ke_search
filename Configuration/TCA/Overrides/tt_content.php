@@ -8,10 +8,12 @@
 // show FlexForm field in plugin configuration
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['ke_search_pi1'] = 'pi_flexform';
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['ke_search_pi2'] = 'pi_flexform';
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_addlist']['ke_search_pi3'] = 'pi_flexform';
 
 // remove the old "plugin mode" configuration field
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['ke_search_pi1'] = 'select_key,recursive';
 $GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['ke_search_pi2'] = 'select_key,recursive,pages';
+$GLOBALS['TCA']['tt_content']['types']['list']['subtypes_excludelist']['ke_search_pi3'] = 'select_key,recursive';
 
 // add plugins
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
@@ -32,6 +34,15 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
     'ke_search'
 );
 
+TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPlugin(
+    array(
+        'LLL:EXT:ke_search/Resources/Private/Language/locallang_db.xml:tt_content.list_type_pi3',
+        'ke_search_pi3'
+    ),
+    'list_type',
+    'ke_search'
+);
+
 // Configure FlexForm field
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
     'ke_search_pi1',
@@ -41,4 +52,9 @@ TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
 TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
     'ke_search_pi2',
     'FILE:EXT:ke_search/Configuration/FlexForms/flexform_resultlist.xml'
+);
+
+TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue(
+    'ke_search_pi3',
+    'FILE:EXT:ke_search/Configuration/FlexForms/flexform_searchbox.xml'
 );
