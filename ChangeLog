@@ -5,6 +5,8 @@ Upcoming version
 [TASK]    Add documentation on how to show images for custom indexers
 [TASK]    Update backend module to use TYPO3 styles. Thanks to Mike Street. https://github.com/teaminmedias-pluswerk/ke_search/pull/427
 [TASK]    Make pluginbase accessible in searchphrase hooks. Thanks to Philip Hartmann. https://github.com/teaminmedias-pluswerk/ke_search/pull/432
+[BUGFIX]  Add missing closing p tag. Thanks to ste101. https://github.com/teaminmedias-pluswerk/ke_search/pull/431
+[TASK]    Allow filters to be rendered in result list. Thanks to Mike Street. https://github.com/teaminmedias-pluswerk/ke_search/pull/428
 
 Version 3.8.1, June 2021
 [TASK]    Return JSON if in headless mode (ke_search_premium feature)

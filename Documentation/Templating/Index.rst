@@ -23,3 +23,4 @@ which control the frontend appearence.
 	TemplateSelector
 	CustomValuesResultRow
 	LinkViewHelper
+	FiltersInResultList
