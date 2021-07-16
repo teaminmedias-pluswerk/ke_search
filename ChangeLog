@@ -1,6 +1,6 @@
 ChangeLog
 
-Upcoming version
+Version 3.9.0, July 2021
 [TASK]    Update label for automated_tagging, Thanks to OnyxPisces, https://github.com/teaminmedias-pluswerk/ke_search/issues/421
 [TASK]    Add documentation on how to show images for custom indexers
 [TASK]    Update backend module to use TYPO3 styles. Thanks to Mike Street. https://github.com/teaminmedias-pluswerk/ke_search/pull/427
