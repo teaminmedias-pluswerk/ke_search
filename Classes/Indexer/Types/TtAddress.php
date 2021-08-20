@@ -291,11 +291,11 @@ class TtAddress extends IndexerBase
         );
 
         // Fetch all records which have been deleted since the last indexing
-        $records = $ttAddressRepository->findAllDeletedByPidListAndTimestampInAllLanguages($folders, $this->lastRunStartTime);
+        $records = $ttAddressRepository->findAllDeletedAndHiddenByPidListAndTimestampInAllLanguages($folders, $this->lastRunStartTime);
 
         // and remove the corresponding index entries
         $count = $indexRepository->deleteCorrespondingIndexRecords('tt_address', $records, $this->indexerConfig);
-        $message = LF . 'Found ' . $count . ' deleted record(s).';
+        $message = LF . 'Found ' . $count . ' deleted and hidden record(s).';
         return $message;
     }
 }

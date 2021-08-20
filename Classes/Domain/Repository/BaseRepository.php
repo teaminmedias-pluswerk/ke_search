@@ -9,7 +9,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 
 /***************************************************************
  *  Copyright notice
- *  (c) 2020 Christian Bülter
+ *  (c) 2021 Christian Bülter
  *  All rights reserved
  *  This script is part of the TYPO3 project. The TYPO3 project is
  *  free software; you can redistribute it and/or modify
@@ -31,18 +31,55 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package TYPO3
  * @subpackage ke_search
  */
-class PageRepository extends BaseRepository {
+class BaseRepository {
     /**
      * @var string
      */
-    protected string $tableName = 'pages';
+    protected string $tableName = '';
 
     /**
-     * @param array $uidList
+     * @return mixed
+     */
+    public function findAll()
+    {
+        /** @var ConnectionPool $connectionPool */
+        $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
+        $queryBuilder = $connectionPool->getQueryBuilderForTable($this->tableName);
+        return $queryBuilder
+            ->select('*')
+            ->from($this->tableName)
+            ->execute()
+            ->fetchAll();
+    }
+
+    /**
+     * @param $uid
+     * @return mixed
+     */
+    public function findOneByUid($uid)
+    {
+        /** @var ConnectionPool $connectionPool */
+        $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
+        $queryBuilder = $connectionPool->getQueryBuilderForTable($this->tableName);
+        return $queryBuilder
+            ->select('*')
+            ->from($this->tableName)
+            ->where(
+                $queryBuilder->expr()->eq(
+                    'uid',
+                    $queryBuilder->createNamedParameter($uid, PDO::PARAM_INT)
+                )
+            )
+            ->execute()
+            ->fetch();
+    }
+
+    /**
+     * @param array $pidList
      * @param int $tstamp
      * @return mixed[]
      */
-    public function findAllDeletedAndHiddenByUidListAndTimestampInAllLanguages(array $uidList, int $tstamp)
+    public function findAllDeletedAndHiddenByPidListAndTimestampInAllLanguages(array $pidList, int $tstamp)
     {
         /** @var ConnectionPool $connectionPool */
         $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
@@ -51,18 +88,12 @@ class PageRepository extends BaseRepository {
         return $queryBuilder
             ->select('*')
             ->from($this->tableName)
-            ->where(
-                $queryBuilder->expr()->in('uid', $queryBuilder->createNamedParameter($uidList,Connection::PARAM_INT_ARRAY))
-            )
             ->orWhere(
-                $queryBuilder->expr()->in('l10n_parent', $queryBuilder->createNamedParameter($uidList,Connection::PARAM_INT_ARRAY))
+                $queryBuilder->expr()->eq('deleted', 1),
+                $queryBuilder->expr()->eq('hidden', 1),
             )
             ->andWhere(
-                '('
-                . $queryBuilder->expr()->eq('deleted', 1)
-                . ' OR '
-                . $queryBuilder->expr()->eq('hidden', 1)
-                . ')',
+                $queryBuilder->expr()->in('pid', $queryBuilder->createNamedParameter($pidList,Connection::PARAM_INT_ARRAY)),
                 $queryBuilder->expr()->gte('tstamp', $queryBuilder->createNamedParameter($tstamp,PDO::PARAM_INT))
             )
             ->execute()

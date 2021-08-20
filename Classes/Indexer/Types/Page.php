@@ -341,11 +341,11 @@ class Page extends IndexerBase
         );
 
         // Fetch all pages which have been deleted since the last indexing
-        $records = $pageRepository->findAllDeletedByUidListAndTimestampInAllLanguages($indexPids, $this->lastRunStartTime);
+        $records = $pageRepository->findAllDeletedAndHiddenByUidListAndTimestampInAllLanguages($indexPids, $this->lastRunStartTime);
 
         // and remove the corresponding index entries
         $count = $indexRepository->deleteCorrespondingIndexRecords('page', $records, $this->indexerConfig);
-        $message = LF . 'Found ' . $count . ' deleted page(s).';
+        $message = LF . 'Found ' . $count . ' deleted or hidden page(s).';
 
         return $message;
     }

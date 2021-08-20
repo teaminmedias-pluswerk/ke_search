@@ -2,11 +2,6 @@
 declare(strict_types=1);
 namespace TeaminmediasPluswerk\KeSearch\Domain\Repository;
 
-use PDO;
-use TYPO3\CMS\Core\Database\Connection;
-use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-
 /***************************************************************
  *  Copyright notice
  *  (c) 2021 Christian Bülter
@@ -31,71 +26,9 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  * @package TYPO3
  * @subpackage ke_search
  */
-class TtNewsRepository {
+class TtNewsRepository extends BaseRepository {
     /**
      * @var string
      */
-    protected $tableName = 'tt_news';
-
-    /**
-     * @return mixed
-     */
-    public function findAll()
-    {
-        /** @var ConnectionPool $connectionPool */
-        $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
-        $queryBuilder = $connectionPool->getQueryBuilderForTable($this->tableName);
-        return $queryBuilder
-            ->select('*')
-            ->from($this->tableName)
-            ->execute()
-            ->fetchAll();
-    }
-
-    /**
-     * @param $uid
-     * @return mixed
-     */
-    public function findOneByUid($uid)
-    {
-        /** @var ConnectionPool $connectionPool */
-        $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
-        $queryBuilder = $connectionPool->getQueryBuilderForTable($this->tableName);
-        return $queryBuilder
-            ->select('*')
-            ->from($this->tableName)
-            ->where(
-                $queryBuilder->expr()->eq(
-                    'uid',
-                    $queryBuilder->createNamedParameter($uid, PDO::PARAM_INT)
-                )
-            )
-            ->execute()
-            ->fetch();
-    }
-
-    /**
-     * @param array $pidList
-     * @param int $tstamp
-     * @return mixed[]
-     */
-    public function findAllDeletedByPidListAndTimestampInAllLanguages(array $pidList, int $tstamp)
-    {
-        /** @var ConnectionPool $connectionPool */
-        $connectionPool = GeneralUtility::makeInstance(ConnectionPool::class);
-        $queryBuilder = $connectionPool->getQueryBuilderForTable($this->tableName);
-        $queryBuilder->getRestrictions()->removeAll();
-        return $queryBuilder
-            ->select('*')
-            ->from($this->tableName)
-            ->where(
-                $queryBuilder->expr()->in('pid', $queryBuilder->createNamedParameter($pidList,Connection::PARAM_INT_ARRAY))
-            )
-            ->andWhere(
-                $queryBuilder->expr()->eq('deleted', 1),
-                $queryBuilder->expr()->gte('tstamp', $queryBuilder->createNamedParameter($tstamp,PDO::PARAM_INT))
-            )
-            ->execute()
-            ->fetchAll();
-    }
+    protected string $tableName = 'tt_news';
 }

@@ -365,12 +365,12 @@ class News extends IndexerBase
             $this->indexerConfig['sysfolder']
         );
 
-        // Fetch all records which have been deleted since the last indexing
-        $records = $newsRepository->findAllDeletedByPidListAndTimestampInAllLanguages($folders, $this->lastRunStartTime);
+        // Fetch all records which have been deleted or hidden since the last indexing
+        $records = $newsRepository->findAllDeletedAndHiddenByPidListAndTimestampInAllLanguages($folders, $this->lastRunStartTime);
 
         // and remove the corresponding index entries
         $count = $indexRepository->deleteCorrespondingIndexRecords('news', $records, $this->indexerConfig);
-        $message = LF . 'Found ' . $count . ' deleted record(s).';
+        $message = LF . 'Found ' . $count . ' deleted or hidden record(s).';
         return $message;
     }
 
