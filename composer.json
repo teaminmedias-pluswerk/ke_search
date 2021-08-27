@@ -1,5 +1,5 @@
 {
-  "name": "teaminmedias-pluswerk/ke_search",
+  "name": "tpwd/ke_search",
   "type": "typo3-cms-extension",
   "description": "Search Extension for TYPO3, including faceting search functions.",
   "homepage": "https://www.typo3-macher.de/en/facetted-search-ke-search/",
@@ -17,6 +17,10 @@
   },
   "require": {
     "typo3/cms-core": "^9.5 || 10.2.0 - 10.4.99"
+  },
+  "replace": {
+    "typo3-ter/ke_search": "self.version",
+    "teaminmedias-pluswerk/ke_search": "self.version"
   },
   "autoload": {
     "psr-4": {
