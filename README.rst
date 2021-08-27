@@ -9,6 +9,8 @@
 ke_search
 =========
 
+**Repository and issue tracker has moved to https://github.com/tpwd/ke_search**
+
 ke_search is a search engine for the TYPO3 content management system.
 
 It offers fulltext search and faceting possibilities. Faceting means you
@@ -26,6 +28,4 @@ For the most used content types indexers are provided within the extension itsel
 
 You can find a rendered version of the documentation at https://docs.typo3.org/p/teaminmedias-pluswerk/ke_search/master/en-us/
 
-If you found a bug or want to ask for a feature, please use https://github.com/teaminmedias-pluswerk/ke_search/issues.
-
-Pull requests are welcome.
+If you found a bug or want to ask for a feature, please use https://github.com/tpwd/ke_search/issues
