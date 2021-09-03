@@ -30,5 +30,6 @@
     "typo3/cms": {
       "extension-key": "ke_search"
     }
-  }
+  },
+  "abandoned": "tpwd/ke_search"
 }
