@@ -341,4 +341,14 @@ class Filters
     {
         return $this->tagChar;
     }
+    
+    /**
+     * returns the starting points IDs
+     *
+     * @return string
+     */
+    public function getStartingPoints()
+    {
+        return $this->startingPoints;
+    }
 }
